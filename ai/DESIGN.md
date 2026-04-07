@@ -51,6 +51,15 @@ Use these for setting the `font:` property. Each resolves to `weight size/line-h
 | font.lineHeight.normal | --font-line-height-normal | 1.6 | Body text |
 | font.lineHeight.relaxed | --font-line-height-relaxed | 1.7 | Long-form reading |
 
+### Font Weight Scale
+| Token | CSS Property | Value | Usage |
+|-------|-------------|-------|-------|
+| font.weight.light | --font-weight-light | 300 | Display/heading weight |
+| font.weight.regular | --font-weight-regular | 400 | Body/UI weight — used by all semantic tokens |
+| font.weight.medium | --font-weight-medium | 500 | Emphasis — reserved |
+| font.weight.semibold | --font-weight-semibold | 600 | Semi-bold — ad-hoc emphasis |
+| font.weight.bold | --font-weight-bold | 700 | Bold — ad-hoc strong emphasis |
+
 ### Font Families and Weights
 | Role | Family | Weight | CSS Property |
 |------|--------|--------|-------------|
