@@ -21,9 +21,11 @@ Use these for setting the `font:` property. Each resolves to `weight size/line-h
 |-------|-------------|----------------|-------|
 | title-large | --font-title-large | 300 2.5rem/1.1 Space Grotesk | Hero text, page titles |
 | title-medium | --font-title-medium | 300 2rem/1.25 Space Grotesk | Intro paragraphs, blog h1, featured text |
-| title-small | --font-title-small | 500 1.5rem/1.25 Space Grotesk | Section labels, blog h2, category headers |
-| body-medium | --font-body-medium | 400 1rem/1.6 Spectral | Default body/paragraph text |
-| body-small | --font-body-small | 400 0.875rem/1.6 Spectral | Secondary body text, smaller prose |
+| title-small | --font-title-small | 500 1.5rem/1.25 Space Grotesk | Section labels, blog h2, category headers, intro text |
+| body-large | --font-body-large | 400 1rem/1.6 Spectral | Default body/paragraph text (16px) |
+| body-medium | --font-body-medium | 400 0.875rem/1.6 Spectral | Secondary body text (14px) |
+| body-small | --font-body-small | 400 0.75rem/1.6 Spectral | Tertiary body text, fine prose (12px) |
+| label-large | --font-label-large | 400 1rem/1.25 Space Grotesk | Section headers, prominent UI labels (16px) |
 | label-medium | --font-label-medium | 400 0.875rem/1.25 Space Grotesk | Navigation, button text, standard UI (14px) |
 | label-small | --font-label-small | 400 0.75rem/1.25 Space Grotesk | Meta text, captions, fine print (12px) |
 

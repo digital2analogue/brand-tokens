@@ -33,7 +33,7 @@
       }
     },
     "body": {
-      "medium": {
+      "large": {
         "$type": "typography",
         "$value": {
           "fontFamily": "{font.family.serif}",
@@ -41,9 +41,9 @@
           "fontSize": "{font.size.base}",
           "lineHeight": "{font.lineHeight.normal}"
         },
-        "$description": "Default body/paragraph text"
+        "$description": "Default body/paragraph text (16px)"
       },
-      "small": {
+      "medium": {
         "$type": "typography",
         "$value": {
           "fontFamily": "{font.family.serif}",
@@ -51,10 +51,30 @@
           "fontSize": "{font.size.sm}",
           "lineHeight": "{font.lineHeight.normal}"
         },
-        "$description": "Secondary body text, smaller prose"
+        "$description": "Secondary body text (14px)"
+      },
+      "small": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.serif}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": "{font.size.xs}",
+          "lineHeight": "{font.lineHeight.normal}"
+        },
+        "$description": "Tertiary body text, fine prose (12px)"
       }
     },
     "label": {
+      "large": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.sans}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": "{font.size.base}",
+          "lineHeight": "{font.lineHeight.snug}"
+        },
+        "$description": "Section headers, prominent UI labels (16px)"
+      },
       "medium": {
         "$type": "typography",
         "$value": {
