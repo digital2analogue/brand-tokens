@@ -10,7 +10,9 @@
       "$type": "fontWeight",
       "light": { "$value": 300, "$description": "Display/heading weight" },
       "regular": { "$value": 400, "$description": "Body/UI weight" },
-      "medium": { "$value": 500, "$description": "Emphasis — reserved" }
+      "medium": { "$value": 500, "$description": "Emphasis — reserved" },
+      "semibold": { "$value": 600, "$description": "Semi-bold — ad-hoc emphasis" },
+      "bold": { "$value": 700, "$description": "Bold — ad-hoc strong emphasis" }
     },
     "size": {
       "$type": "dimension",

@@ -4,7 +4,7 @@
 1. No hardcoded colors — use var(--color-*) custom properties
 2. No hardcoded font weights — use var(--font-weight-*) custom properties
 3. No font families other than Space Grotesk and Spectral
-4. No font weights other than 300, 400, and 500 — title tokens use 400 (regular)
+4. No font weights other than 300, 400, 500, 600, and 700 — title tokens use 400 (regular); 600/700 are ad-hoc only via --font-weight-semibold / --font-weight-bold
 5. Accent green is hover/interactive only
 6. All text must meet WCAG AA contrast (4.5:1) against its background
 7. Spacing values must come from the scale: 4, 8, 16, 24, 48, 80
