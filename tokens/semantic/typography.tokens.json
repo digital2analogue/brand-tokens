@@ -1,0 +1,25 @@
+{
+  "font": {
+    "heading": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontWeight": "{font.weight.light}"
+      }
+    },
+    "body": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{font.family.serif}",
+        "fontWeight": "{font.weight.regular}"
+      }
+    },
+    "ui": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontWeight": "{font.weight.regular}"
+      }
+    }
+  }
+}
