@@ -19,13 +19,12 @@
 
 ## Typography Hierarchy
 - **title-large** (2.5rem / lh 1.1): hero, page title
-- **title-medium** (2rem / lh 1.25): intro paragraphs, featured text
-- **title-small** (1.75rem / lh 1.25): section headers, category labels
-- **heading-1** (1.5rem / lh 1.25): primary content heading (h1 in articles)
-- **heading-2** (1.25rem / lh 1.25): secondary content heading (h2 in articles)
-- **body** (1.125rem / lh 1.6): default body text — Spectral
-- **label-medium** (0.875rem / lh 1.25): navigation, labels, standard UI
-- **label-small** (0.75rem / lh 1.25): fine print, captions, smallest UI
+- **title-medium** (2rem / lh 1.25): intro paragraphs, blog h1, featured text
+- **title-small** (1.75rem / lh 1.25): section headers, blog h2, category labels
+- **body-medium** (1.125rem / lh 1.6): default body/paragraph text — Spectral
+- **body-small** (0.875rem / lh 1.6): secondary body text, smaller prose — Spectral
+- **label-medium** (0.875rem / lh 1.25): navigation, button text, standard UI
+- **label-small** (0.75rem / lh 1.25): meta text, captions, fine print
 
 ## Per-Site Variations
 - **riverromney.com** (.com): Base tokens, no overrides

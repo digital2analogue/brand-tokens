@@ -20,13 +20,12 @@ Use these for setting the `font:` property. Each resolves to `weight size/line-h
 | Token | CSS Property | Resolved Value | Usage |
 |-------|-------------|----------------|-------|
 | title-large | --font-title-large | 300 2.5rem/1.1 Space Grotesk | Hero text, page titles |
-| title-medium | --font-title-medium | 300 2rem/1.25 Space Grotesk | Intro paragraphs, featured text |
-| title-small | --font-title-small | 500 1.75rem/1.25 Space Grotesk | Section labels, category headers |
-| heading-1 | --font-heading-1 | 300 1.5rem/1.25 Space Grotesk | Primary content heading (h1 in articles) |
-| heading-2 | --font-heading-2 | 400 1.25rem/1.25 Space Grotesk | Secondary content heading (h2 in articles) |
-| body | --font-body | 400 1.125rem/1.6 Spectral | Default body text |
-| label-medium | --font-label-medium | 400 0.875rem/1.25 Space Grotesk | Navigation, labels, standard UI (14px) |
-| label-small | --font-label-small | 400 0.75rem/1.25 Space Grotesk | Fine print, captions, smallest UI (12px) |
+| title-medium | --font-title-medium | 300 2rem/1.25 Space Grotesk | Intro paragraphs, blog h1, featured text |
+| title-small | --font-title-small | 500 1.75rem/1.25 Space Grotesk | Section labels, blog h2, category headers |
+| body-medium | --font-body-medium | 400 1.125rem/1.6 Spectral | Default body/paragraph text |
+| body-small | --font-body-small | 400 0.875rem/1.6 Spectral | Secondary body text, smaller prose |
+| label-medium | --font-label-medium | 400 0.875rem/1.25 Space Grotesk | Navigation, button text, standard UI (14px) |
+| label-small | --font-label-small | 400 0.75rem/1.25 Space Grotesk | Meta text, captions, fine print (12px) |
 
 ## Typography — Primitive Tokens
 

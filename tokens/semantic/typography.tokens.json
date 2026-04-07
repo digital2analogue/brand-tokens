@@ -19,7 +19,7 @@
           "fontSize": "{font.size.2xl}",
           "lineHeight": "{font.lineHeight.snug}"
         },
-        "$description": "Intro paragraphs, featured text"
+        "$description": "Intro paragraphs, blog h1, featured text"
       },
       "small": {
         "$type": "typography",
@@ -29,40 +29,30 @@
           "fontSize": "{font.size.xl}",
           "lineHeight": "{font.lineHeight.snug}"
         },
-        "$description": "Section labels, category headers"
-      }
-    },
-    "heading": {
-      "1": {
-        "$type": "typography",
-        "$value": {
-          "fontFamily": "{font.family.sans}",
-          "fontWeight": "{font.weight.light}",
-          "fontSize": "{font.size.lg}",
-          "lineHeight": "{font.lineHeight.snug}"
-        },
-        "$description": "Primary content heading (h1 in articles)"
-      },
-      "2": {
-        "$type": "typography",
-        "$value": {
-          "fontFamily": "{font.family.sans}",
-          "fontWeight": "{font.weight.regular}",
-          "fontSize": "{font.size.md}",
-          "lineHeight": "{font.lineHeight.snug}"
-        },
-        "$description": "Secondary content heading (h2 in articles)"
+        "$description": "Section labels, blog h2, category headers"
       }
     },
     "body": {
-      "$type": "typography",
-      "$value": {
-        "fontFamily": "{font.family.serif}",
-        "fontWeight": "{font.weight.regular}",
-        "fontSize": "{font.size.base}",
-        "lineHeight": "{font.lineHeight.normal}"
+      "medium": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.serif}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": "{font.size.base}",
+          "lineHeight": "{font.lineHeight.normal}"
+        },
+        "$description": "Default body/paragraph text"
       },
-      "$description": "Default body text"
+      "small": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.serif}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": "{font.size.sm}",
+          "lineHeight": "{font.lineHeight.normal}"
+        },
+        "$description": "Secondary body text, smaller prose"
+      }
     },
     "label": {
       "medium": {
@@ -73,7 +63,7 @@
           "fontSize": "{font.size.sm}",
           "lineHeight": "{font.lineHeight.snug}"
         },
-        "$description": "Navigation, labels, standard UI elements (14px)"
+        "$description": "Navigation, button text, standard UI"
       },
       "small": {
         "$type": "typography",
@@ -83,7 +73,7 @@
           "fontSize": "{font.size.xs}",
           "lineHeight": "{font.lineHeight.snug}"
         },
-        "$description": "Fine print, captions, smallest UI text (12px)"
+        "$description": "Meta text, captions, fine print"
       }
     }
   }
