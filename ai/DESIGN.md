@@ -21,8 +21,8 @@ Use these for setting the `font:` property. Each resolves to `weight size/line-h
 |-------|-------------|----------------|-------|
 | title-large | --font-title-large | 300 2.5rem/1.1 Space Grotesk | Hero text, page titles |
 | title-medium | --font-title-medium | 300 2rem/1.25 Space Grotesk | Intro paragraphs, blog h1, featured text |
-| title-small | --font-title-small | 500 1.75rem/1.25 Space Grotesk | Section labels, blog h2, category headers |
-| body-medium | --font-body-medium | 400 1.125rem/1.6 Spectral | Default body/paragraph text |
+| title-small | --font-title-small | 500 1.5rem/1.25 Space Grotesk | Section labels, blog h2, category headers |
+| body-medium | --font-body-medium | 400 1rem/1.6 Spectral | Default body/paragraph text |
 | body-small | --font-body-small | 400 0.875rem/1.6 Spectral | Secondary body text, smaller prose |
 | label-medium | --font-label-medium | 400 0.875rem/1.25 Space Grotesk | Navigation, button text, standard UI (14px) |
 | label-small | --font-label-small | 400 0.75rem/1.25 Space Grotesk | Meta text, captions, fine print (12px) |
@@ -34,10 +34,10 @@ Use these for setting the `font:` property. Each resolves to `weight size/line-h
 |-------|-------------|-------|-------|
 | font.size.xs | --font-size-xs | 0.75rem | 12px — fine print, captions |
 | font.size.sm | --font-size-sm | 0.875rem | 14px — UI labels, nav |
-| font.size.base | --font-size-base | 1.125rem | 18px — body text |
+| font.size.base | --font-size-base | 1rem | 16px — body text |
 | font.size.md | --font-size-md | 1.25rem | 20px — content headings h2 |
-| font.size.lg | --font-size-lg | 1.5rem | 24px — content headings h1 |
-| font.size.xl | --font-size-xl | 1.75rem | 28px — title-small / section labels |
+| font.size.lg | --font-size-lg | 1.5rem | 24px — title-small / section labels |
+| font.size.xl | --font-size-xl | 1.75rem | 28px — (unused in semantic tokens) |
 | font.size.2xl | --font-size-2xl | 2rem | 32px — title-medium / intro text |
 | font.size.3xl | --font-size-3xl | 2.5rem | 40px — title-large / hero |
 
