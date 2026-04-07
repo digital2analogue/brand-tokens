@@ -1,24 +1,89 @@
 {
   "font": {
+    "title": {
+      "large": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.sans}",
+          "fontWeight": "{font.weight.light}",
+          "fontSize": "{font.size.3xl}",
+          "lineHeight": "{font.lineHeight.tight}"
+        },
+        "$description": "Hero text, page titles"
+      },
+      "medium": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.sans}",
+          "fontWeight": "{font.weight.light}",
+          "fontSize": "{font.size.2xl}",
+          "lineHeight": "{font.lineHeight.snug}"
+        },
+        "$description": "Intro paragraphs, featured text"
+      },
+      "small": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.sans}",
+          "fontWeight": "{font.weight.medium}",
+          "fontSize": "{font.size.xl}",
+          "lineHeight": "{font.lineHeight.snug}"
+        },
+        "$description": "Section labels, category headers"
+      }
+    },
     "heading": {
-      "$type": "typography",
-      "$value": {
-        "fontFamily": "{font.family.sans}",
-        "fontWeight": "{font.weight.light}"
+      "1": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.sans}",
+          "fontWeight": "{font.weight.light}",
+          "fontSize": "{font.size.lg}",
+          "lineHeight": "{font.lineHeight.snug}"
+        },
+        "$description": "Primary content heading (h1 in articles)"
+      },
+      "2": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.sans}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": "{font.size.md}",
+          "lineHeight": "{font.lineHeight.snug}"
+        },
+        "$description": "Secondary content heading (h2 in articles)"
       }
     },
     "body": {
       "$type": "typography",
       "$value": {
         "fontFamily": "{font.family.serif}",
-        "fontWeight": "{font.weight.regular}"
-      }
+        "fontWeight": "{font.weight.regular}",
+        "fontSize": "{font.size.base}",
+        "lineHeight": "{font.lineHeight.normal}"
+      },
+      "$description": "Default body text"
     },
-    "ui": {
-      "$type": "typography",
-      "$value": {
-        "fontFamily": "{font.family.sans}",
-        "fontWeight": "{font.weight.regular}"
+    "label": {
+      "medium": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.sans}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": "{font.size.sm}",
+          "lineHeight": "{font.lineHeight.snug}"
+        },
+        "$description": "Navigation, labels, standard UI elements (14px)"
+      },
+      "small": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.sans}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": "{font.size.xs}",
+          "lineHeight": "{font.lineHeight.snug}"
+        },
+        "$description": "Fine print, captions, smallest UI text (12px)"
       }
     }
   }

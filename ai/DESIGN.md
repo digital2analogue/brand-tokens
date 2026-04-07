@@ -14,12 +14,47 @@ Dark-first, green-phosphor aesthetic. Minimalist. Two typefaces: Space Grotesk (
 | --color-accent | #4ADE6E | Hover states and interactive highlights ONLY |
 | --color-border-default | #1E241E | Dividers and borders |
 
-## Typography
+## Typography — Semantic Tokens (font shorthand)
+Use these for setting the `font:` property. Each resolves to `weight size/line-height family`.
+
+| Token | CSS Property | Resolved Value | Usage |
+|-------|-------------|----------------|-------|
+| title-large | --font-title-large | 300 2.5rem/1.1 Space Grotesk | Hero text, page titles |
+| title-medium | --font-title-medium | 300 2rem/1.25 Space Grotesk | Intro paragraphs, featured text |
+| title-small | --font-title-small | 500 1.75rem/1.25 Space Grotesk | Section labels, category headers |
+| heading-1 | --font-heading-1 | 300 1.5rem/1.25 Space Grotesk | Primary content heading (h1 in articles) |
+| heading-2 | --font-heading-2 | 400 1.25rem/1.25 Space Grotesk | Secondary content heading (h2 in articles) |
+| body | --font-body | 400 1.125rem/1.6 Spectral | Default body text |
+| label-medium | --font-label-medium | 400 0.875rem/1.25 Space Grotesk | Navigation, labels, standard UI (14px) |
+| label-small | --font-label-small | 400 0.75rem/1.25 Space Grotesk | Fine print, captions, smallest UI (12px) |
+
+## Typography — Primitive Tokens
+
+### Font Size Scale
+| Token | CSS Property | Value | Usage |
+|-------|-------------|-------|-------|
+| font.size.xs | --font-size-xs | 0.75rem | 12px — fine print, captions |
+| font.size.sm | --font-size-sm | 0.875rem | 14px — UI labels, nav |
+| font.size.base | --font-size-base | 1.125rem | 18px — body text |
+| font.size.md | --font-size-md | 1.25rem | 20px — content headings h2 |
+| font.size.lg | --font-size-lg | 1.5rem | 24px — content headings h1 |
+| font.size.xl | --font-size-xl | 1.75rem | 28px — title-small / section labels |
+| font.size.2xl | --font-size-2xl | 2rem | 32px — title-medium / intro text |
+| font.size.3xl | --font-size-3xl | 2.5rem | 40px — title-large / hero |
+
+### Line Height Scale
+| Token | CSS Property | Value | Usage |
+|-------|-------------|-------|-------|
+| font.lineHeight.tight | --font-line-height-tight | 1.1 | Titles and display text |
+| font.lineHeight.snug | --font-line-height-snug | 1.25 | Headings |
+| font.lineHeight.normal | --font-line-height-normal | 1.6 | Body text |
+| font.lineHeight.relaxed | --font-line-height-relaxed | 1.7 | Long-form reading |
+
+### Font Families and Weights
 | Role | Family | Weight | CSS Property |
 |------|--------|--------|-------------|
-| Headings (h1-h6) | Space Grotesk | 300 | --font-heading-family / --font-weight-light |
-| Body text | Spectral | 400 | --font-body-family / --font-weight-regular |
-| UI (nav, buttons, labels) | Space Grotesk | 400 | --font-ui-family / --font-weight-regular |
+| Headings, UI | Space Grotesk | 300 | --font-family-sans / --font-weight-light |
+| Body text | Spectral | 400 | --font-family-serif / --font-weight-regular |
 
 ## Spacing Scale (8px base)
 --space-xs: 4px / --space-sm: 8px / --space-md: 16px / --space-lg: 24px / --space-xl: 48px / --space-2xl: 80px
@@ -28,7 +63,8 @@ Dark-first, green-phosphor aesthetic. Minimalist. Two typefaces: Space Grotesk (
 - NEVER use color hex values directly. Always use the CSS custom property (e.g., var(--color-bg-primary))
 - NEVER fabricate token values. If a value isn't listed above, it doesn't exist in the system
 - Accent green (#4ADE6E) is for hover and interactive states ONLY — never use it as resting text or background color
-- Only two font weights exist: 300 (headings) and 400 (everything else). Do not use 500, 600, 700, etc.
+- Prefer the `font:` shorthand semantic tokens (e.g., `font: var(--font-body)`) over assembling individual properties
+- Only use primitives (--font-size-*, --font-line-height-*) when you need a single dimension without the full shorthand
 - Dark mode is the only supported theme
 - All text on background pairings meet WCAG AA (4.5:1 minimum). Do not create new pairings without checking contrast
 - Minimal formatting: avoid heavy borders, shadows, or decorative elements. The aesthetic is clean and typographic
