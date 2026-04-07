@@ -4,12 +4,12 @@
       "primary": { "$value": "{color.green.950}" },
       "secondary": { "$value": "{color.green.900}" }
     },
-    "text": {
+    "foreground": {
       "primary": { "$value": "{color.green.200}" },
       "secondary": { "$value": "{color.green.400}" },
-      "muted": { "$value": "{color.green.600}" }
+      "muted": { "$value": "{color.green.600}" },
+      "accent": { "$value": "{color.green.accent}" }
     },
-    "accent": { "$value": "{color.green.accent}" },
     "border": {
       "default": { "$value": "{color.green.900}" }
     }

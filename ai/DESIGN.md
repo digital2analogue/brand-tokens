@@ -8,10 +8,10 @@ Dark-first, green-phosphor aesthetic. Minimalist. Two typefaces: Space Grotesk (
 |----------|-------|-------|
 | --color-bg-primary | #0A0D0A | Page background |
 | --color-bg-secondary | #1E241E | Cards, borders, secondary surfaces |
-| --color-text-primary | #C8CFC4 | Body text, primary content |
-| --color-text-secondary | #A0A89A | Supporting text |
-| --color-text-muted | #8B9683 | Labels, descriptions, tertiary text |
-| --color-accent | #4ADE6E | Hover states and interactive highlights ONLY |
+| --color-foreground-primary | #C8CFC4 | Body text, primary content |
+| --color-foreground-secondary | #A0A89A | Supporting text |
+| --color-foreground-muted | #8B9683 | Labels, descriptions, tertiary text |
+| --color-foreground-accent | #4ADE6E | Hover states and interactive highlights ONLY |
 | --color-border-default | #1E241E | Dividers and borders |
 
 ## Typography — Semantic Tokens (font shorthand)
@@ -72,7 +72,7 @@ Use these for setting the `font:` property. Each resolves to `weight size/line-h
 ## Guardrails
 - NEVER use color hex values directly. Always use the CSS custom property (e.g., var(--color-bg-primary))
 - NEVER fabricate token values. If a value isn't listed above, it doesn't exist in the system
-- Accent green (#4ADE6E) is for hover and interactive states ONLY — never use it as resting text or background color
+- Accent green (#4ADE6E) via var(--color-foreground-accent) is for hover and interactive states ONLY — never use it as resting text or background color
 - Prefer the `font:` shorthand semantic tokens (e.g., `font: var(--font-body)`) over assembling individual properties
 - Only use primitives (--font-size-*, --font-line-height-*) when you need a single dimension without the full shorthand
 - Dark mode is the only supported theme
