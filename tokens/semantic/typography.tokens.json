@@ -5,7 +5,7 @@
         "$type": "typography",
         "$value": {
           "fontFamily": "{font.family.sans}",
-          "fontWeight": "{font.weight.light}",
+          "fontWeight": "{font.weight.regular}",
           "fontSize": "{font.size.3xl}",
           "lineHeight": "{font.lineHeight.tight}"
         },
@@ -15,7 +15,7 @@
         "$type": "typography",
         "$value": {
           "fontFamily": "{font.family.sans}",
-          "fontWeight": "{font.weight.light}",
+          "fontWeight": "{font.weight.regular}",
           "fontSize": "{font.size.2xl}",
           "lineHeight": "{font.lineHeight.snug}"
         },
@@ -25,7 +25,7 @@
         "$type": "typography",
         "$value": {
           "fontFamily": "{font.family.sans}",
-          "fontWeight": "{font.weight.medium}",
+          "fontWeight": "{font.weight.regular}",
           "fontSize": "{font.size.lg}",
           "lineHeight": "{font.lineHeight.snug}"
         },

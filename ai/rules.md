@@ -4,7 +4,7 @@
 1. No hardcoded colors — use var(--color-*) custom properties
 2. No hardcoded font weights — use var(--font-weight-*) custom properties
 3. No font families other than Space Grotesk and Spectral
-4. No font weights other than 300, 400, and 500
+4. No font weights other than 300, 400, and 500 — title tokens use 400 (regular)
 5. Accent green is hover/interactive only
 6. All text must meet WCAG AA contrast (4.5:1) against its background
 7. Spacing values must come from the scale: 4, 8, 16, 24, 48, 80
@@ -18,9 +18,9 @@
 5. Borders should use --color-border-default unless there's a strong reason for something else
 
 ## Typography Hierarchy
-- **title-large** (2.5rem / lh 1.1): hero, page title
-- **title-medium** (2rem / lh 1.25): intro paragraphs, blog h1, featured text
-- **title-small** (1.5rem / lh 1.25): section headers, blog h2, category labels, intro text
+- **title-large** (400 / 2.5rem / lh 1.1): hero, page title
+- **title-medium** (400 / 2rem / lh 1.25): intro paragraphs, blog h1, featured text
+- **title-small** (400 / 1.5rem / lh 1.25): section headers, blog h2, category labels, intro text
 - **body-large** (1rem / lh 1.6): default body/paragraph text — Spectral
 - **body-medium** (0.875rem / lh 1.6): secondary body text, smaller prose — Spectral
 - **body-small** (0.75rem / lh 1.6): tertiary body text, fine prose — Spectral

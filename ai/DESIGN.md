@@ -19,9 +19,9 @@ Use these for setting the `font:` property. Each resolves to `weight size/line-h
 
 | Token | CSS Property | Resolved Value | Usage |
 |-------|-------------|----------------|-------|
-| title-large | --font-title-large | 300 2.5rem/1.1 Space Grotesk | Hero text, page titles |
-| title-medium | --font-title-medium | 300 2rem/1.25 Space Grotesk | Intro paragraphs, blog h1, featured text |
-| title-small | --font-title-small | 500 1.5rem/1.25 Space Grotesk | Section labels, blog h2, category headers, intro text |
+| title-large | --font-title-large | 400 2.5rem/1.1 Space Grotesk | Hero text, page titles |
+| title-medium | --font-title-medium | 400 2rem/1.25 Space Grotesk | Intro paragraphs, blog h1, featured text |
+| title-small | --font-title-small | 400 1.5rem/1.25 Space Grotesk | Section labels, blog h2, category headers, intro text |
 | body-large | --font-body-large | 400 1rem/1.6 Spectral | Default body/paragraph text (16px) |
 | body-medium | --font-body-medium | 400 0.875rem/1.6 Spectral | Secondary body text (14px) |
 | body-small | --font-body-small | 400 0.75rem/1.6 Spectral | Tertiary body text, fine prose (12px) |
@@ -54,7 +54,7 @@ Use these for setting the `font:` property. Each resolves to `weight size/line-h
 ### Font Families and Weights
 | Role | Family | Weight | CSS Property |
 |------|--------|--------|-------------|
-| Headings, UI | Space Grotesk | 300 | --font-family-sans / --font-weight-light |
+| Headings, UI | Space Grotesk | 400 | --font-family-sans / --font-weight-regular |
 | Body text | Spectral | 400 | --font-family-serif / --font-weight-regular |
 
 ## Spacing Scale (8px base)
