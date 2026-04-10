@@ -6,8 +6,8 @@ Dark-first, green-phosphor aesthetic. Minimalist. Two typefaces: Space Grotesk (
 ## Color Tokens (use ONLY these CSS custom properties)
 | Property | Value | Usage |
 |----------|-------|-------|
-| --color-bg-primary | #0A0D0A | Page background |
-| --color-bg-secondary | #1E241E | Cards, borders, secondary surfaces |
+| --color-background-default | #0A0D0A | Page background |
+| --color-background-alt | #1E241E | Cards, borders, secondary surfaces |
 | --color-foreground-primary | #C8CFC4 | Body text, primary content |
 | --color-foreground-secondary | #A0A89A | Supporting text |
 | --color-foreground-muted | #8B9683 | Labels, descriptions, tertiary text |
@@ -70,7 +70,7 @@ Use these for setting the `font:` property. Each resolves to `weight size/line-h
 --space-xs: 4px / --space-sm: 8px / --space-md: 16px / --space-lg: 24px / --space-xl: 48px / --space-2xl: 80px
 
 ## Guardrails
-- NEVER use color hex values directly. Always use the CSS custom property (e.g., var(--color-bg-primary))
+- NEVER use color hex values directly. Always use the CSS custom property (e.g., var(--color-background-default))
 - NEVER fabricate token values. If a value isn't listed above, it doesn't exist in the system
 - Accent green (#4ADE6E) via var(--color-foreground-accent) is for hover and interactive states ONLY — never use it as resting text or background color
 - Prefer the `font:` shorthand semantic tokens (e.g., `font: var(--font-body)`) over assembling individual properties

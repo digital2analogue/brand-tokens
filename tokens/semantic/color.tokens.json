@@ -1,8 +1,8 @@
 {
   "color": {
-    "bg": {
-      "primary": { "$value": "{color.green.950}" },
-      "secondary": { "$value": "{color.green.900}" }
+    "background": {
+      "default": { "$value": "{color.green.950}" },
+      "alt": { "$value": "{color.green.900}" }
     },
     "foreground": {
       "primary": { "$value": "{color.green.200}" },

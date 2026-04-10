@@ -2,8 +2,8 @@
   "$description": "riverromney.art overrides — photography/video",
   "color": {
     "$type": "color",
-    "bg": {
-      "primary": { "$value": "#000000", "$description": "Pure black for photo contrast" }
+    "background": {
+      "default": { "$value": "#000000", "$description": "Pure black for photo contrast" }
     }
   }
 }

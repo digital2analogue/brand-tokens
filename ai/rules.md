@@ -31,5 +31,5 @@
 ## Per-Site Variations
 - **riverromney.com** (.com): Base tokens, no overrides
 - **riverromney.design** (.design): Base tokens, no overrides
-- **riverromney.art** (.art): Override bg.primary to pure black (#000000) for photo contrast
+- **riverromney.art** (.art): Override background.default to pure black (#000000) for photo contrast
 - **riverromney.blog** (.blog): Override body font size to 18px, line-height to 1.7

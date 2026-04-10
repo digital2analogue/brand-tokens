@@ -12,7 +12,7 @@ This repo stores all design tokens for riverromney.com, riverromney.design, rive
 brand-tokens/
   tokens/
     primitives/       Raw values (colors, type scales, spacing)
-    semantic/         Purpose-mapped aliases (bg, text, accent, etc.)
+    semantic/         Purpose-mapped aliases (background, foreground, border, etc.)
     brands/           Per-site overrides (dot-art, dot-blog)
   ai/
     DESIGN.md         AI-readable design system reference
@@ -42,8 +42,8 @@ This generates `build/css/variables.css` with all CSS custom properties.
 **Option 2 — Use custom properties** directly once the file is imported:
 ```css
 body {
-  background-color: var(--color-bg-primary);
-  color: var(--color-text-primary);
+  background-color: var(--color-background-default);
+  color: var(--color-foreground-primary);
   font-family: var(--font-family-serif);
 }
 ```
