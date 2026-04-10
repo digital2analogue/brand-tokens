@@ -1,0 +1,15 @@
+{
+  "duration": {
+    "$type": "duration",
+    "fast":   { "$value": "120ms", "$description": "Hover states, color transitions" },
+    "normal": { "$value": "200ms", "$description": "Expand/collapse, menus" },
+    "slow":   { "$value": "350ms", "$description": "Page transitions, modals" }
+  },
+  "easing": {
+    "$type": "cubicBezier",
+    "default": { "$value": [0.25, 0.1, 0.25, 1.0], "$description": "General-purpose (ease)" },
+    "in":      { "$value": [0.42, 0.0, 1.0, 1.0], "$description": "Elements exiting (ease-in)" },
+    "out":     { "$value": [0.0, 0.0, 0.58, 1.0], "$description": "Elements entering (ease-out)" },
+    "in-out":  { "$value": [0.42, 0.0, 0.58, 1.0], "$description": "Elements moving (ease-in-out)" }
+  }
+}
