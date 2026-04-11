@@ -66,8 +66,40 @@ Use these for setting the `font:` property. Each resolves to `weight size/line-h
 | Headings, UI | Space Grotesk | 400 | --font-family-sans / --font-weight-regular |
 | Body text | Spectral | 400 | --font-family-serif / --font-weight-regular |
 
+## Letter-Spacing Tokens
+| Token | CSS Property | Value | Usage |
+|-------|-------------|-------|-------|
+| letterSpacing.tightest | --letter-spacing-tightest | -0.01em | Large display text |
+| letterSpacing.tight | --letter-spacing-tight | -0.025em | Headings |
+| letterSpacing.normal | --letter-spacing-normal | 0em | Default body text |
+| letterSpacing.wide | --letter-spacing-wide | 0.03em | Labels, nav |
+| letterSpacing.wider | --letter-spacing-wider | 0.1em | All-caps labels |
+
 ## Spacing Scale (8px base)
---space-xs: 4px / --space-sm: 8px / --space-md: 16px / --space-lg: 24px / --space-xl: 48px / --space-2xl: 80px
+
+### Primitives
+| Token | CSS Property | Value |
+|-------|-------------|-------|
+| space.3xs | --space-3xs | 2px |
+| space.2xs | --space-2xs | 4px |
+| space.xs | --space-xs | 8px |
+| space.sm | --space-sm | 12px |
+| space.md | --space-md | 16px |
+| space.lg | --space-lg | 24px |
+| space.xl | --space-xl | 32px |
+| space.2xl | --space-2xl | 48px |
+| space.3xl | --space-3xl | 64px |
+| space.4xl | --space-4xl | 80px |
+| space.5xl | --space-5xl | 128px |
+
+### Semantic Spacing
+| Token | CSS Property | References | Usage |
+|-------|-------------|-----------|-------|
+| spacing.tight | --spacing-tight | {space.xs} / 8px | Tight spacing between closely related items |
+| spacing.inline | --spacing-inline | {space.sm} / 12px | Between inline items |
+| spacing.element | --spacing-element | {space.md} / 16px | Between elements within a component |
+| spacing.component | --spacing-component | {space.lg} / 24px | Between components |
+| spacing.section | --spacing-section | {space.5xl} / 128px | Large section gaps |
 
 ## Guardrails
 - NEVER use color hex values directly. Always use the CSS custom property (e.g., var(--color-background-default))

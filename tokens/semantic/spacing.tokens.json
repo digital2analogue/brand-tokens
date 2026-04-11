@@ -1,1 +1,9 @@
-{}
+{
+  "spacing": {
+    "tight":     { "$value": "{space.xs}",  "$description": "Tight spacing — between closely related items" },
+    "inline":    { "$value": "{space.sm}",  "$description": "Between inline items" },
+    "element":   { "$value": "{space.md}",  "$description": "Between elements within a component" },
+    "component": { "$value": "{space.lg}",  "$description": "Between components" },
+    "section":   { "$value": "{space.5xl}", "$description": "Large section gaps" }
+  }
+}
