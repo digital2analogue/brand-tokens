@@ -1,11 +1,31 @@
 {
   "radius": {
     "$type": "dimension",
-    "none": { "$value": "0", "$description": "Sharp corners" },
-    "sm":   { "$value": "4px", "$description": "Subtle rounding — inputs, small elements" },
-    "md":   { "$value": "8px", "$description": "Buttons, menus, selects" },
-    "lg":   { "$value": "12px", "$description": "Cards, panels" },
-    "xl":   { "$value": "16px", "$description": "Prominent rounding — modals, hero cards" },
-    "full": { "$value": "9999px", "$description": "Pills, badges, circles" }
+    "$description": "Primitive border-radius values for the River Romney design system. Six stops from sharp (0) to pill (9999px). The system leans toward subtle rounding — sharp and near-sharp corners are more common than heavy rounding, consistent with the technical, terminal-adjacent aesthetic. Do not reference these directly in UI code; use semantic tokens when available.",
+
+    "none": {
+      "$value": "0",
+      "$description": "Sharp corners. Use when the component should read as rigid, precise, or grid-locked — code blocks, data tables, horizontal rules, and structural layout elements. The default aesthetic for this system; rounding is applied intentionally, not by default. Referenced by: unmapped."
+    },
+    "sm": {
+      "$value": "4px",
+      "$description": "Subtle rounding. Barely perceptible — softens a component without departing from the sharp aesthetic. Use for inputs, small tags, and elements where a hint of friendliness is appropriate but the component still reads as structured. Referenced by: unmapped."
+    },
+    "md": {
+      "$value": "8px",
+      "$description": "Standard rounding. Visibly rounded without feeling soft. Use for buttons, dropdown menus, select controls, and most interactive UI elements. The default rounding for actionable components. Referenced by: unmapped."
+    },
+    "lg": {
+      "$value": "12px",
+      "$description": "Comfortable rounding. Use for cards, panels, and contained content regions. Reads as a finished surface rather than a raw container. Referenced by: unmapped."
+    },
+    "xl": {
+      "$value": "16px",
+      "$description": "Prominent rounding. Use for modals, hero cards, and large featured surfaces where the rounding is a deliberate design choice rather than a subtle softening. Do not overuse — it competes with the system's sharp-corner default. Referenced by: unmapped."
+    },
+    "full": {
+      "$value": "9999px",
+      "$description": "Pill or circle. Always fully rounded regardless of element size. Use for status badges, avatar circles, tag chips, toggle switches, and decorative pills. The value 9999px ensures a perfect pill at any width or height. Referenced by: unmapped."
+    }
   }
 }
