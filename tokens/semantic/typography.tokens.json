@@ -1,38 +1,43 @@
 {
   "font": {
+    "$description": "Semantic typography tokens for the River Romney design system. Reference these tokens in UI code — never raw primitives. Three content roles (title, body, label) each with three sizes (large, medium, small), plus a code role for monospaced contexts. All tokens are composite typography values combining family, weight, size, and line-height.",
+
     "title": {
+      "$description": "Display and heading text. Always Space Grotesk at light weight (300) — the low weight at large sizes creates the airy, elegant quality of the heading style. Use for structural page and section headings only; do not use for UI labels or body content.",
       "large": {
         "$type": "typography",
         "$value": {
           "fontFamily": "{font.family.sans}",
-          "fontWeight": "{font.weight.regular}",
+          "fontWeight": "{font.weight.light}",
           "fontSize": "{font.size.3xl}",
           "lineHeight": "{font.lineHeight.tight}"
         },
-        "$description": "Hero text, page titles"
+        "$description": "Hero text and primary page titles. Space Grotesk 300 at 40px / 1.1 line-height. The tightest line-height in the system — intentional at this size, where lines read as a unit. Use for the main h1 of a page, hero statements, and splash headings. Do not use below the top level of a page hierarchy."
       },
       "medium": {
         "$type": "typography",
         "$value": {
           "fontFamily": "{font.family.sans}",
-          "fontWeight": "{font.weight.regular}",
+          "fontWeight": "{font.weight.light}",
           "fontSize": "{font.size.2xl}",
           "lineHeight": "{font.lineHeight.snug}"
         },
-        "$description": "Intro paragraphs, blog h1, featured text"
+        "$description": "Intro paragraphs, featured text, and blog h1. Space Grotesk 300 at 32px / 1.25 line-height. One step down from large — use when the content is important but not the primary focus of the page, or for the first heading inside a content section."
       },
       "small": {
         "$type": "typography",
         "$value": {
           "fontFamily": "{font.family.sans}",
-          "fontWeight": "{font.weight.regular}",
+          "fontWeight": "{font.weight.light}",
           "fontSize": "{font.size.lg}",
           "lineHeight": "{font.lineHeight.snug}"
         },
-        "$description": "Section labels, blog h2, category headers"
+        "$description": "Section labels, blog h2, and category headers. Space Grotesk 300 at 24px / 1.25 line-height. The entry-level title size — use to introduce a content section or label a major group of UI elements. Below this size, switch to font.label.* for UI contexts or font.body.* for prose."
       }
     },
+
     "body": {
+      "$description": "Prose and long-form reading text. Always Spectral at regular weight (400). The humanist serif brings warmth and legibility to extended reading. Do not use for UI labels, navigation, or interface elements — those belong to font.label.*.",
       "large": {
         "$type": "typography",
         "$value": {
@@ -41,7 +46,7 @@
           "fontSize": "{font.size.base}",
           "lineHeight": "{font.lineHeight.normal}"
         },
-        "$description": "Default body/paragraph text (16px)"
+        "$description": "Default body and paragraph text. Spectral 400 at 16px / 1.6 line-height. The standard reading size for all prose content — articles, case study copy, Substack posts, and any extended text block. Use this as the default for all body content unless a specific size variation is needed."
       },
       "medium": {
         "$type": "typography",
@@ -51,7 +56,7 @@
           "fontSize": "{font.size.sm}",
           "lineHeight": "{font.lineHeight.normal}"
         },
-        "$description": "Secondary body text (14px)"
+        "$description": "Secondary body text. Spectral 400 at 14px / 1.6 line-height. Use for supporting prose that is present but subordinate — sidebar text, supplementary descriptions, secondary content blocks. Not for primary reading content."
       },
       "small": {
         "$type": "typography",
@@ -61,10 +66,12 @@
           "fontSize": "{font.size.xs}",
           "lineHeight": "{font.lineHeight.normal}"
         },
-        "$description": "Tertiary body text, fine prose (12px)"
+        "$description": "Tertiary body text and fine prose. Spectral 400 at 12px / 1.6 line-height. Use sparingly — for footnotes, endnotes, legal text, or other non-critical prose that must be present but should not draw attention. The serif at this size is still legible but clearly de-emphasised."
       }
     },
+
     "label": {
+      "$description": "UI interface text. Always Space Grotesk at regular weight (400). Use for all non-prose, non-heading text in the interface — navigation, buttons, form labels, metadata, captions. The sans-serif at regular weight reads as functional and neutral, which is appropriate for interface chrome.",
       "large": {
         "$type": "typography",
         "$value": {
@@ -73,7 +80,7 @@
           "fontSize": "{font.size.base}",
           "lineHeight": "{font.lineHeight.snug}"
         },
-        "$description": "Section headers, prominent UI labels (16px)"
+        "$description": "Prominent UI labels and section headers. Space Grotesk 400 at 16px / 1.25 line-height. Use for labels that introduce major UI sections, prominent navigation items, or any interface label that needs to carry visual weight without being a full title. The snug line-height reflects its UI role — tighter than body text."
       },
       "medium": {
         "$type": "typography",
@@ -83,7 +90,7 @@
           "fontSize": "{font.size.sm}",
           "lineHeight": "{font.lineHeight.snug}"
         },
-        "$description": "Navigation, button text, standard UI"
+        "$description": "Standard UI text. Space Grotesk 400 at 14px / 1.25 line-height. The workhorse label size — use for navigation links, button text, form field labels, tag labels, and most standard interface text. The default choice for any UI element that is not a heading, body copy, or fine print."
       },
       "small": {
         "$type": "typography",
@@ -93,8 +100,19 @@
           "fontSize": "{font.size.xs}",
           "lineHeight": "{font.lineHeight.snug}"
         },
-        "$description": "Meta text, captions, fine print"
+        "$description": "Meta text, captions, and fine print. Space Grotesk 400 at 12px / 1.25 line-height. Use for timestamps, image captions, helper text, badges, and any label that needs to be present but clearly secondary. The sans-serif at this size remains legible where the serif (font.body.small) would feel more literary."
       }
+    },
+
+    "code": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{font.family.mono}",
+        "fontWeight": "{font.weight.regular}",
+        "fontSize": "{font.size.sm}",
+        "lineHeight": "{font.lineHeight.normal}"
+      },
+      "$description": "Code blocks and inline code. JetBrains Mono 400 at 14px / 1.6 line-height. Use for all code samples, terminal output, inline code references, and any monospaced content. The slightly generous line-height (1.6) aids readability in multi-line code blocks. The terminal-style aesthetic of JetBrains Mono is intentionally coherent with the system's phosphor-green visual language."
     }
   }
 }
