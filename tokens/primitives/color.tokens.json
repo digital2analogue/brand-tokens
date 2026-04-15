@@ -1,18 +1,50 @@
 {
   "color": {
     "$type": "color",
+    "$description": "Primitive color values for the River Romney design system. These are raw values only — no semantic meaning is attached here. Do not reference these tokens directly in UI code; use semantic tokens (color.background.*, color.foreground.*, color.border.*) instead. Primitives exist so semantic tokens have a single authoritative source for each hex value.",
+
     "green": {
-      "950": { "$value": "#0A0D0A", "$description": "Near-black green (background)" },
-      "900": { "$value": "#1E241E", "$description": "Dark green (borders, secondary bg)" },
-      "600": { "$value": "#8B9683", "$description": "Muted sage (labels, tertiary text) — AA 6.32:1 on 950" },
-      "500": { "$value": "#7A9E80", "$description": "Sage green (intermediate)" },
-      "400": { "$value": "#A0A89A", "$description": "Soft green (secondary text) — AA 7.97:1 on 950" },
-      "200": { "$value": "#C8CFC4", "$description": "Light green (primary text) — AA 12.26:1 on 950" },
-      "accent": { "$value": "#4ADE6E", "$description": "Terminal green (hover/interactive) — AAA 11.13:1 on 950" }
+      "$description": "A single-hue green ramp from near-black to vivid accent. The palette is intentionally narrow — all UI color comes from this one family plus two neutrals. The warm green undertone is what distinguishes this system from a generic dark theme.",
+      "950": {
+        "$value": "#0A0D0A",
+        "$description": "Near-black with a warm green undertone. The darkest point in the palette and the foundation of the dark canvas aesthetic. Warmer than pure black (#000000), which reads as sterile. Referenced by: color.background.default, color.foreground.on-action, color.foreground.on-accent."
+      },
+      "900": {
+        "$value": "#1E241E",
+        "$description": "Deep forest green. Visibly distinct from green.950 only on close inspection — creates subtle surface depth without breaking the dark canvas feel. Referenced by: color.background.alt, color.border.default."
+      },
+      "600": {
+        "$value": "#8B9683",
+        "$description": "Muted sage. Mid-range tone that reads clearly above the dark background without demanding attention. The lowest-contrast text color in the system that still meets WCAG AA. Contrast vs green.950: 6.32:1 (AA). Referenced by: color.foreground.muted."
+      },
+      "500": {
+        "$value": "#7A9E80",
+        "$description": "Sage green. More saturated than green.600 — a bridge between muted and vivid tones. Not currently mapped to a semantic token; reserved for future component-level tokens or an expanded theme palette."
+      },
+      "400": {
+        "$value": "#A0A89A",
+        "$description": "Soft desaturated green. Readable and unobtrusive — neither commanding attention nor fading into the background. Contrast vs green.950: 7.97:1 (AA). Referenced by: color.foreground.alt."
+      },
+      "200": {
+        "$value": "#C8CFC4",
+        "$description": "Light sage-white. The brightest text tone in the palette. High contrast without the harshness of pure white — the subtle green tint keeps it visually cohesive with the rest of the palette. Contrast vs green.950: 12.26:1 (AAA). Referenced by: color.foreground.default."
+      },
+      "accent": {
+        "$value": "#4ADE6E",
+        "$description": "Terminal green. The only high-chroma value in the palette — vivid and saturated against the muted ramp. Evokes phosphor displays and CRT terminals, which is intentional. High visual weight; use through semantic tokens that enforce appropriate restraint. Contrast vs green.950: 11.13:1 (AAA). Referenced by: color.background.action, color.background.accent, color.foreground.action, color.foreground.accent."
+      }
     },
+
     "neutral": {
-      "white": { "$value": "#FFFFFF" },
-      "black": { "$value": "#000000" }
+      "$description": "Absolute neutrals with no green undertone. Used for edge cases and maximum-contrast needs only. The green palette handles all standard UI color.",
+      "white": {
+        "$value": "#FFFFFF",
+        "$description": "Pure white. Reserved for maximum-contrast situations such as text overlaid on photography or outside-system contexts. Avoid in standard UI — it reads as outside the palette and breaks tonal cohesion."
+      },
+      "black": {
+        "$value": "#000000",
+        "$description": "Pure black. Used as the background.default override for the .art site (photo-optimized, no green undertone needed). Not the default canvas for other properties — that is green.950."
+      }
     }
   }
 }
