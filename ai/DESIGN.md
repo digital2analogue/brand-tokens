@@ -122,8 +122,6 @@ All title and display tokens use Space Grotesk at **weight 300 (light)**. All bo
 | letterSpacing.label | --letter-spacing-label | 0.03em | font.label.* — UI labels, nav |
 | letterSpacing.all-caps | --letter-spacing-all-caps | 0.1em | ALL CAPS text only |
 
-⚠️ Note: The underlying primitives `letterSpacing.tightest` (-0.01em) and `letterSpacing.tight` (-0.025em) have inverted names — tight is actually tighter than tightest. The values are correct; names are pending a refactor.
-
 ---
 
 ## Spacing Scale
