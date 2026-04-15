@@ -1,16 +1,16 @@
 {
   "letterSpacing": {
-    "$description": "Semantic letter-spacing tokens for the River Romney design system. Maps typographic roles to primitive tracking values. ⚠️ Note: the underlying primitives have a naming inversion — 'tight' (-0.025em) is actually tighter than 'tightest' (-0.01em). The values referenced here are correct despite the confusing primitive names. A primitive refactor is pending.",
+    "$description": "Semantic letter-spacing tokens for the River Romney design system. Maps typographic roles to primitive tracking values. Do not reference primitives directly — use these semantic tokens in UI code.",
 
     "display": {
-      "$value": "{letterSpacing.tightest}",
-      "$type": "dimension",
-      "$description": "Display tracking. Applied to the largest type on the page — hero headlines, page titles using font.title.large. At very large sizes, the typeface's default tracking reads as too loose; pulling it in slightly (-0.01em) restores optical density without over-tightening. ⚠️ References the primitive named 'tightest' (-0.01em), which is actually the less-tight of the two negative values — pending name correction. Resolves to: -0.01em."
-    },
-    "title": {
       "$value": "{letterSpacing.tight}",
       "$type": "dimension",
-      "$description": "Title tracking. Applied to medium-scale headings — section headers, blog h1, featured callouts using font.title.medium and font.title.small. Slightly tighter tracking than display (-0.025em) helps the heading read as a cohesive unit at mid-range sizes. ⚠️ References the primitive named 'tight' (-0.025em), which is actually the tighter of the two negative values — naming inversion pending correction. Resolves to: -0.025em."
+      "$description": "Display tracking. Applied to the largest type on the page — hero headlines and page titles using font.display. At very large sizes, the typeface's default tracking reads as too loose; pulling it in slightly (-0.01em) restores optical density without over-tightening. Resolves to: -0.01em."
+    },
+    "title": {
+      "$value": "{letterSpacing.tightest}",
+      "$type": "dimension",
+      "$description": "Title tracking. Applied to structural headings using font.title.large, font.title.medium, and font.title.small. Tighter tracking than display (-0.025em) helps headings read as a cohesive unit at mid-range sizes. Resolves to: -0.025em."
     },
     "body": {
       "$value": "{letterSpacing.normal}",

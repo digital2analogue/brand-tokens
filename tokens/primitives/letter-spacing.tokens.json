@@ -1,27 +1,27 @@
 {
   "letterSpacing": {
     "$type": "dimension",
-    "$description": "Primitive letter-spacing values for the River Romney design system. Negative values tighten tracking; positive values open it. ⚠️ Naming inconsistency: 'tight' (-0.025em) is actually more negative — and therefore tighter — than 'tightest' (-0.01em). These names should be swapped in a future refactor. Do not reference these tokens directly in UI code; use semantic tokens when available.",
+    "$description": "Primitive letter-spacing values for the River Romney design system. Negative values tighten tracking; positive values open it. Do not reference these tokens directly in UI code; use semantic tokens when available.",
 
-    "tightest": {
-      "$value": "-0.01em",
-      "$description": "Slightly reduced tracking. ⚠️ Despite the name, this is less tight than 'tight' (-0.025em) — naming should be corrected. Currently used for large display text where modest tracking reduction improves visual weight. Referenced by: unmapped."
-    },
     "tight": {
+      "$value": "-0.01em",
+      "$description": "Slightly reduced tracking. Used for large display text where modest tracking reduction improves visual weight. Referenced by: letterSpacing.display."
+    },
+    "tightest": {
       "$value": "-0.025em",
-      "$description": "Reduced tracking. ⚠️ Despite the name, this is actually tighter than 'tightest' (-0.01em) — naming should be corrected. Used for headings to tighten letter-spacing at medium display sizes. Referenced by: unmapped."
+      "$description": "Most reduced tracking in the system. Used for headings to tighten letter-spacing at medium display sizes. Referenced by: letterSpacing.title."
     },
     "normal": {
       "$value": "0em",
-      "$description": "Default tracking. No adjustment to the typeface's built-in letter-spacing. The baseline for all body text and most UI text. Referenced by: unmapped."
+      "$description": "Default tracking. No adjustment to the typeface's built-in letter-spacing. The baseline for all body text and most UI text. Referenced by: letterSpacing.body."
     },
     "wide": {
       "$value": "0.03em",
-      "$description": "Slightly open tracking. Used for UI labels and navigation where a small amount of open tracking improves readability at small sizes. Referenced by: unmapped."
+      "$description": "Slightly open tracking. Used for UI labels and navigation where a small amount of open tracking improves readability at small sizes. Referenced by: letterSpacing.label."
     },
     "wider": {
       "$value": "0.1em",
-      "$description": "Generously open tracking. For all-caps labels and display contexts where wide tracking is a deliberate typographic choice. Do not use at body sizes — wide tracking at 16px or below reads as broken text. Referenced by: unmapped."
+      "$description": "Generously open tracking. For all-caps labels and display contexts where wide tracking is a deliberate typographic choice. Do not use at body sizes — wide tracking at 16px or below reads as broken text. Referenced by: letterSpacing.all-caps."
     }
   }
 }

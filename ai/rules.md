@@ -48,5 +48,3 @@
 - **riverromney.art** (.art): Override background.default to pure black (#000000) for photo contrast
 - **riverromney.blog** (.blog): Override body font size to 18px, line-height to 1.7 (font.lineHeight.relaxed)
 
-## Known Issues / Pending Refactors
-- **Letter-spacing naming inversion**: `letterSpacing.tightest` (-0.01em) is less tight than `letterSpacing.tight` (-0.025em) — names need swapping. Values are correct. Semantic tokens reference the correct primitives and are unaffected.
