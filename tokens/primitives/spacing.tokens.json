@@ -1,16 +1,51 @@
 {
   "space": {
     "$type": "dimension",
-    "3xs": { "$value": "2px", "$description": "Hairline gaps, optical adjustments" },
-    "2xs": { "$value": "4px", "$description": "Inline icon margins, tight gaps" },
-    "xs":  { "$value": "8px", "$description": "Small padding, compact element spacing" },
-    "sm":  { "$value": "12px", "$description": "Form padding, list item gaps" },
-    "md":  { "$value": "16px", "$description": "Default padding, standard gap" },
-    "lg":  { "$value": "24px", "$description": "Card padding, comfortable spacing" },
-    "xl":  { "$value": "32px", "$description": "Section padding, grid gaps" },
-    "2xl": { "$value": "48px", "$description": "Section margins, layout gaps" },
-    "3xl": { "$value": "64px", "$description": "Large section breaks" },
-    "4xl": { "$value": "80px", "$description": "Page sections" },
-    "5xl": { "$value": "128px", "$description": "Hero / full-bleed spacing" }
+    "$description": "Primitive spacing scale for the River Romney design system. Raw values only — use semantic spacing tokens (spacing.*) in UI code instead. The scale runs from hairline micro-spacing (2px) to full-bleed layout spacing (128px). Note: font.size.md (20px) and font.size.xl (28px) are currently unmapped to semantic tokens — a type scale audit is pending.",
+
+    "3xs": {
+      "$value": "2px",
+      "$description": "Hairline. For optical adjustments, icon-to-label nudges, and micro-corrections that aren't real spacing — they're just making something look right. Not for padding or margin. Referenced by: unmapped."
+    },
+    "2xs": {
+      "$value": "4px",
+      "$description": "Micro spacing. Inline icon-to-text margins, gap between a badge and its label, tight internal element nudges. The smallest value used for genuine spacing (not just optical correction). Referenced by: unmapped."
+    },
+    "xs": {
+      "$value": "8px",
+      "$description": "Small spacing. Compact internal element padding — the tightest spacing that reads as intentional breathing room. Referenced by: spacing.tight."
+    },
+    "sm": {
+      "$value": "12px",
+      "$description": "Form-level spacing. Gaps between list items, input internal padding, spacing between closely related inline elements. Referenced by: spacing.inline."
+    },
+    "md": {
+      "$value": "16px",
+      "$description": "Default spacing. The baseline unit — if there's no reason to go tighter or looser, this is the value. Standard internal padding for most components. Referenced by: spacing.element."
+    },
+    "lg": {
+      "$value": "24px",
+      "$description": "Comfortable spacing. Card padding, gap between a label and its associated content, space between sibling components. Referenced by: spacing.component."
+    },
+    "xl": {
+      "$value": "32px",
+      "$description": "Generous spacing. Grid column gaps, space between a heading and its content block, outer padding for container elements. Referenced by: unmapped — available for layout-level semantic token."
+    },
+    "2xl": {
+      "$value": "48px",
+      "$description": "Layout spacing. Section padding, gap between major layout regions. Referenced by: spacing.layout."
+    },
+    "3xl": {
+      "$value": "64px",
+      "$description": "Large section break. Vertical rhythm between major content sections on a page. Referenced by: unmapped."
+    },
+    "4xl": {
+      "$value": "80px",
+      "$description": "Page-level spacing. Generous vertical separation between top-level page sections. Referenced by: unmapped."
+    },
+    "5xl": {
+      "$value": "128px",
+      "$description": "Hero and full-bleed spacing. Maximum vertical space — for hero sections, full-bleed dividers, and deliberate empty space used as a design element. Referenced by: spacing.section."
+    }
   }
 }
