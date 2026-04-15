@@ -1,20 +1,21 @@
 {
   "font": {
-    "$description": "Semantic typography tokens for the River Romney design system. Reference these tokens in UI code — never raw primitives. Three content roles (title, body, label) each with three sizes (large, medium, small), plus a code role for monospaced contexts. All tokens are composite typography values combining family, weight, size, and line-height.",
+    "$description": "Semantic typography tokens for the River Romney design system. Reference these tokens in UI code — never raw primitives. Four roles: display (expressive, one-per-page hero type), title (structural headings, three steps), body (prose, three steps), and label (UI text, three steps), plus code for monospaced contexts. All tokens are composite typography values combining family, weight, size, and line-height.",
+
+    "display": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontWeight": "{font.weight.light}",
+        "fontSize": "{font.size.3xl}",
+        "lineHeight": "{font.lineHeight.tight}"
+      },
+      "$description": "Display text. Space Grotesk 300 at 40px / 1.1 line-height. The largest type in the system — reserved for hero statements, splash headlines, and page-defining moments. This is not a structural heading; it is an expressive, editorial register. Do not use it to introduce sections or content groups — that is font.title.large's job. Use sparingly: one instance per page is typical. The tight line-height (1.1) is intentional at this scale, where lines read as a visual unit rather than separate lines."
+    },
 
     "title": {
-      "$description": "Display and heading text. Always Space Grotesk at light weight (300) — the low weight at large sizes creates the airy, elegant quality of the heading style. Use for structural page and section headings only; do not use for UI labels or body content.",
+      "$description": "Structural heading text. Always Space Grotesk at light weight (300). Use for document hierarchy — page headings, section labels, content groupings. Three steps covering h1 through h3 equivalents. Below title.small, switch to font.label.* for UI contexts or font.body.* for prose.",
       "large": {
-        "$type": "typography",
-        "$value": {
-          "fontFamily": "{font.family.sans}",
-          "fontWeight": "{font.weight.light}",
-          "fontSize": "{font.size.3xl}",
-          "lineHeight": "{font.lineHeight.tight}"
-        },
-        "$description": "Hero text and primary page titles. Space Grotesk 300 at 40px / 1.1 line-height. The tightest line-height in the system — intentional at this size, where lines read as a unit. Use for the main h1 of a page, hero statements, and splash headings. Do not use below the top level of a page hierarchy."
-      },
-      "medium": {
         "$type": "typography",
         "$value": {
           "fontFamily": "{font.family.sans}",
@@ -22,9 +23,9 @@
           "fontSize": "{font.size.2xl}",
           "lineHeight": "{font.lineHeight.snug}"
         },
-        "$description": "Intro paragraphs, featured text, and blog h1. Space Grotesk 300 at 32px / 1.25 line-height. One step down from large — use when the content is important but not the primary focus of the page, or for the first heading inside a content section."
+        "$description": "Primary page heading. Space Grotesk 300 at 32px / 1.25 line-height. The h1 equivalent — use for the main structural heading of a page or the first heading inside a major content section. One level below font.display, but this is a structural role where display is expressive. Most pages should have exactly one instance."
       },
-      "small": {
+      "medium": {
         "$type": "typography",
         "$value": {
           "fontFamily": "{font.family.sans}",
@@ -32,7 +33,17 @@
           "fontSize": "{font.size.lg}",
           "lineHeight": "{font.lineHeight.snug}"
         },
-        "$description": "Section labels, blog h2, and category headers. Space Grotesk 300 at 24px / 1.25 line-height. The entry-level title size — use to introduce a content section or label a major group of UI elements. Below this size, switch to font.label.* for UI contexts or font.body.* for prose."
+        "$description": "Section heading. Space Grotesk 300 at 24px / 1.25 line-height. The h2 equivalent — use to introduce major sections within a page, blog post subheadings, and category or feature group headers. Clearly subordinate to title.large while still commanding attention."
+      },
+      "small": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.sans}",
+          "fontWeight": "{font.weight.light}",
+          "fontSize": "{font.size.md}",
+          "lineHeight": "{font.lineHeight.snug}"
+        },
+        "$description": "Sub-section heading. Space Grotesk 300 at 20px / 1.25 line-height. The h3 equivalent — use for nested content groups, tertiary sections within a blog post, and UI panel headers where a visual step down from title.medium is needed. The smallest size where the light weight still reads as intentionally editorial rather than just small text."
       }
     },
 
