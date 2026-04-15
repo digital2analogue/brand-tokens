@@ -1,9 +1,36 @@
 {
   "spacing": {
-    "tight":     { "$value": "{space.xs}",  "$description": "Tight spacing — between closely related items" },
-    "inline":    { "$value": "{space.sm}",  "$description": "Between inline items" },
-    "element":   { "$value": "{space.md}",  "$description": "Between elements within a component" },
-    "component": { "$value": "{space.lg}",  "$description": "Between components" },
-    "section":   { "$value": "{space.5xl}", "$description": "Large section gaps" }
+    "$description": "Semantic spacing tokens for the River Romney design system. Maps intent-named roles to primitive space values. Use these in UI code rather than raw primitives — they communicate purpose, not just size. Scale runs from micro-spacing within a component to full-bleed section breaks.",
+
+    "tight": {
+      "$value": "{space.xs}",
+      "$type": "dimension",
+      "$description": "Tight spacing. Between closely related items that belong to the same thought — e.g., an icon and its label, a checkbox and its text, stacked lines within a single element. At 8px, the gap is felt as belonging rather than separating. Resolves to: 8px."
+    },
+    "inline": {
+      "$value": "{space.sm}",
+      "$type": "dimension",
+      "$description": "Inline spacing. Between items that are related but distinct — e.g., items in a navigation row, pills in a tag group, or gaps in a horizontal list. Signals adjacency without implying the items are the same unit. Resolves to: 12px."
+    },
+    "element": {
+      "$value": "{space.md}",
+      "$type": "dimension",
+      "$description": "Element spacing. The default internal padding for most components — input fields, buttons, menu items, list rows. Sets the baseline breathing room inside a discrete UI unit. Also used between sibling elements within the same component zone. Resolves to: 16px."
+    },
+    "component": {
+      "$value": "{space.lg}",
+      "$type": "dimension",
+      "$description": "Component spacing. Between distinct UI components in a layout — e.g., the gap between a label and its input, between a card and the next card in a list, or between a toolbar and the content below it. Signals that two things are related but not the same. Resolves to: 24px."
+    },
+    "layout": {
+      "$value": "{space.2xl}",
+      "$type": "dimension",
+      "$description": "Layout spacing. Between major layout regions within a page section — e.g., between a sidebar and main content, between a page header and the first content block, or between stacked content groups. Larger than component spacing but not a full section break. Resolves to: 48px."
+    },
+    "section": {
+      "$value": "{space.5xl}",
+      "$type": "dimension",
+      "$description": "Section spacing. Between top-level page sections — the full whitespace beat that tells the eye a new chapter has begun. Use for gaps between hero, features, testimonials, and footer regions. Not for component-level gaps; it will feel like the page fell apart. Resolves to: 128px."
+    }
   }
 }
