@@ -1,0 +1,118 @@
+{
+  "$description": "Decision engine brand — enterprise light UI, C1 Navy + Inter. Overrides primitives (color palettes + font family) and adds the accent/feedback semantic layer this app consumes.",
+
+  "primitive": {
+    "color": {
+      "green": {
+        "600": { "$value": "#008545", "$description": "Decision-engine vivid green — success / approval" },
+        "700": { "$value": "#006B37", "$description": "Green hover state" },
+        "800": { "$value": "#004F29", "$description": "Green active state" }
+      },
+      "blue": {
+        "700": { "$value": "#004977", "$description": "C1 Navy — primary brand" },
+        "800": { "$value": "#003A5C", "$description": "Navy hover state" },
+        "900": { "$value": "#002C46", "$description": "Navy active state" }
+      },
+      "red": {
+        "600": { "$value": "#D03027", "$description": "Destructive / expense" },
+        "700": { "$value": "#B52720", "$description": "Red hover state" },
+        "800": { "$value": "#9A1F1B", "$description": "Red active state" }
+      },
+      "purple": {
+        "600": { "$value": "#7C3AED", "$description": "Purple accent" },
+        "700": { "$value": "#6D28D9", "$description": "Purple hover state" },
+        "800": { "$value": "#5B21B6", "$description": "Purple active state" }
+      }
+    }
+  },
+
+  "color": {
+
+    "background": {
+      "default":  { "$value": "{primitive.color.neutral.white}", "$description": "Pure white page background" },
+      "alt":      { "$value": "#F5F6F7", "$description": "Neutral light gray — secondary surfaces" },
+      "elevated": { "$value": "{primitive.color.neutral.white}", "$description": "Pure white for elevated surfaces (cards, modals)" },
+      "action":   { "$value": "{primitive.color.blue.700}", "$description": "Primary CTA background — references blue primitive" },
+      "selected": { "$value": "color-mix(in srgb, {primitive.color.neutral.white} 95%, {primitive.color.blue.700} 5%)", "$description": "Selected row/menu-item wash — subtle blue tint" },
+
+      "accent": {
+        "green":              { "$value": "{primitive.color.green.600}", "$description": "Solid green background" },
+        "green-hover":        { "$value": "{primitive.color.green.700}", "$description": "Solid green hover" },
+        "green-active":       { "$value": "{primitive.color.green.800}", "$description": "Solid green active" },
+        "green-soft":         { "$value": "color-mix(in srgb, {color.background.alt} 78%, {primitive.color.green.600} 22%)", "$description": "Soft-tinted green for chips/pills" },
+        "green-soft-border":  { "$value": "color-mix(in srgb, {color.background.alt} 55%, {primitive.color.green.600} 45%)", "$description": "Border companion for green-soft" },
+
+        "blue":               { "$value": "{primitive.color.blue.700}", "$description": "Solid navy background" },
+        "blue-hover":         { "$value": "{primitive.color.blue.800}", "$description": "Solid navy hover" },
+        "blue-active":        { "$value": "{primitive.color.blue.900}", "$description": "Solid navy active" },
+        "blue-soft":          { "$value": "color-mix(in srgb, {color.background.alt} 78%, {primitive.color.blue.700} 22%)", "$description": "Soft-tinted navy for chips/pills" },
+        "blue-soft-border":   { "$value": "color-mix(in srgb, {color.background.alt} 55%, {primitive.color.blue.700} 45%)", "$description": "Border companion for blue-soft" },
+
+        "red":                { "$value": "{primitive.color.red.600}", "$description": "Solid red background" },
+        "red-hover":          { "$value": "{primitive.color.red.700}", "$description": "Solid red hover" },
+        "red-active":         { "$value": "{primitive.color.red.800}", "$description": "Solid red active" },
+        "red-soft":           { "$value": "color-mix(in srgb, {color.background.alt} 78%, {primitive.color.red.600} 22%)", "$description": "Soft-tinted red for chips/pills" },
+        "red-soft-border":    { "$value": "color-mix(in srgb, {color.background.alt} 55%, {primitive.color.red.600} 45%)", "$description": "Border companion for red-soft" },
+
+        "purple":             { "$value": "{primitive.color.purple.600}", "$description": "Solid purple background" },
+        "purple-hover":       { "$value": "{primitive.color.purple.700}", "$description": "Solid purple hover" },
+        "purple-active":      { "$value": "{primitive.color.purple.800}", "$description": "Solid purple active" },
+        "purple-soft":        { "$value": "color-mix(in srgb, {color.background.alt} 78%, {primitive.color.purple.600} 22%)", "$description": "Soft-tinted purple for chips/pills" },
+        "purple-soft-border": { "$value": "color-mix(in srgb, {color.background.alt} 55%, {primitive.color.purple.600} 45%)", "$description": "Border companion for purple-soft" }
+      },
+
+      "success": { "$value": "color-mix(in srgb, {color.background.alt} 85%, {primitive.color.green.600} 15%)", "$description": "Soft success banner background" },
+      "error":   { "$value": "color-mix(in srgb, {color.background.default} 92%, {primitive.color.red.600} 8%)", "$description": "Soft error banner background" }
+    },
+
+    "foreground": {
+      "default":   { "$value": "#1A1A2E", "$description": "Primary text — near-black with a subtle cool cast" },
+      "alt":       { "$value": "#4A4A5A", "$description": "Secondary text" },
+      "muted":     { "$value": "#8A8A9A", "$description": "Tertiary text, labels, hint/placeholder-like subtitles" },
+
+      "accent":        { "$value": "{primitive.color.blue.700}", "$description": "Primary accent (foreground) — C1 Navy for decision-engine" },
+      "accent-green":  { "$value": "{primitive.color.green.600}", "$description": "Vivid green for text/icons on default bg" },
+      "accent-blue":   { "$value": "{primitive.color.blue.700}", "$description": "C1 Navy for text/icons on default bg" },
+      "accent-red":    { "$value": "{primitive.color.red.600}", "$description": "Red for text/icons on default bg" },
+      "accent-purple": { "$value": "{primitive.color.purple.600}", "$description": "Purple for text/icons on default bg" },
+      "action":        { "$value": "{primitive.color.blue.700}", "$description": "Primary action foreground — C1 Navy" },
+      "on-accent-green":  { "$value": "{primitive.color.neutral.white}", "$description": "Text/icons on solid green bg" },
+      "on-accent-blue":   { "$value": "{primitive.color.neutral.white}", "$description": "Text/icons on solid navy bg" },
+      "on-accent-red":    { "$value": "{primitive.color.neutral.white}", "$description": "Text/icons on solid red bg" },
+      "on-accent-purple": { "$value": "{primitive.color.neutral.white}", "$description": "Text/icons on solid purple bg" },
+      "on-action": { "$value": "{primitive.color.neutral.white}", "$description": "Text/icons on primary CTA — white on navy" },
+
+      "success":    { "$value": "{primitive.color.green.600}", "$description": "Success text/icons on default bg" },
+      "error":      { "$value": "{primitive.color.red.600}", "$description": "Error text/icons on default bg" },
+      "on-success": { "$value": "{primitive.color.green.800}", "$description": "Text on soft success background — dark green for AA contrast" },
+      "on-error":   { "$value": "{primitive.color.red.800}", "$description": "Text on soft error background — dark red for AA contrast" },
+
+      "danger":    { "$value": "{primitive.color.red.600}", "$description": "Red-600 — error/destructive actions" },
+      "inverse":   { "$value": "{primitive.color.neutral.white}", "$description": "Inverse text for dark contexts" }
+    },
+
+    "border": {
+      "default": { "$value": "#D8DCE0", "$description": "Neutral light gray border" },
+      "muted":   { "$value": "#E8EAED", "$description": "Subtle border" },
+      "accent":  { "$value": "{primitive.color.blue.700}", "$description": "Accent border — active states, focus rings" }
+    },
+
+    "state": {
+      "hover":    { "$value": "{primitive.color.blue.800}", "$description": "Navy hover state" },
+      "focus":    { "$value": "{primitive.color.blue.700}", "$description": "Focus ring color" },
+      "disabled": { "$value": "#D1D5CC", "$description": "Light gray — disabled elements" }
+    },
+
+    "feedback": {
+      "error":   { "$value": "{primitive.color.red.600}", "$description": "Semantic error — prefer foreground.error / background.error" },
+      "success": { "$value": "{primitive.color.green.600}", "$description": "Semantic success — prefer foreground.success / background.success" }
+    }
+  },
+
+  "font": {
+    "family": {
+      "sans":  { "$value": "'Inter', sans-serif", "$description": "Inter for all UI type" },
+      "serif": { "$value": "'Inter', sans-serif", "$description": "Same as sans — enterprise data UI uses one family" }
+    }
+  }
+}
