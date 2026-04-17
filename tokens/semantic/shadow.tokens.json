@@ -3,22 +3,22 @@
     "$description": "Semantic shadow tokens for the River Romney design system. Abstract scale — tokens are named by the elevation role they communicate, not by their CSS size. Shadows in a dark theme are intentionally subtle; heavy shadows read as out-of-place against a near-black canvas. Use the lowest-elevation shadow that still communicates the component's layer — don't reach for dialog-level depth on a card.",
 
     "none": {
-      "$value": "{shadow.none}",
+      "$value": "{primitive.shadow.none}",
       "$type": "shadow",
       "$description": "No shadow. The element sits flush with its background — zero elevation cue. Use when depth is communicated by background color (color.background.alt) rather than shadow, or when the component is intentionally part of the surface rather than floating above it. Code blocks, data tables, inline elements. Resolves to: 0 0 0 0 rgba(0,0,0,0)."
     },
     "raised": {
-      "$value": "{shadow.sm}",
+      "$value": "{primitive.shadow.sm}",
       "$type": "shadow",
       "$description": "Raised elevation. Minimal lift — just enough to separate an element from its parent surface without creating strong depth. The element reads as slightly above the canvas but still close to it. Use for inputs on hover or focus, inline dropdowns, subtle interactive feedback. On a dark background, this shadow is nearly imperceptible at rest — which is correct. Resolves to: 0 1px 3px rgba(0,0,0,0.08)."
     },
     "overlay": {
-      "$value": "{shadow.lg}",
+      "$value": "{primitive.shadow.lg}",
       "$type": "shadow",
       "$description": "Overlay elevation. Strong depth cue — the element is clearly floating above the page layer. Use for context menus, popover panels, dropdown lists, and any element that temporarily overlays content without dimming the background. The jump from raised to overlay is intentionally large: there is no 'card' shadow in this system — cards use background.alt for separation instead. Resolves to: 0 6px 20px rgba(0,0,0,0.16)."
     },
     "dialog": {
-      "$value": "{shadow.xl}",
+      "$value": "{primitive.shadow.xl}",
       "$type": "shadow",
       "$description": "Dialog elevation. The maximum shadow in the system — reserved for components that must read as the highest layer regardless of page context: modals, full-screen drawers, bottom sheets, and toast notifications. The strong shadow (0 12px 40px) grounds a floating dialog against an already-dark background. Do not apply to cards, panels, or overlays — it will feel overblown. Resolves to: 0 12px 40px rgba(0,0,0,0.24)."
     }

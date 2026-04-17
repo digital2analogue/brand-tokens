@@ -3,32 +3,32 @@
     "$description": "Semantic border-radius tokens for the River Romney design system. Abstract scale — tokens are named by their role in the rounding hierarchy, not by size. The system defaults toward sharp corners; rounding is applied intentionally as a softening signal, not as a blanket style. Do not round everything — use rounding to communicate component type and elevation.",
 
     "none": {
-      "$value": "{radius.none}",
+      "$value": "{primitive.radius.none}",
       "$type": "dimension",
       "$description": "No rounding. For components that must read as rigid, grid-locked, or structural — code blocks, data tables, horizontal rules, layout dividers, and elements that deliberately read as part of the surface rather than floating above it. The default aesthetic for this system. Resolves to: 0."
     },
     "sm": {
-      "$value": "{radius.sm}",
+      "$value": "{primitive.radius.sm}",
       "$type": "dimension",
       "$description": "Subtle rounding. Barely perceptible softening — the component retains a structured, sharp feel with just enough rounding to avoid reading as strictly rectilinear. Use for text inputs, small tags, inline chips, and compact UI elements where a minimal hint of friendliness is appropriate. Resolves to: 4px."
     },
     "default": {
-      "$value": "{radius.md}",
+      "$value": "{primitive.radius.md}",
       "$type": "dimension",
       "$description": "Default rounding. The standard border-radius for interactive components — buttons, dropdown menus, select controls, toggles, and most clickable UI elements. Visibly rounded without feeling soft or balloon-like. When in doubt about which radius to apply to an actionable component, use this one. Resolves to: 8px."
     },
     "lg": {
-      "$value": "{radius.lg}",
+      "$value": "{primitive.radius.lg}",
       "$type": "dimension",
       "$description": "Large rounding. For contained content surfaces — cards, panels, sidebars, and info regions. Reads as a finished, elevated surface rather than a raw layout container. The rounding at this scale signals 'this is a discrete object' without being decorative. Resolves to: 12px."
     },
     "xl": {
-      "$value": "{radius.xl}",
+      "$value": "{primitive.radius.xl}",
       "$type": "dimension",
       "$description": "Extra-large rounding. For hero cards, featured surfaces, and modals where the rounding is a conscious design decision rather than a subtle softening. Use sparingly — it competes with the system's sharp-corner default and should feel deliberate, not incidental. Resolves to: 16px."
     },
     "full": {
-      "$value": "{radius.full}",
+      "$value": "{primitive.radius.full}",
       "$type": "dimension",
       "$description": "Pill or circle. Always fully rounded regardless of element dimensions. Use for status badges, avatar circles, tag chips, toggle switches, and decorative pills. At 9999px, the element becomes a perfect pill at any width or height — no recalculation needed. Resolves to: 9999px."
     }

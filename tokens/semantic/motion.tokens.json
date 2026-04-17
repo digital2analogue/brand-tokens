@@ -6,17 +6,17 @@
       "$description": "Semantic duration tokens. Named by how the motion should feel — instant, standard, or emphasized — rather than by speed. Match duration to the weight of the interaction.",
 
       "instant": {
-        "$value": "{duration.fast}",
+        "$value": "{primitive.duration.fast}",
         "$type": "duration",
         "$description": "Instant feedback. The shortest transition in the system — fast enough that the change feels immediate, but present enough to avoid a jarring cut. Use for hover color changes, focus ring appearance, active/pressed state toggles, and any micro-interaction where the UI must feel truly responsive. At 120ms, the motion is felt but not consciously watched. Resolves to: 120ms."
       },
       "standard": {
-        "$value": "{duration.normal}",
+        "$value": "{primitive.duration.normal}",
         "$type": "duration",
         "$description": "Standard transition. The default duration for most state changes involving layout or visibility — dropdowns opening, tooltips appearing, accordions expanding, tabs switching. Fast enough to feel snappy; slow enough for the eye to register what changed. The workhorse of the motion system. Resolves to: 200ms."
       },
       "emphasized": {
-        "$value": "{duration.slow}",
+        "$value": "{primitive.duration.slow}",
         "$type": "duration",
         "$description": "Emphasized transition. Reserved for large, page-level motions where the movement itself carries meaning — modal entry and exit, drawer slides, full-screen overlays, page transitions. The extra time lets the user's eye track the motion deliberately. Do not apply to hover states or small component toggles — 350ms on a button hover reads as broken. Resolves to: 350ms."
       }
@@ -26,22 +26,22 @@
       "$description": "Semantic easing tokens. Named by the directional role of the motion — entering, exiting, moving within viewport, or no clear direction. Matching easing to direction makes motion feel physical and intentional.",
 
       "enter": {
-        "$value": "{easing.out}",
+        "$value": "{primitive.easing.out}",
         "$type": "cubicBezier",
         "$description": "Easing for elements entering the screen or appearing. Ease-out: starts fast, decelerates to rest. The deceleration signals arrival — the element lands rather than snapping into place. Use for modals appearing, drawers sliding in, tooltips fading up, dropdowns opening. Resolves to: cubic-bezier(0, 0, 0.58, 1)."
       },
       "exit": {
-        "$value": "{easing.in}",
+        "$value": "{primitive.easing.in}",
         "$type": "cubicBezier",
         "$description": "Easing for elements leaving the screen or disappearing. Ease-in: starts slow, accelerates to exit. The acceleration signals departure — the element moves away with purpose rather than drifting off. Use for modals closing, drawers retracting, tooltips fading out, dropdowns collapsing. Resolves to: cubic-bezier(0.42, 0, 1, 1)."
       },
       "move": {
-        "$value": "{easing.in-out}",
+        "$value": "{primitive.easing.in-out}",
         "$type": "cubicBezier",
         "$description": "Easing for elements repositioning within the viewport. Ease-in-out: accelerates then decelerates symmetrically, giving the motion a smooth arc. Use for sliding panels, tab indicator underlines moving between tabs, loading indicators traversing a track, or any element traveling from one place to another without entering or exiting. Resolves to: cubic-bezier(0.42, 0, 0.58, 1)."
       },
       "default": {
-        "$value": "{easing.default}",
+        "$value": "{primitive.easing.default}",
         "$type": "cubicBezier",
         "$description": "General-purpose easing. CSS ease — a gentle acceleration and deceleration with no strong directional character. Use when the transition has no meaningful direction — opacity fades, color shifts, scale pulses. Falls back gracefully for any motion where enter/exit/move semantics don't clearly apply. Resolves to: cubic-bezier(0.25, 0.1, 0.25, 1)."
       }

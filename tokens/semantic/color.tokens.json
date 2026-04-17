@@ -6,19 +6,19 @@
       "$type": "color",
       "$description": "Surface tokens. Two levels — default (the canvas) and alt (elevated surfaces) — plus action and accent fills for interactive and emphasis contexts. Do not invent additional background levels; if more depth is needed, use a border.",
       "default": {
-        "$value": "{color.green.950}",
+        "$value": "{primitive.color.green.950}",
         "$description": "The base canvas. Use as the default background for every page, full-bleed section, and outermost container. The green undertone (#0A0D0A) is what distinguishes this system from generic dark themes — it is not interchangeable with pure black. Do not use for cards, panels, or any element that needs to read as elevated. Hex: #0A0D0A."
       },
       "alt": {
-        "$value": "{color.green.900}",
+        "$value": "{primitive.color.green.900}",
         "$description": "Elevated surface — one level above the canvas. Use for cards, panels, code blocks, input backgrounds, tooltips, dropdowns, and any contained element that needs to read as sitting on top of background.default. Not for full-page backgrounds. The difference from background.default is intentionally subtle — a quiet layer, not a strong contrast shift. Hex: #1E241E."
       },
       "action": {
-        "$value": "{color.green.accent}",
+        "$value": "{primitive.color.green.accent}",
         "$description": "Interactive fill. Use when a surface or component is the primary action — filled primary buttons, selected states, active toggles, and CTAs where the background itself signals interactivity. Always pair text or icons on this surface with foreground.on-action. This token and background.accent currently share the same value but are kept separate — action is tied to interactivity and may change independently. Hex: #4ADE6E."
       },
       "accent": {
-        "$value": "{color.green.accent}",
+        "$value": "{primitive.color.green.accent}",
         "$description": "Decorative or emphasis fill. Use for non-interactive surfaces that need the accent color for visual interest — highlights, callout backgrounds, decorative badges, or design elements that draw the eye without implying clickability. Currently shares its value with background.action but is intentionally separate — accent may drift to a different color as the system matures. Always pair text or icons on this surface with foreground.on-accent. Hex: #4ADE6E."
       }
     },
@@ -27,31 +27,31 @@
       "$type": "color",
       "$description": "Foreground tokens cover all content rendered on top of a surface: text, icons, labels, and interactive elements. default/alt/muted form a three-level reading hierarchy. action and accent are reserved for interactive and emphasis contexts respectively. on-* tokens are for content placed on top of filled action or accent backgrounds.",
       "default": {
-        "$value": "{color.green.200}",
+        "$value": "{primitive.color.green.200}",
         "$description": "Primary text and icons. The default foreground color — use for headings, body copy, navigation labels, button labels, and any text or icon that is the primary reason a user is reading a given element. Applies equally to text and icons. Use this unless there is a clear reason to step down in hierarchy. Contrast vs background.default: 12.26:1 (WCAG AAA). Hex: #C8CFC4."
       },
       "alt": {
-        "$value": "{color.green.400}",
+        "$value": "{primitive.color.green.400}",
         "$description": "Secondary text and icons. Use for subtitles, metadata, timestamps, secondary descriptions, supporting labels, and icons that provide context rather than primary information. Applies equally to text and icons. Signals 'useful but not the headline.' Contrast vs background.default: 7.97:1 (WCAG AA). Do not use for primary headings or standalone body copy — the visual step-down implies the content is subordinate. Hex: #A0A89A."
       },
       "muted": {
-        "$value": "{color.green.600}",
+        "$value": "{primitive.color.green.600}",
         "$description": "Tertiary and subdued content. Use for placeholder text, disabled UI labels, fine print, footnotes, helper text, and decorative or atmospheric text that should not compete for attention. Applies equally to text and icons. At the lower end of the accessible range — do not use for anything interactive, critical, or requiring strong legibility. Contrast vs background.default: 6.32:1 (WCAG AA, minimum). Hex: #8B9683."
       },
       "action": {
-        "$value": "{color.green.accent}",
+        "$value": "{primitive.color.green.accent}",
         "$description": "Interactive text and icons. Use for links, interactive labels, active navigation items, and any text or icon element that signals clickability or interactivity without a filled background. This is the foreground counterpart to background.action — same intent, different surface treatment. Currently shares its value with foreground.accent but is intentionally separate; the action color may change independently as the system evolves. Contrast vs background.default: 11.13:1 (WCAG AAA). Never use for resting/static text. Hex: #4ADE6E."
       },
       "accent": {
-        "$value": "{color.green.accent}",
+        "$value": "{primitive.color.green.accent}",
         "$description": "Decorative or emphasis text and icons. Use sparingly for non-interactive elements that need the accent color for visual interest — a highlighted keyword, an emphasis icon, a design detail. Not tied to interactivity. Currently shares its value with foreground.action but is intentionally separate — accent is an uncommon color in the UI and may drift to a different value as the system matures. Contrast vs background.default: 11.13:1 (WCAG AAA). Hex: #4ADE6E."
       },
       "on-action": {
-        "$value": "{color.green.950}",
+        "$value": "{primitive.color.green.950}",
         "$description": "Text and icon color for content rendered on top of background.action (#4ADE6E). Inverts the standard canvas relationship — the page background becomes the foreground color, maintaining the warm green undertone. Use whenever text, icons, or labels appear inside a filled interactive component (e.g., primary button label). Contrast vs background.action: 11.13:1 (WCAG AAA). Hex: #0A0D0A."
       },
       "on-accent": {
-        "$value": "{color.green.950}",
+        "$value": "{primitive.color.green.950}",
         "$description": "Text and icon color for content rendered on top of background.accent (#4ADE6E). Mirrors on-action in current value but is kept separate — if accent and action diverge in color, on-accent and on-action must be able to diverge independently. Use whenever text, icons, or labels appear inside a decorative or emphasis accent-filled element. Contrast vs background.accent: 11.13:1 (WCAG AAA). Hex: #0A0D0A."
       }
     },
@@ -60,8 +60,8 @@
       "$type": "color",
       "$description": "Border tokens define the edge and separation language of the system. Borders are intentionally subtle — their job is to delineate, not to decorate.",
       "default": {
-        "$value": "{color.green.900}",
-        "$description": "The standard border color for all UI edges: cards, inputs, dividers, panels, and containers. Shares its raw value with background.alt — both resolve to {color.green.900} — but carry different semantic intent. Use color.border.default for edges and lines; use color.background.alt for filled surfaces. The subtlety is deliberate: borders in this system recede, they do not frame. Hex: #1E241E."
+        "$value": "{primitive.color.green.900}",
+        "$description": "The standard border color for all UI edges: cards, inputs, dividers, panels, and containers. Shares its raw value with background.alt — both resolve to {primitive.color.green.900} — but carry different semantic intent. Use color.border.default for edges and lines; use color.background.alt for filled surfaces. The subtlety is deliberate: borders in this system recede, they do not frame. Hex: #1E241E."
       }
     }
   }

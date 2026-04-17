@@ -1,41 +1,60 @@
 {
-  "duration": {
-    "$type": "duration",
-    "$description": "Primitive animation duration values. Three stops covering the full range from instant micro-interactions to deliberate transitions. Do not use these directly in UI — reference semantic motion tokens when available.",
-
-    "fast": {
-      "$value": "120ms",
-      "$description": "Instant feedback. Use for hover state color changes, focus ring appearance, and any interaction where the UI must feel immediately responsive. At 120ms, the transition is felt but not watched. Referenced by: unmapped."
+  "primitive": {
+    "duration": {
+      "$type": "duration",
+      "$description": "Primitive animation duration values. Three stops covering the full range from instant micro-interactions to deliberate transitions. Do not use these directly in UI — reference semantic motion tokens when available.",
+      "fast": {
+        "$value": "120ms",
+        "$description": "Instant feedback. Use for hover state color changes, focus ring appearance, and any interaction where the UI must feel immediately responsive. At 120ms, the transition is felt but not watched. Referenced by: unmapped."
+      },
+      "normal": {
+        "$value": "200ms",
+        "$description": "Standard transition. Use for expand/collapse, dropdown menus, tooltip appearance, and most component state changes. Fast enough to feel snappy; slow enough to be legible. Referenced by: unmapped."
+      },
+      "slow": {
+        "$value": "350ms",
+        "$description": "Deliberate transition. Use for page-level transitions, modal entry/exit, and large layout changes where the motion needs to be noticed and tracked by the eye. Do not use for simple hover or focus states — 350ms on a hover reads as sluggish. Referenced by: unmapped."
+      }
     },
-    "normal": {
-      "$value": "200ms",
-      "$description": "Standard transition. Use for expand/collapse, dropdown menus, tooltip appearance, and most component state changes. Fast enough to feel snappy; slow enough to be legible. Referenced by: unmapped."
-    },
-    "slow": {
-      "$value": "350ms",
-      "$description": "Deliberate transition. Use for page-level transitions, modal entry/exit, and large layout changes where the motion needs to be noticed and tracked by the eye. Do not use for simple hover or focus states — 350ms on a hover reads as sluggish. Referenced by: unmapped."
-    }
-  },
-
-  "easing": {
-    "$type": "cubicBezier",
-    "$description": "Cubic bezier easing curves. Match the easing to the direction of motion — elements entering should decelerate (ease-out), elements exiting should accelerate (ease-in). Default is general-purpose.",
-
-    "default": {
-      "$value": [0.25, 0.1, 0.25, 1.0],
-      "$description": "General-purpose easing (CSS ease). A gentle acceleration and deceleration. Use when the motion has no clear directional intent — e.g., a color transition or opacity fade that isn't tied to an element entering or leaving. Referenced by: unmapped."
-    },
-    "in": {
-      "$value": [0.42, 0.0, 1.0, 1.0],
-      "$description": "Ease-in. Starts slow, ends fast. Use for elements that are exiting or being dismissed — the acceleration signals departure. Do not use for elements entering the screen; it will feel like they're being launched rather than arriving. Referenced by: unmapped."
-    },
-    "out": {
-      "$value": [0.0, 0.0, 0.58, 1.0],
-      "$description": "Ease-out. Starts fast, decelerates to rest. Use for elements entering the screen — the deceleration signals arrival and gives the eye time to catch up. The most commonly used easing for appearing elements (modals, drawers, tooltips). Referenced by: unmapped."
-    },
-    "in-out": {
-      "$value": [0.42, 0.0, 0.58, 1.0],
-      "$description": "Ease-in-out. Accelerates then decelerates symmetrically. Use for elements moving from one position to another within the viewport — e.g., a sliding panel, a repositioning element, or a loading indicator traversing a track. Referenced by: unmapped."
+    "easing": {
+      "$type": "cubicBezier",
+      "$description": "Cubic bezier easing curves. Match the easing to the direction of motion — elements entering should decelerate (ease-out), elements exiting should accelerate (ease-in). Default is general-purpose.",
+      "default": {
+        "$value": [
+          0.25,
+          0.1,
+          0.25,
+          1
+        ],
+        "$description": "General-purpose easing (CSS ease). A gentle acceleration and deceleration. Use when the motion has no clear directional intent — e.g., a color transition or opacity fade that isn't tied to an element entering or leaving. Referenced by: unmapped."
+      },
+      "in": {
+        "$value": [
+          0.42,
+          0,
+          1,
+          1
+        ],
+        "$description": "Ease-in. Starts slow, ends fast. Use for elements that are exiting or being dismissed — the acceleration signals departure. Do not use for elements entering the screen; it will feel like they're being launched rather than arriving. Referenced by: unmapped."
+      },
+      "out": {
+        "$value": [
+          0,
+          0,
+          0.58,
+          1
+        ],
+        "$description": "Ease-out. Starts fast, decelerates to rest. Use for elements entering the screen — the deceleration signals arrival and gives the eye time to catch up. The most commonly used easing for appearing elements (modals, drawers, tooltips). Referenced by: unmapped."
+      },
+      "in-out": {
+        "$value": [
+          0.42,
+          0,
+          0.58,
+          1
+        ],
+        "$description": "Ease-in-out. Accelerates then decelerates symmetrically. Use for elements moving from one position to another within the viewport — e.g., a sliding panel, a repositioning element, or a loading indicator traversing a track. Referenced by: unmapped."
+      }
     }
   }
 }

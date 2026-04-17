@@ -3,27 +3,27 @@
     "$description": "Semantic letter-spacing tokens for the River Romney design system. Maps typographic roles to primitive tracking values. Do not reference primitives directly — use these semantic tokens in UI code.",
 
     "display": {
-      "$value": "{letterSpacing.tight}",
+      "$value": "{primitive.letterSpacing.tight}",
       "$type": "dimension",
       "$description": "Display tracking. Applied to the largest type on the page — hero headlines and page titles using font.display. At very large sizes, the typeface's default tracking reads as too loose; pulling it in slightly (-0.01em) restores optical density without over-tightening. Resolves to: -0.01em."
     },
     "title": {
-      "$value": "{letterSpacing.tightest}",
+      "$value": "{primitive.letterSpacing.tightest}",
       "$type": "dimension",
       "$description": "Title tracking. Applied to structural headings using font.title.large, font.title.medium, and font.title.small. Tighter tracking than display (-0.025em) helps headings read as a cohesive unit at mid-range sizes. Resolves to: -0.025em."
     },
     "body": {
-      "$value": "{letterSpacing.normal}",
+      "$value": "{primitive.letterSpacing.normal}",
       "$type": "dimension",
       "$description": "Body tracking. No adjustment from the typeface's built-in tracking. The default for all Spectral body text — font.body.large, font.body.medium, font.body.small. Tracking adjustments at reading sizes typically hurt legibility more than they help. Do not tighten or open body text without a specific, tested reason. Resolves to: 0em."
     },
     "label": {
-      "$value": "{letterSpacing.wide}",
+      "$value": "{primitive.letterSpacing.wide}",
       "$type": "dimension",
       "$description": "Label tracking. Slightly open tracking for small Space Grotesk UI text — navigation, button labels, captions, tag text. At small sizes (12–14px), a modest +0.03em opening improves legibility and gives the label a clean, structured feel. Use for font.label.small and font.label.medium. Resolves to: 0.03em."
     },
     "all-caps": {
-      "$value": "{letterSpacing.wider}",
+      "$value": "{primitive.letterSpacing.wider}",
       "$type": "dimension",
       "$description": "All-caps tracking. Generously open tracking exclusively for text set in ALL CAPS. All-caps text at default or tight tracking reads as dense and unpolished — the wide +0.1em opening is the convention that makes it legible and intentional. Do not use at body sizes or mixed-case; it will read as broken text. Resolves to: 0.1em."
     }
