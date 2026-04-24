@@ -1,0 +1,16 @@
+{
+  "space": {
+    "$type": "dimension",
+    "3xs": { "$value": "2px", "$description": "Hairline gaps, optical adjustments" },
+    "2xs": { "$value": "4px", "$description": "Inline icon margins, tight gaps" },
+    "xs":  { "$value": "8px", "$description": "Small padding, compact element spacing" },
+    "sm":  { "$value": "12px", "$description": "Form padding, list item gaps" },
+    "md":  { "$value": "16px", "$description": "Default padding, standard gap" },
+    "lg":  { "$value": "24px", "$description": "Card padding, comfortable spacing" },
+    "xl":  { "$value": "32px", "$description": "Section padding, grid gaps" },
+    "2xl": { "$value": "48px", "$description": "Section margins, layout gaps" },
+    "3xl": { "$value": "64px", "$description": "Large section breaks" },
+    "4xl": { "$value": "80px", "$description": "Page sections" },
+    "5xl": { "$value": "128px", "$description": "Hero / full-bleed spacing" }
+  }
+}

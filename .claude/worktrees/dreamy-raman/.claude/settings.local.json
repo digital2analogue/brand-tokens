@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/heath/Documents/Github/brand-tokens/tokens/primitives//**)",
+      "Read(//c/Users/heath/Documents/Github/brand-tokens/tokens/semantic//**)"
+    ]
+  }
+}

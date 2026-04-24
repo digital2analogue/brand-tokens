@@ -1,9 +1,11 @@
 {
   "name": "brand-tokens",
   "version": "1.0.0",
+  "type": "module",
   "description": "River Romney's cross-site design token system",
   "scripts": {
-    "build": "node style-dictionary.config.mjs"
+    "build": "node style-dictionary.config.mjs",
+    "lint:tokens": "node scripts/lint-tokens.js"
   },
   "devDependencies": {
     "style-dictionary": "^4.0.0"

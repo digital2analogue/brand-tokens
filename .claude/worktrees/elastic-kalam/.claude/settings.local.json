@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"C:\\\\Users\\\\heath\\\\Documents\\\\Github\\\\brand-tokens\" log --oneline origin/main..main)",
+      "Bash(git -C \"C:\\\\Users\\\\heath\\\\Documents\\\\Github\\\\brand-tokens\" log --oneline main..origin/main)"
+    ]
+  }
+}

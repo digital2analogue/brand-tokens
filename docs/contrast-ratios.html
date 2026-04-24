@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contrast Ratios — River Romney Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Space+Grotesk:wght@300;400;600&family=Spectral:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ── Design Tokens ─────────────────────────────────────── */
+    :root {
+      --color-background-default: #0A0D0A;
+      --color-background-alt: #1E241E;
+      --color-background-action: #4ADE6E;
+      --color-background-accent: #4ADE6E;
+
+      --color-foreground-default: #C8CFC4;
+      --color-foreground-alt: #A0A89A;
+      --color-foreground-muted: #8B9683;
+      --color-foreground-action: #4ADE6E;
+      --color-foreground-accent: #4ADE6E;
+      --color-foreground-on-action: #0A0D0A;
+      --color-foreground-on-accent: #0A0D0A;
+
+      --color-border-default: #1E241E;
+      --color-border-hover: #2E362E;
+
+      --color-fail: #E05252;
+      --color-fail-surface: rgba(224, 82, 82, 0.12);
+      --color-pass-surface: rgba(74, 222, 110, 0.12);
+
+      --font-family-sans: 'Space Grotesk', sans-serif;
+      --font-family-serif: 'Spectral', serif;
+      --font-family-mono: 'JetBrains Mono', monospace;
+
+      --font-weight-light: 300;
+      --font-weight-regular: 400;
+      --font-weight-semibold: 600;
+
+      --font-size-2xs: 0.625rem;
+      --font-size-xs: 0.75rem;
+      --font-size-sm: 0.875rem;
+      --font-size-base: 1rem;
+      --font-size-md: 1.25rem;
+      --font-size-lg: 1.5rem;
+      --font-size-xl: 2rem;
+      --font-size-2xl: 2.5rem;
+      --font-size-3xl: 3.5rem;
+
+      --line-height-tight: 1.1;
+      --line-height-snug: 1.25;
+      --line-height-normal: 1.6;
+
+      --tracking-display: -0.02em;
+      --tracking-title: -0.015em;
+      --tracking-body: 0em;
+      --tracking-label: 0.04em;
+
+      --space-3xs: 2px;
+      --space-2xs: 4px;
+      --space-xs: 8px;
+      --space-sm: 12px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-2xl: 48px;
+      --space-3xl: 64px;
+      --space-4xl: 80px;
+
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-full: 9999px;
+
+      --duration-fast: 120ms;
+      --duration-normal: 200ms;
+      --duration-slow: 350ms;
+      --easing-default: cubic-bezier(0.25, 0.1, 0.25, 1);
+      --easing-out: cubic-bezier(0, 0, 0.58, 1);
+    }
+
+    /* ── Reset ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--color-background-default);
+      color: var(--color-foreground-default);
+      font: var(--font-weight-regular) var(--font-size-base)/var(--line-height-normal) var(--font-family-serif);
+      letter-spacing: var(--tracking-body);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* ── Noise texture overlay ─────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 256px;
+    }
+
+    /* ── Load animation ────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes widthReveal {
+      from { width: 0; }
+      to { width: var(--target-width, 100%); }
+    }
+
+    .animate-in {
+      opacity: 0;
+      animation: fadeUp 0.5s var(--easing-out) forwards;
+    }
+
+    .animate-scale {
+      opacity: 0;
+      animation: scaleIn 0.4s var(--easing-out) forwards;
+    }
+
+    /* ── Layout ────────────────────────────────────────────── */
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: var(--space-4xl) var(--space-lg);
+    }
+
+    /* ── Header ────────────────────────────────────────────── */
+    .header {
+      margin-bottom: var(--space-3xl);
+    }
+
+    .header__eyebrow {
+      font: var(--font-weight-regular) var(--font-size-xs)/var(--line-height-snug) var(--font-family-sans);
+      letter-spacing: var(--tracking-label);
+      color: var(--color-foreground-action);
+      text-transform: uppercase;
+      margin-bottom: var(--space-sm);
+      animation-delay: 0ms;
+    }
+
+    .header__rule {
+      height: 1px;
+      background: linear-gradient(90deg, var(--color-foreground-action), transparent 60%);
+      margin-bottom: var(--space-lg);
+      animation-delay: 80ms;
+    }
+
+    .header__title {
+      font: var(--font-weight-light) var(--font-size-3xl)/var(--line-height-tight) var(--font-family-sans);
+      letter-spacing: var(--tracking-display);
+      color: var(--color-foreground-default);
+      margin-bottom: var(--space-md);
+      animation-delay: 120ms;
+    }
+
+    .header__desc {
+      font: var(--font-weight-regular) var(--font-size-base)/var(--line-height-normal) var(--font-family-serif);
+      color: var(--color-foreground-alt);
+      max-width: 600px;
+      animation-delay: 200ms;
+    }
+
+    /* ── Summary Strip ─────────────────────────────────────── */
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--color-border-default);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: var(--space-3xl);
+      animation-delay: 300ms;
+    }
+
+    .summary__card {
+      background: var(--color-background-default);
+      padding: var(--space-lg);
+      text-align: center;
+      transition: background var(--duration-fast) var(--easing-default);
+    }
+
+    .summary__card:hover {
+      background: var(--color-background-alt);
+    }
+
+    .summary__value {
+      font: var(--font-weight-light) var(--font-size-xl)/var(--line-height-tight) var(--font-family-sans);
+      letter-spacing: var(--tracking-title);
+      color: var(--color-foreground-default);
+      margin-bottom: var(--space-2xs);
+    }
+
+    .summary__value--pass { color: var(--color-foreground-action); }
+    .summary__value--fail { color: var(--color-fail); }
+
+    .summary__label {
+      font: var(--font-weight-regular) var(--font-size-xs)/var(--line-height-snug) var(--font-family-sans);
+      letter-spacing: var(--tracking-label);
+      color: var(--color-foreground-muted);
+      text-transform: uppercase;
+    }
+
+    /* ── Compliance bar ────────────────────────────────────── */
+    .compliance-bar {
+      margin-bottom: var(--space-3xl);
+      animation-delay: 380ms;
+    }
+
+    .compliance-bar__track {
+      height: 6px;
+      background: var(--color-background-alt);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      display: flex;
+    }
+
+    .compliance-bar__segment {
+      height: 100%;
+      transition: width 0.8s var(--easing-out);
+    }
+
+    .compliance-bar__segment--aaa {
+      background: var(--color-foreground-action);
+      border-radius: var(--radius-full) 0 0 var(--radius-full);
+    }
+
+    .compliance-bar__segment--aa {
+      background: rgba(74, 222, 110, 0.4);
+    }
+
+    .compliance-bar__segment--fail {
+      background: var(--color-fail);
+      border-radius: 0 var(--radius-full) var(--radius-full) 0;
+    }
+
+    .compliance-bar__labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: var(--space-xs);
+      font: var(--font-weight-regular) var(--font-size-2xs)/var(--line-height-snug) var(--font-family-sans);
+      letter-spacing: var(--tracking-label);
+      color: var(--color-foreground-muted);
+      text-transform: uppercase;
+    }
+
+    /* ── Legend ─────────────────────────────────────────────── */
+    .legend {
+      margin-bottom: var(--space-3xl);
+      padding: var(--space-lg);
+      background: var(--color-background-alt);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-lg);
+      animation-delay: 440ms;
+    }
+
+    .legend__title {
+      font: var(--font-weight-regular) var(--font-size-sm)/var(--line-height-snug) var(--font-family-sans);
+      letter-spacing: var(--tracking-label);
+      color: var(--color-foreground-muted);
+      text-transform: uppercase;
+      margin-bottom: var(--space-sm);
+    }
+
+    .legend__text {
+      color: var(--color-foreground-alt);
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-normal);
+    }
+
+    .legend__text + .legend__text {
+      margin-top: var(--space-xs);
+    }
+
+    .legend__inline-badge {
+      display: inline-flex;
+      vertical-align: middle;
+      margin: 0 2px;
+    }
+
+    /* ── Swatches ──────────────────────────────────────────── */
+    .swatches {
+      display: flex;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-3xl);
+      overflow-x: auto;
+      padding-bottom: var(--space-xs);
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-border-default) transparent;
+    }
+
+    .swatch {
+      flex: 0 0 auto;
+      width: 140px;
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color var(--duration-fast) var(--easing-default),
+                  transform var(--duration-fast) var(--easing-default);
+    }
+
+    .swatch:hover {
+      border-color: var(--color-border-hover);
+      transform: translateY(-2px);
+    }
+
+    .swatch__color {
+      height: 40px;
+      position: relative;
+    }
+
+    .swatch__info {
+      background: var(--color-background-alt);
+      padding: var(--space-xs) var(--space-sm);
+      border-top: 1px solid var(--color-border-default);
+    }
+
+    .swatch__name {
+      font: var(--font-weight-regular) var(--font-size-2xs)/var(--line-height-snug) var(--font-family-sans);
+      letter-spacing: var(--tracking-label);
+      color: var(--color-foreground-alt);
+      text-transform: uppercase;
+      margin-bottom: 1px;
+      white-space: nowrap;
+    }
+
+    .swatch__hex {
+      font: var(--font-weight-regular) var(--font-size-xs)/var(--line-height-snug) var(--font-family-mono);
+      color: var(--color-foreground-muted);
+    }
+
+    /* ── Section ───────────────────────────────────────────── */
+    .section {
+      margin-bottom: var(--space-3xl);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-lg);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid var(--color-border-default);
+    }
+
+    .section-header__swatch {
+      width: 20px;
+      height: 20px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-foreground-muted);
+      flex-shrink: 0;
+    }
+
+    .section-header__title {
+      font: var(--font-weight-light) var(--font-size-lg)/var(--line-height-snug) var(--font-family-sans);
+      letter-spacing: var(--tracking-title);
+      color: var(--color-foreground-default);
+    }
+
+    .section-header__hex {
+      font: var(--font-weight-regular) var(--font-size-sm)/var(--line-height-snug) var(--font-family-mono);
+      color: var(--color-foreground-muted);
+      margin-left: auto;
+    }
+
+    /* ── Matrix Grid ───────────────────────────────────────── */
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--space-sm);
+    }
+
+    .cell {
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: border-color var(--duration-fast) var(--easing-default),
+                  transform var(--duration-normal) var(--easing-out),
+                  box-shadow var(--duration-normal) var(--easing-default);
+    }
+
+    .cell:hover {
+      border-color: var(--color-border-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .cell--fail {
+      border-color: rgba(224, 82, 82, 0.2);
+    }
+
+    .cell__preview {
+      padding: var(--space-lg);
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: var(--space-2xs);
+    }
+
+    .cell__sample-heading {
+      font: var(--font-weight-light) var(--font-size-md)/var(--line-height-snug) var(--font-family-sans);
+      letter-spacing: var(--tracking-title);
+    }
+
+    .cell__sample-body {
+      font: var(--font-weight-regular) var(--font-size-sm)/var(--line-height-normal) var(--font-family-serif);
+      opacity: 0.85;
+    }
+
+    .cell__meta {
+      background: var(--color-background-alt);
+      padding: var(--space-xs) var(--space-md);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-xs);
+      border-top: 1px solid var(--color-border-default);
+    }
+
+    .cell__tokens {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .cell__fg-token,
+    .cell__bg-token {
+      font: var(--font-weight-regular) var(--font-size-2xs)/var(--line-height-snug) var(--font-family-mono);
+      color: var(--color-foreground-muted);
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cell__ratio {
+      font: var(--font-weight-regular) var(--font-size-sm)/1 var(--font-family-mono);
+      color: var(--color-foreground-alt);
+      white-space: nowrap;
+    }
+
+    .cell__badges {
+      display: flex;
+      gap: var(--space-2xs);
+    }
+
+    .badge {
+      font: var(--font-weight-semibold) var(--font-size-2xs)/1 var(--font-family-sans);
+      letter-spacing: var(--tracking-label);
+      padding: 3px 7px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .badge--pass {
+      background: var(--color-pass-surface);
+      color: var(--color-foreground-action);
+    }
+
+    .badge--fail {
+      background: var(--color-fail-surface);
+      color: var(--color-fail);
+    }
+
+    /* ── Footer ────────────────────────────────────────────── */
+    .footer {
+      margin-top: var(--space-4xl);
+      padding-top: var(--space-lg);
+      border-top: 1px solid var(--color-border-default);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+    }
+
+    .footer__text {
+      color: var(--color-foreground-muted);
+      font: var(--font-weight-regular) var(--font-size-xs)/var(--line-height-normal) var(--font-family-sans);
+    }
+
+    .footer a {
+      color: var(--color-foreground-action);
+      text-decoration: none;
+      transition: opacity var(--duration-fast) var(--easing-default);
+    }
+
+    .footer a:hover {
+      opacity: 0.7;
+    }
+
+    .footer__spec {
+      font: var(--font-weight-regular) var(--font-size-2xs)/1 var(--font-family-mono);
+      color: var(--color-foreground-muted);
+      letter-spacing: var(--tracking-label);
+      text-transform: uppercase;
+    }
+
+    /* ── Responsive ────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .page { padding: var(--space-xl) var(--space-md); }
+      .header__title { font-size: var(--font-size-xl); }
+      .summary { grid-template-columns: repeat(2, 1fr); }
+      .matrix { grid-template-columns: 1fr; }
+      .swatches { gap: var(--space-2xs); }
+      .swatch { width: 110px; }
+      .section-header__hex { display: none; }
+      .footer { flex-direction: column; }
+    }
+
+    @media (max-width: 480px) {
+      .header__title { font-size: var(--font-size-lg); }
+      .summary { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page" id="app"></div>
+
+  <script>
+    // ── Color Data ──────────────────────────────────────────
+    const backgrounds = [
+      { name: 'background.default', hex: '#0A0D0A', css: '--color-background-default' },
+      { name: 'background.alt',     hex: '#1E241E', css: '--color-background-alt' },
+      { name: 'background.action',  hex: '#4ADE6E', css: '--color-background-action' },
+      { name: 'background.accent',  hex: '#4ADE6E', css: '--color-background-accent' },
+    ];
+
+    const foregrounds = [
+      { name: 'foreground.default',   hex: '#C8CFC4', css: '--color-foreground-default' },
+      { name: 'foreground.alt',       hex: '#A0A89A', css: '--color-foreground-alt' },
+      { name: 'foreground.muted',     hex: '#8B9683', css: '--color-foreground-muted' },
+      { name: 'foreground.action',    hex: '#4ADE6E', css: '--color-foreground-action' },
+      { name: 'foreground.accent',    hex: '#4ADE6E', css: '--color-foreground-accent' },
+      { name: 'foreground.on-action', hex: '#0A0D0A', css: '--color-foreground-on-action' },
+      { name: 'foreground.on-accent', hex: '#0A0D0A', css: '--color-foreground-on-accent' },
+    ];
+
+    // ── WCAG Contrast ──────────────────────────────────────
+    function hexToRgb(hex) {
+      const h = hex.replace('#', '');
+      return [
+        parseInt(h.substring(0, 2), 16) / 255,
+        parseInt(h.substring(2, 4), 16) / 255,
+        parseInt(h.substring(4, 6), 16) / 255,
+      ];
+    }
+
+    function srgbToLinear(c) {
+      return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    }
+
+    function relativeLuminance(hex) {
+      const [r, g, b] = hexToRgb(hex).map(srgbToLinear);
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    }
+
+    function contrastRatio(hex1, hex2) {
+      const l1 = relativeLuminance(hex1);
+      const l2 = relativeLuminance(hex2);
+      return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+    }
+
+    function fmt(ratio) { return ratio.toFixed(2) + ':1'; }
+
+    // ── Build Pairings ──────────────────────────────────────
+    const pairings = [];
+    for (const bg of backgrounds) {
+      for (const fg of foregrounds) {
+        const ratio = contrastRatio(fg.hex, bg.hex);
+        pairings.push({ fg, bg, ratio, passAA: ratio >= 4.5, passAAA: ratio >= 7 });
+      }
+    }
+
+    const total = pairings.length;
+    const passAA = pairings.filter(p => p.passAA).length;
+    const passAAA = pairings.filter(p => p.passAAA).length;
+    const aaOnly = passAA - passAAA;
+    const failAA = total - passAA;
+
+    // ── Group by background ─────────────────────────────────
+    const grouped = new Map();
+    for (const p of pairings) {
+      const key = p.bg.name;
+      if (!grouped.has(key)) grouped.set(key, []);
+      grouped.get(key).push(p);
+    }
+
+    // ── Helpers ──────────────────────────────────────────────
+    function badge(pass, level) {
+      return `<span class="badge badge--${pass ? 'pass' : 'fail'}">${level} ${pass ? 'Pass' : 'Fail'}</span>`;
+    }
+
+    let cellIndex = 0;
+
+    function renderCell(p) {
+      const delay = 500 + (cellIndex++ * 30);
+      const failClass = p.passAA ? '' : ' cell--fail';
+      return `
+        <div class="cell animate-scale${failClass}" style="animation-delay: ${delay}ms;">
+          <div class="cell__preview" style="background: ${p.bg.hex};">
+            <span class="cell__sample-heading" style="color: ${p.fg.hex};">
+              The quick brown fox
+            </span>
+            <span class="cell__sample-body" style="color: ${p.fg.hex};">
+              jumps over the lazy dog
+            </span>
+          </div>
+          <div class="cell__meta">
+            <div class="cell__tokens">
+              <span class="cell__fg-token">${p.fg.css}</span>
+              <span class="cell__bg-token">${p.bg.css}</span>
+            </div>
+            <span class="cell__ratio">${fmt(p.ratio)}</span>
+            <div class="cell__badges">
+              ${badge(p.passAA, 'AA')}
+              ${badge(p.passAAA, 'AAA')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSwatch(token, i) {
+      const delay = 420 + (i * 40);
+      return `
+        <div class="swatch animate-scale" style="animation-delay: ${delay}ms;">
+          <div class="swatch__color" style="background: ${token.hex};"></div>
+          <div class="swatch__info">
+            <div class="swatch__name">${token.name.split('.').pop()}</div>
+            <div class="swatch__hex">${token.hex}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ── Deduplicate tokens for swatch display ────────────────
+    const allTokens = [...backgrounds, ...foregrounds];
+    const uniqueTokens = allTokens.filter((t, i, arr) =>
+      arr.findIndex(u => u.name === t.name) === i
+    );
+
+    // ── Percentages for compliance bar ──────────────────────
+    const pctAAA = ((passAAA / total) * 100).toFixed(1);
+    const pctAA = ((aaOnly / total) * 100).toFixed(1);
+    const pctFail = ((failAA / total) * 100).toFixed(1);
+
+    // ── Render ──────────────────────────────────────────────
+    let html = `
+      <header class="header">
+        <p class="header__eyebrow animate-in" style="animation-delay: 0ms;">River Romney Design System</p>
+        <div class="header__rule animate-in" style="animation-delay: 80ms;"></div>
+        <h1 class="header__title animate-in" style="animation-delay: 120ms;">Contrast Ratios</h1>
+        <p class="header__desc animate-in" style="animation-delay: 200ms;">
+          Every semantic foreground/background pairing, with programmatically calculated
+          contrast ratios and WCAG 2.1 compliance. Generated from the token source files.
+        </p>
+      </header>
+
+      <div class="summary animate-in" style="animation-delay: 300ms;">
+        <div class="summary__card">
+          <div class="summary__value">${total}</div>
+          <div class="summary__label">Total Pairings</div>
+        </div>
+        <div class="summary__card">
+          <div class="summary__value summary__value--pass">${passAA}</div>
+          <div class="summary__label">Pass AA</div>
+        </div>
+        <div class="summary__card">
+          <div class="summary__value summary__value--pass">${passAAA}</div>
+          <div class="summary__label">Pass AAA</div>
+        </div>
+        <div class="summary__card">
+          <div class="summary__value summary__value--fail">${failAA}</div>
+          <div class="summary__label">Fail AA</div>
+        </div>
+      </div>
+
+      <div class="compliance-bar animate-in" style="animation-delay: 380ms;">
+        <div class="compliance-bar__track">
+          <div class="compliance-bar__segment compliance-bar__segment--aaa" style="width: ${pctAAA}%;"></div>
+          <div class="compliance-bar__segment compliance-bar__segment--aa" style="width: ${pctAA}%;"></div>
+          <div class="compliance-bar__segment compliance-bar__segment--fail" style="width: ${pctFail}%;"></div>
+        </div>
+        <div class="compliance-bar__labels">
+          <span>AAA ${pctAAA}%</span>
+          <span>AA Only ${pctAA}%</span>
+          <span>Fail ${pctFail}%</span>
+        </div>
+      </div>
+
+      <div class="legend animate-in" style="animation-delay: 440ms;">
+        <h2 class="legend__title">Reading This Page</h2>
+        <p class="legend__text">
+          Each card renders text at the exact foreground and background hex values from the token system.
+          Ratios use the WCAG 2.1 relative luminance formula.
+          <span class="legend__inline-badge">${badge(true, 'AA')}</span> = 4.5:1 minimum for normal text.
+          <span class="legend__inline-badge">${badge(true, 'AAA')}</span> = 7:1 enhanced threshold.
+        </p>
+        <p class="legend__text">
+          Not every pairing is intended for production use. Consult the design system docs for sanctioned combinations.
+        </p>
+      </div>
+
+      <section class="section">
+        <div class="section-header animate-in" style="animation-delay: 480ms;">
+          <h2 class="section-header__title">Semantic Tokens</h2>
+        </div>
+        <div class="swatches">
+          ${uniqueTokens.map(renderSwatch).join('')}
+        </div>
+      </section>
+    `;
+
+    for (const [bgName, cells] of grouped) {
+      cells.sort((a, b) => b.ratio - a.ratio);
+      const bgToken = backgrounds.find(b => b.name === bgName);
+
+      html += `
+        <section class="section">
+          <div class="section-header animate-in" style="animation-delay: ${480 + (cellIndex * 5)}ms;">
+            <div class="section-header__swatch" style="background: ${bgToken.hex};"></div>
+            <h2 class="section-header__title">${bgName}</h2>
+            <span class="section-header__hex">${bgToken.hex}</span>
+          </div>
+          <div class="matrix">
+            ${cells.map(renderCell).join('')}
+          </div>
+        </section>
+      `;
+    }
+
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    html += `
+      <footer class="footer">
+        <span class="footer__text">
+          Generated ${dateStr} from
+          <a href="https://github.com/digital2analogue/brand-tokens">brand-tokens</a> ·
+          <a href="https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html">WCAG 2.1</a>
+        </span>
+        <span class="footer__spec">DTCG 2025.10</span>
+      </footer>
+    `;
+
+    document.getElementById('app').innerHTML = html;
+  </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "color": {
+    "background": {
+      "default":  { "$value": "{color.green.950}", "$description": "Primary background" },
+      "alt":      { "$value": "{color.green.900}", "$description": "Secondary / elevated background" },
+      "action":   { "$value": "{color.green.100}", "$description": "Action background — buttons, CTAs" }
+    },
+    "foreground": {
+      "primary":   { "$value": "{color.green.200}", "$description": "Primary text" },
+      "secondary": { "$value": "{color.green.400}", "$description": "Secondary text" },
+      "muted":     { "$value": "{color.green.600}", "$description": "Tertiary text, labels" },
+      "accent":    { "$value": "{color.green.100}", "$description": "Interactive / emphasis" },
+      "action":    { "$value": "{color.green.100}", "$description": "Action foreground — links, interactive text" },
+      "on-action": { "$value": "{color.green.950}", "$description": "Text on action backgrounds — button labels" }
+    },
+    "border": {
+      "default": { "$value": "{color.green.900}", "$description": "Default border" }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "sans": { "$value": "Space Grotesk", "$description": "Geometric sans — headers, UI" },
+      "serif": { "$value": "Spectral", "$description": "Humanist serif — body text" },
+      "mono": { "$value": "JetBrains Mono", "$description": "Code blocks — reserved" }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "light": { "$value": 300, "$description": "Display/heading weight" },
+      "regular": { "$value": 400, "$description": "Body/UI weight" },
+      "medium": { "$value": 500, "$description": "Emphasis — reserved" }
+    }
+  }
+}

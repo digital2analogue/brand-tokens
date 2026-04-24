@@ -1,0 +1,210 @@
+# River Romney Brand Design System
+
+> A cross-site design token system for riverromney.com, riverromney.design, riverromney.art, and riverromney.blog. Dark-first, green-phosphor aesthetic. Terminal-meets-editorial. Three typefaces, one color story, shared across all properties.
+
+## Architecture
+
+Three-tier DTCG token architecture (W3C Design Tokens Community Group 2025.10 format), compiled to CSS custom properties via Style Dictionary v4.
+
+- **Primitives** (`tokens/primitives/`): Raw values with no usage context — hex colors, px sizes, font stacks
+- **Semantic** (`tokens/semantic/`): Intent-based aliases — `color.background.default` references `{color.green.950}`
+- **Brand overrides** (`tokens/brands/`): Per-site exceptions — .art uses pure black background, .blog uses larger body type
+
+Build: `npm run build` produces `build/css/variables.css` with all tokens as `--custom-property` names.
+
+## Color Palette
+
+### Primitive Colors
+
+| Token | Hex |
+|---|---|
+| color.green.950 | #0A0D0A |
+| color.green.900 | #1E241E |
+| color.green.600 | #8B9683 |
+| color.green.400 | #A0A89A |
+| color.green.200 | #C8CFC4 |
+| color.green.accent | #4ADE6E |
+| color.neutral.white | #FFFFFF |
+| color.neutral.black | #000000 |
+
+### Semantic Color Tokens
+
+Use ONLY these CSS custom properties in UI code. Never use hex values directly or reference primitives.
+
+**Backgrounds:**
+- `--color-background-default` (#0A0D0A): Page canvas, full-bleed sections
+- `--color-background-alt` (#1E241E): Elevated surfaces — cards, panels, inputs
+- `--color-background-action` (#4ADE6E): Interactive fills — primary buttons, active toggles
+- `--color-background-accent` (#4ADE6E): Decorative fills — callouts, badges (non-interactive)
+
+**Foregrounds:**
+- `--color-foreground-default` (#C8CFC4): Primary text/icons — 12.26:1 AAA vs default bg
+- `--color-foreground-alt` (#A0A89A): Secondary text — 7.97:1 AA vs default bg
+- `--color-foreground-muted` (#8B9683): Tertiary text — 6.32:1 AA vs default bg
+- `--color-foreground-action` (#4ADE6E): Interactive text — links, active nav — 11.13:1 AAA
+- `--color-foreground-accent` (#4ADE6E): Emphasis text — highlights (non-interactive) — 11.13:1 AAA
+- `--color-foreground-on-action` (#0A0D0A): Text on green action surfaces — 11.13:1 AAA
+- `--color-foreground-on-accent` (#0A0D0A): Text on green accent surfaces — 11.13:1 AAA
+
+**Border:**
+- `--color-border-default` (#1E241E): All UI edges — cards, inputs, dividers
+
+## Typography
+
+Three typefaces: Space Grotesk (sans — headings, UI), Spectral (serif — body prose), JetBrains Mono (mono — code).
+
+### Semantic Font Tokens
+
+| CSS Property | Weight | Size | Line-height | Family | Usage |
+|---|---|---|---|---|---|
+| --font-display | 300 | 2.5rem | 1.1 | Space Grotesk | Hero text, one per page max |
+| --font-title-large | 300 | 2rem | 1.25 | Space Grotesk | Page heading (h1) |
+| --font-title-medium | 300 | 1.5rem | 1.25 | Space Grotesk | Section heading (h2) |
+| --font-title-small | 300 | 1.25rem | 1.25 | Space Grotesk | Sub-section heading (h3) |
+| --font-body-large | 400 | 1rem | 1.6 | Spectral | Default body text |
+| --font-body-medium | 400 | 0.875rem | 1.6 | Spectral | Secondary body text |
+| --font-body-small | 400 | 0.75rem | 1.6 | Spectral | Fine print, footnotes |
+| --font-label-large | 400 | 1rem | 1.25 | Space Grotesk | Prominent UI labels |
+| --font-label-medium | 400 | 0.875rem | 1.25 | Space Grotesk | Nav, buttons, standard UI |
+| --font-label-small | 400 | 0.75rem | 1.25 | Space Grotesk | Meta text, captions |
+| --font-code | 400 | 0.875rem | 1.6 | JetBrains Mono | Code blocks, inline code |
+
+### Font Size Scale (Primitives)
+
+| CSS Property | Value |
+|---|---|
+| --font-size-xs | 0.75rem (12px) |
+| --font-size-sm | 0.875rem (14px) |
+| --font-size-base | 1rem (16px) |
+| --font-size-md | 1.25rem (20px) |
+| --font-size-lg | 1.5rem (24px) |
+| --font-size-2xl | 2rem (32px) |
+| --font-size-3xl | 2.5rem (40px) |
+
+### Letter Spacing
+
+| CSS Property | Value | Usage |
+|---|---|---|
+| --letter-spacing-display | -0.01em | Hero/display text |
+| --letter-spacing-title | -0.025em | Structural headings |
+| --letter-spacing-body | 0em | All prose |
+| --letter-spacing-label | 0.03em | UI labels, nav |
+| --letter-spacing-all-caps | 0.1em | ALL CAPS text only |
+
+### Font Weights
+
+| CSS Property | Value | Usage |
+|---|---|---|
+| --font-weight-light | 300 | Display and title tokens only |
+| --font-weight-regular | 400 | Body, label, and code tokens |
+| --font-weight-medium | 500 | Reserved — not mapped to any token |
+| --font-weight-semibold | 600 | Ad-hoc emphasis only |
+| --font-weight-bold | 700 | Ad-hoc strong emphasis only |
+
+## Spacing
+
+Base-4 grid. Use semantic tokens in UI; primitives only when building new semantic mappings.
+
+### Primitive Scale
+
+| CSS Property | Value |
+|---|---|
+| --space-3xs | 2px |
+| --space-2xs | 4px |
+| --space-xs | 8px |
+| --space-sm | 12px |
+| --space-md | 16px |
+| --space-lg | 24px |
+| --space-xl | 32px |
+| --space-2xl | 48px |
+| --space-3xl | 64px |
+| --space-4xl | 80px |
+| --space-5xl | 128px |
+
+### Semantic Spacing
+
+| CSS Property | Value | Usage |
+|---|---|---|
+| --spacing-tight | 8px | Icon + label, checkbox + text |
+| --spacing-inline | 12px | Nav rows, tag groups |
+| --spacing-element | 16px | Input/button padding, list rows |
+| --spacing-component | 24px | Between components in a layout |
+| --spacing-layout | 48px | Between major layout regions |
+| --spacing-section | 128px | Between page sections |
+
+## Border Radius
+
+| CSS Property | Value | Usage |
+|---|---|---|
+| --radius-none | 0 | Code blocks, tables |
+| --radius-sm | 4px | Inputs, small tags |
+| --radius-default | 8px | Buttons, dropdowns |
+| --radius-lg | 12px | Cards, panels |
+| --radius-xl | 16px | Modals, hero cards |
+| --radius-full | 9999px | Badges, avatars, pills |
+
+## Shadow / Elevation
+
+| CSS Property | Value | Usage |
+|---|---|---|
+| --shadow-none | 0 0 0 0 transparent | Flat — use background.alt instead |
+| --shadow-raised | 0 1px 3px rgba(0,0,0,0.08) | Inputs on hover/focus |
+| --shadow-overlay | 0 6px 20px rgba(0,0,0,0.16) | Popovers, dropdowns |
+| --shadow-dialog | 0 12px 40px rgba(0,0,0,0.24) | Modals, drawers, toasts |
+
+## Motion
+
+### Duration
+- `--motion-duration-instant` (120ms): Hover, focus, micro-interactions
+- `--motion-duration-standard` (200ms): Dropdowns, tooltips, accordions
+- `--motion-duration-emphasized` (350ms): Modals, drawers, page transitions
+
+### Easing
+- `--motion-easing-enter` cubic-bezier(0, 0, 0.58, 1): Elements appearing
+- `--motion-easing-exit` cubic-bezier(0.42, 0, 1, 1): Elements disappearing
+- `--motion-easing-move` cubic-bezier(0.42, 0, 0.58, 1): Repositioning
+- `--motion-easing-default` cubic-bezier(0.25, 0.1, 0.25, 1): Fades, color shifts
+
+## Per-Site Overrides
+
+| Site | Override |
+|---|---|
+| riverromney.com | Base tokens, no overrides |
+| riverromney.design | Base tokens, no overrides |
+| riverromney.art | `--color-background-default` → #000000 (pure black for photo contrast) |
+| riverromney.blog | Body font size → 18px, line-height → 1.7 (reading-optimized) |
+
+## Guardrails
+
+1. **No hardcoded values** — Always use `var(--token-name)` CSS custom properties
+2. **No fabricating tokens** — If a token isn't listed above, it doesn't exist in the system
+3. **No primitive tokens in UI code** — Go through the semantic layer (e.g. `--color-background-default`, not `--color-green-950`)
+4. **Accent green is never resting text** — `--color-foreground-action` and `--color-foreground-accent` signal interactivity or intentional emphasis only
+5. **WCAG AA minimum** — All existing text/background pairings meet AA (4.5:1). Do not introduce new pairings without verifying contrast
+6. **Title/display weight is 300** — Never use 400 for headings. Body/label/code weight is 400.
+7. **Only three font families** — Space Grotesk, Spectral, JetBrains Mono. No substitutions.
+8. **Spacing from the scale only** — No arbitrary pixel values outside the defined tokens
+9. **Dark mode only** (v1) — There is no light theme in the current system
+10. **Prefer background.alt over shadows** for card separation — shadows are for true overlay elevation
+
+## Links
+
+- [AI Design Reference](ai/DESIGN.md): Complete design system spec for AI consumption
+- [Design Rules](ai/rules.md): Hard and soft rules for using the system
+- [Primitive Color Tokens](tokens/primitives/color.tokens.json): DTCG color definitions
+- [Primitive Typography Tokens](tokens/primitives/typography.tokens.json): Font families, sizes, weights
+- [Primitive Spacing Tokens](tokens/primitives/spacing.tokens.json): Spacing scale values
+- [Primitive Radius Tokens](tokens/primitives/radius.tokens.json): Border radius scale
+- [Primitive Shadow Tokens](tokens/primitives/shadow.tokens.json): Elevation shadows
+- [Primitive Motion Tokens](tokens/primitives/motion.tokens.json): Duration and easing curves
+- [Primitive Letter Spacing Tokens](tokens/primitives/letter-spacing.tokens.json): Tracking values
+- [Semantic Color Tokens](tokens/semantic/color.tokens.json): Intent-based color mappings
+- [Semantic Typography Tokens](tokens/semantic/typography.tokens.json): Composite font tokens
+- [Semantic Spacing Tokens](tokens/semantic/spacing.tokens.json): Purpose-based spacing
+- [Semantic Radius Tokens](tokens/semantic/radius.tokens.json): Purpose-based radius
+- [Semantic Shadow Tokens](tokens/semantic/shadow.tokens.json): Purpose-based elevation
+- [Semantic Motion Tokens](tokens/semantic/motion.tokens.json): Purpose-based motion
+- [Semantic Letter Spacing Tokens](tokens/semantic/letter-spacing.tokens.json): Purpose-based tracking
+- [Brand Override: .art](tokens/brands/dot-art.tokens.json): Photo-optimized overrides
+- [Brand Override: .blog](tokens/brands/dot-blog.tokens.json): Reading-optimized overrides
+- [Style Dictionary Config](style-dictionary.config.mjs): Build configuration

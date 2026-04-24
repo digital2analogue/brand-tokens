@@ -1,0 +1,34 @@
+{
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "sans": { "$value": "Space Grotesk", "$description": "Geometric sans — headers, UI" },
+      "serif": { "$value": "Spectral", "$description": "Humanist serif — body text" },
+      "mono": { "$value": "JetBrains Mono", "$description": "Code blocks — reserved" }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "light": { "$value": 300, "$description": "Display/heading weight" },
+      "regular": { "$value": 400, "$description": "Body/UI weight" },
+      "medium": { "$value": 500, "$description": "Emphasis — reserved" }
+    },
+    "size": {
+      "$type": "dimension",
+      "xs": { "$value": "0.75rem", "$description": "12px — fine print, captions" },
+      "sm": { "$value": "0.875rem", "$description": "14px — UI labels, nav" },
+      "base": { "$value": "1rem", "$description": "16px — body text" },
+      "md": { "$value": "1.25rem", "$description": "20px — content headings h2" },
+      "lg": { "$value": "1.5rem", "$description": "24px — content headings h1" },
+      "xl": { "$value": "1.75rem", "$description": "28px — title-small / section labels" },
+      "2xl": { "$value": "2rem", "$description": "32px — title-medium / intro text" },
+      "3xl": { "$value": "2.5rem", "$description": "40px — title-large / hero" }
+    },
+    "lineHeight": {
+      "$type": "number",
+      "tight": { "$value": 1.1, "$description": "Titles and display text" },
+      "snug": { "$value": 1.25, "$description": "Headings" },
+      "normal": { "$value": 1.6, "$description": "Body text" },
+      "relaxed": { "$value": 1.7, "$description": "Long-form reading" }
+    }
+  }
+}

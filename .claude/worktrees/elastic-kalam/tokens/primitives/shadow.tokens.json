@@ -1,0 +1,10 @@
+{
+  "shadow": {
+    "$type": "shadow",
+    "none": { "$value": { "offsetX": "0", "offsetY": "0", "blur": "0", "spread": "0", "color": "rgba(0,0,0,0)" }, "$description": "Flat — no elevation" },
+    "sm":   { "$value": { "offsetX": "0", "offsetY": "1px", "blur": "3px", "spread": "0", "color": "rgba(0,0,0,0.08)" }, "$description": "Subtle lift — inputs, dropdowns" },
+    "md":   { "$value": { "offsetX": "0", "offsetY": "2px", "blur": "8px", "spread": "0", "color": "rgba(0,0,0,0.12)" }, "$description": "Cards, toolbars" },
+    "lg":   { "$value": { "offsetX": "0", "offsetY": "6px", "blur": "20px", "spread": "0", "color": "rgba(0,0,0,0.16)" }, "$description": "Modals, menus, popovers" },
+    "xl":   { "$value": { "offsetX": "0", "offsetY": "12px", "blur": "40px", "spread": "0", "color": "rgba(0,0,0,0.24)" }, "$description": "Dialogs, toasts" }
+  }
+}

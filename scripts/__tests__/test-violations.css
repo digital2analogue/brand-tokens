@@ -1,0 +1,107 @@
+/* ─── Test file: should trigger violations for all categories ─── */
+
+/* These are fine — custom property definitions */
+:root {
+  --custom-thing: #0A0D0A;
+  --my-size: 16px;
+}
+
+/* ─── Color violations ─── */
+.hero {
+  background: #0A0D0A;          /* should flag → var(--color-background-default) */
+  color: #C8CFC4;               /* should flag → var(--color-foreground-default) */
+  border-color: #1E241E;        /* should flag → var(--color-border-default) */
+}
+.accent-block {
+  background-color: #4ADE6E;    /* should flag → var(--color-background-action) */
+  color: #8B9683;               /* should flag → var(--color-foreground-muted) */
+}
+.rgb-test {
+  color: rgb(200, 207, 196);    /* should flag → matches #C8CFC4 */
+}
+
+/* ─── Font-family violations ─── */
+.heading {
+  font-family: 'Space Grotesk', sans-serif;  /* should flag */
+}
+.body-text {
+  font-family: Spectral, serif;              /* should flag */
+}
+.code-block {
+  font-family: 'JetBrains Mono', monospace;  /* should flag */
+}
+
+/* ─── Font-size violations ─── */
+.title {
+  font-size: 2rem;     /* should flag → var(--primitive-font-size-2xl) */
+}
+.small-text {
+  font-size: 0.75rem;  /* should flag → var(--primitive-font-size-xs) */
+}
+.body {
+  font-size: 1rem;     /* should flag → var(--primitive-font-size-base) */
+}
+
+/* ─── Font-weight violations ─── */
+.light-heading {
+  font-weight: 300;    /* should flag → var(--primitive-font-weight-light) */
+}
+.regular-text {
+  font-weight: 400;    /* should flag → var(--primitive-font-weight-regular) */
+}
+
+/* ─── Spacing violations ─── */
+.card {
+  padding: 24px;       /* should flag → var(--spacing-component) */
+  margin-bottom: 48px; /* should flag → var(--spacing-layout) */
+  gap: 8px;            /* should flag → var(--spacing-tight) */
+}
+.section {
+  padding: 16px 24px;  /* should flag both values */
+  margin-top: 128px;   /* should flag → var(--spacing-section) */
+}
+
+/* ─── Border-radius violations ─── */
+.button {
+  border-radius: 8px;     /* should flag → var(--radius-default) */
+}
+.card-panel {
+  border-radius: 12px;    /* should flag → var(--radius-lg) */
+}
+.pill {
+  border-radius: 9999px;  /* should flag → var(--radius-full) */
+}
+
+/* ─── Shadow violations ─── */
+.dropdown {
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.08);  /* should flag → var(--shadow-raised/primitive) */
+}
+.modal {
+  box-shadow: 0 12px 40px 0 rgba(0,0,0,0.24); /* should flag → var(--shadow-dialog/primitive) */
+}
+
+/* ─── Duration violations ─── */
+.hover-effect {
+  transition: color 120ms ease;     /* should flag 120ms */
+}
+.dropdown-anim {
+  transition: opacity 200ms ease;   /* should flag 200ms */
+  animation-duration: 350ms;        /* should flag 350ms */
+}
+.seconds-test {
+  transition: all 0.2s ease;        /* should flag 0.2s → 200ms */
+}
+
+/* ─── These should NOT be flagged ─── */
+.clean {
+  padding: 0;
+  margin: auto;
+  color: inherit;
+  background: none;
+  border-radius: initial;
+  color: var(--color-foreground-default);
+  padding: var(--spacing-element);
+  font-family: var(--primitive-font-family-sans);
+  font-weight: var(--primitive-font-weight-light);
+  border: 1px solid currentColor;
+}

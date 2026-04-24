@@ -1,0 +1,17 @@
+{
+  "color": {
+    "background": {
+      "default": { "$value": "{color.green.950}" },
+      "alt": { "$value": "{color.green.900}" }
+    },
+    "foreground": {
+      "primary": { "$value": "{color.green.200}" },
+      "secondary": { "$value": "{color.green.400}" },
+      "muted": { "$value": "{color.green.600}" },
+      "accent": { "$value": "{color.green.accent}" }
+    },
+    "border": {
+      "default": { "$value": "{color.green.900}" }
+    }
+  }
+}

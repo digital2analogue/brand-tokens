@@ -1,0 +1,11 @@
+{
+  "name": "brand-tokens",
+  "version": "1.0.0",
+  "description": "River Romney's cross-site design token system",
+  "scripts": {
+    "build": "style-dictionary build --config style-dictionary.config.mjs"
+  },
+  "devDependencies": {
+    "style-dictionary": "^4.0.0"
+  }
+}

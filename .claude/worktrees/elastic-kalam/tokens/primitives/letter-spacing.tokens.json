@@ -1,0 +1,10 @@
+{
+  "letterSpacing": {
+    "$type": "dimension",
+    "tightest": { "$value": "-0.01em", "$description": "Large display text" },
+    "tight":    { "$value": "-0.025em", "$description": "Headings" },
+    "normal":   { "$value": "0em", "$description": "Default body text" },
+    "wide":     { "$value": "0.03em", "$description": "Labels, nav" },
+    "wider":    { "$value": "0.1em", "$description": "All-caps labels" }
+  }
+}

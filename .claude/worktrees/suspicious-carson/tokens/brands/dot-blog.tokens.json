@@ -1,0 +1,15 @@
+{
+  "$description": "riverromney.blog overrides — long-form reading",
+  "font": {
+    "body": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{font.family.serif}",
+        "fontWeight": "{font.weight.regular}",
+        "fontSize": "18px",
+        "lineHeight": "1.7"
+      },
+      "$description": "Larger for long-form reading comfort"
+    }
+  }
+}

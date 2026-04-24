@@ -1,0 +1,11 @@
+{
+  "radius": {
+    "$type": "dimension",
+    "none": { "$value": "0", "$description": "Sharp corners" },
+    "sm":   { "$value": "4px", "$description": "Subtle rounding — inputs, small elements" },
+    "md":   { "$value": "8px", "$description": "Buttons, menus, selects" },
+    "lg":   { "$value": "12px", "$description": "Cards, panels" },
+    "xl":   { "$value": "16px", "$description": "Prominent rounding — modals, hero cards" },
+    "full": { "$value": "9999px", "$description": "Pills, badges, circles" }
+  }
+}

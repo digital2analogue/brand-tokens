@@ -1,0 +1,26 @@
+{
+  "color": {
+    "background": {
+      "default": { "$value": "{color.green.950}" },
+      "alt": { "$value": "{color.green.900}" }
+    },
+    "foreground": {
+      "primary": { "$value": "{color.green.200}" },
+      "secondary": { "$value": "{color.green.400}" },
+      "muted": { "$value": "{color.green.600}" },
+      "accent": { "$value": "{color.green.accent}" }
+    },
+    "border": {
+      "default": { "$value": "{color.green.900}" }
+    },
+    "state": {
+      "hover": { "$value": "{color.green.accent}", "$description": "Hover highlight — terminal green" },
+      "focus": { "$value": "{color.green.accent}", "$description": "Focus ring — terminal green" },
+      "disabled": { "$value": "{color.green.600}", "$description": "Disabled text/icons — muted, low contrast by design" }
+    },
+    "feedback": {
+      "error": { "$value": "{color.red.400}", "$description": "Error state text and icons" },
+      "success": { "$value": "{color.green.accent}", "$description": "Success state text and icons" }
+    }
+  }
+}

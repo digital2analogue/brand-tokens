@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(cp \"C:\\\\Users\\\\heath\\\\Documents\\\\Github\\\\brand-tokens\\\\.claude\\\\worktrees\\\\affectionate-cartwright\\\\build\\\\css\\\\variables.css\" \"C:\\\\Users\\\\heath\\\\Documents\\\\Github\\\\river-intro\\\\variables.css\")",
+      "Bash(cp \"C:\\\\Users\\\\heath\\\\Documents\\\\Github\\\\brand-tokens\\\\.clone\\\\worktrees\\\\affectionate-cartwright\\\\build\\\\css\\\\variables.css\" \"C:\\\\Users\\\\heath\\\\Documents\\\\Github\\\\portfolio-site\\\\assets\\\\css\\\\variables.css\")"
+    ]
+  }
+}

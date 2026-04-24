@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/heath/Documents/Github/brand-tokens/**)",
+      "Bash(gh repo:*)",
+      "Bash(where gh:*)",
+      "Read(//usr/local/bin/**)",
+      "Read(//c/Users/heath/Documents/Github/brand-tokens/.claude/worktrees/optimistic-hellman/$LOCALAPPDATA/Programs/GitHub CLI/**)",
+      "Read(//c/Program Files/**)",
+      "Read(//c/Users/heath/AppData/Local/Programs/**)",
+      "Bash(powershell.exe -command \"Get-Command gh -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source\")",
+      "Bash(powershell.exe -command \"where.exe gh 2>&1\")"
+    ]
+  }
+}

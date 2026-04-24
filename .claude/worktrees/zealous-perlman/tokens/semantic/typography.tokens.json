@@ -1,0 +1,100 @@
+{
+  "font": {
+    "title": {
+      "large": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.sans}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": "{font.size.3xl}",
+          "lineHeight": "{font.lineHeight.tight}"
+        },
+        "$description": "Hero text, page titles"
+      },
+      "medium": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.sans}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": "{font.size.2xl}",
+          "lineHeight": "{font.lineHeight.snug}"
+        },
+        "$description": "Intro paragraphs, blog h1, featured text"
+      },
+      "small": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.sans}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": "{font.size.lg}",
+          "lineHeight": "{font.lineHeight.snug}"
+        },
+        "$description": "Section labels, blog h2, category headers"
+      }
+    },
+    "body": {
+      "large": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.serif}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": "{font.size.base}",
+          "lineHeight": "{font.lineHeight.normal}"
+        },
+        "$description": "Default body/paragraph text (16px)"
+      },
+      "medium": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.serif}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": "{font.size.sm}",
+          "lineHeight": "{font.lineHeight.normal}"
+        },
+        "$description": "Secondary body text (14px)"
+      },
+      "small": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.serif}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": "{font.size.xs}",
+          "lineHeight": "{font.lineHeight.normal}"
+        },
+        "$description": "Tertiary body text, fine prose (12px)"
+      }
+    },
+    "label": {
+      "large": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.sans}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": "{font.size.base}",
+          "lineHeight": "{font.lineHeight.snug}"
+        },
+        "$description": "Section headers, prominent UI labels (16px)"
+      },
+      "medium": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.sans}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": "{font.size.sm}",
+          "lineHeight": "{font.lineHeight.snug}"
+        },
+        "$description": "Navigation, button text, standard UI"
+      },
+      "small": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.sans}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": "{font.size.xs}",
+          "lineHeight": "{font.lineHeight.snug}"
+        },
+        "$description": "Meta text, captions, fine print"
+      }
+    }
+  }
+}

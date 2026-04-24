@@ -1,0 +1,16 @@
+{
+  "color": {
+    "$type": "color",
+    "green": {
+      "950": { "$value": "#0A0D0A", "$description": "Near-black green (background)" },
+      "900": { "$value": "#1E241E", "$description": "Dark green (borders, secondary bg)" },
+      "600": { "$value": "#8B9683", "$description": "Muted sage (labels, tertiary text) — AA 6.32:1 on 950" },
+      "400": { "$value": "#A0A89A", "$description": "Soft green (secondary text) — AA 7.97:1 on 950" },
+      "200": { "$value": "#C8CFC4", "$description": "Light green (primary text) — AA 12.26:1 on 950" },
+      "accent": { "$value": "#4ADE6E", "$description": "Terminal green (hover/interactive) — AAA 11.13:1 on 950" }
+    },
+    "red": {
+      "400": { "$value": "#E05C5C", "$description": "Muted terminal red (error states) — AA on 950" }
+    }
+  }
+}
