@@ -1,6 +1,7 @@
 import StyleDictionary from 'style-dictionary'
 import { readdirSync } from 'node:fs'
 import path from 'node:path'
+import { designMdFormat } from './formats/design-md.mjs'
 
 const BRANDS_DIR = 'tokens/brands'
 
@@ -27,8 +28,23 @@ function cssPlatform(destination) {
 const defaultSD = new StyleDictionary({
   usesDtcg: true,
   source: BASE_SOURCES,
-  platforms: { css: cssPlatform('variables.css') },
+  platforms: {
+    css: cssPlatform('variables.css'),
+    designMd: {
+      // No transformGroup — keep composite token values as objects
+      // so the formatter can extract fontFamily, fontSize, etc.
+      transforms: ['name/kebab'],
+      buildPath: 'build/',
+      files: [
+        {
+          destination: 'DESIGN.md',
+          format: 'design-md',
+        },
+      ],
+    },
+  },
 })
+defaultSD.registerFormat(designMdFormat)
 await defaultSD.buildAllPlatforms()
 
 // Per-brand themes — primitives + semantic (as include) + brand overrides (as source)
@@ -36,11 +52,15 @@ const brandFiles = readdirSync(BRANDS_DIR).filter((f) => f.endsWith('.tokens.jso
 
 for (const file of brandFiles) {
   const brandName = path.basename(file, '.tokens.json')
+  // Map "dot-art" → "variables-art", "dot-blog" → "variables-blog", etc.
+  const cssFileName = brandName.startsWith('dot-')
+    ? `variables-${brandName.slice(4)}.css`
+    : `${brandName}.css`
   const brandSD = new StyleDictionary({
     usesDtcg: true,
     include: BASE_SOURCES,
     source: [`${BRANDS_DIR}/${file}`],
-    platforms: { css: cssPlatform(`${brandName}.css`) },
+    platforms: { css: cssPlatform(cssFileName) },
   })
   await brandSD.buildAllPlatforms()
 }
