@@ -5,10 +5,10 @@
     "display": {
       "$type": "typography",
       "$value": {
-        "fontFamily": "{font.family.sans}",
-        "fontWeight": "{font.weight.light}",
-        "fontSize": "{font.size.3xl}",
-        "lineHeight": "{font.lineHeight.tight}"
+        "fontFamily": "{primitive.font.family.sans}",
+        "fontWeight": "{primitive.font.weight.light}",
+        "fontSize": "{primitive.font.size.3xl}",
+        "lineHeight": "{primitive.font.lineHeight.tight}"
       },
       "$description": "Display text. Space Grotesk 300 at 40px / 1.1 line-height. The largest type in the system — reserved for hero statements, splash headlines, and page-defining moments. This is not a structural heading; it is an expressive, editorial register. Do not use it to introduce sections or content groups — that is font.title.large's job. Use sparingly: one instance per page is typical. The tight line-height (1.1) is intentional at this scale, where lines read as a visual unit rather than separate lines."
     },
@@ -18,30 +18,30 @@
       "large": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.sans}",
-          "fontWeight": "{font.weight.light}",
-          "fontSize": "{font.size.2xl}",
-          "lineHeight": "{font.lineHeight.snug}"
+          "fontFamily": "{primitive.font.family.sans}",
+          "fontWeight": "{primitive.font.weight.light}",
+          "fontSize": "{primitive.font.size.2xl}",
+          "lineHeight": "{primitive.font.lineHeight.snug}"
         },
         "$description": "Primary page heading. Space Grotesk 300 at 32px / 1.25 line-height. The h1 equivalent — use for the main structural heading of a page or the first heading inside a major content section. One level below font.display, but this is a structural role where display is expressive. Most pages should have exactly one instance."
       },
       "medium": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.sans}",
-          "fontWeight": "{font.weight.light}",
-          "fontSize": "{font.size.lg}",
-          "lineHeight": "{font.lineHeight.snug}"
+          "fontFamily": "{primitive.font.family.sans}",
+          "fontWeight": "{primitive.font.weight.light}",
+          "fontSize": "{primitive.font.size.lg}",
+          "lineHeight": "{primitive.font.lineHeight.snug}"
         },
         "$description": "Section heading. Space Grotesk 300 at 24px / 1.25 line-height. The h2 equivalent — use to introduce major sections within a page, blog post subheadings, and category or feature group headers. Clearly subordinate to title.large while still commanding attention."
       },
       "small": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.sans}",
-          "fontWeight": "{font.weight.light}",
-          "fontSize": "{font.size.md}",
-          "lineHeight": "{font.lineHeight.snug}"
+          "fontFamily": "{primitive.font.family.sans}",
+          "fontWeight": "{primitive.font.weight.light}",
+          "fontSize": "{primitive.font.size.md}",
+          "lineHeight": "{primitive.font.lineHeight.snug}"
         },
         "$description": "Sub-section heading. Space Grotesk 300 at 20px / 1.25 line-height. The h3 equivalent — use for nested content groups, tertiary sections within a blog post, and UI panel headers where a visual step down from title.medium is needed. The smallest size where the light weight still reads as intentionally editorial rather than just small text."
       }
@@ -52,30 +52,30 @@
       "large": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.serif}",
-          "fontWeight": "{font.weight.regular}",
-          "fontSize": "{font.size.base}",
-          "lineHeight": "{font.lineHeight.normal}"
+          "fontFamily": "{primitive.font.family.serif}",
+          "fontWeight": "{primitive.font.weight.regular}",
+          "fontSize": "{primitive.font.size.base}",
+          "lineHeight": "{primitive.font.lineHeight.normal}"
         },
         "$description": "Default body and paragraph text. Spectral 400 at 16px / 1.6 line-height. The standard reading size for all prose content — articles, case study copy, Substack posts, and any extended text block. Use this as the default for all body content unless a specific size variation is needed."
       },
       "medium": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.serif}",
-          "fontWeight": "{font.weight.regular}",
-          "fontSize": "{font.size.sm}",
-          "lineHeight": "{font.lineHeight.normal}"
+          "fontFamily": "{primitive.font.family.serif}",
+          "fontWeight": "{primitive.font.weight.regular}",
+          "fontSize": "{primitive.font.size.sm}",
+          "lineHeight": "{primitive.font.lineHeight.normal}"
         },
         "$description": "Secondary body text. Spectral 400 at 14px / 1.6 line-height. Use for supporting prose that is present but subordinate — sidebar text, supplementary descriptions, secondary content blocks. Not for primary reading content."
       },
       "small": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.serif}",
-          "fontWeight": "{font.weight.regular}",
-          "fontSize": "{font.size.xs}",
-          "lineHeight": "{font.lineHeight.normal}"
+          "fontFamily": "{primitive.font.family.serif}",
+          "fontWeight": "{primitive.font.weight.regular}",
+          "fontSize": "{primitive.font.size.xs}",
+          "lineHeight": "{primitive.font.lineHeight.normal}"
         },
         "$description": "Tertiary body text and fine prose. Spectral 400 at 12px / 1.6 line-height. Use sparingly — for footnotes, endnotes, legal text, or other non-critical prose that must be present but should not draw attention. The serif at this size is still legible but clearly de-emphasised."
       }
@@ -86,30 +86,30 @@
       "large": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.sans}",
-          "fontWeight": "{font.weight.regular}",
-          "fontSize": "{font.size.base}",
-          "lineHeight": "{font.lineHeight.snug}"
+          "fontFamily": "{primitive.font.family.sans}",
+          "fontWeight": "{primitive.font.weight.regular}",
+          "fontSize": "{primitive.font.size.base}",
+          "lineHeight": "{primitive.font.lineHeight.snug}"
         },
         "$description": "Prominent UI labels and section headers. Space Grotesk 400 at 16px / 1.25 line-height. Use for labels that introduce major UI sections, prominent navigation items, or any interface label that needs to carry visual weight without being a full title. The snug line-height reflects its UI role — tighter than body text."
       },
       "medium": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.sans}",
-          "fontWeight": "{font.weight.regular}",
-          "fontSize": "{font.size.sm}",
-          "lineHeight": "{font.lineHeight.snug}"
+          "fontFamily": "{primitive.font.family.sans}",
+          "fontWeight": "{primitive.font.weight.regular}",
+          "fontSize": "{primitive.font.size.sm}",
+          "lineHeight": "{primitive.font.lineHeight.snug}"
         },
         "$description": "Standard UI text. Space Grotesk 400 at 14px / 1.25 line-height. The workhorse label size — use for navigation links, button text, form field labels, tag labels, and most standard interface text. The default choice for any UI element that is not a heading, body copy, or fine print."
       },
       "small": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.sans}",
-          "fontWeight": "{font.weight.regular}",
-          "fontSize": "{font.size.xs}",
-          "lineHeight": "{font.lineHeight.snug}"
+          "fontFamily": "{primitive.font.family.sans}",
+          "fontWeight": "{primitive.font.weight.regular}",
+          "fontSize": "{primitive.font.size.xs}",
+          "lineHeight": "{primitive.font.lineHeight.snug}"
         },
         "$description": "Meta text, captions, and fine print. Space Grotesk 400 at 12px / 1.25 line-height. Use for timestamps, image captions, helper text, badges, and any label that needs to be present but clearly secondary. The sans-serif at this size remains legible where the serif (font.body.small) would feel more literary."
       }
@@ -118,10 +118,10 @@
     "code": {
       "$type": "typography",
       "$value": {
-        "fontFamily": "{font.family.mono}",
-        "fontWeight": "{font.weight.regular}",
-        "fontSize": "{font.size.sm}",
-        "lineHeight": "{font.lineHeight.normal}"
+        "fontFamily": "{primitive.font.family.mono}",
+        "fontWeight": "{primitive.font.weight.regular}",
+        "fontSize": "{primitive.font.size.sm}",
+        "lineHeight": "{primitive.font.lineHeight.normal}"
       },
       "$description": "Code blocks and inline code. JetBrains Mono 400 at 14px / 1.6 line-height. Use for all code samples, terminal output, inline code references, and any monospaced content. The slightly generous line-height (1.6) aids readability in multi-line code blocks. The terminal-style aesthetic of JetBrains Mono is intentionally coherent with the system's phosphor-green visual language."
     }

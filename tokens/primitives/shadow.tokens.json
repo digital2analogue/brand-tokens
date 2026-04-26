@@ -1,57 +1,58 @@
 {
-  "shadow": {
-    "$type": "shadow",
-    "$description": "Primitive shadow values for the River Romney design system. Five elevation levels from flat to dialog-height. Shadows in a dark theme are subtle by design — heavy shadows read as out-of-place against a near-black canvas. All shadows use pure black with low opacity rather than colored shadows, which would fight the green palette. Do not reference these directly in UI code; use semantic tokens when available.",
-
-    "none": {
-      "$value": {
-        "offsetX": "0",
-        "offsetY": "0",
-        "blur": "0",
-        "spread": "0",
-        "color": "rgba(0,0,0,0)"
+  "primitive": {
+    "shadow": {
+      "$type": "shadow",
+      "$description": "Primitive shadow values for the River Romney design system. Five elevation levels from flat to dialog-height. Shadows in a dark theme are subtle by design — heavy shadows read as out-of-place against a near-black canvas. All shadows use pure black with low opacity rather than colored shadows, which would fight the green palette. Do not reference these directly in UI code; use semantic tokens when available.",
+      "none": {
+        "$value": {
+          "offsetX": "0",
+          "offsetY": "0",
+          "blur": "0",
+          "spread": "0",
+          "color": "rgba(0,0,0,0)"
+        },
+        "$description": "No shadow. Flat — the element sits flush with its background with no elevation cue. Use when depth is communicated by background color (background.alt) rather than shadow, or when the component intentionally reads as part of the surface. Referenced by: unmapped."
       },
-      "$description": "No shadow. Flat — the element sits flush with its background with no elevation cue. Use when depth is communicated by background color (background.alt) rather than shadow, or when the component intentionally reads as part of the surface. Referenced by: unmapped."
-    },
-    "sm": {
-      "$value": {
-        "offsetX": "0",
-        "offsetY": "1px",
-        "blur": "3px",
-        "spread": "0",
-        "color": "rgba(0,0,0,0.08)"
+      "sm": {
+        "$value": {
+          "offsetX": "0",
+          "offsetY": "1px",
+          "blur": "3px",
+          "spread": "0",
+          "color": "rgba(0,0,0,0.08)"
+        },
+        "$description": "Subtle lift. Minimal elevation cue — just enough to separate an element from its parent surface without creating strong depth. Use for inputs on hover/focus, inline dropdowns, and elements that need a light sense of separation. Referenced by: unmapped."
       },
-      "$description": "Subtle lift. Minimal elevation cue — just enough to separate an element from its parent surface without creating strong depth. Use for inputs on hover/focus, inline dropdowns, and elements that need a light sense of separation. Referenced by: unmapped."
-    },
-    "md": {
-      "$value": {
-        "offsetX": "0",
-        "offsetY": "2px",
-        "blur": "8px",
-        "spread": "0",
-        "color": "rgba(0,0,0,0.12)"
+      "md": {
+        "$value": {
+          "offsetX": "0",
+          "offsetY": "2px",
+          "blur": "8px",
+          "spread": "0",
+          "color": "rgba(0,0,0,0.12)"
+        },
+        "$description": "Standard card elevation. Clear separation from the background — the component reads as floating above the canvas. Use for cards, toolbars, and contained panels. The most common shadow in the system. Referenced by: unmapped."
       },
-      "$description": "Standard card elevation. Clear separation from the background — the component reads as floating above the canvas. Use for cards, toolbars, and contained panels. The most common shadow in the system. Referenced by: unmapped."
-    },
-    "lg": {
-      "$value": {
-        "offsetX": "0",
-        "offsetY": "6px",
-        "blur": "20px",
-        "spread": "0",
-        "color": "rgba(0,0,0,0.16)"
+      "lg": {
+        "$value": {
+          "offsetX": "0",
+          "offsetY": "6px",
+          "blur": "20px",
+          "spread": "0",
+          "color": "rgba(0,0,0,0.16)"
+        },
+        "$description": "Overlay elevation. Strong depth cue — the element is clearly above the page layer. Use for modals, context menus, popover panels, and any element that temporarily overlays content. Referenced by: unmapped."
       },
-      "$description": "Overlay elevation. Strong depth cue — the element is clearly above the page layer. Use for modals, context menus, popover panels, and any element that temporarily overlays content. Referenced by: unmapped."
-    },
-    "xl": {
-      "$value": {
-        "offsetX": "0",
-        "offsetY": "12px",
-        "blur": "40px",
-        "spread": "0",
-        "color": "rgba(0,0,0,0.24)"
-      },
-      "$description": "Maximum elevation. The strongest shadow in the system — reserved for dialogs, full-screen drawers, and toast notifications that must read as highest-layer content. Do not use for standard cards or panels; it will feel overblown. Referenced by: unmapped."
+      "xl": {
+        "$value": {
+          "offsetX": "0",
+          "offsetY": "12px",
+          "blur": "40px",
+          "spread": "0",
+          "color": "rgba(0,0,0,0.24)"
+        },
+        "$description": "Maximum elevation. The strongest shadow in the system — reserved for dialogs, full-screen drawers, and toast notifications that must read as highest-layer content. Do not use for standard cards or panels; it will feel overblown. Referenced by: unmapped."
+      }
     }
   }
 }

@@ -4,8 +4,8 @@
     "body": {
       "$type": "typography",
       "$value": {
-        "fontFamily": "{font.family.serif}",
-        "fontWeight": "{font.weight.regular}",
+        "fontFamily": "{primitive.font.family.serif}",
+        "fontWeight": "{primitive.font.weight.regular}",
         "fontSize": "18px",
         "lineHeight": "1.7"
       },

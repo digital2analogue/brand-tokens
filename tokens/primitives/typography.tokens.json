@@ -1,100 +1,98 @@
 {
-  "font": {
-    "$description": "Primitive typography values for the River Romney design system. Raw values only — no semantic meaning attached here. Do not reference these tokens directly in UI code; use semantic tokens (font.title.*, font.body.*, font.label.*, font.code) instead.",
-
-    "family": {
-      "$type": "fontFamily",
-      "$description": "Three typefaces covering all roles in the system. The pairing of geometric sans (Space Grotesk) against humanist serif (Spectral) creates the contrast between structure and warmth that defines the reading experience. Mono is reserved for code contexts.",
-      "sans": {
-        "$value": "Space Grotesk",
-        "$description": "Geometric sans-serif. Used for all titles, UI labels, navigation, and interface text. Its clean, slightly technical character pairs well with the terminal-green aesthetic without feeling cold. Referenced by: font.title.*, font.label.*."
+  "primitive": {
+    "font": {
+      "$description": "Primitive typography values for the River Romney design system. Raw values only — no semantic meaning attached here. Do not reference these tokens directly in UI code; use semantic tokens (font.title.*, font.body.*, font.label.*, font.code) instead.",
+      "family": {
+        "$type": "fontFamily",
+        "$description": "Three typefaces covering all roles in the system. The pairing of geometric sans (Space Grotesk) against humanist serif (Spectral) creates the contrast between structure and warmth that defines the reading experience. Mono is reserved for code contexts.",
+        "sans": {
+          "$value": "Space Grotesk",
+          "$description": "Geometric sans-serif. Used for all titles, UI labels, navigation, and interface text. Its clean, slightly technical character pairs well with the terminal-green aesthetic without feeling cold. Referenced by: font.title.*, font.label.*."
+        },
+        "serif": {
+          "$value": "Spectral",
+          "$description": "Humanist serif designed for screen reading. Used for all body and long-form prose. Its warmth and legibility at reading sizes makes it the right counterpart to Space Grotesk's structure. Referenced by: font.body.*."
+        },
+        "mono": {
+          "$value": "JetBrains Mono",
+          "$description": "Monospaced typeface designed for code. Optimised for readability at small sizes with clear distinction between similar characters (0/O, 1/l/I). Reserved for code blocks, inline code, and terminal-style UI elements. Referenced by: font.code."
+        }
       },
-      "serif": {
-        "$value": "Spectral",
-        "$description": "Humanist serif designed for screen reading. Used for all body and long-form prose. Its warmth and legibility at reading sizes makes it the right counterpart to Space Grotesk's structure. Referenced by: font.body.*."
+      "weight": {
+        "$type": "fontWeight",
+        "$description": "Five weight stops defined; only two are currently active in semantic tokens. Heavier weights (medium, semibold, bold) are reserved for future component-level tokens or emphasis patterns.",
+        "light": {
+          "$value": 300,
+          "$description": "Light weight. Used for all title and display text — the low weight against large sizes creates the elegant, airy quality of the heading style. Do not use at body sizes or below; 300 at small sizes reduces legibility. Referenced by: font.title.*."
+        },
+        "regular": {
+          "$value": 400,
+          "$description": "Regular weight. The default for all body copy, UI labels, code, and most interface text. Referenced by: font.body.*, font.label.*, font.code."
+        },
+        "medium": {
+          "$value": 500,
+          "$description": "Medium weight. Not currently mapped to any semantic token. Reserved for future component-level emphasis tokens (e.g., active nav label, form field label)."
+        },
+        "semibold": {
+          "$value": 600,
+          "$description": "Semibold weight. Not currently mapped to any semantic token. Reserved for future strong emphasis patterns."
+        },
+        "bold": {
+          "$value": 700,
+          "$description": "Bold weight. Not currently mapped to any semantic token. Reserved for future strong emphasis patterns where semibold is insufficient."
+        }
       },
-      "mono": {
-        "$value": "JetBrains Mono",
-        "$description": "Monospaced typeface designed for code. Optimised for readability at small sizes with clear distinction between similar characters (0/O, 1/l/I). Reserved for code blocks, inline code, and terminal-style UI elements. Referenced by: font.code."
-      }
-    },
-
-    "weight": {
-      "$type": "fontWeight",
-      "$description": "Five weight stops defined; only two are currently active in semantic tokens. Heavier weights (medium, semibold, bold) are reserved for future component-level tokens or emphasis patterns.",
-      "light": {
-        "$value": 300,
-        "$description": "Light weight. Used for all title and display text — the low weight against large sizes creates the elegant, airy quality of the heading style. Do not use at body sizes or below; 300 at small sizes reduces legibility. Referenced by: font.title.*."
+      "size": {
+        "$type": "dimension",
+        "$description": "Seven-step size scale in rem units. Covers fine print (12px) through display (40px). Steps follow a near-Major Third (1.25×) modular ratio in the title range. font.size.xl (28px) was removed during the type scale audit — it had no semantic mapping and no identified future role.",
+        "xs": {
+          "$value": "0.75rem",
+          "$description": "12px. Fine print, captions, meta text. The smallest size in the system — use sparingly and only for non-critical content. Referenced by: font.body.small, font.label.small."
+        },
+        "sm": {
+          "$value": "0.875rem",
+          "$description": "14px. Secondary UI text — navigation, supporting labels, secondary body. Referenced by: font.body.medium, font.label.medium, font.code."
+        },
+        "base": {
+          "$value": "1rem",
+          "$description": "16px. The default reading size for body text and prominent UI labels. Referenced by: font.body.large, font.label.large."
+        },
+        "md": {
+          "$value": "1.25rem",
+          "$description": "20px. Sub-section heading size — h3-level headings in editorial and UI contexts. Referenced by: font.title.small."
+        },
+        "lg": {
+          "$value": "1.5rem",
+          "$description": "24px. Section heading size — h2-level headings. Referenced by: font.title.medium."
+        },
+        "2xl": {
+          "$value": "2rem",
+          "$description": "32px. Primary page heading size — h1-level headings in editorial contexts. Referenced by: font.title.large."
+        },
+        "3xl": {
+          "$value": "2.5rem",
+          "$description": "40px. Display size — hero text, splash statements, page-defining moments. The largest size in the system. Referenced by: font.display."
+        }
       },
-      "regular": {
-        "$value": 400,
-        "$description": "Regular weight. The default for all body copy, UI labels, code, and most interface text. Referenced by: font.body.*, font.label.*, font.code."
-      },
-      "medium": {
-        "$value": 500,
-        "$description": "Medium weight. Not currently mapped to any semantic token. Reserved for future component-level emphasis tokens (e.g., active nav label, form field label)."
-      },
-      "semibold": {
-        "$value": 600,
-        "$description": "Semibold weight. Not currently mapped to any semantic token. Reserved for future strong emphasis patterns."
-      },
-      "bold": {
-        "$value": 700,
-        "$description": "Bold weight. Not currently mapped to any semantic token. Reserved for future strong emphasis patterns where semibold is insufficient."
-      }
-    },
-
-    "size": {
-      "$type": "dimension",
-      "$description": "Seven-step size scale in rem units. Covers fine print (12px) through display (40px). Steps follow a near-Major Third (1.25×) modular ratio in the title range. font.size.xl (28px) was removed during the type scale audit — it had no semantic mapping and no identified future role.",
-      "xs": {
-        "$value": "0.75rem",
-        "$description": "12px. Fine print, captions, meta text. The smallest size in the system — use sparingly and only for non-critical content. Referenced by: font.body.small, font.label.small."
-      },
-      "sm": {
-        "$value": "0.875rem",
-        "$description": "14px. Secondary UI text — navigation, supporting labels, secondary body. Referenced by: font.body.medium, font.label.medium, font.code."
-      },
-      "base": {
-        "$value": "1rem",
-        "$description": "16px. The default reading size for body text and prominent UI labels. Referenced by: font.body.large, font.label.large."
-      },
-      "md": {
-        "$value": "1.25rem",
-        "$description": "20px. Sub-section heading size — h3-level headings in editorial and UI contexts. Referenced by: font.title.small."
-      },
-      "lg": {
-        "$value": "1.5rem",
-        "$description": "24px. Section heading size — h2-level headings. Referenced by: font.title.medium."
-      },
-      "2xl": {
-        "$value": "2rem",
-        "$description": "32px. Primary page heading size — h1-level headings in editorial contexts. Referenced by: font.title.large."
-      },
-      "3xl": {
-        "$value": "2.5rem",
-        "$description": "40px. Display size — hero text, splash statements, page-defining moments. The largest size in the system. Referenced by: font.display."
-      }
-    },
-
-    "lineHeight": {
-      "$type": "number",
-      "$description": "Four line-height values covering display through long-form reading. Values are unitless multipliers.",
-      "tight": {
-        "$value": 1.1,
-        "$description": "For large display and hero text only. At 1.1, lines sit close together — visually intentional at large sizes but unreadable at body sizes. Referenced by: font.title.large."
-      },
-      "snug": {
-        "$value": 1.25,
-        "$description": "For headings and UI labels. Enough breathing room for multi-line labels without excess space. Referenced by: font.title.medium, font.title.small, font.label.*."
-      },
-      "normal": {
-        "$value": 1.6,
-        "$description": "For standard body text. Comfortable reading rhythm at body sizes. Referenced by: font.body.*, font.code."
-      },
-      "relaxed": {
-        "$value": 1.7,
-        "$description": "For long-form prose at larger sizes (e.g., .blog body text override). Not currently mapped to a semantic token — reserved for the dot-blog brand override."
+      "lineHeight": {
+        "$type": "number",
+        "$description": "Four line-height values covering display through long-form reading. Values are unitless multipliers.",
+        "tight": {
+          "$value": 1.1,
+          "$description": "For large display and hero text only. At 1.1, lines sit close together — visually intentional at large sizes but unreadable at body sizes. Referenced by: font.title.large."
+        },
+        "snug": {
+          "$value": 1.25,
+          "$description": "For headings and UI labels. Enough breathing room for multi-line labels without excess space. Referenced by: font.title.medium, font.title.small, font.label.*."
+        },
+        "normal": {
+          "$value": 1.6,
+          "$description": "For standard body text. Comfortable reading rhythm at body sizes. Referenced by: font.body.*, font.code."
+        },
+        "relaxed": {
+          "$value": 1.7,
+          "$description": "For long-form prose at larger sizes (e.g., .blog body text override). Not currently mapped to a semantic token — reserved for the dot-blog brand override."
+        }
       }
     }
   }
