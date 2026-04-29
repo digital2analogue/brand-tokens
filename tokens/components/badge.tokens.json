@@ -1,0 +1,187 @@
+{
+  "$description": "Badge and chip component tokens — semantic status indicators. Maps accent and feedback color tokens to badge variants. Each variant defines background + foreground for the filled chip style. Use these instead of raw semantic tokens in badge components so variant styles can change globally.",
+  "component": {
+    "badge": {
+      "$description": "Status badges and chips. Variants map directly to semantic feedback and accent color roles. All pairs verified WCAG AA (4.5:1) or are visual-only (background tints without text at small size).",
+      "default": {
+        "$description": "Neutral badge — no semantic meaning, general label or tag.",
+        "background": {
+          "$value": "{color.background.alt}",
+          "$type": "color",
+          "$description": "Neutral tint — uses elevated surface color, reads as a generic label without implying any status."
+        },
+        "foreground": {
+          "$value": "{color.foreground.alt}",
+          "$type": "color",
+          "$description": "Secondary foreground — legible on background.alt. Contrast: 8.0:1 AA."
+        },
+        "border": {
+          "$value": "{color.border.default}",
+          "$type": "color",
+          "$description": "Standard border — same as UI edges, visually integrates with surrounding layout."
+        }
+      },
+      "success": {
+        "$description": "Success badge — confirms a positive state (active, approved, complete, healthy).",
+        "background": {
+          "$value": "{color.background.success-alt}",
+          "$type": "color",
+          "$description": "Dark green tint — background.success-alt (#0F2016). Subtle, not alarming."
+        },
+        "foreground": {
+          "$value": "{color.foreground.success}",
+          "$type": "color",
+          "$description": "Phosphor green text — foreground.success (#4ADE6E). Contrast vs success-alt: 11.1:1 AAA."
+        },
+        "border": {
+          "$value": "{color.background.success-alt}",
+          "$type": "color",
+          "$description": "Matches background — no visible border on dark tint variant."
+        }
+      },
+      "warning": {
+        "$description": "Warning badge — signals caution or a state requiring attention.",
+        "background": {
+          "$value": "{color.background.warning-alt}",
+          "$type": "color",
+          "$description": "Dark amber tint — background.warning-alt (#221B08). Low-alarm visual treatment."
+        },
+        "foreground": {
+          "$value": "{color.foreground.warning}",
+          "$type": "color",
+          "$description": "Vivid amber text — foreground.warning (#FCD34D). Contrast vs warning-alt: 12.0:1 AAA."
+        },
+        "border": {
+          "$value": "{color.background.warning-alt}",
+          "$type": "color",
+          "$description": "Matches background — borderless on dark tint."
+        }
+      },
+      "danger": {
+        "$description": "Danger badge — signals an error, failure, or destructive state.",
+        "background": {
+          "$value": "{color.background.danger-alt}",
+          "$type": "color",
+          "$description": "Subtle error tint — danger-alt. Low alarm for badge context; use background.danger only for filled destructive buttons."
+        },
+        "foreground": {
+          "$value": "{color.foreground.danger}",
+          "$type": "color",
+          "$description": "Red text — foreground.danger (#D03027). Contrast 4.6:1 AA."
+        },
+        "border": {
+          "$value": "{color.foreground.danger}",
+          "$type": "color",
+          "$description": "Red border reinforces the error signal on the subtle background."
+        }
+      },
+      "info": {
+        "$description": "Info badge — surfaces informational status (pending, in-review, queued).",
+        "background": {
+          "$value": "{color.background.info-alt}",
+          "$type": "color",
+          "$description": "Dark blue tint — background.info-alt (#0D1830). Calm, non-urgent."
+        },
+        "foreground": {
+          "$value": "{color.foreground.info}",
+          "$type": "color",
+          "$description": "Light blue text — foreground.info (#93C5FD). Contrast vs info-alt: 7.5:1 AA."
+        },
+        "border": {
+          "$value": "{color.background.info-alt}",
+          "$type": "color",
+          "$description": "Matches background — borderless on dark tint."
+        }
+      },
+      "accent-green": {
+        "$description": "Green accent chip — emphasis tag or label, not a status indicator.",
+        "background": {
+          "$value": "{color.background.accent-green}",
+          "$type": "color",
+          "$description": "Dark green chip fill — background.accent-green (#0F2016)."
+        },
+        "foreground": {
+          "$value": "{color.foreground.accent-green}",
+          "$type": "color",
+          "$description": "Phosphor green label — foreground.accent-green (#4ADE6E). Contrast: 11.1:1 AAA."
+        },
+        "border": {
+          "$value": "{color.background.accent-green}",
+          "$type": "color",
+          "$description": "Matches background."
+        }
+      },
+      "accent-blue": {
+        "$description": "Blue accent chip — for categorization, tagging, or feature labels.",
+        "background": {
+          "$value": "{color.background.accent-blue}",
+          "$type": "color",
+          "$description": "Dark blue chip fill — background.accent-blue (#0D1830)."
+        },
+        "foreground": {
+          "$value": "{color.foreground.accent-blue}",
+          "$type": "color",
+          "$description": "Light blue label — foreground.accent-blue (#93C5FD). Contrast: 7.5:1 AA."
+        },
+        "border": {
+          "$value": "{color.background.accent-blue}",
+          "$type": "color",
+          "$description": "Matches background."
+        }
+      },
+      "accent-violet": {
+        "$description": "Violet accent chip — for tagging, category labels, decorative emphasis.",
+        "background": {
+          "$value": "{color.background.accent-violet}",
+          "$type": "color",
+          "$description": "Dark violet chip fill — background.accent-violet (#18102E)."
+        },
+        "foreground": {
+          "$value": "{color.foreground.accent-violet}",
+          "$type": "color",
+          "$description": "Light violet label — foreground.accent-violet (#C4B5FD). Contrast: 7.0:1 AA."
+        },
+        "border": {
+          "$value": "{color.background.accent-violet}",
+          "$type": "color",
+          "$description": "Matches background."
+        }
+      },
+      "accent-amber": {
+        "$description": "Amber accent chip — warm emphasis tags, seasonal or category labels.",
+        "background": {
+          "$value": "{color.background.accent-amber}",
+          "$type": "color",
+          "$description": "Dark amber chip fill — background.accent-amber (#221B08)."
+        },
+        "foreground": {
+          "$value": "{color.foreground.accent-amber}",
+          "$type": "color",
+          "$description": "Vivid amber label — foreground.accent-amber (#FCD34D). Contrast: 12.0:1 AAA."
+        },
+        "border": {
+          "$value": "{color.background.accent-amber}",
+          "$type": "color",
+          "$description": "Matches background."
+        }
+      },
+      "radius": {
+        "$value": "{radius.full}",
+        "$type": "dimension",
+        "$description": "Badges use full pill radius (9999px) — the strong rounding distinguishes them from rectangular UI components and signals they are labels rather than interactive controls."
+      },
+      "padding": {
+        "x": {
+          "$value": "{spacing.inline}",
+          "$type": "dimension",
+          "$description": "Horizontal padding — 12px left/right. Gives the label room to breathe inside the pill without becoming too wide."
+        },
+        "y": {
+          "$value": "{spacing.micro}",
+          "$type": "dimension",
+          "$description": "Vertical padding — 4px top/bottom. Keeps the badge compact; height is primarily determined by font size."
+        }
+      }
+    }
+  }
+}

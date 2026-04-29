@@ -1,7 +1,11 @@
 {
   "spacing": {
     "$description": "Semantic spacing tokens for the River Romney design system. Maps intent-named roles to primitive space values. Use these in UI code rather than raw primitives — they communicate purpose, not just size. Scale runs from micro-spacing within a component to full-bleed section breaks.",
-
+    "micro": {
+      "$value": "{primitive.space.2xs}",
+      "$type": "dimension",
+      "$description": "Micro spacing. For icon-to-text margins, gap between a badge and its label, and tight internal nudges within a single element. At 4px the gap signals that two things are part of the same unit — barely breathing room, not real separation. Resolves to: 4px."
+    },
     "tight": {
       "$value": "{primitive.space.xs}",
       "$type": "dimension",
@@ -22,10 +26,25 @@
       "$type": "dimension",
       "$description": "Component spacing. Between distinct UI components in a layout — e.g., the gap between a label and its input, between a card and the next card in a list, or between a toolbar and the content below it. Signals that two things are related but not the same. Resolves to: 24px."
     },
+    "group": {
+      "$value": "{primitive.space.xl}",
+      "$type": "dimension",
+      "$description": "Group spacing. Between related groups of components within a layout zone — stacked form sections, card grid gaps, gap between a heading block and its content cluster. Fills the jump between component (24px) and layout (48px). Resolves to: 32px."
+    },
     "layout": {
       "$value": "{primitive.space.2xl}",
       "$type": "dimension",
       "$description": "Layout spacing. Between major layout regions within a page section — e.g., between a sidebar and main content, between a page header and the first content block, or between stacked content groups. Larger than component spacing but not a full section break. Resolves to: 48px."
+    },
+    "block": {
+      "$value": "{primitive.space.3xl}",
+      "$type": "dimension",
+      "$description": "Block spacing. Between major content blocks within a page section — distinct from component groupings but not a full section break. Use for the vertical gap between a text block and a media element, between a heading cluster and a feature grid, or between stacked editorial rows. Resolves to: 64px."
+    },
+    "page": {
+      "$value": "{primitive.space.4xl}",
+      "$type": "dimension",
+      "$description": "Page spacing. Between major editorial sections — the standard vertical separator for hero-to-content and section-to-section gaps in portfolio and documentation contexts. Larger than spacing.block (content-level rhythm) but not as expansive as spacing.section (full page breathing room). Resolves to: 80px."
     },
     "section": {
       "$value": "{primitive.space.5xl}",

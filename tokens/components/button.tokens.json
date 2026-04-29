@@ -1,0 +1,120 @@
+{
+  "$description": "Button component tokens. Third layer above primitives and semantics \u2014 maps semantic color tokens to specific button roles and states. Use these in UI code instead of semantic tokens directly, so button styles can be updated system-wide without touching components.",
+  "component": {
+    "button": {
+      "$description": "Button variants: primary (one per page, main CTA), secondary (supporting actions), danger (destructive). Each variant defines default and hover states.",
+      "primary": {
+        "$description": "Primary button \u2014 filled, high-emphasis. One per page maximum.",
+        "background": {
+          "default": {
+            "$value": "{color.background.action}",
+            "$type": "color",
+            "$description": "Filled action color \u2014 blue in decision-engine, phosphor green in base theme."
+          },
+          "hover": {
+            "$value": "{color.background.action-hover}",
+            "$type": "color",
+            "$description": "Darkened action color on hover."
+          },
+          "active": {
+            "$value": "{color.background.action-active}",
+            "$type": "color",
+            "$description": "Pressed/active state \u2014 deep darkened action color."
+          }
+        },
+        "foreground": {
+          "default": {
+            "$value": "{color.foreground.on-action}",
+            "$type": "color",
+            "$description": "Text/icon color on filled action background \u2014 always white in decision-engine."
+          }
+        },
+        "border": {
+          "default": {
+            "$value": "{color.background.action}",
+            "$type": "color",
+            "$description": "Matches background so no visible border seam."
+          },
+          "hover": {
+            "$value": "{color.background.action-hover}",
+            "$type": "color",
+            "$description": "Matches hover background."
+          },
+          "active": {
+            "$value": "{color.background.action-active}",
+            "$type": "color",
+            "$description": "Matches active background."
+          }
+        }
+      },
+      "secondary": {
+        "$description": "Secondary button \u2014 outlined, medium-emphasis. Multiple per page allowed.",
+        "background": {
+          "default": {
+            "$value": "{color.background.default}",
+            "$type": "color",
+            "$description": "White canvas background \u2014 the button sits flush with the page surface."
+          },
+          "hover": {
+            "$value": "{color.background.alt}",
+            "$type": "color",
+            "$description": "Subtle gray lift on hover \u2014 signals interactivity without implying primary priority."
+          }
+        },
+        "foreground": {
+          "default": {
+            "$value": "{color.foreground.default}",
+            "$type": "color",
+            "$description": "Near-black text \u2014 neutral, not action-colored. Blue is reserved for interactive links and primary actions."
+          }
+        },
+        "border": {
+          "default": {
+            "$value": "{color.border.default}",
+            "$type": "color",
+            "$description": "Standard border \u2014 same gray used for inputs and cards."
+          },
+          "hover": {
+            "$value": "{color.border.default}",
+            "$type": "color",
+            "$description": "Border unchanged on hover \u2014 background shift is the only state signal."
+          }
+        }
+      },
+      "danger": {
+        "$description": "Danger button \u2014 for destructive or irreversible actions (delete, remove).",
+        "background": {
+          "default": {
+            "$value": "{color.background.default}",
+            "$type": "color",
+            "$description": "White \u2014 danger button is outlined by default, not filled."
+          },
+          "hover": {
+            "$value": "{color.background.danger-alt}",
+            "$type": "color",
+            "$description": "Subtle red tint on hover signals destructive intent."
+          }
+        },
+        "foreground": {
+          "default": {
+            "$value": "{color.foreground.danger}",
+            "$type": "color",
+            "$description": "Red text communicates the destructive nature of the action."
+          }
+        },
+        "border": {
+          "default": {
+            "$value": "{color.foreground.danger}",
+            "$type": "color",
+            "$description": "Red border reinforces the danger signal."
+          },
+          "hover": {
+            "$value": "{color.foreground.danger}",
+            "$type": "color",
+            "$description": "Border unchanged on hover."
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,295 @@
+{
+  "$description": "decision-engine sub-brand overrides. Light-mode enterprise data UI theme. Replaces the base dark/phosphor aesthetic with a white-canvas, C1-Navy-primary palette suited for data-dense decisioning interfaces. Font exception: uses Inter (not Space Grotesk) — enterprise data UI convention, approved for this sub-brand only.",
+  "color": {
+    "background": {
+      "default": {
+        "$value": "{primitive.color.neutral.white}",
+        "$type": "color",
+        "$description": "White page canvas — inverts the base dark theme. All decisioning UI renders on pure white. Contrast vs gray.900 foreground: 16.1:1 (WCAG AAA)."
+      },
+      "alt": {
+        "$value": "{primitive.color.gray.50}",
+        "$type": "color",
+        "$description": "Light gray secondary surface — table row alternates, panel backgrounds, input fills. Visually distinct from white without introducing strong contrast."
+      },
+      "action": {
+        "$value": "{primitive.color.blue.700}",
+        "$type": "color",
+        "$description": "Primary CTA background — filled primary buttons, selected states, active toggles. Replaces phosphor green as the interactive fill in this sub-brand. Always pair with foreground.on-action (white). Contrast vs white: 5.95:1 (WCAG AA)."
+      },
+      "action-hover": {
+        "$value": "{primitive.color.blue.800}",
+        "$type": "color",
+        "$description": "Hover fill for primary action elements — darkened navy (#1E48D0) over the base blue.700 action color. Replaces color.state.hover."
+      },
+      "action-active": {
+        "$value": "{primitive.color.blue.900}",
+        "$type": "color",
+        "$description": "Active/pressed fill for primary action elements — deep navy (#183DAE) for the moment a button is held down."
+      },
+      "disabled": {
+        "$value": "{primitive.color.gray.100}",
+        "$type": "color",
+        "$description": "Fill for disabled interactive elements (inputs, buttons, selects). Very light gray (#E8EAED) — clearly not white, clearly not interactive. Promotes and replaces color.state.disabled."
+      },
+      "elevated": {
+        "$value": "{primitive.color.neutral.white}",
+        "$type": "color",
+        "$description": "Elevated surface — cards, modals, popovers that float above the default canvas. Same value as background.default in light mode; kept as a separate token so dark-mode contexts can diverge independently."
+      },
+      "accent-subtle": {
+        "$value": "{primitive.color.blue.100}",
+        "$type": "color",
+        "$description": "Very light blue tint — hover surfaces, selected row highlights, active cell fills. Computed from white 88% + blue.700 12%. Use when a surface needs to signal blue-family association without strong color weight."
+      },
+      "accent-hover": {
+        "$value": "{primitive.color.blue.200}",
+        "$type": "color",
+        "$description": "Medium blue tint — hover fill for accent-tinted interactive surfaces. Computed from white 55% + blue.700 45%. Stronger than accent-subtle; clearly lighter than the full action blue."
+      },
+      "danger-subtle": {
+        "$value": "{primitive.color.red.100}",
+        "$type": "color",
+        "$description": "Very light red tint — danger hover surfaces, error row highlights. Computed from white 92% + red.600 8% (the deeper crimson, formerly red.500). Slightly more saturated than background.danger-alt (#FEF2F2) — use danger-subtle for interactive hover signals, danger-alt for static alert fills."
+      },
+      "danger-alt": {
+        "$value": "{primitive.color.red.50}",
+        "$type": "color",
+        "$description": "Subtle danger background for static error alert fills and error state surfaces. #FEF2F2 — light warm blush. Always pair with foreground.danger text. Red.500 text on this: 4.64:1 (WCAG AA)."
+      },
+      "success": {
+        "$value": "{primitive.color.green.positive}",
+        "$type": "color",
+        "$description": "Success fill — #15803D. White text on this: 5.0:1 AA. Replaces base phosphor green with a proper light-mode success green."
+      },
+      "success-alt": {
+        "$value": "{primitive.color.green.100}",
+        "$type": "color",
+        "$description": "Subtle success tint #DCFCE7 — success alert/banner backgrounds in DE light mode."
+      },
+      "warning": {
+        "$value": "{primitive.color.amber.500}",
+        "$type": "color",
+        "$description": "Warning fill — amber.500 #D97706. Use dark text (on-warning = near-black). 6.8:1 contrast."
+      },
+      "warning-alt": {
+        "$value": "{primitive.color.amber.100}",
+        "$type": "color",
+        "$description": "Subtle warning tint #FEF3C7 — warning alert/banner backgrounds in DE light mode."
+      },
+      "info": {
+        "$value": "{primitive.color.blue.700}",
+        "$type": "color",
+        "$description": "Info fill — same blue as action in DE. Semantically distinct: info is a state, action is interactive. White text: 5.95:1 AA."
+      },
+      "info-alt": {
+        "$value": "{primitive.color.blue.100}",
+        "$type": "color",
+        "$description": "Subtle info tint #E5EBFC — info alert/banner backgrounds. Promotes the hand-crafted value from decisioning-table."
+      },
+      "danger": {
+        "$value": "{primitive.color.red.500}",
+        "$type": "color",
+        "$description": "Danger fill for destructive button backgrounds. Bright red — always pair text/icons on this surface with foreground.on-danger (white). Hex: #D03027."
+      },
+      "accent-green": {
+        "$value": "{primitive.color.green.50}",
+        "$type": "color",
+        "$description": "Light green tint for DE light-mode chip/tag fills and callout panels with green emphasis. Overrides base dark tint. Provisional — finesse later."
+      },
+      "accent-blue": {
+        "$value": "{primitive.color.blue.100}",
+        "$type": "color",
+        "$description": "Light blue tint for DE light-mode chip/tag fills and callout panels with blue emphasis. Matches background-accent-subtle value — kept separate for semantic distinction."
+      },
+      "accent-violet": {
+        "$value": "{primitive.color.violet.100}",
+        "$type": "color",
+        "$description": "Light violet tint for DE light-mode chip/tag fills and callout panels with violet emphasis. Overrides base dark tint. Provisional — finesse later."
+      },
+      "accent-amber": {
+        "$value": "{primitive.color.amber.50}",
+        "$type": "color",
+        "$description": "Light amber tint for DE light-mode chip/tag fills and callout panels with warm emphasis. Overrides base dark tint. Provisional — finesse later."
+      },
+      "selected": {
+        "$value": "{primitive.color.blue.100}",
+        "$type": "color",
+        "$description": "Selected-state surface — table rows, list items, options in their selected/checked state. Same resolved value as background.accent-subtle; kept separate so selection and accent-tint semantics can diverge independently."
+      }
+    },
+    "foreground": {
+      "default": {
+        "$value": "{primitive.color.gray.900}",
+        "$type": "color",
+        "$description": "Primary text on white — headings, body copy, labels, table cell values. Near-black with a cool cast. Contrast vs white: 16.1:1 (WCAG AAA)."
+      },
+      "alt": {
+        "$value": "{primitive.color.gray.700}",
+        "$type": "color",
+        "$description": "Secondary text on white — metadata, timestamps, supporting labels, icon chrome. Contrast vs white: 8.9:1 (WCAG AAA)."
+      },
+      "muted": {
+        "$value": "{primitive.color.gray.500}",
+        "$type": "color",
+        "$description": "Muted text — secondary labels, captions, timestamps, metadata. Also use for input placeholder text (foreground.disabled exists for disabled element text)."
+      },
+      "disabled": {
+        "$value": "{primitive.color.gray.200}",
+        "$type": "color",
+        "$description": "Text and icons on disabled elements — light gray (#D8DCE0), recedes toward the border level on white canvas. WCAG contrast exemption applies to disabled text (1.4.3 exception)."
+      },
+      "action": {
+        "$value": "{primitive.color.blue.700}",
+        "$type": "color",
+        "$description": "Interactive text — links, active nav items, text-only CTAs. Bright blue replaces phosphor green. Contrast vs white: 5.95:1 (WCAG AA)."
+      },
+      "on-action": {
+        "$value": "{primitive.color.neutral.white}",
+        "$type": "color",
+        "$description": "Text/icons on primary blue CTA backgrounds. White on blue. Contrast vs background.action: 5.95:1 (WCAG AA)."
+      },
+      "accent-green": {
+        "$value": "{primitive.color.green.600}",
+        "$type": "color",
+        "$description": "Green for Approve outcome states and success indicators. Vivid green text/icons on white background."
+      },
+      "accent-blue": {
+        "$value": "{primitive.color.blue.700}",
+        "$type": "color",
+        "$description": "Primary blue for branded text and icon accents."
+      },
+      "accent-purple": {
+        "$value": "{primitive.color.purple.600}",
+        "$type": "color",
+        "$description": "Purple for Review/pending outcome states. Contrast vs white: 5.76:1 (WCAG AA)."
+      },
+      "secondary": {
+        "$value": "{primitive.color.gray.navy}",
+        "$type": "color",
+        "$description": "Secondary text — supporting labels, metadata, helper text. Navy-tinted; sits between foreground.muted and foreground.default in visual hierarchy. Contrast vs white: 9.39:1 (WCAG AAA)."
+      },
+      "danger": {
+        "$value": "{primitive.color.red.600}",
+        "$type": "color",
+        "$description": "Danger/error text and icons — used for validation messages, destructive action labels, and error states. More vivid than foreground.accent-red; reserved for feedback contexts. Contrast vs white: 6.01:1 (WCAG AA)."
+      },
+      "inverse": {
+        "$value": "{primitive.color.neutral.white}",
+        "$type": "color",
+        "$description": "Text on dark/colored surfaces — white text used over non-white backgrounds (e.g. tooltips on dark panels, text over photography). Not for standard UI on the white canvas."
+      },
+      "accent-on-blue": {
+        "$value": "{primitive.color.neutral.white}",
+        "$type": "color",
+        "$description": "White text/icons on solid navy backgrounds."
+      },
+      "accent-on-green": {
+        "$value": "{primitive.color.neutral.white}",
+        "$type": "color",
+        "$description": "White text/icons on solid green backgrounds (Approve badges)."
+      },
+      "accent-on-purple": {
+        "$value": "{primitive.color.neutral.white}",
+        "$type": "color",
+        "$description": "White text/icons on solid purple backgrounds (Review badges)."
+      },
+      "on-danger": {
+        "$value": "{primitive.color.neutral.white}",
+        "$type": "color",
+        "$description": "Text/icons on danger red backgrounds. White on red."
+      },
+      "success": {
+        "$value": "{primitive.color.green.positive}",
+        "$type": "color",
+        "$description": "Success text and icons. Dark green (#15803D) for sufficient contrast on white. Contrast vs white: 5.02:1 (WCAG AA)."
+      },
+      "on-success": {
+        "$value": "{primitive.color.neutral.white}",
+        "$type": "color",
+        "$description": "Text/icons on success green backgrounds. White on dark green."
+      },
+      "warning": {
+        "$value": "{primitive.color.amber.700}",
+        "$type": "color",
+        "$description": "Warning text and icons. Deep amber (#92400E) for contrast on white. Contrast vs white: 7.5:1 (WCAG AA)."
+      },
+      "on-warning": {
+        "$value": "{primitive.color.neutral.white}",
+        "$type": "color",
+        "$description": "Text/icons on warning amber backgrounds."
+      },
+      "info": {
+        "$value": "{primitive.color.blue.700}",
+        "$type": "color",
+        "$description": "Informational text and icons. DE primary blue, contrast vs white: 5.95:1 (WCAG AA)."
+      },
+      "on-info": {
+        "$value": "{primitive.color.neutral.white}",
+        "$type": "color",
+        "$description": "Text/icons on info blue backgrounds."
+      }
+    },
+    "border": {
+      "default": {
+        "$value": "{primitive.color.gray.200}",
+        "$type": "color",
+        "$description": "Standard border — input outlines, card edges, table borders, dividers. Light gray on white."
+      },
+      "elevated": {
+        "$value": "{primitive.color.gray.300}",
+        "$type": "color",
+        "$description": "DE structural chrome borders — headers, card frames, section dividers. Cool gray step above border-default (#D8DCE0). Contrast vs white: sufficient for structural separation."
+      },
+      "hover": {
+        "$value": "{primitive.color.blue.700}",
+        "$type": "color",
+        "$description": "Border on interactive elements in hover state — action blue. Signals that the element is interactive. Use on input outlines, card borders, select controls on hover."
+      },
+      "active": {
+        "$value": "{primitive.color.blue.800}",
+        "$type": "color",
+        "$description": "Border on interactive elements in active/pressed state — darkened navy. Slightly heavier than hover to signal commitment."
+      },
+      "focus": {
+        "$value": "{primitive.color.blue.700}",
+        "$type": "color",
+        "$description": "Focus ring color. Applied as an outline on keyboard-focused interactive elements. Matches action blue so focus rings feel integrated with the interaction system. Promotes and replaces color.state.focus."
+      },
+      "disabled": {
+        "$value": "{primitive.color.gray.100}",
+        "$type": "color",
+        "$description": "Border on disabled elements — very light gray, recedes toward white canvas. Combine with reduced opacity on the overall component."
+      },
+      "muted": {
+        "$value": "{primitive.color.gray.100}",
+        "$type": "color",
+        "$description": "Subtle border — #E8EAED, lighter than border.default (#D8DCE0). Hairline dividers, table row separators, zebra stripes in DE."
+      },
+      "accent": {
+        "$value": "{primitive.color.blue.700}",
+        "$type": "color",
+        "$description": "Blue accent border — focus rings, active tab indicators, selected card outlines, and any border that should read as interactive/branded. Always use paired with the appropriate background token."
+      }
+    },
+    "feedback": {
+      "success": {
+        "$value": "{primitive.color.green.approve}",
+        "$type": "color",
+        "$description": "Success state color — used for confirmation messages, successful submission states, and positive feedback indicators. Approve-teal distinct from the phosphor accent green. Contrast vs white: 4.55:1 (WCAG AA)."
+      }
+    },
+    "accent": {
+      "subtle": {
+        "$value": "{primitive.color.blue.150}",
+        "$type": "color",
+        "$description": "Very light blue tint for non-background accent surfaces — inline highlights, active chip fills, tag backgrounds. Computed from white 86% + blue.700 14%. Slightly more saturated than background.accent-subtle."
+      },
+      "subtle-border": {
+        "$value": "{primitive.color.blue.250}",
+        "$type": "color",
+        "$description": "Medium-light blue for borders on accent-subtle surfaces — chip outlines, tag borders, badge strokes. Computed from white 50% + blue.700 50%. Provides visible separation on light blue backgrounds without the full weight of the action blue."
+      }
+    }
+  }
+}

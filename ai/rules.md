@@ -4,7 +4,7 @@
 1. No hardcoded colors — use var(--color-*) custom properties
 2. No hardcoded font weights — use var(--font-weight-*) custom properties
 3. No font families other than Space Grotesk, Spectral, and JetBrains Mono
-4. Display and title tokens use weight 300 (light) — body, label, and code tokens use weight 400 (regular) — 600/700 are ad-hoc only via --font-weight-semibold / --font-weight-bold
+4. Display and title tokens use weight 300 (light) — body, label, and code tokens use weight 400 (regular) — label-strong tokens use weight 500 (medium) for emphasis — 600/700 are ad-hoc only via --font-weight-semibold / --font-weight-bold
 5. Accent green (foreground.action, foreground.accent, background.action, background.accent) is never resting text or decoration — it signals interactivity or intentional emphasis only
 6. All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking
 7. Spacing values must come from the defined scale — do not introduce arbitrary values
@@ -39,6 +39,12 @@
 - **font.label.medium** (400 / 0.875rem / lh 1.25 / Space Grotesk): navigation, button text, standard UI
 - **font.label.small** (400 / 0.75rem / lh 1.25 / Space Grotesk): meta text, captions, fine print
 
+### Label Strong (emphasized UI)
+Same sizes as Label; weight stepped up to 500 (medium). Use for active states, primary CTAs, and any label that must assert itself without changing size.
+- **font.label-strong.large** (500 / 1rem / lh 1.25 / Space Grotesk): active primary nav, section header labels with extra weight
+- **font.label-strong.medium** (500 / 0.875rem / lh 1.25 / Space Grotesk): button text, active tab labels, table column headers
+- **font.label-strong.small** (500 / 0.75rem / lh 1.25 / Space Grotesk): active badge labels, selected filter chips, emphasized metadata
+
 ### Code
 - **font.code** (400 / 0.875rem / lh 1.6 / JetBrains Mono): all code blocks, inline code, terminal UI
 
@@ -47,4 +53,5 @@
 - **riverromney.design** (.design): Base tokens, no overrides
 - **riverromney.art** (.art): Override background.default to pure black (#000000) for photo contrast
 - **riverromney.blog** (.blog): Override body font size to 18px, line-height to 1.7 (font.lineHeight.relaxed)
+- **decision-engine** (sub-brand): Full light-mode inversion — white background, primary blue (#2456E4) as action/accent, cool-gray text hierarchy, multi-color outcome states (green=Approve, red=Deny, purple=Review). **Approved font exception**: uses Inter instead of Space Grotesk — enterprise data UI convention for this product only. Source: tokens/brands/decision-engine.tokens.json. Build: node scripts/build-brands.mjs. For resolved token values read build/css/decision-engine.css — ai/DESIGN.md covers the base dark theme only.
 

@@ -1,0 +1,27 @@
+{
+  "icon": {
+    "$description": "Semantic icon size tokens. Maps intent-named roles to primitive icon sizes. Use these in components \u2014 icon.size.default for most inline icons, icon.size.compact for dense UI, icon.size.large for standalone icons.",
+    "size": {
+      "compact": {
+        "$value": "{primitive.icon.sm}",
+        "$type": "dimension",
+        "$description": "Compact icon. 16px \u2014 use in dense UI contexts: input adornments, tag/chip icons, tight toolbar rows. The smallest interactive icon size."
+      },
+      "default": {
+        "$value": "{primitive.icon.md}",
+        "$type": "dimension",
+        "$description": "Default icon. 20px \u2014 the standard icon size for most UI contexts: nav items, button icons, list row glyphs, form icons. When in doubt, use this."
+      },
+      "large": {
+        "$value": "{primitive.icon.lg}",
+        "$type": "dimension",
+        "$description": "Large icon. 24px \u2014 for icons that anchor a UI region: section headers, standalone icon buttons, prominent action icons."
+      },
+      "xl": {
+        "$value": "{primitive.icon.xl}",
+        "$type": "dimension",
+        "$description": "Extra-large icon. 32px \u2014 reserved for empty states, onboarding illustrations, and feature highlight graphics. Never inline with text."
+      }
+    }
+  }
+}
