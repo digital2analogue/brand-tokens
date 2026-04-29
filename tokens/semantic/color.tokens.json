@@ -1,67 +1,234 @@
 {
   "color": {
-    "$description": "Semantic color tokens for the River Romney design system. These are the only tokens AI agents and developers should reference in UI code. Never use primitive tokens (color.green.*, color.neutral.*) directly — always go through the semantic layer. All values are dark-mode only (v1). Namespaces: background (surfaces and fills), foreground (text, icons, and interactive elements), border (edges and dividers).",
-
+    "$description": "Semantic color tokens. Never use primitive tokens in UI code — always go through the semantic layer.",
     "background": {
       "$type": "color",
-      "$description": "Surface tokens. Two levels — default (the canvas) and alt (elevated surfaces) — plus action and accent fills for interactive and emphasis contexts. Do not invent additional background levels; if more depth is needed, use a border.",
+      "$description": "Surface tokens. default (canvas), alt (elevated), action/accent (fills), danger/danger-alt (error fills).",
       "default": {
         "$value": "{primitive.color.green.950}",
-        "$description": "The base canvas. Use as the default background for every page, full-bleed section, and outermost container. The green undertone (#0A0D0A) is what distinguishes this system from generic dark themes — it is not interchangeable with pure black. Do not use for cards, panels, or any element that needs to read as elevated. Hex: #0A0D0A."
+        "$description": "Base canvas #0A0D0A. Use for every page background and full-bleed section. Not for cards or elevated elements."
       },
       "alt": {
         "$value": "{primitive.color.green.900}",
-        "$description": "Elevated surface — one level above the canvas. Use for cards, panels, code blocks, input backgrounds, tooltips, dropdowns, and any contained element that needs to read as sitting on top of background.default. Not for full-page backgrounds. The difference from background.default is intentionally subtle — a quiet layer, not a strong contrast shift. Hex: #1E241E."
+        "$description": "Elevated surface #1E241E. Use for cards, panels, code blocks, inputs, tooltips. One subtle step above canvas."
       },
       "action": {
         "$value": "{primitive.color.green.accent}",
-        "$description": "Interactive fill. Use when a surface or component is the primary action — filled primary buttons, selected states, active toggles, and CTAs where the background itself signals interactivity. Always pair text or icons on this surface with foreground.on-action. This token and background.accent currently share the same value but are kept separate — action is tied to interactivity and may change independently. Hex: #4ADE6E."
+        "$description": "Interactive fill #4ADE6E. Use for filled primary buttons, selected states, active toggles. Pair with foreground.on-action."
+      },
+      "action-hover": {
+        "$value": "{primitive.color.green.accent-hover}",
+        "$type": "color",
+        "$description": "Hover fill for primary action elements. 16% darker than background.action. Use for button hover backgrounds when the border matches the background."
+      },
+      "action-active": {
+        "$value": "{primitive.color.green.accent-active}",
+        "$type": "color",
+        "$description": "Active/pressed fill for primary action elements. 30% darker than background.action. Use for the moment a button is held down."
+      },
+      "disabled": {
+        "$value": "{primitive.color.green.900}",
+        "$type": "color",
+        "$description": "Fill for disabled interactive elements (inputs, buttons, selects). Same value as background.alt — disabled controls blend into elevated surfaces, signalling they are part of the layout but not actionable."
       },
       "accent": {
         "$value": "{primitive.color.green.accent}",
-        "$description": "Decorative or emphasis fill. Use for non-interactive surfaces that need the accent color for visual interest — highlights, callout backgrounds, decorative badges, or design elements that draw the eye without implying clickability. Currently shares its value with background.action but is intentionally separate — accent may drift to a different color as the system matures. Always pair text or icons on this surface with foreground.on-accent. Hex: #4ADE6E."
+        "$description": "Default decorative fill #4ADE6E. Use for non-interactive emphasis surfaces when no specific color is needed. Pair with foreground.on-accent. Kept separate from action — may diverge."
+      },
+      "accent-green": {
+        "$value": "{primitive.color.green.chip}",
+        "$description": "Dark green tint #0F2016. Subtle chip/tag fills, callout panels with green emphasis. Pair with foreground.accent-green for text."
+      },
+      "accent-blue": {
+        "$value": "{primitive.color.blue.950}",
+        "$description": "Dark blue tint #0D1830. Subtle chip/tag fills, callout panels with blue emphasis. Pair with foreground.accent-blue for text."
+      },
+      "accent-violet": {
+        "$value": "{primitive.color.violet.950}",
+        "$description": "Dark violet tint #18102E. Subtle chip/tag fills, callout panels with violet emphasis. Pair with foreground.accent-violet for text."
+      },
+      "accent-amber": {
+        "$value": "{primitive.color.amber.950}",
+        "$description": "Dark amber tint #221B08. Subtle chip/tag fills, callout panels with warm amber emphasis. Pair with foreground.accent-amber for text."
+      },
+      "danger": {
+        "$value": "{primitive.color.red.500}",
+        "$description": "Danger fill #D03027. Use for filled destructive buttons (delete, remove). Always pair with foreground.on-danger."
+      },
+      "danger-alt": {
+        "$value": "{primitive.color.gray.50}",
+        "$description": "Subtle danger tint. Use for error alert backgrounds. Never use for text — foreground.danger handles that. DE overrides to warm red tint."
+      },
+      "success": {
+        "$value": "{primitive.color.green.accent}",
+        "$type": "color",
+        "$description": "Strong success fill — success badges, status pills, success CTA fills. Pair with foreground.on-success (dark text). Base dark: phosphor green."
+      },
+      "success-alt": {
+        "$value": "{primitive.color.green.chip}",
+        "$type": "color",
+        "$description": "Subtle success tint — success alert/banner backgrounds. Base dark: deep green tint #0F2016."
+      },
+      "warning": {
+        "$value": "{primitive.color.amber.300}",
+        "$type": "color",
+        "$description": "Strong warning fill — warning badges, status pills. Pair with foreground.on-warning (dark text)."
+      },
+      "warning-alt": {
+        "$value": "{primitive.color.amber.950}",
+        "$type": "color",
+        "$description": "Subtle warning tint — warning alert/banner backgrounds. Base dark: deep amber tint #221B08."
+      },
+      "info": {
+        "$value": "{primitive.color.blue.700}",
+        "$type": "color",
+        "$description": "Strong info fill — info badges, status pills. Pair with foreground.on-info (white)."
+      },
+      "info-alt": {
+        "$value": "{primitive.color.blue.950}",
+        "$type": "color",
+        "$description": "Subtle info tint — info alert/banner backgrounds. Base dark: deep blue tint #0D1830."
       }
     },
-
     "foreground": {
       "$type": "color",
-      "$description": "Foreground tokens cover all content rendered on top of a surface: text, icons, labels, and interactive elements. default/alt/muted form a three-level reading hierarchy. action and accent are reserved for interactive and emphasis contexts respectively. on-* tokens are for content placed on top of filled action or accent backgrounds.",
+      "$description": "Text, icons, and interactive elements. default/alt/muted = reading hierarchy. action/accent = interactive/emphasis. on-* = content on filled backgrounds.",
       "default": {
         "$value": "{primitive.color.green.200}",
-        "$description": "Primary text and icons. The default foreground color — use for headings, body copy, navigation labels, button labels, and any text or icon that is the primary reason a user is reading a given element. Applies equally to text and icons. Use this unless there is a clear reason to step down in hierarchy. Contrast vs background.default: 12.26:1 (WCAG AAA). Hex: #C8CFC4."
+        "$description": "Primary text and icons #C8CFC4. Use for headings, body copy, nav labels. Contrast vs background.default: 12.26:1 AAA."
       },
       "alt": {
         "$value": "{primitive.color.green.400}",
-        "$description": "Secondary text and icons. Use for subtitles, metadata, timestamps, secondary descriptions, supporting labels, and icons that provide context rather than primary information. Applies equally to text and icons. Signals 'useful but not the headline.' Contrast vs background.default: 7.97:1 (WCAG AA). Do not use for primary headings or standalone body copy — the visual step-down implies the content is subordinate. Hex: #A0A89A."
+        "$description": "Secondary text and icons #A0A89A. Use for metadata, timestamps, supporting labels. Contrast vs background.default: 7.97:1 AA."
       },
       "muted": {
         "$value": "{primitive.color.green.600}",
-        "$description": "Tertiary and subdued content. Use for placeholder text, disabled UI labels, fine print, footnotes, helper text, and decorative or atmospheric text that should not compete for attention. Applies equally to text and icons. At the lower end of the accessible range — do not use for anything interactive, critical, or requiring strong legibility. Contrast vs background.default: 6.32:1 (WCAG AA, minimum). Hex: #8B9683."
+        "$description": "Muted text — secondary labels, captions, timestamps, metadata. Also use for input placeholder text (foreground.disabled exists for disabled element text — placeholder copy on active inputs uses muted, not disabled)."
+      },
+      "disabled": {
+        "$value": "{primitive.color.green.900}",
+        "$type": "color",
+        "$description": "Text and icons on disabled elements. Deeply receded against the dark canvas — communicates unavailability without being invisible. WCAG contrast exemption applies to disabled text (1.4.3 exception)."
       },
       "action": {
         "$value": "{primitive.color.green.accent}",
-        "$description": "Interactive text and icons. Use for links, interactive labels, active navigation items, and any text or icon element that signals clickability or interactivity without a filled background. This is the foreground counterpart to background.action — same intent, different surface treatment. Currently shares its value with foreground.accent but is intentionally separate; the action color may change independently as the system evolves. Contrast vs background.default: 11.13:1 (WCAG AAA). Never use for resting/static text. Hex: #4ADE6E."
+        "$description": "Interactive text and icons #4ADE6E. Use for links, active nav items, interactive labels. Never for static text. Contrast: 11.13:1 AAA."
       },
-      "accent": {
+      "accent-green": {
         "$value": "{primitive.color.green.accent}",
-        "$description": "Decorative or emphasis text and icons. Use sparingly for non-interactive elements that need the accent color for visual interest — a highlighted keyword, an emphasis icon, a design detail. Not tied to interactivity. Currently shares its value with foreground.action but is intentionally separate — accent is an uncommon color in the UI and may drift to a different value as the system matures. Contrast vs background.default: 11.13:1 (WCAG AAA). Hex: #4ADE6E."
+        "$description": "Phosphor green accent #4ADE6E. Use for emphasis text, icons, and labels that should read in the green family. Pair with background.accent-green for tinted surfaces. Contrast vs background.default: 11.13:1 AAA."
+      },
+      "accent-blue": {
+        "$value": "{primitive.color.blue.sky}",
+        "$description": "Light blue accent #93C5FD. Use for emphasis text, icons, and labels that should read in the blue family. Pair with background.accent-blue for tinted surfaces. Contrast vs background.default: ~7.5:1 AA."
+      },
+      "accent-violet": {
+        "$value": "{primitive.color.violet.300}",
+        "$description": "Light violet accent #C4B5FD. Use for emphasis text, icons, and labels that should read in the violet family. Pair with background.accent-violet for tinted surfaces. Contrast vs background.default: ~7:1 AA."
+      },
+      "accent-amber": {
+        "$value": "{primitive.color.amber.300}",
+        "$description": "Warm amber accent #FCD34D. Use for emphasis text, icons, and labels that should read in the warm/amber family. Pair with background.accent-amber for tinted surfaces. Contrast vs background.default: ~12:1 AAA."
       },
       "on-action": {
         "$value": "{primitive.color.green.950}",
-        "$description": "Text and icon color for content rendered on top of background.action (#4ADE6E). Inverts the standard canvas relationship — the page background becomes the foreground color, maintaining the warm green undertone. Use whenever text, icons, or labels appear inside a filled interactive component (e.g., primary button label). Contrast vs background.action: 11.13:1 (WCAG AAA). Hex: #0A0D0A."
+        "$description": "Text/icons on background.action #0A0D0A. Use for labels inside filled interactive components (e.g. primary button). Contrast vs action: 11.13:1 AAA."
       },
-      "on-accent": {
+      "danger": {
+        "$value": "{primitive.color.red.500}",
+        "$description": "Error/destructive text and icons #D03027. Use for delete labels, validation errors, Deny outcomes on background.default or background.alt. Contrast: 4.6:1 AA."
+      },
+      "on-danger": {
+        "$value": "{primitive.color.neutral.white}",
+        "$description": "Text/icons on background.danger #FFFFFF. Use inside filled destructive components (e.g. filled delete button). Never on white or dark canvases."
+      },
+      "success": {
+        "$value": "{primitive.color.green.accent}",
+        "$type": "color",
+        "$description": "Success text and icons. Base dark: phosphor green #4ADE6E — vivid and legible on dark canvas (11.1:1 AAA)."
+      },
+      "on-success": {
         "$value": "{primitive.color.green.950}",
-        "$description": "Text and icon color for content rendered on top of background.accent (#4ADE6E). Mirrors on-action in current value but is kept separate — if accent and action diverge in color, on-accent and on-action must be able to diverge independently. Use whenever text, icons, or labels appear inside a decorative or emphasis accent-filled element. Contrast vs background.accent: 11.13:1 (WCAG AAA). Hex: #0A0D0A."
+        "$type": "color",
+        "$description": "Text/icons on success fill backgrounds. Near-black on vivid green — high contrast (11.1:1 AAA)."
+      },
+      "warning": {
+        "$value": "{primitive.color.amber.300}",
+        "$type": "color",
+        "$description": "Warning text and icons. Base dark: amber.400 #FCD34D — bright amber on dark canvas (13.6:1 AAA)."
+      },
+      "on-warning": {
+        "$value": "{primitive.color.green.950}",
+        "$type": "color",
+        "$description": "Text/icons on warning fill backgrounds. Near-black on amber — always use dark text on amber fills."
+      },
+      "info": {
+        "$value": "{primitive.color.blue.sky}",
+        "$type": "color",
+        "$description": "Info text and icons. Base dark: blue.sky #93C5FD — light blue on dark canvas (10.8:1 AAA)."
+      },
+      "on-info": {
+        "$value": "{primitive.color.neutral.white}",
+        "$type": "color",
+        "$description": "Text/icons on info fill backgrounds. White on blue fill."
+      },
+      "accent-on-green": {
+        "$value": "{primitive.color.green.950}",
+        "$type": "color",
+        "$description": "Text/icons on green accent fills. Near-black on dark theme."
+      },
+      "accent-on-blue": {
+        "$value": "{primitive.color.green.950}",
+        "$type": "color",
+        "$description": "Text/icons on blue accent fills. Near-black on dark theme."
+      },
+      "accent-on-violet": {
+        "$value": "{primitive.color.green.950}",
+        "$type": "color",
+        "$description": "Text/icons on violet accent fills. Near-black on dark theme."
+      },
+      "accent-on-amber": {
+        "$value": "{primitive.color.green.950}",
+        "$type": "color",
+        "$description": "Text/icons on amber accent fills. Near-black on dark theme."
       }
     },
-
     "border": {
       "$type": "color",
-      "$description": "Border tokens define the edge and separation language of the system. Borders are intentionally subtle — their job is to delineate, not to decorate.",
+      "$description": "Edge and separation tokens. Borders recede — they delineate, not decorate.",
       "default": {
         "$value": "{primitive.color.green.900}",
-        "$description": "The standard border color for all UI edges: cards, inputs, dividers, panels, and containers. Shares its raw value with background.alt — both resolve to {primitive.color.green.900} — but carry different semantic intent. Use color.border.default for edges and lines; use color.background.alt for filled surfaces. The subtlety is deliberate: borders in this system recede, they do not frame. Hex: #1E241E."
+        "$description": "Standard border #1E241E. Use for card edges, input outlines, dividers. Shares value with background.alt but different intent — use border.default for lines, background.alt for filled surfaces."
+      },
+      "elevated": {
+        "$value": "{primitive.color.green.800}",
+        "$type": "color",
+        "$description": "Structural chrome borders — headers, card frames, section dividers, prominent UI edges. One step above border-default; not interactive. Use where default borders are too invisible for the component's hierarchy."
+      },
+      "hover": {
+        "$value": "{primitive.color.green.600}",
+        "$type": "color",
+        "$description": "Border on interactive elements in hover state. Mid-toned green — clearly visible against the dark canvas, signals interactivity without using the full accent."
+      },
+      "active": {
+        "$value": "{primitive.color.green.400}",
+        "$type": "color",
+        "$description": "Border on interactive elements in active/pressed state. Lighter than hover — maximum border prominence for the held-down moment."
+      },
+      "focus": {
+        "$value": "{primitive.color.green.accent}",
+        "$type": "color",
+        "$description": "Focus ring color. Applied as an outline on keyboard-focused interactive elements. Vivid phosphor green — maximum visibility against the dark canvas. Always pair with a non-color indicator (outline offset) for non-color-blind users."
+      },
+      "disabled": {
+        "$value": "{primitive.color.green.950}",
+        "$type": "color",
+        "$description": "Border on disabled elements. Recedes to near-canvas — the element visually withdraws. Combine with reduced opacity on the overall component."
+      },
+      "muted": {
+        "$value": "{primitive.color.green.chip}",
+        "$type": "color",
+        "$description": "Near-invisible hairline border for dense list and table contexts. Base dark: green.chip (#0F2016) — intentionally very subtle; use spacing + background.alt to create separation in dark contexts."
       }
     }
   }

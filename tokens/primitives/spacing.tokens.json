@@ -2,18 +2,18 @@
   "primitive": {
     "space": {
       "$type": "dimension",
-      "$description": "Primitive spacing scale for the River Romney design system. Raw values only — use semantic spacing tokens (spacing.*) in UI code instead. The scale runs from hairline micro-spacing (2px) to full-bleed layout spacing (128px). Note: font.size.md (20px) and font.size.xl (28px) are currently unmapped to semantic tokens — a type scale audit is pending.",
+      "$description": "Primitive spacing scale for the River Romney design system. Raw values only — use semantic spacing tokens (spacing.*) in UI code instead. The scale runs from hairline micro-spacing (2px) to full-bleed layout spacing (128px). All steps from 2xs through 5xl are referenced by at least one semantic token except 3xs (intentional — optical-only).",
       "3xs": {
         "$value": "2px",
-        "$description": "Hairline. For optical adjustments, icon-to-label nudges, and micro-corrections that aren't real spacing — they're just making something look right. Not for padding or margin. Referenced by: unmapped."
+        "$description": "Hairline. For optical adjustments, icon-to-label nudges, and micro-corrections that are not real spacing they are just making something look right. Not for padding or margin. Intentionally unmapped from semantic tokens."
       },
       "2xs": {
         "$value": "4px",
-        "$description": "Micro spacing. Inline icon-to-text margins, gap between a badge and its label, tight internal element nudges. The smallest value used for genuine spacing (not just optical correction). Referenced by: unmapped."
+        "$description": "Micro spacing. Inline icon-to-text margins, gap between a badge and its label, tight internal element nudges. The smallest value used for genuine spacing (not just optical correction). Referenced by: spacing.micro."
       },
       "xs": {
         "$value": "8px",
-        "$description": "Small spacing. Compact internal element padding — the tightest spacing that reads as intentional breathing room. Referenced by: spacing.tight."
+        "$description": "Small spacing. Compact internal element padding the tightest spacing that reads as intentional breathing room. Referenced by: spacing.tight."
       },
       "sm": {
         "$value": "12px",
@@ -21,7 +21,7 @@
       },
       "md": {
         "$value": "16px",
-        "$description": "Default spacing. The baseline unit — if there's no reason to go tighter or looser, this is the value. Standard internal padding for most components. Referenced by: spacing.element."
+        "$description": "Default spacing. The baseline unit if there is no reason to go tighter or looser, this is the value. Standard internal padding for most components. Referenced by: spacing.element."
       },
       "lg": {
         "$value": "24px",
@@ -29,7 +29,7 @@
       },
       "xl": {
         "$value": "32px",
-        "$description": "Generous spacing. Grid column gaps, space between a heading and its content block, outer padding for container elements. Referenced by: unmapped — available for layout-level semantic token."
+        "$description": "Generous spacing. Grid column gaps, space between a heading and its content block, outer padding for container elements. Referenced by: spacing.group."
       },
       "2xl": {
         "$value": "48px",
@@ -37,15 +37,15 @@
       },
       "3xl": {
         "$value": "64px",
-        "$description": "Large section break. Vertical rhythm between major content sections on a page. Referenced by: unmapped."
+        "$description": "Large section break. Vertical rhythm between major content sections on a page the beat between distinct page blocks that are not full hero-level breaks. Referenced by: spacing.block."
       },
       "4xl": {
         "$value": "80px",
-        "$description": "Page-level spacing. Generous vertical separation between top-level page sections. Referenced by: unmapped."
+        "$description": "Page-level spacing. Generous vertical separation between top-level page sections. Referenced by: spacing.page."
       },
       "5xl": {
         "$value": "128px",
-        "$description": "Hero and full-bleed spacing. Maximum vertical space — for hero sections, full-bleed dividers, and deliberate empty space used as a design element. Referenced by: spacing.section."
+        "$description": "Hero and full-bleed spacing. Maximum vertical space for hero sections, full-bleed dividers, and deliberate empty space used as a design element. Referenced by: spacing.section."
       }
     }
   }

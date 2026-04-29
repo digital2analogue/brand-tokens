@@ -44,10 +44,10 @@
       },
       "size": {
         "$type": "dimension",
-        "$description": "Seven-step size scale in rem units. Covers fine print (12px) through display (40px). Steps follow a near-Major Third (1.25×) modular ratio in the title range. font.size.xl (28px) was removed during the type scale audit — it had no semantic mapping and no identified future role.",
+        "$description": "Eight-step size scale in rem units. Covers micro labels (10px / 2xs) through display (40px). Steps follow a near-Major Third (1.25x) modular ratio in the title range.",
         "xs": {
           "$value": "0.75rem",
-          "$description": "12px. Fine print, captions, meta text. The smallest size in the system — use sparingly and only for non-critical content. Referenced by: font.body.small, font.label.small."
+          "$description": "12px. Fine print, captions, meta text. The smallest size for standard UI — use sparingly and only for non-critical content. One step above font.size.2xs (10px). Referenced by: font.body.small, font.label.small, font.mono-label-small."
         },
         "sm": {
           "$value": "0.875rem",
@@ -72,6 +72,10 @@
         "3xl": {
           "$value": "2.5rem",
           "$description": "40px. Display size — hero text, splash statements, page-defining moments. The largest size in the system. Referenced by: font.display."
+        },
+        "2xs": {
+          "$value": "0.625rem",
+          "$description": "10px. Sub-caption and xsmall label size — below the system minimum for body text. Use only for tightly constrained UI micro-labels such as color chip annotations, icon badges, or fine decorative text where legibility at larger sizes would break the layout. Referenced by: font.label.xsmall, font.label-strong.xsmall, font.mono-label.xsmall."
         }
       },
       "lineHeight": {

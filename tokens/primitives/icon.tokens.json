@@ -1,0 +1,28 @@
+{
+  "primitive": {
+    "icon": {
+      "$type": "dimension",
+      "$description": "Primitive icon size scale. Five steps covering inline glyph (12px) through standalone large icon (32px). All values align to the 4px grid. Reference through semantic icon tokens (icon.size.*) in UI code \u2014 never directly.",
+      "xs": {
+        "$value": "12px",
+        "$description": "12px. Inline glyph size \u2014 icon inside a badge, status dot, or tight metadata row."
+      },
+      "sm": {
+        "$value": "16px",
+        "$description": "16px. Compact icon \u2014 inline with small labels, input prefix/suffix icons, tight toolbar icons. Minimum size for interactive icons."
+      },
+      "md": {
+        "$value": "20px",
+        "$description": "20px. Standard icon \u2014 default for most UI icons beside labels (nav items, button icons, list row glyphs). Pairs with font.label.medium."
+      },
+      "lg": {
+        "$value": "24px",
+        "$description": "24px. Prominent icon \u2014 section header icons, standalone icon buttons. Pairs with font.label.large."
+      },
+      "xl": {
+        "$value": "32px",
+        "$description": "32px. Large standalone icon \u2014 feature highlights, empty state graphics. Not for inline-with-text use."
+      }
+    }
+  }
+}

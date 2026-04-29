@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decision Engine · River Romney Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Decision Engine tokens ─────────────────────────────────────────── */
+    :root {
+      /* Doc chrome — wired to brand-tokens semantic layer (decision-engine) */
+      --canvas:         var(--color-background-default);
+      --canvas-alt:     var(--color-background-alt);
+      --surface:        var(--color-background-disabled);
+      --fg:             var(--color-foreground-default);
+      --fg-secondary:   var(--color-foreground-secondary);
+      --fg-alt:         var(--color-foreground-alt);
+      --fg-muted:       var(--color-foreground-muted);
+      --action:         var(--color-background-action);
+      --action-hover:   var(--color-background-action-hover);
+      --border:         var(--color-border-default);
+      --border-muted:   var(--color-border-muted);
+      --border-bright:  var(--color-border-elevated);
+      --danger:         var(--color-foreground-danger);
+      --success:        var(--color-foreground-success);
+      --sans: 'Plus Jakarta Sans', sans-serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      background: var(--canvas);
+      color: var(--fg);
+      font-size: 14px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Header ─────────────────────────────────────────────────────────── */
+    .site-header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 24px;
+      padding: 0 48px; height: 52px;
+    }
+    .site-logo {
+      font-family: var(--mono); font-size: 12px; font-weight: 500;
+      color: var(--action); letter-spacing: var(--letter-spacing-label); text-decoration: none; flex-shrink: 0;
+    }
+    .header-div { width: 1px; height: 16px; background: var(--border); }
+    .site-nav { display: flex; gap: 2px; flex: 1; }
+    .nav-link {
+      padding: 5px 12px; font-size: 12px; font-weight: 500;
+      color: var(--fg-muted); text-decoration: none;
+      border-radius: var(--radius-sm); letter-spacing: var(--letter-spacing-label);
+      transition: color var(--motion-duration-instant), background var(--motion-duration-instant);
+    }
+    .nav-link:hover { color: var(--fg); background: var(--surface); }
+    .nav-link.active { color: var(--action); }
+    .header-right { margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--fg-muted); }
+
+    /* ── Layout ─────────────────────────────────────────────────────────── */
+    .main { flex: 1; min-width: 0; padding: 8px 48px 120px; }
+
+    /* ── Hero ───────────────────────────────────────────────────────────── */
+    .hero { margin-bottom: 72px; }
+    .hero-eyebrow {
+      font-family: var(--mono); font-size: 12px; color: var(--action);
+      letter-spacing: var(--letter-spacing-all-caps); text-transform: uppercase; margin-bottom: 14px;
+    }
+    .hero-title {
+      font: var(--font-display); font-family: var(--sans); letter-spacing: var(--letter-spacing-display);
+      color: var(--fg); margin-bottom: 16px;
+    }
+    .hero-desc {
+      font-family: var(--sans); font-size: 1rem; font-weight: 400;
+      color: var(--fg-alt); line-height: 1.7; max-width: 560px;
+    }
+
+    /* ── Section ────────────────────────────────────────────────────────── */
+    .section { margin-bottom: 72px; }
+    .section-header {
+      display: flex; align-items: baseline; gap: 12px;
+      margin-bottom: 20px; padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-title { font: var(--font-title-medium); font-family: var(--sans); color: var(--fg); letter-spacing: var(--letter-spacing-title); }
+    .section-subtitle { font-family: var(--mono); font-size: 12px; color: var(--fg-muted); letter-spacing: var(--letter-spacing-label); }
+
+    /* ── Group label ────────────────────────────────────────────────────── */
+    .group-label {
+      font: var(--font-title-small); font-family: var(--sans);
+      letter-spacing: var(--letter-spacing-title);
+      color: var(--fg-muted); margin-bottom: 8px; margin-top: 28px;
+    }
+    .group-label:first-child { margin-top: 0; }
+
+    /* ── Token rows ─────────────────────────────────────────────────────── */
+    .token-list { display: flex; flex-direction: column; gap: 2px; }
+    .subcategory-label {
+      font: var(--font-label-medium); font-family: var(--sans); letter-spacing: var(--letter-spacing-label);
+      color: var(--fg-muted); padding: 10px 0 4px; margin-top: 4px;
+    }
+    .token-row {
+      display: grid;
+      grid-template-columns: 32px 220px 1fr 180px;
+      align-items: center; gap: 14px;
+      padding: 8px 10px; border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      transition: background var(--motion-duration-instant), border-color var(--motion-duration-instant);
+    }
+    .token-row:hover { background: var(--canvas-alt); border-color: var(--border); }
+    .token-swatch {
+      width: 32px; height: 32px; border-radius: var(--radius-sm);
+      border: 1px solid rgba(0,0,0,0.08); flex-shrink: 0;
+    }
+    .token-name { font-family: var(--mono); font-size: 12px; color: var(--fg); word-break: break-all; }
+    .token-usage { font-size: 12px; color: var(--fg-alt); line-height: 1.5; }
+    .token-value { font-family: var(--mono); font-size: 12px; color: var(--fg-muted); text-align: right; }
+    .token-value .hex { color: var(--fg-secondary); display: block; }
+
+    /* ── Contrast chips ─────────────────────────────────────────────────── */
+    .contrast-chip {
+      display: inline-block; font-size: 12px; font-family: var(--mono);
+      padding: 1px 6px; border-radius: var(--radius-full); border: 1px solid; margin-top: 3px;
+    }
+    .chip-aaa { background: var(--color-background-success-alt); color: var(--color-foreground-success); border-color: #A3D4B8; /* TODO: --color-border-success-subtle */ }
+    .chip-aa  { background: var(--color-background-info-alt); color: var(--color-foreground-action); border-color: #9CB3F3; /* TODO: --color-border-info-subtle */ }
+    .chip-fail { background: var(--color-background-danger-alt); color: var(--color-foreground-danger); border-color: #F5C0C8; /* TODO: --color-border-danger-subtle */ }
+    .chip-warn { background: var(--color-background-warning-alt); color: var(--color-foreground-warning); border-color: #F0D080; /* TODO: --color-border-warning-subtle */ }
+
+    /* ── Notice ─────────────────────────────────────────────────────────── */
+    .notice {
+      display: flex; gap: 10px; padding: 11px 14px;
+      background: var(--color-background-info-alt); border: 1px solid #C4D4F8; /* TODO: --color-border-info-subtle */
+      border-radius: var(--radius-sm); font-size: 12px; line-height: 1.55;
+      color: var(--fg-alt); margin-bottom: 16px;
+    }
+    .notice-icon { flex-shrink: 0; color: var(--action); }
+    .notice-warn {
+      background: var(--color-background-warning-alt); border-color: #F0D080; /* TODO: --color-border-warning-subtle */ color: var(--fg-alt);
+    }
+    .notice-warn .notice-icon { color: var(--color-foreground-warning); }
+    code {
+      font-family: var(--mono); font-size: 0.88em;
+      padding: 1px 5px; background: rgba(36,86,228,0.07); border-radius: 3px;
+      color: var(--action);
+    }
+
+    /* ── Type specimens ─────────────────────────────────────────────────── */
+    .type-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+    .type-card {
+      padding: 20px; border-radius: var(--radius-default);
+      border: 1px solid var(--border); background: var(--canvas-alt);
+    }
+    .type-sample { margin-bottom: 10px; }
+    .type-meta { font-family: var(--mono); font-size: 12px; color: var(--fg-muted); line-height: 1.7; }
+
+    /* ── Size scale ─────────────────────────────────────────────────────── */
+    .ls-row {
+      display: flex; align-items: center; gap: 20px;
+      padding: 8px 10px; border-radius: var(--radius-sm);
+      border: 1px solid transparent; transition: background var(--motion-duration-instant);
+    }
+    .ls-row:hover { background: var(--canvas-alt); border-color: var(--border); }
+    .ls-meta { width: 160px; flex-shrink: 0; }
+    .ls-token { font-family: var(--mono); font-size: 12px; color: var(--action); display: block; }
+    .ls-val { font-family: var(--mono); font-size: 12px; color: var(--fg-muted); display: block; margin-top: 1px; }
+    .ls-sample { flex: 1; }
+    .ls-use { font-size: 12px; color: var(--fg-muted); text-align: right; min-width: 120px; }
+
+    /* ── Spacing scale ──────────────────────────────────────────────────── */
+    .space-row {
+      display: flex; align-items: center; gap: 16px;
+      padding: 6px 10px; border-radius: var(--radius-sm);
+      border: 1px solid transparent; transition: background var(--motion-duration-instant);
+    }
+    .space-row:hover { background: var(--canvas-alt); border-color: var(--border); }
+    .space-bar { height: 14px; background: var(--action); border-radius: 2px; flex-shrink: 0; opacity: 0.2; }
+    .space-name { font-family: var(--mono); font-size: 12px; color: var(--action); width: 120px; flex-shrink: 0; }
+    .space-usage { font-size: 12px; color: var(--fg-alt); }
+
+    /* ── Radius demos ───────────────────────────────────────────────────── */
+    .radius-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 16px; }
+    .radius-card { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .radius-demo {
+      width: 52px; height: 52px;
+      background: var(--canvas-alt);
+      border: 1px solid var(--border);
+    }
+    .radius-meta { text-align: center; }
+    .radius-name { font-family: var(--mono); font-size: 12px; color: var(--action); display: block; }
+    .radius-val { font-family: var(--mono); font-size: 12px; color: var(--fg-muted); display: block; margin-top: 1px; }
+    .radius-use { font-size: 12px; color: var(--fg-muted); display: block; margin-top: 2px; }
+
+    /* ── Shadow demos ───────────────────────────────────────────────────── */
+    .shadow-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 24px; }
+    .shadow-card { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .shadow-demo {
+      width: 60px; height: 44px;
+      background: var(--canvas); border-radius: var(--radius-default);
+    }
+    .shadow-meta { text-align: center; }
+    .shadow-name { font-family: var(--mono); font-size: 12px; color: var(--action); display: block; }
+    .shadow-use { font-size: 12px; color: var(--fg-muted); display: block; margin-top: 2px; }
+
+    /* ── Motion ─────────────────────────────────────────────────────────── */
+    .motion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .motion-card {
+      padding: 18px 20px; border-radius: var(--radius-default);
+      border: 1px solid var(--border); background: var(--canvas-alt);
+    }
+    .motion-card-label {
+      font-family: var(--mono); font-size: 12px; color: var(--action);
+      letter-spacing: var(--letter-spacing-all-caps); text-transform: uppercase; margin-bottom: 12px;
+    }
+    .motion-item { margin-bottom: 10px; }
+    .motion-item:last-child { margin-bottom: 0; }
+    .motion-item-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+    .motion-item-name { font-family: var(--mono); font-size: 12px; color: var(--fg); }
+    .motion-item-val { font-family: var(--mono); font-size: 12px; color: var(--action); }
+    .motion-track { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
+    .motion-fill { height: 100%; background: var(--action); border-radius: 2px; opacity: 0.6; }
+    .motion-desc { font-size: 12px; color: var(--fg-muted); }
+    .easing-item { margin-bottom: 10px; }
+    .easing-item:last-child { margin-bottom: 0; }
+    .easing-head { display: flex; justify-content: space-between; margin-bottom: 2px; }
+    .easing-name { font-family: var(--mono); font-size: 12px; color: var(--fg); }
+    .easing-val { font-family: var(--mono); font-size: 12px; color: var(--fg-muted); }
+    .easing-desc { font-size: 12px; color: var(--fg-muted); }
+
+    /* ── Letter-spacing ─────────────────────────────────────────────────── */
+    .ls-list { display: flex; flex-direction: column; gap: 4px; }
+
+    /* ── Primitive color bars ───────────────────────────────────────────── */
+    .prim-ramp { margin-bottom: 20px; }
+    .ramp-label { font-family: var(--mono); font-size: 12px; color: var(--fg-muted); margin-bottom: 6px; }
+    .ramp-bar {
+      display: flex; height: 40px; border-radius: var(--radius-default);
+      overflow: hidden; border: 1px solid var(--border);
+    }
+    .ramp-swatch { flex: 1; position: relative; cursor: default; }
+    .ramp-swatch:hover::after {
+      content: attr(data-label);
+      position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+      font-family: var(--mono); font-size: 12px; white-space: nowrap;
+      padding: 2px 6px; border-radius: 3px;
+      background: rgba(0,0,0,0.75); color: #fff; pointer-events: none;
+    }
+    .ramp-labels { display: flex; margin-top: 4px; }
+    .ramp-labels span { flex: 1; font-family: var(--mono); font-size: 12px; color: var(--fg-muted); text-align: center; }
+
+    /* ── Deleted tokens table ───────────────────────────────────────────── */
+    .deleted-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .deleted-table th {
+      font-family: var(--mono); font-size: 12px; font-weight: 500;
+      letter-spacing: var(--letter-spacing-all-caps); text-transform: uppercase;
+      color: var(--fg-muted); text-align: left; padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .deleted-table td {
+      padding: 8px 12px; color: var(--fg-alt);
+      border-bottom: 1px solid var(--border-muted);
+      vertical-align: top;
+    }
+    .deleted-table tr:last-child td { border-bottom: none; }
+    .deleted-table td:first-child { font-family: var(--mono); font-size: 12px; color: var(--fg-muted); text-decoration: line-through; }
+    .deleted-table tr:hover td { background: var(--canvas-alt); }
+
+    .section-div { height: 1px; background: var(--border); margin: 24px 0; }
+
+    /* ── Page layout + sidenav ──────────────────────────────────────────── */
+    .page-layout {
+      display: flex;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding-top: 68px;
+      align-items: flex-start;
+    }
+    .sidenav {
+      width: 160px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 68px;
+      height: calc(100vh - 68px);
+      overflow-y: auto;
+      padding: 32px 0 40px 24px;
+      scrollbar-width: none;
+      border-right: 1px solid var(--border);
+    }
+    .sidenav::-webkit-scrollbar { display: none; }
+    .sidenav nav { display: flex; flex-direction: column; gap: 1px; }
+    .sidenav-link {
+      display: block;
+      font-family: var(--mono); font-size: 11px; font-weight: 500;
+      color: var(--fg-muted); text-decoration: none;
+      padding: 5px 10px 5px 12px;
+      border-radius: var(--radius-sm);
+      letter-spacing: var(--letter-spacing-label);
+      border-left: 2px solid transparent;
+      transition: color var(--motion-duration-instant), background var(--motion-duration-instant), border-color var(--motion-duration-instant);
+    }
+    .sidenav-link:hover { color: var(--fg); background: var(--surface); }
+    .sidenav-link.active { color: var(--accent); border-left-color: var(--accent); }
+    @media (max-width: 1180px) { .sidenav { display: none; } }
+    .anchor { scroll-margin-top: 80px; }
+  </style>
+  <link rel="stylesheet" href="../build/css/decision-engine.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html" class="site-logo">river·tokens</a>
+  <div class="header-div"></div>
+  <nav class="site-nav">
+    <a href="index.html" class="nav-link">Base Dark</a>
+    <a href="decision-engine.html" class="nav-link active">Decision Engine</a>
+  </nav>
+  <div class="header-right">brand-tokens · 2026</div>
+  <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+    <span id="theme-icon-sun"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span>
+    <span id="theme-icon-moon" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+  </button>
+</header>
+
+<div class="page-layout">
+<aside class="sidenav" aria-label="Page navigation">
+  <nav>
+    <a class="sidenav-link" href="#color">Colors</a>
+    <a class="sidenav-link" href="#typography">Typography</a>
+    <a class="sidenav-link" href="#spacing">Spacing</a>
+    <a class="sidenav-link" href="#radius">Radius</a>
+    <a class="sidenav-link" href="#shadow">Shadow</a>
+    <a class="sidenav-link" href="#motion">Motion</a>
+    <a class="sidenav-link" href="#letter-spacing">Letter spacing</a>
+    <a class="sidenav-link" href="#notes">Architecture</a>
+    <a class="sidenav-link" href="#icons">Iconography</a>
+  </nav>
+</aside>
+<main class="main">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-eyebrow">River Romney · brand-tokens · sub-brand</div>
+    <h1 class="hero-title">Decision Engine</h1>
+    <p class="hero-desc">White canvas, blue primary action. Enterprise data UI for rule tables and decisioning interfaces. Light-mode counterpart to the Base Dark theme. Plus Jakarta Sans and DM Mono.</p>
+  </div>
+
+  <!-- ── 1. COLOR TOKENS ─────────────────────────────────────────────────── -->
+  <section class="section anchor" id="color">
+    <div class="section-header">
+      <h2 class="section-title">Color tokens</h2>
+      <span class="section-subtitle">tokens/brands/decision-engine.tokens.json → build/css/decision-engine.css</span>
+    </div>
+
+    <div class="group-label">Backgrounds</div>
+    <div class="token-list">
+      <div class="subcategory-label">Base</div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#FFFFFF; border-color:rgba(0,0,0,0.1);"></div>
+        <div class="token-name">--color-background-default</div>
+        <div class="token-usage">Primary page canvas. All main DE UI renders on white. <em style="color:var(--color-foreground-warning);">Local override: #F7F9FC (bluer tint, hand-tuned)</em></div>
+        <div class="token-value"><span class="hex">#FFFFFF</span><span class="contrast-chip chip-warn">local drift ↗</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#F5F6F7;"></div>
+        <div class="token-name">--color-background-alt</div>
+        <div class="token-usage">Table row alternates, sidebar panels, secondary surfaces. <em style="color:var(--color-foreground-warning);">Local: #EFF1F8 (bluer tint)</em></div>
+        <div class="token-value"><span class="hex">#F5F6F7</span><span class="contrast-chip chip-warn">local drift ↗</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#FFFFFF; border-color:rgba(0,0,0,0.1);"></div>
+        <div class="token-name">--color-background-elevated</div>
+        <div class="token-usage">Cards, modals, popovers floating above the canvas. White — semantically distinct from canvas-default even at the same value.</div>
+        <div class="token-value"><span class="hex">#FFFFFF</span></div>
+      </div>
+
+      <div class="subcategory-label">Action</div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#2456E4;"></div>
+        <div class="token-name">--color-background-action</div>
+        <div class="token-usage">Primary CTA fill. Always pair with foreground-on-action (white). 5.9:1 on white.</div>
+        <div class="token-value"><span class="hex">#2456E4</span><span class="contrast-chip chip-aa">5.9:1 AA</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#1E48D0;"></div>
+        <div class="token-name">--color-background-action-hover</div>
+        <div class="token-usage">Hover fill for primary action elements — blue.800, 10% darker than action blue.</div>
+        <div class="token-value"><span class="hex">#1E48D0</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#183DAE;"></div>
+        <div class="token-name">--color-background-action-active</div>
+        <div class="token-usage">Active/pressed fill — blue.900, 20% darker than action blue. For the held-down button moment.</div>
+        <div class="token-value"><span class="hex">#183DAE</span></div>
+      </div>
+
+      <div class="subcategory-label">Disabled</div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#E8EAED; border-color:rgba(0,0,0,0.06);"></div>
+        <div class="token-name">--color-background-disabled</div>
+        <div class="token-usage">Fill for disabled inputs, buttons, and selects. Light gray — clearly not white, clearly not interactive.</div>
+        <div class="token-value"><span class="hex">#E8EAED</span></div>
+      </div>
+
+      <div class="subcategory-label">Accent</div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#E5EBFC; border-color:rgba(0,0,0,0.06);"></div>
+        <div class="token-name">--color-background-accent-subtle</div>
+        <div class="token-usage">Hover surfaces, selected row highlights, active cell fills. Very light blue tint.</div>
+        <div class="token-value"><span class="hex">#E5EBFC</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#9CB3F3;"></div>
+        <div class="token-name">--color-background-accent-hover</div>
+        <div class="token-usage">Medium blue hover fill for accent-tinted interactive surfaces.</div>
+        <div class="token-value"><span class="hex">#9CB3F3</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#ECFDF5; border-color:rgba(0,0,0,0.06);"></div>
+        <div class="token-name">--color-background-accent-green</div>
+        <div class="token-usage">Light green tint — chip/tag fills, callout panels with green emphasis. Pair with foreground-accent-green.</div>
+        <div class="token-value"><span class="hex">#ECFDF5</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#E5EBFC; border-color:rgba(0,0,0,0.06);"></div>
+        <div class="token-name">--color-background-accent-blue</div>
+        <div class="token-usage">Light blue tint — chip/tag fills, callout panels with blue emphasis. Pair with foreground-accent-blue.</div>
+        <div class="token-value"><span class="hex">#E5EBFC</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#F5F3FF; border-color:rgba(0,0,0,0.06);"></div>
+        <div class="token-name">--color-background-accent-violet</div>
+        <div class="token-usage">Light violet tint — chip/tag fills, callout panels with violet emphasis. Pair with foreground-accent-purple.</div>
+        <div class="token-value"><span class="hex">#F5F3FF</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#FFFBEB; border-color:rgba(0,0,0,0.06);"></div>
+        <div class="token-name">--color-background-accent-amber</div>
+        <div class="token-usage">Light amber tint — chip/tag fills, callout panels with warm emphasis. Pair with foreground-accent-amber.</div>
+        <div class="token-value"><span class="hex">#FFFBEB</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#E5EBFC; border-color:rgba(0,0,0,0.06);"></div>
+        <div class="token-name">--color-background-selected</div>
+        <div class="token-usage">Selected-state surface — table rows, list items. Same raw value as accent-subtle; semantically separate so they can diverge.</div>
+        <div class="token-value"><span class="hex">#E5EBFC</span></div>
+      </div>
+
+      <div class="subcategory-label">Danger</div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#D03027;"></div>
+        <div class="token-name">--color-background-danger</div>
+        <div class="token-usage">Fill for destructive buttons. Bright red — pairs with foreground-on-danger (white).</div>
+        <div class="token-value"><span class="hex">#D03027</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#FEF2F2; border-color:rgba(0,0,0,0.06);"></div>
+        <div class="token-name">--color-background-danger-alt</div>
+        <div class="token-usage">Subtle tint for static error alert backgrounds. Light warm blush — pairs with foreground-danger for text.</div>
+        <div class="token-value"><span class="hex">#FEF2F2</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#FBEBEE; border-color:rgba(0,0,0,0.06);"></div>
+        <div class="token-name">--color-background-danger-subtle</div>
+        <div class="token-usage">Danger hover surfaces, error row highlights. More saturated than danger-alt — use for interactive hover signals, not static alert fills.</div>
+        <div class="token-value"><span class="hex">#FBEBEE</span></div>
+      </div>
+
+      <div class="subcategory-label">Feedback</div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#15803D;"></div>
+        <div class="token-name">--color-background-success</div>
+        <div class="token-usage">Strong success fill — success badges, status pills. Dark green replaces phosphor green. Pair with foreground-on-success (white). 5.0:1 AA.</div>
+        <div class="token-value"><span class="hex">#15803D</span><span class="contrast-chip chip-aa">5.0:1 AA</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#DCFCE7; border-color:rgba(0,0,0,0.06);"></div>
+        <div class="token-name">--color-background-success-alt</div>
+        <div class="token-usage">Subtle success tint — success alert/banner backgrounds. Light mint green.</div>
+        <div class="token-value"><span class="hex">#DCFCE7</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#D97706;"></div>
+        <div class="token-name">--color-background-warning</div>
+        <div class="token-usage">Strong warning fill — warning badges, status pills. Amber.500. Pair with foreground-on-warning (white). 6.8:1 AA.</div>
+        <div class="token-value"><span class="hex">#D97706</span><span class="contrast-chip chip-aa">6.8:1 AA</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#FEF3C7; border-color:rgba(0,0,0,0.06);"></div>
+        <div class="token-name">--color-background-warning-alt</div>
+        <div class="token-usage">Subtle warning tint — warning alert/banner backgrounds. Light amber.</div>
+        <div class="token-value"><span class="hex">#FEF3C7</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#2456E4;"></div>
+        <div class="token-name">--color-background-info</div>
+        <div class="token-usage">Informational fill — info badges, banners. Same as action blue in DE. Semantically distinct: info is a state, action is interactive. 5.95:1 AA.</div>
+        <div class="token-value"><span class="hex">#2456E4</span><span class="contrast-chip chip-aa">5.9:1 AA</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#E5EBFC; border-color:rgba(0,0,0,0.06);"></div>
+        <div class="token-name">--color-background-info-alt</div>
+        <div class="token-usage">Subtle info tint — info alert/banner backgrounds. Light blue.</div>
+        <div class="token-value"><span class="hex">#E5EBFC</span></div>
+      </div>
+    </div>
+
+    <div class="group-label">Foreground</div>
+    <div class="token-list">
+      <div class="subcategory-label">Text</div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#1A1A2E;"></div>
+        <div class="token-name">--color-foreground-default</div>
+        <div class="token-usage">Primary text — headings, body copy, table cell values. Near-black with a cool cast.</div>
+        <div class="token-value"><span class="hex">#1A1A2E</span><span class="contrast-chip chip-aaa">16.1:1 AAA</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#3A4663;"></div>
+        <div class="token-name">--color-foreground-secondary</div>
+        <div class="token-usage">Supporting labels, metadata, step text, form help copy. Navy-tinted; sits between muted and default.</div>
+        <div class="token-value"><span class="hex">#3A4663</span><span class="contrast-chip chip-aaa">9.4:1 AAA</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#4A4A5A;"></div>
+        <div class="token-name">--color-foreground-alt</div>
+        <div class="token-usage">Timestamps, icon chrome, supporting labels, secondary table cell content.</div>
+        <div class="token-value"><span class="hex">#4A4A5A</span><span class="contrast-chip chip-aaa">8.9:1 AAA</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#5E6E88;"></div>
+        <div class="token-name">--color-foreground-muted</div>
+        <div class="token-usage">Placeholders, empty states, step labels, dimmed info. Corrected 2026-04-27 from #767686 which failed WCAG AA. <strong>Use for input placeholder text</strong> — foreground.disabled is for disabled element labels.</div>
+        <div class="token-value"><span class="hex">#5E6E88</span><span class="contrast-chip chip-aa">5.2:1 AA</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#D8DCE0; border-color:rgba(0,0,0,0.06);"></div>
+        <div class="token-name">--color-foreground-disabled</div>
+        <div class="token-usage">Text and icons on disabled elements — light gray, recedes toward border level on white canvas. WCAG 1.4.3 exempts disabled text from contrast requirements.</div>
+        <div class="token-value"><span class="hex">#D8DCE0</span></div>
+      </div>
+
+      <div class="subcategory-label">Action</div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#2456E4;"></div>
+        <div class="token-name">--color-foreground-action</div>
+        <div class="token-usage">Links, active nav, text CTAs. Blue replaces phosphor green as the interactive signal in DE.</div>
+        <div class="token-value"><span class="hex">#2456E4</span><span class="contrast-chip chip-aa">5.9:1 AA</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#2456E4;"></div>
+        <div class="token-name">--color-foreground-on-action</div>
+        <div class="token-usage">Text and icons on blue fills. White — always white, never tinted.</div>
+        <div class="token-value">
+          <div style="background:#2456E4;color:#fff;border-radius:4px;padding:2px 8px;font-family:var(--mono);font-size: 12px;display:inline-block;">#FFF on blue</div>
+        </div>
+      </div>
+
+      <div class="subcategory-label">Danger</div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#C8002E;"></div>
+        <div class="token-name">--color-foreground-danger</div>
+        <div class="token-usage">Error text, delete labels, Deny outcomes, validation messages. Pairs with background-danger-alt for alert surfaces.</div>
+        <div class="token-value"><span class="hex">#C8002E</span><span class="contrast-chip chip-aa">6.0:1 AA</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#FFFFFF; border-color:rgba(0,0,0,0.12);"></div>
+        <div class="token-name">--color-foreground-on-danger</div>
+        <div class="token-usage">Text and icons on background-danger. White on filled destructive surfaces (e.g. filled delete button). Pairs with background-danger.</div>
+        <div class="token-value"><span class="hex">#FFFFFF</span></div>
+      </div>
+
+      <div class="subcategory-label">Inverse</div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#FFFFFF; border-color:rgba(0,0,0,0.12);"></div>
+        <div class="token-name">--color-foreground-inverse</div>
+        <div class="token-usage">Text on dark or colored surfaces — tooltips over dark panels, text on photos.</div>
+        <div class="token-value"><span class="hex">#FFFFFF</span></div>
+      </div>
+
+      <div class="subcategory-label">Feedback</div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#15803D;"></div>
+        <div class="token-name">--color-foreground-success</div>
+        <div class="token-usage">Success text and icons. Dark green for contrast on white. Contrast vs white: 5.02:1 AA.</div>
+        <div class="token-value"><span class="hex">#15803D</span><span class="contrast-chip chip-aa">5.0:1 AA</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#FFFFFF; border-color:rgba(0,0,0,0.12);"></div>
+        <div class="token-name">--color-foreground-on-success</div>
+        <div class="token-usage">Text/icons on success green backgrounds. White on dark green.</div>
+        <div class="token-value"><span class="hex">#FFFFFF</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#92400E;"></div>
+        <div class="token-name">--color-foreground-warning</div>
+        <div class="token-usage">Warning text and icons. Deep amber for contrast on white. Contrast vs white: 7.5:1 AA.</div>
+        <div class="token-value"><span class="hex">#92400E</span><span class="contrast-chip chip-aa">7.5:1 AA</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#FFFFFF; border-color:rgba(0,0,0,0.12);"></div>
+        <div class="token-name">--color-foreground-on-warning</div>
+        <div class="token-usage">Text/icons on warning amber backgrounds.</div>
+        <div class="token-value"><span class="hex">#FFFFFF</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#2456E4;"></div>
+        <div class="token-name">--color-foreground-info</div>
+        <div class="token-usage">Informational text and icons. DE primary blue. Contrast vs white: 5.95:1 AA.</div>
+        <div class="token-value"><span class="hex">#2456E4</span><span class="contrast-chip chip-aa">5.9:1 AA</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#FFFFFF; border-color:rgba(0,0,0,0.12);"></div>
+        <div class="token-name">--color-foreground-on-info</div>
+        <div class="token-usage">Text/icons on info blue backgrounds.</div>
+        <div class="token-value"><span class="hex">#FFFFFF</span></div>
+      </div>
+
+      <div class="subcategory-label">Accent <span style="font-weight:400;letter-spacing:0;text-transform:none;font-size:11px;opacity:0.7;">(non-semantic palette slots)</span></div>
+      <div class="notice notice-warn" style="margin:8px 0 4px;">
+        <span class="notice-icon">⚠</span>
+        <div>These are <strong>not semantic</strong> — palette slots for bespoke product UI (data viz, outcome labels, decorative highlights). The color has no fixed meaning. Values are placeholders. Do not interpret "Approve = green" as a system contract.</div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#2456E4;"></div>
+        <div class="token-name">--color-foreground-accent-blue</div>
+        <div class="token-usage">Blue slot for bespoke product UI — data viz, labels, decorative highlights.</div>
+        <div class="token-value"><span class="hex">#2456E4</span><span class="contrast-chip chip-aa">5.9:1 AA</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#8B9683;"></div>
+        <div class="token-name">--color-foreground-accent-green</div>
+        <div class="token-usage">Green slot. Non-semantic placeholder. ⚠ Fails AA on white — do not use as readable body text.</div>
+        <div class="token-value"><span class="hex">#8B9683</span><span class="contrast-chip chip-fail">3.1:1 ✗</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#7C3AED;"></div>
+        <div class="token-name">--color-foreground-accent-purple</div>
+        <div class="token-usage">Purple slot — review / pending outcome decorative color.</div>
+        <div class="token-value"><span class="hex">#7C3AED</span><span class="contrast-chip chip-aa">5.8:1 AA</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#FFFFFF; border-color:rgba(0,0,0,0.1);"></div>
+        <div class="token-name">--color-foreground-accent-on-blue</div>
+        <div class="token-usage">Text on blue accent fills.</div>
+        <div class="token-value"><span class="hex">#FFFFFF</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#FFFFFF; border-color:rgba(0,0,0,0.1);"></div>
+        <div class="token-name">--color-foreground-accent-on-green</div>
+        <div class="token-usage">Text on green accent fills.</div>
+        <div class="token-value"><span class="hex">#FFFFFF</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#FFFFFF; border-color:rgba(0,0,0,0.1);"></div>
+        <div class="token-name">--color-foreground-accent-on-purple</div>
+        <div class="token-usage">Text on purple accent fills.</div>
+        <div class="token-value"><span class="hex">#FFFFFF</span></div>
+      </div>
+    </div>
+
+    <div class="group-label">Borders</div>
+    <div class="token-list">
+      <div class="subcategory-label">Default</div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#D8DCE0;"></div>
+        <div class="token-name">--color-border-default</div>
+        <div class="token-usage">Inputs, cards, table borders, component edges. <em style="color:#92600A;">Local: #DDE1EC (bluer)</em></div>
+        <div class="token-value"><span class="hex">#D8DCE0</span><span class="contrast-chip chip-warn">local drift ↗</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#E8EAED;"></div>
+        <div class="token-name">--color-border-muted</div>
+        <div class="token-usage">Hairline dividers, zebra stripe separators, subtle section breaks. <em style="color:#92600A;">Local: #ECEEF5 (bluer)</em></div>
+        <div class="token-value"><span class="hex">#E8EAED</span><span class="contrast-chip chip-warn">local drift ↗</span></div>
+      </div>
+
+      <div class="subcategory-label">Accent</div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#2456E4;"></div>
+        <div class="token-name">--color-border-accent</div>
+        <div class="token-usage">Focus rings, active tab underlines, selected card outlines.</div>
+        <div class="token-value"><span class="hex">#2456E4</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#E0E7FB; border-color:rgba(0,0,0,0.06);"></div>
+        <div class="token-name">--color-accent-subtle</div>
+        <div class="token-usage">Inline highlights, chip fills, tag backgrounds. More saturated than background-accent-subtle.</div>
+        <div class="token-value"><span class="hex">#E0E7FB</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#92AAF2;"></div>
+        <div class="token-name">--color-accent-subtle-border</div>
+        <div class="token-usage">Border on accent-subtle surfaces — chip outlines, tag borders, badge strokes.</div>
+        <div class="token-value"><span class="hex">#92AAF2</span></div>
+      </div>
+
+      <div class="subcategory-label">Interactive</div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#2456E4;"></div>
+        <div class="token-name">--color-border-hover</div>
+        <div class="token-usage">Border on interactive elements in hover state — action blue. Signals interactivity on inputs, cards, select controls.</div>
+        <div class="token-value"><span class="hex">#2456E4</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#1E48D0;"></div>
+        <div class="token-name">--color-border-active</div>
+        <div class="token-usage">Border in active/pressed state — blue.800. Slightly heavier than hover to signal commitment.</div>
+        <div class="token-value"><span class="hex">#1E48D0</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#2456E4;"></div>
+        <div class="token-name">--color-border-focus</div>
+        <div class="token-usage">Focus ring color — action blue. Applied as an outline on keyboard-focused elements. Matches action color so focus rings feel integrated, not grafted on.</div>
+        <div class="token-value"><span class="hex">#2456E4</span></div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#E8EAED; border-color:rgba(0,0,0,0.06);"></div>
+        <div class="token-name">--color-border-disabled</div>
+        <div class="token-usage">Border on disabled elements — very light gray, recedes toward white canvas. Combine with reduced opacity on the component.</div>
+        <div class="token-value"><span class="hex">#E8EAED</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 2. TYPOGRAPHY ───────────────────────────────────────────────────── -->
+  <section class="section anchor" id="typography">
+    <div class="section-header">
+      <h2 class="section-title">Typography</h2>
+      <span class="section-subtitle">Plus Jakarta Sans + DM Mono · Inter approved as exception</span>
+    </div>
+
+    <div class="notice">
+      <span class="notice-icon">ℹ</span>
+      <div><strong>Font exception:</strong> Inter is approved for Decision Engine use only. Base Dark uses Space Grotesk and Spectral. The DE sub-brand uses Plus Jakarta Sans and DM Mono as its primary pair — Inter remains a permitted fallback for specific contexts.</div>
+    </div>
+
+    <div class="group-label">Families</div>
+    <div class="type-grid">
+      <div class="type-card">
+        <div class="type-sample">
+          <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;font-size:1.625rem;letter-spacing:-0.02em;color:var(--fg);line-height:1.1;">Plus Jakarta Sans</div>
+          <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;font-size:0.875rem;color:var(--fg-alt);margin-top:5px;">ABCDEFGHIJKLM · 0123456789 · (),;:</div>
+          <div style="margin-top:10px;display:flex;gap:8px;">
+            <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;font-size:0.875rem;color:var(--fg-muted);">300</span>
+            <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;font-size:0.875rem;color:var(--fg-muted);">400</span>
+            <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;font-size:0.875rem;color:var(--fg-muted);">500</span>
+            <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:0.875rem;color:var(--fg-muted);">600</span>
+            <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.875rem;color:var(--fg-muted);">700</span>
+          </div>
+        </div>
+        <div class="type-meta">
+          font.family.sans (DE)<br>
+          Titles · UI labels · Table headers · Navigation<br>
+          Light (300) headings · Medium (500) labels
+        </div>
+      </div>
+      <div class="type-card">
+        <div class="type-sample">
+          <div style="font-family:'DM Mono',monospace;font-size:0.9375rem;color:var(--action);line-height:1.5;">--color-foreground-action<br>→ #2456E4 · 5.9:1 AA</div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--fg-muted);margin-top:8px;">ABCDEFG 012345 → ≥ ≤ ≠</div>
+        </div>
+        <div class="type-meta">
+          font.family.mono (DE)<br>
+          Token names · Code values · Condition strings · Rule logic<br>
+          Regular (400) · 14px default
+        </div>
+      </div>
+    </div>
+
+
+    <div class="group-label">Type scale</div>
+    <div style="display:flex;flex-direction:column;gap:3px;">
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">--font-display</span><span class="ls-val">sans 300 · 40px / 1.1</span></div>
+        <div class="ls-sample" style="font:var(--font-display);font-family:var(--sans);letter-spacing:var(--letter-spacing-display);color:var(--fg);">Display</div>
+        <div class="ls-use">hero statements · splash headlines</div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">--font-title-large</span><span class="ls-val">sans 300 · 32px / 1.25</span></div>
+        <div class="ls-sample" style="font:var(--font-title-large);font-family:var(--sans);letter-spacing:var(--letter-spacing-title);color:var(--fg);">Title Large</div>
+        <div class="ls-use">page heading · h1 equivalent</div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">--font-title-medium</span><span class="ls-val">sans 300 · 24px / 1.25</span></div>
+        <div class="ls-sample" style="font:var(--font-title-medium);font-family:var(--sans);letter-spacing:var(--letter-spacing-title);color:var(--fg);">Title Medium</div>
+        <div class="ls-use">section heading · h2 equivalent</div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">--font-title-small</span><span class="ls-val">sans 300 · 20px / 1.25</span></div>
+        <div class="ls-sample" style="font:var(--font-title-small);font-family:var(--sans);letter-spacing:var(--letter-spacing-title);color:var(--fg);">Title Small</div>
+        <div class="ls-use">sub-section · panel header · h3</div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">--font-label-large</span><span class="ls-val">sans 400 · 16px / 1.25</span></div>
+        <div class="ls-sample" style="font:var(--font-label-large);font-family:var(--sans);letter-spacing:var(--letter-spacing-label);color:var(--fg);">Label Large</div>
+        <div class="ls-use">major UI labels · prominent nav</div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">--font-label-medium</span><span class="ls-val">sans 400 · 14px / 1.25</span></div>
+        <div class="ls-sample" style="font:var(--font-label-medium);font-family:var(--sans);letter-spacing:var(--letter-spacing-label);color:var(--fg);">Label Medium</div>
+        <div class="ls-use">buttons · nav links · form labels</div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">--font-label-small</span><span class="ls-val">sans 400 · 12px / 1.25</span></div>
+        <div class="ls-sample" style="font:var(--font-label-small);font-family:var(--sans);letter-spacing:var(--letter-spacing-label);color:var(--fg-muted);">Label Small</div>
+        <div class="ls-use">timestamps · badges · helper text</div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">--font-body-large</span><span class="ls-val">sans 400 · 16px / 1.6</span></div>
+        <div class="ls-sample" style="font-family:var(--sans);font-weight:400;font-size:1rem;line-height:1.6;letter-spacing:var(--letter-spacing-body);color:var(--fg);">Body Large</div>
+        <div class="ls-use">primary body content</div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">--font-body-medium</span><span class="ls-val">sans 400 · 14px / 1.6</span></div>
+        <div class="ls-sample" style="font-family:var(--sans);font-weight:400;font-size:0.875rem;line-height:1.6;letter-spacing:var(--letter-spacing-body);color:var(--fg-alt);">Body Medium</div>
+        <div class="ls-use">secondary descriptions · table cells</div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">--font-body-small</span><span class="ls-val">sans 400 · 12px / 1.6</span></div>
+        <div class="ls-sample" style="font-family:var(--sans);font-weight:400;font-size:0.75rem;line-height:1.6;letter-spacing:var(--letter-spacing-body);color:var(--fg-muted);">Body Small</div>
+        <div class="ls-use">footnotes · fine print</div>
+      </div>
+    </div>
+
+    <div class="group-label">Weights · Plus Jakarta Sans</div>
+    <div style="display:flex;flex-direction:column;gap:4px;">
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">font.weight.light</span><span class="ls-val">300 · titles only</span></div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;font-size:1.5rem;color:var(--fg);flex:1;">Light — Display and Title headings</div>
+        <div class="ls-use">Do not use below 1.25rem</div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">font.weight.regular</span><span class="ls-val">400 · default</span></div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;font-size:1rem;color:var(--fg);flex:1;">Regular — body, labels, UI text</div>
+        <div class="ls-use">All body + label sizes</div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">font.weight.medium</span><span class="ls-val">500 · label-strong</span></div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;font-size:1rem;color:var(--fg);flex:1;">Medium — button text, active nav, table headers</div>
+        <div class="ls-use">Emphasis labels</div>
+      </div>
+      <div class="ls-row" style="opacity:0.5;">
+        <div class="ls-meta"><span class="ls-token">font.weight.semibold</span><span class="ls-val">600 · reserved</span></div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:1rem;color:var(--fg-muted);flex:1;">Semibold — reserved for future use</div>
+        <div class="ls-use">Not yet mapped</div>
+      </div>
+    </div>
+
+    <!-- Line heights -->
+    <div class="group-label">Line heights</div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">lineHeight.tight</span><span class="ls-val">1.1</span></div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;font-size:1.5rem;line-height:1.1;color:var(--fg);flex:1;">Display heading — lines sit close. Only at large display sizes.</div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">lineHeight.snug</span><span class="ls-val">1.25</span></div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;line-height:1.25;color:var(--fg);flex:1;">Headings and labels — breathing room without excess space.</div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">lineHeight.normal</span><span class="ls-val">1.6</span></div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.9375rem;line-height:1.6;color:var(--fg-alt);flex:1;">Standard body and table cell content. Comfortable reading rhythm at 14–16px.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 3. SPACING ──────────────────────────────────────────────────────── -->
+  <section class="section anchor" id="spacing">
+    <div class="section-header">
+      <h2 class="section-title">Spacing</h2>
+      <span class="section-subtitle">tokens/primitives/spacing.tokens.json · shared with Base Dark</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:5px;">
+      <div class="space-row"><div class="space-bar" style="width:2px;"></div><div class="space-name">space.3xs · 2px</div><div class="space-usage">Hairline — optical adjustments only.</div></div>
+      <div class="space-row"><div class="space-bar" style="width:4px;"></div><div class="space-name">space.2xs · 4px</div><div class="space-usage">Micro — badge margins, icon-to-label gaps.</div></div>
+      <div class="space-row"><div class="space-bar" style="width:8px;"></div><div class="space-name">space.xs · 8px</div><div class="space-usage">Small — tightest intentional padding. → <code>spacing.tight</code></div></div>
+      <div class="space-row"><div class="space-bar" style="width:12px;"></div><div class="space-name">space.sm · 12px</div><div class="space-usage">Form-level — list gaps, input padding. → <code>spacing.inline</code></div></div>
+      <div class="space-row"><div class="space-bar" style="width:16px;"></div><div class="space-name">space.md · 16px</div><div class="space-usage">Default — the baseline unit. Standard component padding. → <code>spacing.element</code></div></div>
+      <div class="space-row"><div class="space-bar" style="width:24px;"></div><div class="space-name">space.lg · 24px</div><div class="space-usage">Comfortable — card padding, label-to-content gap. → <code>spacing.component</code></div></div>
+      <div class="space-row"><div class="space-bar" style="width:32px;"></div><div class="space-name">space.xl · 32px</div><div class="space-usage">Generous — column gaps, heading-to-content space. → <code>spacing.group</code></div></div>
+      <div class="space-row"><div class="space-bar" style="width:48px;"></div><div class="space-name">space.2xl · 48px</div><div class="space-usage">Layout — section padding, major region gaps. → <code>spacing.layout</code></div></div>
+      <div class="space-row"><div class="space-bar" style="width:64px;"></div><div class="space-name">space.3xl · 64px</div><div class="space-usage">Large section break.</div></div>
+      <div class="space-row"><div class="space-bar" style="width:80px;"></div><div class="space-name">space.4xl · 80px</div><div class="space-usage">Page-level separation.</div></div>
+      <div class="space-row"><div class="space-bar" style="width:128px;"></div><div class="space-name">space.5xl · 128px</div><div class="space-usage">Hero / full-bleed. → <code>spacing.section</code></div></div>
+    </div>
+  </section>
+
+  <!-- ── 4. RADIUS ───────────────────────────────────────────────────────── -->
+  <section class="section anchor" id="radius">
+    <div class="section-header">
+      <h2 class="section-title">Radius</h2>
+      <span class="section-subtitle">tokens/primitives/radius.tokens.json · shared with Base Dark</span>
+    </div>
+    <div class="radius-grid">
+      <div class="radius-card">
+        <div class="radius-demo" style="border-radius:0;"></div>
+        <div class="radius-meta"><span class="radius-name">radius.none</span><span class="radius-val">0</span><span class="radius-use">Tables, data grids, code</span></div>
+      </div>
+      <div class="radius-card">
+        <div class="radius-demo" style="border-radius:4px;"></div>
+        <div class="radius-meta"><span class="radius-name">radius.sm</span><span class="radius-val">4px</span><span class="radius-use">Inputs, tags, badges</span></div>
+      </div>
+      <div class="radius-card">
+        <div class="radius-demo" style="border-radius:8px;"></div>
+        <div class="radius-meta"><span class="radius-name">radius.md</span><span class="radius-val">8px</span><span class="radius-use">Buttons, dropdowns</span></div>
+      </div>
+      <div class="radius-card">
+        <div class="radius-demo" style="border-radius:12px;"></div>
+        <div class="radius-meta"><span class="radius-name">radius.lg</span><span class="radius-val">12px</span><span class="radius-use">Cards, panels</span></div>
+      </div>
+      <div class="radius-card">
+        <div class="radius-demo" style="border-radius:16px;"></div>
+        <div class="radius-meta"><span class="radius-name">radius.xl</span><span class="radius-val">16px</span><span class="radius-use">Modals, large surfaces</span></div>
+      </div>
+      <div class="radius-card">
+        <div class="radius-demo" style="border-radius:9999px;"></div>
+        <div class="radius-meta"><span class="radius-name">radius.full</span><span class="radius-val">9999px</span><span class="radius-use">Pills, avatars, toggles</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 5. SHADOW ───────────────────────────────────────────────────────── -->
+  <section class="section anchor" id="shadow">
+    <div class="section-header">
+      <h2 class="section-title">Shadow</h2>
+      <span class="section-subtitle">tokens/primitives/shadow.tokens.json · shared with Base Dark</span>
+    </div>
+    <div class="notice">
+      <span class="notice-icon">ℹ</span>
+      <div>In light-mode contexts shadows are more visible than in Base Dark. Use them to communicate elevation hierarchy — don't flatten everything or over-shadow small components.</div>
+    </div>
+    <div class="shadow-grid">
+      <div class="shadow-card">
+        <div class="shadow-demo" style="box-shadow:none; border:1px solid var(--border);"></div>
+        <div class="shadow-meta"><span class="shadow-name">shadow.none</span><span class="shadow-use">Flat · no elevation</span></div>
+      </div>
+      <div class="shadow-card">
+        <div class="shadow-demo" style="box-shadow:0 1px 3px rgba(0,0,0,0.08);"></div>
+        <div class="shadow-meta"><span class="shadow-name">shadow.sm</span><span class="shadow-use">Inputs on focus</span></div>
+      </div>
+      <div class="shadow-card">
+        <div class="shadow-demo" style="box-shadow:0 2px 8px rgba(0,0,0,0.12);"></div>
+        <div class="shadow-meta"><span class="shadow-name">shadow.md</span><span class="shadow-use">Card elevation</span></div>
+      </div>
+      <div class="shadow-card">
+        <div class="shadow-demo" style="box-shadow:0 6px 20px rgba(0,0,0,0.16);"></div>
+        <div class="shadow-meta"><span class="shadow-name">shadow.lg</span><span class="shadow-use">Menus · popovers</span></div>
+      </div>
+      <div class="shadow-card">
+        <div class="shadow-demo" style="box-shadow:0 12px 40px rgba(0,0,0,0.24);"></div>
+        <div class="shadow-meta"><span class="shadow-name">shadow.xl</span><span class="shadow-use">Modals · dialogs</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 6. MOTION ───────────────────────────────────────────────────────── -->
+  <section class="section anchor" id="motion">
+    <div class="section-header">
+      <h2 class="section-title">Motion</h2>
+      <span class="section-subtitle">tokens/primitives/motion.tokens.json · shared with Base Dark</span>
+    </div>
+    <div class="motion-grid">
+      <div class="motion-card">
+        <div class="motion-card-label">Duration</div>
+        <div class="motion-item">
+          <div class="motion-item-head"><span class="motion-item-name">duration.fast</span><span class="motion-item-val">var(--motion-duration-instant)</span></div>
+          <div class="motion-track"><div class="motion-fill" style="width:24%;"></div></div>
+          <div class="motion-desc">Hover states, focus rings, color changes. Immediate feedback.</div>
+        </div>
+        <div class="motion-item">
+          <div class="motion-item-head"><span class="motion-item-name">duration.normal</span><span class="motion-item-val">200ms</span></div>
+          <div class="motion-track"><div class="motion-fill" style="width:40%;"></div></div>
+          <div class="motion-desc">Dropdowns, tooltips, expand/collapse. Default for component transitions.</div>
+        </div>
+        <div class="motion-item">
+          <div class="motion-item-head"><span class="motion-item-name">duration.slow</span><span class="motion-item-val">350ms</span></div>
+          <div class="motion-track"><div class="motion-fill" style="width:70%;"></div></div>
+          <div class="motion-desc">Modals, drawers, large layout changes. Deliberate and tracked.</div>
+        </div>
+      </div>
+      <div class="motion-card">
+        <div class="motion-card-label">Easing</div>
+        <div class="easing-item">
+          <div class="easing-head"><span class="easing-name">easing.default</span><span class="easing-val">0.25, 0.1, 0.25, 1</span></div>
+          <div class="easing-desc">General-purpose. Color/opacity with no directional intent.</div>
+        </div>
+        <div class="easing-item">
+          <div class="easing-head"><span class="easing-name">easing.out</span><span class="easing-val">0, 0, 0.58, 1</span></div>
+          <div class="easing-desc">Elements <em>entering</em>. Decelerates to rest. Signals arrival. Most common.</div>
+        </div>
+        <div class="easing-item">
+          <div class="easing-head"><span class="easing-name">easing.in</span><span class="easing-val">0.42, 0, 1, 1</span></div>
+          <div class="easing-desc">Elements <em>exiting</em>. Accelerates. Signals departure.</div>
+        </div>
+        <div class="easing-item">
+          <div class="easing-head"><span class="easing-name">easing.in-out</span><span class="easing-val">0.42, 0, 0.58, 1</span></div>
+          <div class="easing-desc">Elements <em>moving within</em> the viewport — sliding panels, repositioning.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 7. LETTER-SPACING ───────────────────────────────────────────────── -->
+  <section class="section anchor" id="letter-spacing">
+    <div class="section-header">
+      <h2 class="section-title">Letter-spacing</h2>
+      <span class="section-subtitle">tokens/primitives/letter-spacing.tokens.json · shared with Base Dark</span>
+    </div>
+    <div class="ls-list">
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">letterSpacing.tightest</span><span class="ls-val">-0.025em</span></div>
+        <div class="ls-sample" style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;font-size:1.75rem;letter-spacing:-0.025em;line-height:1.1;color:var(--fg);">Display Heading</div>
+        <div class="ls-use">h2+ titles only</div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">letterSpacing.tight</span><span class="ls-val">-0.01em</span></div>
+        <div class="ls-sample" style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;font-size:1.75rem;letter-spacing:-0.01em;line-height:1.1;color:var(--fg);">Display Heading</div>
+        <div class="ls-use">Large display text</div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">letterSpacing.normal</span><span class="ls-val">0em</span></div>
+        <div class="ls-sample" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;letter-spacing:0;color:var(--fg);">Body text at default tracking</div>
+        <div class="ls-use">All body text</div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">letterSpacing.wide</span><span class="ls-val">0.03em</span></div>
+        <div class="ls-sample" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.875rem;letter-spacing:0.03em;color:var(--fg);">UI label · table header</div>
+        <div class="ls-use">Labels, nav items</div>
+      </div>
+      <div class="ls-row">
+        <div class="ls-meta"><span class="ls-token">letterSpacing.wider</span><span class="ls-val">0.1em</span></div>
+        <div class="ls-sample" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.6875rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--fg-muted);">ALL-CAPS SECTION LABEL</div>
+        <div class="ls-use">All-caps eyebrows only</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 8. TOKEN ARCHITECTURE NOTES ───────────────────────────────────────── -->
+  <section class="section anchor" id="notes">
+    <div class="section-header">
+      <h2 class="section-title">Architecture notes</h2>
+      <span class="section-subtitle">Deleted tokens · Naming rules · Known drifts</span>
+    </div>
+
+    <div class="group-label">Naming convention — hard rule</div>
+    <div class="notice">
+      <span class="notice-icon">⚑</span>
+      <div>Accent tokens must always include the color name. Text color: <code>foreground-accent-blue</code>, <code>foreground-accent-green</code>, <code>foreground-accent-purple</code>. Inverse (text on a filled accent surface): <code>foreground-accent-on-blue</code>, <code>foreground-accent-on-green</code>, <code>foreground-accent-on-purple</code>. <strong>Wrong:</strong> <code>foreground-accent</code> or <code>foreground-on-accent-blue</code> — bare or inverted namespace, deleted 2026-04-28.</div>
+    </div>
+
+    <div class="group-label">Tokens deleted 2026-04-27</div>
+    <table class="deleted-table">
+      <thead>
+        <tr><th>Token</th><th>Reason for deletion</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>foreground-accent</td><td>Generic — replaced by named <code>foreground-accent-[color]</code> slots. No stable semantic meaning.</td></tr>
+        <tr><td>background-accent</td><td>Redundant with <code>background-action</code> in DE. Two tokens, same value, no distinction.</td></tr>
+        <tr><td>foreground-on-accent</td><td>Paired counterpart to deleted <code>background-accent</code>.</td></tr>
+        <tr><td>foreground-primary</td><td>Redundant with <code>foreground-default</code>. Identical value, no distinction.</td></tr>
+        <tr><td>feedback-error</td><td>Redundant with <code>foreground-danger</code> — both were #C8002E. Two tokens, same value.</td></tr>
+        <tr><td>feedback-danger-foreground</td><td>Renamed to <code>foreground-danger</code>. Removed feedback namespace — foreground/background structure handles all roles.</td></tr>
+        <tr><td>foreground-accent-red</td><td>Renamed to <code>foreground-danger</code>. Red was the only non-green accent in the old palette — consolidated into the danger semantic role.</td></tr>
+        <tr><td>feedback-danger-background-subtle</td><td>Renamed to <code>background-danger-alt</code>. Removed feedback namespace.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="group-label">Tokens renamed 2026-04-28</div>
+    <table class="deleted-table">
+      <thead>
+        <tr><th>Old name</th><th>New name</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>foreground-on-accent-blue</td><td><code>foreground-accent-on-blue</code> — accent namespace moved before on for consistency with foreground-accent-[color] pattern.</td></tr>
+        <tr><td>foreground-on-accent-green</td><td><code>foreground-accent-on-green</code></td></tr>
+        <tr><td>foreground-on-accent-purple</td><td><code>foreground-accent-on-purple</code></td></tr>
+      </tbody>
+    </table>
+
+    <div class="group-label">Known drifts — variables.css vs brand-tokens</div>
+    <div class="notice notice-warn">
+      <span class="notice-icon">⚠</span>
+      <div>The following 5 tokens have intentionally different values in <code>decisioning-table/src/tokens/variables.css</code> vs the brand-tokens build output. Hand-tuned for DE light mode; not yet backported. Do not treat as drift to fix.</div>
+    </div>
+    <table class="deleted-table">
+      <thead>
+        <tr><th>Token</th><th>Reason</th></tr>
+      </thead>
+      <tbody>
+        <tr><td style="text-decoration:none;">--color-background-alt</td><td>Slightly bluer tint, hand-tuned for the table surface in DE light mode.</td></tr>
+        <tr><td style="text-decoration:none;">--color-background-default</td><td>Same — cool white with a blue cast vs pure white in brand-tokens.</td></tr>
+        <tr><td style="text-decoration:none;">--color-border-default</td><td>Bluer hue to match the surface tint.</td></tr>
+        <tr><td style="text-decoration:none;">--color-border-muted</td><td>Same rationale — barely-there blue tint on subtle separators.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ── 5. ICONOGRAPHY ─────────────────────────────────────────────────── -->
+  <section class="section anchor" id="icons">
+    <h2 class="section-title">Iconography</h2>
+    <p style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.875rem;color:var(--fg-muted);margin:0 0 20px;">Icon sizes live in two layers: <strong>primitive</strong> (raw px values on a 4px grid) and <strong>semantic</strong> (named roles for UI context). Always reference semantic sizes in components.</p>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.7rem;font-weight:500;color:var(--fg-muted);text-transform:uppercase;letter-spacing:0.05em;padding:0 8px 8px;border-bottom:1px solid var(--border);">
+        <span>Token</span><span>Size</span><span>Preview</span><span>Use case</span>
+      </div>
+
+      <!-- compact / 16px -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0;align-items:center;padding:10px 8px;border-bottom:1px solid var(--border);">
+        <div style="font-family:'JetBrains Mono','Fira Mono',monospace;font-size:0.75rem;color:var(--accent);">icon.size.compact</div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;color:var(--fg-muted);">16px <span style="opacity:0.5;">· primitive.icon.sm</span></div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color:var(--fg);">
+            <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="5" y1="8" x2="11" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="8" y1="5" x2="8" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;color:var(--fg-muted);">Dense UI, input adornments, minimum interactive size</div>
+      </div>
+
+      <!-- default / 20px -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0;align-items:center;padding:10px 8px;border-bottom:1px solid var(--border);">
+        <div style="font-family:'JetBrains Mono','Fira Mono',monospace;font-size:0.75rem;color:var(--accent);">icon.size.default</div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;color:var(--fg-muted);">20px <span style="opacity:0.5;">· primitive.icon.md</span></div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="color:var(--fg);">
+            <rect x="2.5" y="2.5" width="15" height="15" rx="3" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="6" y1="10" x2="14" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="10" y1="6" x2="10" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;color:var(--fg-muted);">Default for most contexts — nav items, button icons, inline actions</div>
+      </div>
+
+      <!-- large / 24px -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0;align-items:center;padding:10px 8px;border-bottom:1px solid var(--border);">
+        <div style="font-family:'JetBrains Mono','Fira Mono',monospace;font-size:0.75rem;color:var(--accent);">icon.size.large</div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;color:var(--fg-muted);">24px <span style="opacity:0.5;">· primitive.icon.lg</span></div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="color:var(--fg);">
+            <rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="7" y1="12" x2="17" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="12" y1="7" x2="12" y2="17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;color:var(--fg-muted);">Section header icons, standalone icon buttons, toolbar</div>
+      </div>
+
+      <!-- xl / 32px -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0;align-items:center;padding:10px 8px;">
+        <div style="font-family:'JetBrains Mono','Fira Mono',monospace;font-size:0.75rem;color:var(--accent);">icon.size.xl</div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;color:var(--fg-muted);">32px <span style="opacity:0.5;">· primitive.icon.xl</span></div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" style="color:var(--fg);">
+            <rect x="4" y="4" width="24" height="24" rx="5" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="9" y1="16" x2="23" y2="16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="16" y1="9" x2="16" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;color:var(--fg-muted);">Empty states, onboarding illustrations — never inline with text</div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+</div>
+
+  <script>
+    const btn  = document.getElementById('theme-toggle');
+    const sun  = document.getElementById('theme-icon-sun');
+    const moon = document.getElementById('theme-icon-moon');
+    let dark = false;
+    btn.addEventListener('click', () => {
+      dark = !dark;
+      document.body.classList.toggle('dark-mode', dark);
+      sun.style.display  = dark ? 'none' : '';
+      moon.style.display = dark ? ''     : 'none';
+    });
+
+    // ── Scroll-spy: highlight active section in sidenav ───────────────────
+    (function () {
+      const sections = document.querySelectorAll('.section.anchor');
+      const navLinks = document.querySelectorAll('.sidenav-link');
+      if (!sections.length || !navLinks.length) return;
+      const activate = (id) => {
+        navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+      };
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) activate(entry.target.id); });
+      }, { rootMargin: '-68px 0px -65% 0px', threshold: 0 });
+      sections.forEach(s => obs.observe(s));
+    })();
+  </script>
+</body>
+</html>

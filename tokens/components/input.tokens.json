@@ -1,0 +1,116 @@
+{
+  "$description": "Input component tokens — text input, textarea, select. Third layer: maps semantic color tokens to specific input roles and states. Covers default, hover, focus, error, and disabled states for both value and placeholder text.",
+  "component": {
+    "input": {
+      "$description": "Form input fields — text input, textarea, select. System leans on border transitions and focus ring for state communication; background changes are subtle.",
+      "background": {
+        "default": {
+          "$value": "{color.background.default}",
+          "$type": "color",
+          "$description": "Input rests on the page canvas — same color as the page background. Creates depth via border + label contrast, not background elevation."
+        },
+        "hover": {
+          "$value": "{color.background.default}",
+          "$type": "color",
+          "$description": "Background unchanged on hover — border change alone communicates interactivity."
+        },
+        "focus": {
+          "$value": "{color.background.default}",
+          "$type": "color",
+          "$description": "Background unchanged on focus — the focus ring carries the state signal."
+        },
+        "disabled": {
+          "$value": "{color.background.alt}",
+          "$type": "color",
+          "$description": "Disabled input sits on the elevated surface color — visually recedes, communicates non-interactivity."
+        },
+        "error": {
+          "$value": "{color.background.default}",
+          "$type": "color",
+          "$description": "Error state background unchanged — border color alone communicates the error."
+        }
+      },
+      "foreground": {
+        "value": {
+          "$value": "{color.foreground.default}",
+          "$type": "color",
+          "$description": "User-entered text — primary foreground, full legibility."
+        },
+        "placeholder": {
+          "$value": "{color.foreground.muted}",
+          "$type": "color",
+          "$description": "Placeholder text — tertiary foreground. Minimum legible level. Not disabled — disabled has its own token."
+        },
+        "label": {
+          "$value": "{color.foreground.alt}",
+          "$type": "color",
+          "$description": "Form field label above the input — secondary foreground, clearly associated but not primary content."
+        },
+        "label-required": {
+          "$value": "{color.foreground.danger}",
+          "$type": "color",
+          "$description": "Required field asterisk or indicator — danger color signals mandatory without alarming."
+        },
+        "helper": {
+          "$value": "{color.foreground.muted}",
+          "$type": "color",
+          "$description": "Helper text below the input — same as placeholder, tertiary level."
+        },
+        "error": {
+          "$value": "{color.foreground.danger}",
+          "$type": "color",
+          "$description": "Inline error message text below the input. Red signals the validation failure."
+        },
+        "disabled": {
+          "$value": "{color.foreground.disabled}",
+          "$type": "color",
+          "$description": "Text in disabled input — deeply receded, signals non-interactivity."
+        }
+      },
+      "border": {
+        "default": {
+          "$value": "{color.border.default}",
+          "$type": "color",
+          "$description": "Resting input border — the same as all UI edges."
+        },
+        "hover": {
+          "$value": "{color.border.hover}",
+          "$type": "color",
+          "$description": "Input border on hover — steps up one level to signal interactivity."
+        },
+        "focus": {
+          "$value": "{color.border.focus}",
+          "$type": "color",
+          "$description": "Input border on focus — phosphor green focus ring, maximum visibility for keyboard navigation."
+        },
+        "error": {
+          "$value": "{color.foreground.danger}",
+          "$type": "color",
+          "$description": "Input border in error state — red communicates validation failure clearly."
+        },
+        "disabled": {
+          "$value": "{color.border.disabled}",
+          "$type": "color",
+          "$description": "Input border when disabled — recedes to near-canvas."
+        }
+      },
+      "radius": {
+        "$value": "{radius.sm}",
+        "$type": "dimension",
+        "$description": "Input corner radius — subtle 4px rounding. Softer than a pure rectangle but maintains the structured, precise character of the system."
+      },
+      "padding": {
+        "x": {
+          "$value": "{spacing.element}",
+          "$type": "dimension",
+          "$description": "Horizontal padding inside the input — 16px left/right. Provides comfortable typing clearance from the border."
+        },
+        "y": {
+          "$value": "{spacing.tight}",
+          "$type": "dimension",
+          "$description": "Vertical padding inside the input — 8px top/bottom. Combined with line-height creates the standard 40px input height."
+        }
+      }
+    }
+  }
+}
