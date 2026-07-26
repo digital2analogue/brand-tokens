@@ -183,6 +183,14 @@
   "figma": {
     "componentKey": "",
     "nodeId": "103:27",
-    "codeConnectFile": "input.figma.ts"
+    "codeConnectFile": "input.figma.ts",
+    "ignoredOptions": {
+      "State": [
+        "default",
+        "hover",
+        "focus",
+        "error"
+      ]
+    }
   }
 }

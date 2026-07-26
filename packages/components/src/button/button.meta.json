@@ -219,6 +219,14 @@
   "figma": {
     "componentKey": "",
     "nodeId": "98:56",
-    "codeConnectFile": "button.figma.ts"
+    "codeConnectFile": "button.figma.ts",
+    "ignoredOptions": {
+      "State": [
+        "default",
+        "hover",
+        "active",
+        "focus"
+      ]
+    }
   }
 }
