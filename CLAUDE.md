@@ -33,6 +33,8 @@ scripts/
   validate.mjs                Build gate: meta.json schema + lint rules + token-reference resolution.
   drift-scan.mjs              Reusable consumer-repo scan (scanConsumer): walk + ignore handling + shared rules. Shared by drift-lint and the MCP lint_consumer tool.
   drift-lint.mjs              Thin CLI over drift-scan: scans a consumer repo using the shared rules. `npm run drift -- <dir>`.
+  component-parity.mjs        Code↔Figma parity differ (`npm run parity`): diffs meta.json prop bindings against
+                              figma/components.dump.json, classifies drift ahead/behind/mismatched. See docs/contracts.md.
   check-publish-fresh.mjs     Diffs source-built tokens vs the published npm package; flags a needed republish. `npm run check:publish-fresh`.
   drift_audit.py              Figma-variable-vs-token drift auditor (separate concern from code linting).
 design-system.json   Generated artifact — merged component metadata + Custom Elements Manifest, read by the MCP server.
@@ -52,6 +54,8 @@ design-system.json   Generated artifact — merged component metadata + Custom E
 docs/
   index.html         Base dark theme design system reference. Open file:// directly in browser.
   brand-design-system-prd.md  Product requirements. v1 + the v2 (agentic) scope that reversed several v1 non-goals.
+  contracts.md       Operational guide to the component contract system (#156): prop bindings, slot
+                     accepts, `npm run parity` + how to read ahead/behind/mismatched, dump refresh.
   decisions.md       THE decision log — the only one. Dated entries, newest first.
 AGENTS.md            Vendor-neutral guide for agents *consuming* the system in product repos.
 ```
