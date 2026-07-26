@@ -36,6 +36,9 @@ scripts/
   component-parity.mjs        Code↔Figma parity differ (`npm run parity`): diffs meta.json prop bindings against
                               figma/components.dump.json, classifies drift ahead/behind/mismatched. See docs/contracts.md.
   check-publish-fresh.mjs     Diffs source-built tokens vs the published npm package; flags a needed republish. `npm run check:publish-fresh`.
+  check-golden.mjs            Golden gate: built brand CSS must match tests/golden/css fixtures byte-for-byte
+                              (`npm run check:golden`; after an intentional token change: `npm run golden:update`).
+                              CI also builds twice and byte-compares — non-determinism fails the run.
   drift_audit.py              Figma-variable-vs-token drift auditor (separate concern from code linting).
 design-system.json   Generated artifact — merged component metadata + Custom Elements Manifest, read by the MCP server.
 .github/workflows/

@@ -40,6 +40,21 @@ jobs:
       - name: Build all brand CSS
         run: npm run build
 
+      # Two gates over the built CSS (#151). build/ is gitignored, so without
+      # these a token change altering output is only caught by the weekly
+      # publish-freshness check.
+      - name: Fail if the token build is non-deterministic (build twice, byte-compare)
+        run: |
+          sha256sum build/css/*.css > /tmp/build-hashes-1
+          npm run build
+          sha256sum -c /tmp/build-hashes-1 || {
+            echo "::error::Two consecutive token builds produced different output — the build is non-deterministic."
+            exit 1
+          }
+
+      - name: Fail if built CSS differs from golden fixtures (tests/golden/css)
+        run: node scripts/check-golden.mjs
+
       - name: Rebuild generated artifacts (CEM + design-system.json)
         run: npm run build:meta
 

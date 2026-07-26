@@ -22,6 +22,8 @@
     "drift": "node scripts/drift-lint.mjs",
     "parity": "node scripts/component-parity.mjs",
     "check:publish-fresh": "node scripts/check-publish-fresh.mjs",
+    "check:golden": "node scripts/check-golden.mjs",
+    "golden:update": "npm run build && node scripts/check-golden.mjs --update",
     "test": "npm test --workspaces --if-present",
     "test:unit": "vitest",
     "test:unit:ui": "vitest --ui",
