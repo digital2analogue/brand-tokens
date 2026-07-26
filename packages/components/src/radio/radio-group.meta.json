@@ -5,23 +5,66 @@
   "summary": "Form-associated group of radio buttons. Renders a fieldset/legend and manages selection and form value for its rr-radio children.",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
-    { "name": "name", "type": "string", "default": "" },
-    { "name": "value", "type": "string", "default": "" },
-    { "name": "label", "type": "string", "default": "" },
-    { "name": "errorText", "type": "string", "default": "" },
-    { "name": "required", "type": "boolean", "default": "false" },
-    { "name": "disabled", "type": "boolean", "default": "false" },
-    { "name": "orientation", "type": "'vertical' | 'horizontal'", "default": "vertical" }
+    {
+      "name": "name",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "errorText",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "default": "false"
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false"
+    },
+    {
+      "name": "orientation",
+      "type": "'vertical' | 'horizontal'",
+      "default": "vertical"
+    }
   ],
   "slots": [
-    { "name": "default", "description": "rr-radio child elements." }
+    {
+      "name": "default",
+      "description": "rr-radio child elements.",
+      "accepts": [
+        "rr-radio"
+      ]
+    }
   ],
   "events": [
-    { "name": "change", "detail": "none" }
+    {
+      "name": "change",
+      "detail": "none"
+    }
   ],
   "cssParts": [
-    { "name": "fieldset", "description": "The outer fieldset element." },
-    { "name": "legend", "description": "The legend / label element." }
+    {
+      "name": "fieldset",
+      "description": "The outer fieldset element."
+    },
+    {
+      "name": "legend",
+      "description": "The legend / label element."
+    }
   ],
   "tokensUsed": [
     "--font-label-medium",
@@ -40,10 +83,22 @@
     "Place rr-radio elements in the default slot; the group manages their checked state and form value"
   ],
   "examples": [
-    { "title": "Default vertical group", "html": "<rr-radio-group name=\"size\" label=\"Size\" value=\"md\">\n  <rr-radio value=\"sm\">Small</rr-radio>\n  <rr-radio value=\"md\">Medium</rr-radio>\n  <rr-radio value=\"lg\">Large</rr-radio>\n</rr-radio-group>" },
-    { "title": "Horizontal orientation", "html": "<rr-radio-group name=\"size\" label=\"Size\" orientation=\"horizontal\">\n  <rr-radio value=\"sm\">Small</rr-radio>\n  <rr-radio value=\"md\">Medium</rr-radio>\n</rr-radio-group>" },
-    { "title": "Error state", "html": "<rr-radio-group name=\"size\" label=\"Size\" required error-text=\"Please select a size\">\n  <rr-radio value=\"sm\">Small</rr-radio>\n  <rr-radio value=\"md\">Medium</rr-radio>\n</rr-radio-group>" },
-    { "title": "Disabled group", "html": "<rr-radio-group name=\"size\" label=\"Size\" disabled>\n  <rr-radio value=\"sm\">Small</rr-radio>\n  <rr-radio value=\"md\">Medium</rr-radio>\n</rr-radio-group>" }
+    {
+      "title": "Default vertical group",
+      "html": "<rr-radio-group name=\"size\" label=\"Size\" value=\"md\">\n  <rr-radio value=\"sm\">Small</rr-radio>\n  <rr-radio value=\"md\">Medium</rr-radio>\n  <rr-radio value=\"lg\">Large</rr-radio>\n</rr-radio-group>"
+    },
+    {
+      "title": "Horizontal orientation",
+      "html": "<rr-radio-group name=\"size\" label=\"Size\" orientation=\"horizontal\">\n  <rr-radio value=\"sm\">Small</rr-radio>\n  <rr-radio value=\"md\">Medium</rr-radio>\n</rr-radio-group>"
+    },
+    {
+      "title": "Error state",
+      "html": "<rr-radio-group name=\"size\" label=\"Size\" required error-text=\"Please select a size\">\n  <rr-radio value=\"sm\">Small</rr-radio>\n  <rr-radio value=\"md\">Medium</rr-radio>\n</rr-radio-group>"
+    },
+    {
+      "title": "Disabled group",
+      "html": "<rr-radio-group name=\"size\" label=\"Size\" disabled>\n  <rr-radio value=\"sm\">Small</rr-radio>\n  <rr-radio value=\"md\">Medium</rr-radio>\n</rr-radio-group>"
+    }
   ],
   "accessibility": {
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/radio/",
@@ -61,5 +116,9 @@
     ],
     "rules": []
   },
-  "figma": { "componentKey": "", "nodeId": "121:77", "codeConnectFile": "radio.figma.ts" }
+  "figma": {
+    "componentKey": "",
+    "nodeId": "121:77",
+    "codeConnectFile": "radio.figma.ts"
+  }
 }

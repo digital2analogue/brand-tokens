@@ -5,11 +5,25 @@
   "summary": "Sized, accessible wrapper for inline SVG icons. Decorative by default; labelled icons become role=\"img\".",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
-    { "name": "size", "type": "'compact' | 'default' | 'large' | 'xl'", "default": "default" },
-    { "name": "aria-label", "type": "string | null", "default": "null" }
+    {
+      "name": "size",
+      "type": "'compact' | 'default' | 'large' | 'xl'",
+      "default": "default"
+    },
+    {
+      "name": "aria-label",
+      "type": "string | null",
+      "default": "null"
+    }
   ],
   "slots": [
-    { "name": "default", "description": "The SVG icon element to render." }
+    {
+      "name": "default",
+      "description": "The SVG icon element to render.",
+      "accepts": [
+        "svg"
+      ]
+    }
   ],
   "events": [],
   "cssParts": [],
@@ -26,9 +40,18 @@
     "Icon color is inherited from the parent — set color on the surrounding element, not the icon"
   ],
   "examples": [
-    { "title": "Decorative icon (screen readers skip it)", "html": "<rr-icon size=\"default\">\n  <svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"10\" /></svg>\n</rr-icon>" },
-    { "title": "Labelled standalone icon", "html": "<rr-icon aria-label=\"Close dialog\">\n  <svg viewBox=\"0 0 16 16\"><path d=\"M4 4L12 12M12 4L4 12\" /></svg>\n</rr-icon>" },
-    { "title": "Large size", "html": "<rr-icon size=\"large\">\n  <svg viewBox=\"0 0 24 24\"><path d=\"...\" /></svg>\n</rr-icon>" }
+    {
+      "title": "Decorative icon (screen readers skip it)",
+      "html": "<rr-icon size=\"default\">\n  <svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"10\" /></svg>\n</rr-icon>"
+    },
+    {
+      "title": "Labelled standalone icon",
+      "html": "<rr-icon aria-label=\"Close dialog\">\n  <svg viewBox=\"0 0 16 16\"><path d=\"M4 4L12 12M12 4L4 12\" /></svg>\n</rr-icon>"
+    },
+    {
+      "title": "Large size",
+      "html": "<rr-icon size=\"large\">\n  <svg viewBox=\"0 0 24 24\"><path d=\"...\" /></svg>\n</rr-icon>"
+    }
   ],
   "accessibility": {
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/",
@@ -44,5 +67,9 @@
       "Set aria-label only when the icon conveys meaning not present in adjacent text — it then gets role=\"img\""
     ]
   },
-  "figma": { "componentKey": "", "nodeId": "115:10", "codeConnectFile": "icon.figma.ts" }
+  "figma": {
+    "componentKey": "",
+    "nodeId": "115:10",
+    "codeConnectFile": "icon.figma.ts"
+  }
 }

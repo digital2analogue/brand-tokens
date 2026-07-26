@@ -5,14 +5,31 @@
   "summary": "Accessible tab strip that wraps rr-tab elements, managing selection and arrow-key navigation.",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
-    { "name": "label", "type": "string", "default": "" },
-    { "name": "value", "type": "string", "default": "" }
+    {
+      "name": "label",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": ""
+    }
   ],
   "slots": [
-    { "name": "default", "description": "Place rr-tab elements here." }
+    {
+      "name": "default",
+      "description": "Place rr-tab elements here.",
+      "accepts": [
+        "rr-tab"
+      ]
+    }
   ],
   "events": [
-    { "name": "change", "detail": "Fired (bubbles, composed) when a tab is selected by click or keyboard; detail.value is the newly selected tab value." }
+    {
+      "name": "change",
+      "detail": "Fired (bubbles, composed) when a tab is selected by click or keyboard; detail.value is the newly selected tab value."
+    }
   ],
   "cssParts": [],
   "tokensUsed": [
@@ -25,8 +42,14 @@
     "Tab panels are managed by the consuming app — listen for the change event and show/hide content accordingly."
   ],
   "examples": [
-    { "title": "Default", "html": "<rr-tab-list label=\"View options\" value=\"overview\">\n  <rr-tab value=\"overview\">Overview</rr-tab>\n  <rr-tab value=\"details\">Details</rr-tab>\n  <rr-tab value=\"settings\">Settings</rr-tab>\n</rr-tab-list>" },
-    { "title": "With a disabled tab", "html": "<rr-tab-list label=\"Actions\" value=\"first\">\n  <rr-tab value=\"first\">First</rr-tab>\n  <rr-tab value=\"second\" disabled>Second</rr-tab>\n</rr-tab-list>" }
+    {
+      "title": "Default",
+      "html": "<rr-tab-list label=\"View options\" value=\"overview\">\n  <rr-tab value=\"overview\">Overview</rr-tab>\n  <rr-tab value=\"details\">Details</rr-tab>\n  <rr-tab value=\"settings\">Settings</rr-tab>\n</rr-tab-list>"
+    },
+    {
+      "title": "With a disabled tab",
+      "html": "<rr-tab-list label=\"Actions\" value=\"first\">\n  <rr-tab value=\"first\">First</rr-tab>\n  <rr-tab value=\"second\" disabled>Second</rr-tab>\n</rr-tab-list>"
+    }
   ],
   "accessibility": {
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
@@ -49,5 +72,9 @@
       "label is required so the tablist has an accessible name via aria-label."
     ]
   },
-  "figma": { "componentKey": "", "nodeId": "125:7", "codeConnectFile": "tabs.figma.ts" }
+  "figma": {
+    "componentKey": "",
+    "nodeId": "125:7",
+    "codeConnectFile": "tabs.figma.ts"
+  }
 }

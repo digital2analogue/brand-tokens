@@ -45,7 +45,7 @@
     },
     "slots": {
       "type": "array",
-      "items": { "$ref": "#/$defs/named" }
+      "items": { "$ref": "#/$defs/slot" }
     },
     "events": {
       "type": "array",
@@ -134,6 +134,24 @@
       "properties": {
         "name": { "type": "string" },
         "description": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "slot": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "accepts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^([a-z][a-z0-9]*(-[a-z0-9]+)*|\\*|#text)$"
+          },
+          "description": "Element tags this slot accepts (e.g. rr-menu-item, svg). Omit when the slot is genuinely unconstrained — only encode constraints the component actually assumes. '*' is an explicit anything; '#text' means plain text content."
+        }
       },
       "additionalProperties": false
     },

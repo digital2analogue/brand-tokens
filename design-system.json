@@ -886,7 +886,10 @@
       "slots": [
         {
           "name": "default",
-          "description": "The SVG icon element to render."
+          "description": "The SVG icon element to render.",
+          "accepts": [
+            "svg"
+          ]
         }
       ],
       "events": [],
@@ -1260,7 +1263,10 @@
         },
         {
           "name": "(default)",
-          "description": "Place <rr-menu-item> elements here."
+          "description": "Place <rr-menu-item> elements here.",
+          "accepts": [
+            "rr-menu-item"
+          ]
         }
       ],
       "events": [
@@ -1676,7 +1682,10 @@
       "slots": [
         {
           "name": "default",
-          "description": "rr-radio child elements."
+          "description": "rr-radio child elements.",
+          "accepts": [
+            "rr-radio"
+          ]
         }
       ],
       "events": [
@@ -2162,7 +2171,10 @@
       "slots": [
         {
           "name": "default",
-          "description": "Place rr-tab elements here."
+          "description": "Place rr-tab elements here.",
+          "accepts": [
+            "rr-tab"
+          ]
         }
       ],
       "events": [
@@ -2253,11 +2265,17 @@
       "slots": [
         {
           "name": "header",
-          "description": "A single rr-table-row of header cells (rr-table-cell header)."
+          "description": "A single rr-table-row of header cells (rr-table-cell header).",
+          "accepts": [
+            "rr-table-row"
+          ]
         },
         {
           "name": "(default)",
-          "description": "Body rr-table-row elements."
+          "description": "Body rr-table-row elements.",
+          "accepts": [
+            "rr-table-row"
+          ]
         }
       ],
       "events": [],
@@ -2411,7 +2429,10 @@
       "slots": [
         {
           "name": "(default)",
-          "description": "rr-table-cell elements."
+          "description": "rr-table-cell elements.",
+          "accepts": [
+            "rr-table-cell"
+          ]
         }
       ],
       "events": [],
