@@ -122,6 +122,16 @@
         "codeConnectFile": {
           "type": "string",
           "description": "Path to the .figma.ts Code Connect file, relative to the component directory."
+        },
+        "ignoredOptions": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          },
+          "description": "Figma variant options that are design-reference only and deliberately emit no code (e.g. State: default/hover/active/focus — CSS-only states). Keyed by Figma property name. The parity differ treats these as covered; anything else unbound is drift."
         }
       },
       "additionalProperties": false

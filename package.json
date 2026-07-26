@@ -20,6 +20,7 @@
     "build:meta": "npm run build:cem && node scripts/build-design-system-json.mjs && node scripts/build-considerations.mjs",
     "build:considerations": "node scripts/build-considerations.mjs",
     "drift": "node scripts/drift-lint.mjs",
+    "parity": "node scripts/component-parity.mjs",
     "check:publish-fresh": "node scripts/check-publish-fresh.mjs",
     "test": "npm test --workspaces --if-present",
     "test:unit": "vitest",
