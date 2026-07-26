@@ -154,9 +154,11 @@ mcp package (still scoped `@riverromney`) is not published yet.
   - Brand awareness (from `tokens/brands/*.tokens.json`): `get_brand(brand)` — a
     sub-brand's full override set (base vs brand value per token); `compare_brands(a, b)` —
     the tokens whose resolved value diverges between two brands.
-  - Assembly: `check_assembly({components, tokens, context})` — design-intent check
-    over a set used together (3-rule v1: spacing-between-components, WCAG fg/bg pairing,
-    deprecated/unknown token). Returns `{ valid, suggestions }`; logic in `scripts/assembly.mjs`.
+  - Assembly: `check_assembly({components, tokens, placements, context})` — design-intent
+    check over a set used together (4 rules: spacing-between-components, WCAG fg/bg pairing,
+    deprecated/unknown token, and slot composition — `placements: [{component, parent, slot?}]`
+    checked against the parent slot's `accepts` contract from meta.json; slots without
+    `accepts` are unconstrained). Returns `{ valid, suggestions }`; logic in `scripts/assembly.mjs`.
   - Contrast (from `scripts/contrast.mjs`, reusing the WCAG math in `assembly.mjs`):
     `check_contrast({foreground, background, brand?, fontSize?, bold?})` — ratio + AA/AAA
     verdict for a pair (tokens or hex; large-text threshold when `fontSize` qualifies);

@@ -29,11 +29,17 @@
   "slots": [
     {
       "name": "header",
-      "description": "A single rr-table-row of header cells (rr-table-cell header)."
+      "description": "A single rr-table-row of header cells (rr-table-cell header).",
+      "accepts": [
+        "rr-table-row"
+      ]
     },
     {
       "name": "(default)",
-      "description": "Body rr-table-row elements."
+      "description": "Body rr-table-row elements.",
+      "accepts": [
+        "rr-table-row"
+      ]
     }
   ],
   "events": [],
@@ -56,8 +62,8 @@
     "Never use hex values. Always use var(--color-*) semantic tokens",
     "Never reference --primitive-* tokens in component code",
     "All text/background pairings must pass WCAG AA (4.5:1)",
-    "Always set label \u2014 it names the table for assistive tech",
-    "Set interactive only when rows actually respond to clicks \u2014 the hover tint is an interactivity signal, never decoration"
+    "Always set label — it names the table for assistive tech",
+    "Set interactive only when rows actually respond to clicks — the hover tint is an interactivity signal, never decoration"
   ],
   "examples": [
     {
@@ -79,7 +85,7 @@
     ],
     "rules": [
       "The host carries role=table with aria-label from the label prop; shadow rowgroups carry role=rowgroup",
-      "Because layout is CSS tables (not <table>), the explicit ARIA roles on host/rows/cells are the semantics \u2014 do not remove them",
+      "Because layout is CSS tables (not <table>), the explicit ARIA roles on host/rows/cells are the semantics — do not remove them",
       "Selected rows expose aria-selected=true"
     ]
   },
