@@ -22,7 +22,10 @@ import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 import { lintLines } from "./rules.mjs";
 import { loadTokens } from "./tokens.mjs";
-import { findUnmappedEmissions } from "./code-connect.mjs";
+import {
+  findUnmappedEmissions,
+  findBindingMismatches,
+} from "./code-connect.mjs";
 import { unresolvedAccepts } from "./assembly.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
@@ -47,6 +50,7 @@ const metaGlobs = ["packages/components/**/*.meta.json", "src/**/*.meta.json"];
 
 let metaCount = 0;
 const metas = [];
+const metaEntries = []; // { dir, data } — §4b pairs metas with their *.figma.ts
 for (const pattern of metaGlobs) {
   for await (const entry of glob(pattern, { cwd: ROOT })) {
     metaCount++;
@@ -61,6 +65,7 @@ for (const pattern of metaGlobs) {
       } else {
         console.log(`  ✓ ${rel}`);
         metas.push(data);
+        metaEntries.push({ dir: dirname(resolve(ROOT, entry)), data });
       }
     } catch (e) {
       fail(`${rel}: ${e.message}`);
@@ -192,6 +197,34 @@ console.log(
     ? "  (no *.figma.ts files found)\n"
     : exitCode === 0
       ? `  ✓ ${ccCount} Code Connect files in parity\n`
+      : "",
+);
+
+// ── 4b. Prop bindings ↔ Code Connect consistency (#152) ─────────────────────
+// A meta that declares prop `bindings` must agree with its *.figma.ts in both
+// directions: every VARIANT binding matches a figma.enum (property + valueMap),
+// and every figma.enum is covered by a binding. Opt-in per component — metas
+// without bindings are exempt until their roll-out lands.
+
+console.log("Checking prop bindings ↔ Code Connect consistency...\n");
+
+let boundCount = 0;
+for (const { dir, data } of metaEntries) {
+  if (!(data.props ?? []).some((p) => p.bindings)) continue;
+  boundCount++;
+  let figmaSrc = "";
+  for await (const f of glob("*.figma.ts", { cwd: dir })) {
+    figmaSrc += readFileSync(resolve(dir, f), "utf8") + "\n";
+  }
+  for (const msg of findBindingMismatches(data, figmaSrc)) {
+    fail(`${data.name}: ${msg}`);
+  }
+}
+console.log(
+  boundCount === 0
+    ? "  (no metas declare prop bindings yet)\n"
+    : exitCode === 0
+      ? `  ✓ ${boundCount} component(s)' bindings agree with their Code Connect mapping\n`
       : "",
 );
 

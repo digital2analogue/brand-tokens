@@ -93,3 +93,139 @@ describe("findUnmappedEmissions", () => {
     expect(findUnmappedEmissions(FIGMA_SRC, COMPONENT_WITH_GHOST)).toEqual([]);
   });
 });
+
+// ── #152: bindings parsing + meta ↔ figma.ts consistency ────────────────────
+
+import {
+  extractEnumBindings,
+  findBindingMismatches,
+} from "../../scripts/code-connect.mjs";
+
+describe("extractEnumBindings", () => {
+  it("captures code prop, Figma property, and full entry map — booleans included", () => {
+    expect(extractEnumBindings(FIGMA_SRC)).toEqual([
+      {
+        codeProp: "variant",
+        property: "Variant",
+        entries: { primary: "primary", secondary: "secondary", ghost: "ghost" },
+      },
+      {
+        codeProp: "size",
+        property: "Size",
+        entries: { sm: "small", md: "medium", lg: "large" },
+      },
+      {
+        codeProp: "disabled",
+        property: "State",
+        entries: { disabled: true },
+      },
+    ]);
+  });
+
+  it("handles quoted keys with hyphens", () => {
+    const src = `x: figma.enum('Variant', { 'accent-green': 'accent-green' })`;
+    expect(extractEnumBindings(src)[0].entries).toEqual({
+      "accent-green": "accent-green",
+    });
+  });
+
+  it("returns [] for source with no enums", () => {
+    expect(extractEnumBindings("figma.connect('url', {})")).toEqual([]);
+  });
+});
+
+describe("findBindingMismatches", () => {
+  const binding = (prop, property, valueMap) => ({
+    name: prop,
+    type: "string",
+    bindings: {
+      code: { prop },
+      figma: { kind: "VARIANT", property, valueMap },
+    },
+  });
+
+  const AGREEING_META = {
+    name: "rr-fixture",
+    props: [
+      binding("variant", "Variant", {
+        primary: "primary",
+        secondary: "secondary",
+        ghost: "ghost",
+      }),
+      binding("size", "Size", { sm: "small", md: "medium", lg: "large" }),
+      binding("disabled", "State", { disabled: true }),
+    ],
+  };
+
+  it("agreeing meta and figma.ts produce no findings", () => {
+    expect(findBindingMismatches(AGREEING_META, FIGMA_SRC)).toEqual([]);
+  });
+
+  it("is opt-in: a meta without bindings has no opinion", () => {
+    const meta = {
+      name: "rr-fixture",
+      props: [{ name: "variant", type: "string" }],
+    };
+    expect(findBindingMismatches(meta, FIGMA_SRC)).toEqual([]);
+  });
+
+  it("flags a valueMap entry figma.ts lacks, and vice versa", () => {
+    const meta = structuredClone(AGREEING_META);
+    delete meta.props[0].bindings.figma.valueMap.ghost; // binding behind figma.ts
+    meta.props[1].bindings.figma.valueMap.xl = "xlarge"; // binding ahead of figma.ts
+    const msgs = findBindingMismatches(meta, FIGMA_SRC);
+    expect(msgs).toHaveLength(2);
+    expect(msgs[0]).toMatch(/Variant=ghost .* valueMap omits it/);
+    expect(msgs[1]).toMatch(/Size=xl but \*\.figma\.ts does not/);
+  });
+
+  it("flags a value that differs between binding and figma.ts", () => {
+    const meta = structuredClone(AGREEING_META);
+    meta.props[1].bindings.figma.valueMap.sm = "tiny";
+    const msgs = findBindingMismatches(meta, FIGMA_SRC);
+    expect(msgs).toHaveLength(1);
+    expect(msgs[0]).toMatch(
+      /Size=sm maps to "tiny" .* "small" in \*\.figma\.ts/,
+    );
+  });
+
+  it("flags a Figma property-name disagreement (the ghost/danger drift class)", () => {
+    const meta = structuredClone(AGREEING_META);
+    meta.props[0].bindings.figma.property = "Kind";
+    const msgs = findBindingMismatches(meta, FIGMA_SRC);
+    expect(
+      msgs.some((m) => /property "Kind", \*\.figma\.ts says "Variant"/.test(m)),
+    ).toBe(true);
+  });
+
+  it("flags bindings.code.prop that differs from the prop name", () => {
+    const meta = structuredClone(AGREEING_META);
+    meta.props[0].bindings.code.prop = "kind";
+    const msgs = findBindingMismatches(meta, FIGMA_SRC);
+    expect(msgs.some((m) => /bindings\.code\.prop is "kind"/.test(m))).toBe(
+      true,
+    );
+  });
+
+  it("flags a figma.enum mapping the meta does not bind (reverse arrow)", () => {
+    const meta = structuredClone(AGREEING_META);
+    meta.props.pop(); // drop the disabled binding
+    const msgs = findBindingMismatches(meta, FIGMA_SRC);
+    expect(
+      msgs.some((m) =>
+        /maps prop "disabled" via Figma "State" but the meta declares no binding/.test(
+          m,
+        ),
+      ),
+    ).toBe(true);
+  });
+
+  it("flags a VARIANT binding with no figma.enum at all", () => {
+    const meta = {
+      name: "rr-fixture",
+      props: [binding("variant", "Variant", { primary: "primary" })],
+    };
+    const msgs = findBindingMismatches(meta, "");
+    expect(msgs[0]).toMatch(/no figma\.enum maps it/);
+  });
+});

@@ -259,6 +259,26 @@
           "name": "variant",
           "type": "'default' | 'success' | 'warning' | 'danger' | 'info' | 'accent-green' | 'accent-blue' | 'accent-violet' | 'accent-amber'",
           "default": "default",
+          "bindings": {
+            "code": {
+              "prop": "variant"
+            },
+            "figma": {
+              "kind": "VARIANT",
+              "property": "Variant",
+              "valueMap": {
+                "default": "default",
+                "success": "success",
+                "warning": "warning",
+                "danger": "danger",
+                "info": "info",
+                "accent-green": "accent-green",
+                "accent-blue": "accent-blue",
+                "accent-violet": "accent-violet",
+                "accent-amber": "accent-amber"
+              }
+            }
+          },
           "description": "Visual variant. Status variants (success, warning, danger, info) convey\nsemantic meaning. Accent variants are decorative emphasis tags."
         }
       ],
@@ -371,24 +391,77 @@
           "name": "variant",
           "type": "string",
           "default": "primary",
+          "bindings": {
+            "code": {
+              "prop": "variant"
+            },
+            "figma": {
+              "kind": "VARIANT",
+              "property": "Variant",
+              "valueMap": {
+                "primary": "primary",
+                "secondary": "secondary",
+                "ghost": "ghost",
+                "danger": "danger"
+              }
+            }
+          },
           "description": "Visual variant: primary (filled CTA), secondary (outlined), danger (destructive), ghost (text-only, quiet)."
         },
         {
           "name": "size",
           "type": "string",
           "default": "md",
+          "bindings": {
+            "code": {
+              "prop": "size"
+            },
+            "figma": {
+              "kind": "VARIANT",
+              "property": "Size",
+              "valueMap": {
+                "sm": "sm",
+                "md": "md",
+                "lg": "lg"
+              }
+            }
+          },
           "description": "Size: sm, md, lg. Controls padding and font size."
         },
         {
           "name": "disabled",
           "type": "boolean",
           "default": false,
+          "bindings": {
+            "code": {
+              "prop": "disabled"
+            },
+            "figma": {
+              "kind": "VARIANT",
+              "property": "State",
+              "valueMap": {
+                "disabled": true
+              }
+            }
+          },
           "description": "Disables the button. Prevents click and removes from tab order."
         },
         {
           "name": "loading",
           "type": "boolean",
           "default": false,
+          "bindings": {
+            "code": {
+              "prop": "loading"
+            },
+            "figma": {
+              "kind": "VARIANT",
+              "property": "State",
+              "valueMap": {
+                "loading": true
+              }
+            }
+          },
           "description": "Shows a spinner and sets aria-busy. Click suppressed while loading."
         },
         {
@@ -999,6 +1072,18 @@
           "name": "disabled",
           "type": "boolean",
           "default": false,
+          "bindings": {
+            "code": {
+              "prop": "disabled"
+            },
+            "figma": {
+              "kind": "VARIANT",
+              "property": "State",
+              "valueMap": {
+                "disabled": true
+              }
+            }
+          },
           "description": "Disables the input."
         },
         {
