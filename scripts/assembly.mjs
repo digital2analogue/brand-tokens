@@ -66,6 +66,32 @@ const slotKey = (name) =>
   !name || name === "default" || name === "(default)" ? "default" : name;
 
 /**
+ * Every rr-* entry in a slot's `accepts` must name a component that exists —
+ * a typo'd entry would otherwise just never match and rule 4 would silently
+ * wave everything through. Plain element tags (svg), "*", and "#text" are
+ * not component references and are not checked. Consumed by validate.mjs
+ * (build gate) so a dangling reference fails the build, mirroring the token
+ * reference-resolution check.
+ *
+ * @param {object[]} metas  parsed *.meta.json contents
+ * @returns {{ component: string, slot: string, entry: string }[]}
+ */
+export function unresolvedAccepts(metas) {
+  const known = new Set(metas.map((m) => m.name));
+  const missing = [];
+  for (const m of metas) {
+    for (const slot of m.slots ?? []) {
+      for (const entry of slot.accepts ?? []) {
+        if (entry.startsWith("rr-") && !known.has(entry)) {
+          missing.push({ component: m.name, slot: slotKey(slot.name), entry });
+        }
+      }
+    }
+  }
+  return missing;
+}
+
+/**
  * @param {object} store  result of loadTokens()
  * @param {object} input  { components?: string[], tokens?: string[] (CSS vars),
  *                          placements?: { component, parent, slot? }[], context?: string }

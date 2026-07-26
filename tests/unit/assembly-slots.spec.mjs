@@ -6,7 +6,7 @@
  * so enriching a real meta.json can never invert these tests.
  */
 import { describe, it, expect } from "vitest";
-import { checkAssembly } from "../../scripts/assembly.mjs";
+import { checkAssembly, unresolvedAccepts } from "../../scripts/assembly.mjs";
 
 // Minimal store: rule 4 never resolves tokens, rules 1–3 see empty inputs.
 const STORE = { base: new Map() };
@@ -105,5 +105,52 @@ describe("check_assembly rule 4: slot composition", () => {
     const { valid, suggestions } = checkAssembly(STORE, {}, INDEX);
     expect(valid).toBe(true);
     expect(suggestions).toEqual([]);
+  });
+});
+
+describe("unresolvedAccepts (the validate.mjs build gate)", () => {
+  it("flags an rr-* accepts entry that names no component", () => {
+    const metas = [
+      {
+        name: "rr-fixture-menu",
+        slots: [{ name: "(default)", accepts: ["rr-fixture-itme"] }], // typo
+      },
+    ];
+    expect(unresolvedAccepts(metas)).toEqual([
+      {
+        component: "rr-fixture-menu",
+        slot: "default",
+        entry: "rr-fixture-itme",
+      },
+    ]);
+  });
+
+  it("passes when the referenced component exists", () => {
+    const metas = [
+      {
+        name: "rr-fixture-menu",
+        slots: [{ name: "default", accepts: ["rr-fixture-item"] }],
+      },
+      { name: "rr-fixture-item", slots: [] },
+    ];
+    expect(unresolvedAccepts(metas)).toEqual([]);
+  });
+
+  it("ignores plain element tags, '*', and '#text' — they are not component refs", () => {
+    const metas = [
+      {
+        name: "rr-fixture-icon",
+        slots: [{ name: "default", accepts: ["svg", "*", "#text"] }],
+      },
+    ];
+    expect(unresolvedAccepts(metas)).toEqual([]);
+  });
+
+  it("handles metas with no slots or no accepts", () => {
+    const metas = [
+      { name: "rr-fixture-plain" },
+      { name: "rr-fixture-open", slots: [{ name: "default" }] },
+    ];
+    expect(unresolvedAccepts(metas)).toEqual([]);
   });
 });

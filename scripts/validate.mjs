@@ -23,6 +23,7 @@ import addFormats from "ajv-formats";
 import { lintLines } from "./rules.mjs";
 import { loadTokens } from "./tokens.mjs";
 import { findUnmappedEmissions } from "./code-connect.mjs";
+import { unresolvedAccepts } from "./assembly.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const SCHEMA_PATH = resolve(ROOT, "schemas/meta.schema.json");
@@ -45,6 +46,7 @@ const validate = ajv.compile(schema);
 const metaGlobs = ["packages/components/**/*.meta.json", "src/**/*.meta.json"];
 
 let metaCount = 0;
+const metas = [];
 for (const pattern of metaGlobs) {
   for await (const entry of glob(pattern, { cwd: ROOT })) {
     metaCount++;
@@ -58,6 +60,7 @@ for (const pattern of metaGlobs) {
         }
       } else {
         console.log(`  ✓ ${rel}`);
+        metas.push(data);
       }
     } catch (e) {
       fail(`${rel}: ${e.message}`);
@@ -65,6 +68,17 @@ for (const pattern of metaGlobs) {
   }
 }
 console.log(metaCount === 0 ? "  (no *.meta.json files found)\n" : "");
+
+// ── 1b. Slot `accepts` references resolve ───────────────────────────────────
+// A typo'd rr-* entry in a slot's accepts would never match anything and
+// check_assembly's rule 4 would silently wave violations through. Same
+// principle as the token reference check (§3): dangling references fail here.
+
+for (const { component, slot, entry } of unresolvedAccepts(metas)) {
+  fail(
+    `${component}: slot "${slot}" accepts "${entry}" — no such component exists`,
+  );
+}
 
 // ── 2. Token lint on component sources ──────────────────────────────────────
 
