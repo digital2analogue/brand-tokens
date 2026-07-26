@@ -38,7 +38,8 @@
           "name": { "type": "string" },
           "type": { "type": "string" },
           "default": {},
-          "description": { "type": "string" }
+          "description": { "type": "string" },
+          "bindings": { "$ref": "#/$defs/bindings" }
         },
         "additionalProperties": false
       }
@@ -134,6 +135,48 @@
       "properties": {
         "name": { "type": "string" },
         "description": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "bindings": {
+      "type": "object",
+      "required": ["code", "figma"],
+      "description": "Dual code↔design binding for one prop (#152). Machine-checkable source for the Code Connect mapping and the Figma parity differ; validate fails when it disagrees with the component's *.figma.ts.",
+      "properties": {
+        "code": {
+          "type": "object",
+          "required": ["prop"],
+          "properties": {
+            "prop": {
+              "type": "string",
+              "description": "The code-side property name. Must equal the prop this binding is attached to."
+            }
+          },
+          "additionalProperties": false
+        },
+        "figma": {
+          "type": "object",
+          "required": ["kind", "property"],
+          "properties": {
+            "kind": {
+              "enum": ["VARIANT", "BOOLEAN", "TEXT", "INSTANCE_SWAP"],
+              "description": "Figma component-property kind this prop binds to."
+            },
+            "property": {
+              "type": "string",
+              "description": "The Figma property name, e.g. \"Variant\" or \"State\"."
+            },
+            "valueMap": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": {
+                "anyOf": [{ "type": "string" }, { "type": "boolean" }]
+              },
+              "description": "Figma option → code value. A boolean value means the option derives a boolean prop (e.g. State=disabled → disabled: true). Omit for 1:1 TEXT/BOOLEAN bindings."
+            }
+          },
+          "additionalProperties": false
+        }
       },
       "additionalProperties": false
     },

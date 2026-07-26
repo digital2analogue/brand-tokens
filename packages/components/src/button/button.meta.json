@@ -5,23 +5,115 @@
   "summary": "Button with primary/secondary/danger/ghost variants, three sizes, loading spinner, and full keyboard/form semantics.",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
-    { "name": "variant", "type": "string", "default": "primary" },
-    { "name": "size", "type": "string", "default": "md" },
-    { "name": "disabled", "type": "boolean", "default": false },
-    { "name": "loading", "type": "boolean", "default": false },
-    { "name": "type", "type": "string", "default": "button" },
-    { "name": "aria-label", "type": "string", "default": null }
+    {
+      "name": "variant",
+      "type": "string",
+      "default": "primary",
+      "bindings": {
+        "code": {
+          "prop": "variant"
+        },
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Variant",
+          "valueMap": {
+            "primary": "primary",
+            "secondary": "secondary",
+            "ghost": "ghost",
+            "danger": "danger"
+          }
+        }
+      }
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "default": "md",
+      "bindings": {
+        "code": {
+          "prop": "size"
+        },
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Size",
+          "valueMap": {
+            "sm": "sm",
+            "md": "md",
+            "lg": "lg"
+          }
+        }
+      }
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": false,
+      "bindings": {
+        "code": {
+          "prop": "disabled"
+        },
+        "figma": {
+          "kind": "VARIANT",
+          "property": "State",
+          "valueMap": {
+            "disabled": true
+          }
+        }
+      }
+    },
+    {
+      "name": "loading",
+      "type": "boolean",
+      "default": false,
+      "bindings": {
+        "code": {
+          "prop": "loading"
+        },
+        "figma": {
+          "kind": "VARIANT",
+          "property": "State",
+          "valueMap": {
+            "loading": true
+          }
+        }
+      }
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "default": "button"
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "default": null
+    }
   ],
   "slots": [
-    { "name": "(default)", "description": "Button label text." },
-    { "name": "prefix", "description": "Icon or element before the label." },
-    { "name": "suffix", "description": "Icon or element after the label." }
+    {
+      "name": "(default)",
+      "description": "Button label text."
+    },
+    {
+      "name": "prefix",
+      "description": "Icon or element before the label."
+    },
+    {
+      "name": "suffix",
+      "description": "Icon or element after the label."
+    }
   ],
   "events": [
-    { "name": "click", "detail": "Native click event. Suppressed when disabled or loading." }
+    {
+      "name": "click",
+      "detail": "Native click event. Suppressed when disabled or loading."
+    }
   ],
   "cssParts": [
-    { "name": "button", "description": "The inner <button> element." }
+    {
+      "name": "button",
+      "description": "The inner <button> element."
+    }
   ],
   "tokensUsed": [
     "--component-button-primary-background-default",
@@ -69,14 +161,38 @@
     "Icon-only buttons must have aria-label"
   ],
   "examples": [
-    { "title": "Primary", "html": "<rr-button>Save changes</rr-button>" },
-    { "title": "Secondary", "html": "<rr-button variant=\"secondary\">Cancel</rr-button>" },
-    { "title": "Danger", "html": "<rr-button variant=\"danger\">Delete</rr-button>" },
-    { "title": "Small", "html": "<rr-button size=\"sm\">Tag</rr-button>" },
-    { "title": "Large", "html": "<rr-button size=\"lg\">Get started</rr-button>" },
-    { "title": "Loading", "html": "<rr-button loading>Saving...</rr-button>" },
-    { "title": "Disabled", "html": "<rr-button disabled>Unavailable</rr-button>" },
-    { "title": "Icon-only", "html": "<rr-button aria-label=\"Close\"><span slot=\"prefix\">X</span></rr-button>" }
+    {
+      "title": "Primary",
+      "html": "<rr-button>Save changes</rr-button>"
+    },
+    {
+      "title": "Secondary",
+      "html": "<rr-button variant=\"secondary\">Cancel</rr-button>"
+    },
+    {
+      "title": "Danger",
+      "html": "<rr-button variant=\"danger\">Delete</rr-button>"
+    },
+    {
+      "title": "Small",
+      "html": "<rr-button size=\"sm\">Tag</rr-button>"
+    },
+    {
+      "title": "Large",
+      "html": "<rr-button size=\"lg\">Get started</rr-button>"
+    },
+    {
+      "title": "Loading",
+      "html": "<rr-button loading>Saving...</rr-button>"
+    },
+    {
+      "title": "Disabled",
+      "html": "<rr-button disabled>Unavailable</rr-button>"
+    },
+    {
+      "title": "Icon-only",
+      "html": "<rr-button aria-label=\"Close\"><span slot=\"prefix\">X</span></rr-button>"
+    }
   ],
   "accessibility": {
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/button/",

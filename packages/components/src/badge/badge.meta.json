@@ -8,7 +8,27 @@
     {
       "name": "variant",
       "type": "'default' | 'success' | 'warning' | 'danger' | 'info' | 'accent-green' | 'accent-blue' | 'accent-violet' | 'accent-amber'",
-      "default": "default"
+      "default": "default",
+      "bindings": {
+        "code": {
+          "prop": "variant"
+        },
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Variant",
+          "valueMap": {
+            "default": "default",
+            "success": "success",
+            "warning": "warning",
+            "danger": "danger",
+            "info": "info",
+            "accent-green": "accent-green",
+            "accent-blue": "accent-blue",
+            "accent-violet": "accent-violet",
+            "accent-amber": "accent-amber"
+          }
+        }
+      }
     }
   ],
   "slots": [

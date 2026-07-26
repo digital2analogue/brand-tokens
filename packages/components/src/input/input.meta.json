@@ -5,29 +5,102 @@
   "summary": "Form-associated text input with label, helper/error text, and ElementInternals for native form participation.",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
-    { "name": "type", "type": "string", "default": "text" },
-    { "name": "name", "type": "string", "default": "" },
-    { "name": "value", "type": "string", "default": "" },
-    { "name": "placeholder", "type": "string", "default": "" },
-    { "name": "label", "type": "string", "default": "" },
-    { "name": "helper-text", "type": "string", "default": "" },
-    { "name": "error-text", "type": "string", "default": "" },
-    { "name": "required", "type": "boolean", "default": false },
-    { "name": "disabled", "type": "boolean", "default": false },
-    { "name": "autocomplete", "type": "string", "default": "" }
+    {
+      "name": "type",
+      "type": "string",
+      "default": "text"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "helper-text",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "error-text",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": false,
+      "bindings": {
+        "code": {
+          "prop": "disabled"
+        },
+        "figma": {
+          "kind": "VARIANT",
+          "property": "State",
+          "valueMap": {
+            "disabled": true
+          }
+        }
+      }
+    },
+    {
+      "name": "autocomplete",
+      "type": "string",
+      "default": ""
+    }
   ],
   "slots": [
-    { "name": "label", "description": "Optional override for the label content." }
+    {
+      "name": "label",
+      "description": "Optional override for the label content."
+    }
   ],
   "events": [
-    { "name": "input", "detail": "Fired on each keystroke, mirrors native input event." },
-    { "name": "change", "detail": "Fired on value commit (blur), mirrors native change event." }
+    {
+      "name": "input",
+      "detail": "Fired on each keystroke, mirrors native input event."
+    },
+    {
+      "name": "change",
+      "detail": "Fired on value commit (blur), mirrors native change event."
+    }
   ],
   "cssParts": [
-    { "name": "label", "description": "The label element above the input." },
-    { "name": "input", "description": "The inner <input> element." },
-    { "name": "helper", "description": "The helper text container." },
-    { "name": "error", "description": "The error message container." }
+    {
+      "name": "label",
+      "description": "The label element above the input."
+    },
+    {
+      "name": "input",
+      "description": "The inner <input> element."
+    },
+    {
+      "name": "helper",
+      "description": "The helper text container."
+    },
+    {
+      "name": "error",
+      "description": "The error message container."
+    }
   ],
   "tokensUsed": [
     "--component-input-background-default",
@@ -60,12 +133,30 @@
     "All text/background pairings must pass WCAG AA (4.5:1)"
   ],
   "examples": [
-    { "title": "Default", "html": "<rr-input label=\"Email\" placeholder=\"you@example.com\"></rr-input>" },
-    { "title": "With helper text", "html": "<rr-input label=\"Username\" helper-text=\"Must be 3-20 characters\"></rr-input>" },
-    { "title": "Error state", "html": "<rr-input label=\"Email\" value=\"bad\" error-text=\"Invalid email address\"></rr-input>" },
-    { "title": "Required", "html": "<rr-input label=\"Name\" required></rr-input>" },
-    { "title": "Disabled", "html": "<rr-input label=\"Locked\" value=\"Cannot edit\" disabled></rr-input>" },
-    { "title": "With autocomplete", "html": "<rr-input label=\"Email\" type=\"email\" autocomplete=\"email\"></rr-input>" }
+    {
+      "title": "Default",
+      "html": "<rr-input label=\"Email\" placeholder=\"you@example.com\"></rr-input>"
+    },
+    {
+      "title": "With helper text",
+      "html": "<rr-input label=\"Username\" helper-text=\"Must be 3-20 characters\"></rr-input>"
+    },
+    {
+      "title": "Error state",
+      "html": "<rr-input label=\"Email\" value=\"bad\" error-text=\"Invalid email address\"></rr-input>"
+    },
+    {
+      "title": "Required",
+      "html": "<rr-input label=\"Name\" required></rr-input>"
+    },
+    {
+      "title": "Disabled",
+      "html": "<rr-input label=\"Locked\" value=\"Cannot edit\" disabled></rr-input>"
+    },
+    {
+      "title": "With autocomplete",
+      "html": "<rr-input label=\"Email\" type=\"email\" autocomplete=\"email\"></rr-input>"
+    }
   ],
   "accessibility": {
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/textbox/",
