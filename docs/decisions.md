@@ -11,6 +11,34 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-07-26 — Contract-authoritative model committed: the contract owns the definition, surfaces are generated from it
+
+**What:** Parsimony adopts the component-contract architecture demonstrated by the
+ds-contracts-poc reference implementation as its end state: a machine-readable contract
+(evolved from `*.meta.json`) becomes the single authoritative definition of each
+component — props with dual code↔Figma bindings, per-part anatomy with token bindings,
+semantics, slot constraints — and both surfaces (Figma library, Lit code) become
+generated renderings of it, mechanically provable against it. Surfaces never sync
+side-to-side; every change promotes through the contract as a reviewable diff. Staged in
+**#156**: (1) prove-parity — #151 eval harness, #152 bindings + code↔Figma differ,
+#154 slot constraints, #153 governance eval, #155 context packs; (2) structured anatomy
+in `meta.schema.json`; (3) generation — Figma library first (the most manual,
+most drift-prone surface), Lit code second. Scope boundary kept from the reference
+model: generation owns API, anatomy, tokens, and semantics — complex behavior (focus
+trapping, typeahead, drag) stays hand-written. Current census: 24 components carry
+`meta.json`; 3 (`rr-badge`, `rr-button`, `rr-input`) are at full contract depth — the
+other 21 get promoted as stages 1–2 roll through them. **Why:** today's `meta.json` is
+descriptive — it documents hand-written components and can silently lie when either
+surface moves (live evidence: `button.figma.ts` maps a Figma `ghost` variant the code
+calls `danger`, #46). A prescriptive contract cannot drift from what it generates, and
+the differ names any residual divergence instead of letting it accumulate.
+**Alternative considered:** stay descriptive and adopt only the parity checks (stages
+1–2 without 3) — most of the drift-elimination value at lower cost. Rejected by
+maintainer call (2026-07-26): contract-authoritative is the better architecture, and
+the migration only gets more expensive as the component count grows. **Status:**
+direction committed, no code yet; work tracked in #156 (+ #151–#155). Sequencing note:
+#114 (two-tier token collapse) lands first so anatomy bindings are semantic-only.
+
 ## 2026-07-16 — Component-token tier frozen: new components ship semantic-only
 
 **What:** The three staple components added 2026-07-15/16 (toast, menu, table) initially
