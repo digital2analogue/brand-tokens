@@ -7,6 +7,7 @@ packages/tokens/tokens.json
 packages/tokens/rules.json
 packages/tokens/AGENTS.md
 packages/tokens/pairings.json
+packages/tokens/context/
 .DS_Store
 .claude/*
 !.claude/skills/

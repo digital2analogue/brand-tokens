@@ -6,6 +6,7 @@
   "type": "module",
   "files": [
     "css",
+    "context",
     "tokens.json",
     "rules.json",
     "pairings.json",
@@ -20,7 +21,8 @@
     "./package.json": "./package.json",
     "./tokens.json": "./tokens.json",
     "./rules.json": "./rules.json",
-    "./pairings.json": "./pairings.json"
+    "./pairings.json": "./pairings.json",
+    "./context/*": "./context/*"
   },
   "sideEffects": [
     "*.css"

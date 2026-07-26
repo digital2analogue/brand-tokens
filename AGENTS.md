@@ -18,6 +18,8 @@ These three files describe the tokens, rules, and per-brand decisions you must r
 
 Each file declares its scope in YAML front-matter (`scope`, `applies-to`, `always-on`) so you can filter without reading the body.
 
+**No repo checkout? Use the context packs in the installed package.** `node_modules/@digital2analogue2/parsimony/` ships compiled, sharded context so any agent can be governed without the MCP or this repo: start at `context/system.md` (rules + brands + the map), then load only what you need — `tokens.json` (full catalog + brand overrides), `context/components/<tag>.md` (one contract per component: props, bindings, slots + accepts, tokens, a11y, examples), `pairings.json`, `rules.json`. `context/index.json` is the machine-readable manifest.
+
 ## Components
 
 `@digital2analogue2/parsimony-components` ships framework-agnostic Lit web components. Query the MCP server (`list_components` / `get_component`) for the authoritative, always-current contract — the table below is a convenience index generated from `design-system.json`.
