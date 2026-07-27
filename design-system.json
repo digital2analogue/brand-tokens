@@ -247,7 +247,7 @@
       "metaVersion": "1.0.0",
       "status": "stable",
       "name": "rr-badge",
-      "summary": "Status badge and accent chip. 9 variants map to component tokens; brand theming cascades via CSS custom properties.",
+      "summary": "Status badge and accent chip. 9 variants styled by semantic tokens; brand theming cascades via CSS custom properties.",
       "package": "@digital2analogue2/parsimony-components",
       "props": [
         {

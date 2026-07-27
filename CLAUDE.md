@@ -13,7 +13,6 @@ River Romney's cross-site design system. Single source of truth for color, typog
 tokens/
   primitives/       Raw values — hex colors, px sizes. Never referenced directly in UI.
   semantic/         Base dark-theme semantic tokens (named roles → primitives).
-  components/        Component-scoped tokens (badge, button, input, alert, …).
   brands/           Sub-brand overrides (decision-engine, dot-art, dot-blog).
 build/
   css/              Built output — one CSS file per brand. Generated; consumed by product repos.
@@ -85,9 +84,11 @@ Multiple autonomous sessions (local + cloud) work this repo in parallel. Each bo
 
 ## Token Layers
 
+**Two tiers** (the component tier was deleted 2026-07-27 — #114; the `no-component-token`
+lint fences it out):
+
 1. **Primitives** (`tokens/primitives/`) — raw hex values. Never use in UI code.
-2. **Semantic** (`tokens/semantic/`, `tokens/brands/`) — named roles (background, foreground, border). These are what UI code imports.
-3. **Component** (`tokens/components/`) — tokens scoped to a single component (badge, button, input, …), consumed by the matching `rr-*` web component in `packages/components/`. **FROZEN — do not add to this tier.** The target architecture is two-tier (primitives → semantic; see #114 and the 2026-07-16 decision entry): new components write semantic roles directly, and the 9 remaining legacy families migrate out under #114.
+2. **Semantic** (`tokens/semantic/`, `tokens/brands/`) — named roles (background, foreground, border). These are what UI code — including every `rr-*` component — references directly.
 
 ## Workflow: Making a Token Change
 
@@ -96,7 +97,7 @@ Multiple autonomous sessions (local + cloud) work this repo in parallel. Each bo
 1. Edit the appropriate file:
    - New color value → `tokens/primitives/color.tokens.json`
    - Semantic role change → `tokens/semantic/` or `tokens/brands/<brand>.tokens.json`
-   - Component-scoped value → `tokens/components/<component>.tokens.json`
+   - (There is no component tier — #114. Components reference semantic roles directly.)
 2. Build tokens: `npm run build` (or `node scripts/build-brands.mjs`)
 3. Regenerate docs: `npm run docs` (or `node scripts/generate-docs.mjs`)
    - Or run both at once: `npm run build:all`
