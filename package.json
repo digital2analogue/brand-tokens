@@ -21,6 +21,7 @@
     "build:considerations": "node scripts/build-considerations.mjs",
     "drift": "node scripts/drift-lint.mjs",
     "parity": "node scripts/component-parity.mjs",
+    "eval:governance": "node scripts/governance-eval.mjs",
     "check:publish-fresh": "node scripts/check-publish-fresh.mjs",
     "check:golden": "node scripts/check-golden.mjs",
     "golden:update": "npm run build && node scripts/check-golden.mjs --update",
