@@ -11,6 +11,34 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-07-27 — Governance eval run (#153): governed 95% clean vs ungoverned 70% clean
+
+**What:** Ran the #153 governed-vs-ungoverned A/B: the 20-prompt set in
+`evals/governance/prompts.json` × 2 arms × 1 isolated fresh subagent per prompt per arm
+(40 runs total, no agent reused across prompts or arms), exactly per
+`evals/governance/README.md`. Governed arm received, verbatim, `packages/tokens/context/system.md`
+plus the relevant `packages/tokens/context/components/<tag>.md` pack(s) for each prompt,
+then the prompt text — no MCP, no other repo access. Ungoverned arm received only the
+prompt text prefixed "Use the design system." — no repo access at all. Both arms: same
+model (Claude Sonnet 5), same date. Outputs saved verbatim to `evals/governance/out/<arm>/<id>.html`
+(gitignored) and scored mechanically with `npm run eval:governance` (shared `rules.mjs`
+detectors + fabricated-token + fabricated-prop checks — no hand grading).
+**Result:** governed **19/20 clean (95%)**, mean **0.1** violations/run (2 rule
+violations, 0 fabricated tokens, 0 fabricated props). Ungoverned **14/20 clean (70%)**,
+mean **0.55** violations/run (11 rule violations, 0 fabricated tokens, 0 fabricated
+props). Because the governed arm's only input was the compiled context packs (no MCP,
+no other files read), this run also satisfies #155's "governed arm runs off packs
+alone" acceptance box. The one dirty governed run (`toast-success`) tripped two rule
+classes: `no-hex` (agent redeclared the token custom properties locally with literal
+hex values instead of assuming the brand CSS already defines them) and
+`no-hardcoded-font-size` (a scalar `font-size` override duplicated a value already
+carried by a `font` shorthand token) — both are context-delivery gaps in the packs, not
+`rules.mjs` detector bugs; filed as #166 and #167.
+**Alternative considered:** none — first measurement of a previously-asserted-but-unmeasured
+claim, not a design choice.
+**Status:** live; harness is re-runnable (`evals/governance/README.md`) as the MCP/packs
+grow (e.g. after #89 patterns, #152 bindings).
+
 ## 2026-07-26 — Contract-authoritative model committed: the contract owns the definition, surfaces are generated from it
 
 **What:** Parsimony adopts the component-contract architecture demonstrated by the
