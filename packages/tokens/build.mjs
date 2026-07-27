@@ -60,11 +60,7 @@ const store = await loadTokens();
 const paths = [...store.base.keys()].sort();
 
 const tier = (path) =>
-  path.startsWith("primitive.")
-    ? "primitive"
-    : path.startsWith("component.")
-      ? "component"
-      : "semantic";
+  path.startsWith("primitive.") ? "primitive" : "semantic";
 
 const entry = (path, brand) => {
   const t = resolveToken(store, path, brand ? { brand } : {});

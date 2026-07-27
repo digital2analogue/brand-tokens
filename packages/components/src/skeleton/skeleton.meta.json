@@ -20,7 +20,7 @@
     "--radius-default"
   ],
   "rules": [
-    "Never use hex values — always var(--color-*) or var(--component-*)",
+    "Never use hex values — always var(--color-*)",
     "Never reference --primitive-* tokens in component code",
     "All text/background pairings must pass WCAG AA (4.5:1)",
     "Decorative placeholder only — the inner element is role=presentation and aria-hidden, so it is excluded from the accessibility tree"

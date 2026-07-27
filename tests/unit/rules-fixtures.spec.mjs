@@ -64,6 +64,17 @@ const FIXTURES = {
       "font-family: system-ui;", // generic families pass
     ],
   },
+  "no-component-token": {
+    violating: [
+      "background: var(--component-badge-success-background);",
+      "height: var(--component-avatar-size-lg);",
+    ],
+    clean: [
+      // The semantic roles the tier aliased — the correct post-#114 form.
+      "background: var(--color-background-success-alt);",
+      "height: 40px;",
+    ],
+  },
   "deprecated-token": {
     violating: [
       "color: var(--color-state-hover);",

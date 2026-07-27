@@ -63,21 +63,17 @@
       ],
       "tokensUsed": [
         "--spacing-tight",
-        "--component-alert-padding-y",
-        "--component-alert-padding-x",
-        "--component-alert-radius",
-        "--component-alert-success-border",
-        "--component-alert-success-background",
-        "--component-alert-success-foreground",
-        "--component-alert-warning-border",
-        "--component-alert-warning-background",
-        "--component-alert-warning-foreground",
-        "--component-alert-danger-border",
-        "--component-alert-danger-background",
-        "--component-alert-danger-foreground",
-        "--component-alert-info-border",
-        "--component-alert-info-background",
-        "--component-alert-info-foreground",
+        "--spacing-inline",
+        "--spacing-element",
+        "--radius-default",
+        "--color-background-success-alt",
+        "--color-foreground-success",
+        "--color-background-warning-alt",
+        "--color-foreground-warning",
+        "--color-background-danger-alt",
+        "--color-foreground-danger",
+        "--color-background-info-alt",
+        "--color-foreground-info",
         "--font-label-strong-medium",
         "--font-body-medium",
         "--radius-sm",
@@ -85,7 +81,7 @@
         "--motion-easing-default"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
+        "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)",
         "Use alert for form-level or system feedback; for field-level validation use rr-input error-text instead"
@@ -189,26 +185,25 @@
         }
       ],
       "tokensUsed": [
-        "--component-avatar-background-default",
-        "--component-avatar-foreground-default",
-        "--component-avatar-size-md",
+        "--color-background-alt",
+        "--color-foreground-alt",
+        "--spacing-group",
         "--font-label-strong-small",
-        "--component-avatar-size-sm",
+        "--spacing-component",
         "--font-label-strong-xsmall",
-        "--component-avatar-size-lg",
         "--font-label-strong-medium",
-        "--component-avatar-size-xl",
-        "--component-avatar-background-indigo",
-        "--component-avatar-foreground-indigo",
-        "--component-avatar-background-sky",
-        "--component-avatar-foreground-sky",
-        "--component-avatar-background-green",
-        "--component-avatar-foreground-green",
-        "--component-avatar-background-amber",
-        "--component-avatar-foreground-amber"
+        "--spacing-layout",
+        "--color-background-accent-indigo-bold",
+        "--color-foreground-accent-on-indigo",
+        "--color-background-accent-sky-bold",
+        "--color-foreground-accent-on-sky",
+        "--color-background-accent-green-bold",
+        "--color-foreground-accent-on-green-bold",
+        "--color-background-accent-amber-bold",
+        "--color-foreground-accent-on-amber-bold"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
+        "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)",
         "Always provide name (or alt when using src) so the avatar has an accessible label"
@@ -291,44 +286,36 @@
       "events": [],
       "cssParts": [],
       "tokensUsed": [
-        "--component-badge-default-background",
-        "--component-badge-default-foreground",
-        "--component-badge-default-border",
-        "--component-badge-success-background",
-        "--component-badge-success-foreground",
-        "--component-badge-success-border",
-        "--component-badge-warning-background",
-        "--component-badge-warning-foreground",
-        "--component-badge-warning-border",
-        "--component-badge-danger-background",
-        "--component-badge-danger-foreground",
-        "--component-badge-danger-border",
-        "--component-badge-info-background",
-        "--component-badge-info-foreground",
-        "--component-badge-info-border",
-        "--component-badge-accent-green-background",
-        "--component-badge-accent-green-foreground",
-        "--component-badge-accent-green-border",
-        "--component-badge-accent-blue-background",
-        "--component-badge-accent-blue-foreground",
-        "--component-badge-accent-blue-border",
-        "--component-badge-accent-violet-background",
-        "--component-badge-accent-violet-foreground",
-        "--component-badge-accent-violet-border",
-        "--component-badge-accent-amber-background",
-        "--component-badge-accent-amber-foreground",
-        "--component-badge-accent-amber-border",
-        "--component-badge-radius",
-        "--component-badge-padding-x",
-        "--component-badge-padding-y",
+        "--color-background-alt",
+        "--color-foreground-alt",
+        "--color-border-alt",
+        "--color-background-success-alt",
+        "--color-foreground-success",
+        "--color-background-warning-alt",
+        "--color-foreground-warning",
+        "--color-background-danger-alt",
+        "--color-foreground-danger",
+        "--color-background-info-alt",
+        "--color-foreground-info",
+        "--color-background-accent-green",
+        "--color-foreground-accent-green",
+        "--color-background-accent-blue",
+        "--color-foreground-accent-blue",
+        "--color-background-accent-violet",
+        "--color-foreground-accent-violet",
+        "--color-background-accent-amber",
+        "--color-foreground-accent-amber",
+        "--radius-full",
+        "--spacing-inline",
+        "--spacing-micro",
         "--font-label-small"
       ],
       "rules": [
-        "Never use hex values. Always use var(--color-*) or var(--component-*)",
+        "Never use hex values. Always use var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)",
-        "Variants use a subtle style: a tinted background with accent-colored text, not a solid fill. component-badge-{variant}-foreground is the accent color itself (e.g. foreground-success), not foreground-on-{variant}.",
-        "To make a variant solid instead (bright fill + dark text), repoint its component tokens to background-{variant} and foreground-on-{variant}; consumer code does not change."
+        "Variants use a subtle style: a tinted background with accent-colored text, not a solid fill. The variant foreground is the accent color itself (e.g. foreground-accent-green), not foreground-on-{variant}.",
+        "To make a variant solid instead (bright fill + dark text), point the variant's styles in badge.ts at background-{variant} and foreground-on-{variant}."
       ],
       "examples": [
         {
@@ -504,28 +491,16 @@
         }
       ],
       "tokensUsed": [
-        "--component-button-primary-background-default",
-        "--component-button-primary-background-hover",
-        "--component-button-primary-background-active",
-        "--component-button-primary-foreground-default",
-        "--component-button-primary-border-default",
-        "--component-button-primary-border-hover",
-        "--component-button-primary-border-active",
-        "--component-button-secondary-background-default",
-        "--component-button-secondary-background-hover",
-        "--component-button-secondary-foreground-default",
-        "--component-button-secondary-border-default",
-        "--component-button-secondary-border-hover",
-        "--component-button-ghost-background-default",
-        "--component-button-ghost-background-hover",
-        "--component-button-ghost-foreground-default",
-        "--component-button-ghost-border-default",
-        "--component-button-ghost-border-hover",
-        "--component-button-danger-background-default",
-        "--component-button-danger-background-hover",
-        "--component-button-danger-foreground-default",
-        "--component-button-danger-border-default",
-        "--component-button-danger-border-hover",
+        "--color-background-action",
+        "--color-background-action-hover",
+        "--color-background-action-active",
+        "--color-foreground-on-action",
+        "--color-background-alt",
+        "--color-foreground-action",
+        "--color-border-action",
+        "--color-background-default",
+        "--color-background-danger-alt",
+        "--color-foreground-danger",
         "--color-background-disabled",
         "--color-foreground-disabled",
         "--color-border-disabled",
@@ -542,7 +517,7 @@
         "--motion-easing-default"
       ],
       "rules": [
-        "Never use hex values. Always use var(--color-*) or var(--component-*)",
+        "Never use hex values. Always use var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)",
         "Primary button: one per page maximum",
@@ -661,7 +636,7 @@
         "--font-label-small"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
+        "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)",
         "Use background.alt for surface separation rather than a shadow token"
@@ -766,24 +741,23 @@
       ],
       "tokensUsed": [
         "--spacing-tight",
-        "--component-checkbox-border-default",
-        "--component-checkbox-radius",
-        "--component-checkbox-background-unchecked",
+        "--color-border-default",
+        "--radius-sm",
+        "--color-background-default",
         "--motion-duration-instant",
         "--motion-easing-default",
-        "--component-checkbox-border-hover",
-        "--component-checkbox-background-checked",
-        "--component-checkbox-border-checked",
-        "--component-checkbox-background-disabled",
-        "--component-checkbox-border-disabled",
-        "--component-checkbox-border-focus",
-        "--component-checkbox-foreground-checkmark",
+        "--color-border-hover",
+        "--color-background-action",
+        "--color-background-disabled",
+        "--color-border-disabled",
+        "--color-border-focus",
+        "--color-foreground-on-action",
         "--font-label-medium",
-        "--component-checkbox-foreground-label",
-        "--component-checkbox-foreground-disabled"
+        "--color-foreground-alt",
+        "--color-foreground-disabled"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
+        "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)",
         "Always provide a label (via the label prop or slotted content) so the control is named"
@@ -898,7 +872,7 @@
         "--spacing-inline"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
+        "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)",
         "Open and close the dialog via the open property or the show()/close() methods — both keep state and the rr-dialog-close event in sync"
@@ -982,7 +956,7 @@
         "--icon-size-xl"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
+        "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)",
         "Icon color is inherited from the parent — set color on the surrounding element, not the icon"
@@ -1136,32 +1110,26 @@
         }
       ],
       "tokensUsed": [
-        "--component-input-background-default",
-        "--component-input-background-hover",
-        "--component-input-background-focus",
-        "--component-input-background-disabled",
-        "--component-input-background-error",
-        "--component-input-foreground-value",
-        "--component-input-foreground-placeholder",
-        "--component-input-foreground-label",
-        "--component-input-foreground-label-required",
-        "--component-input-foreground-helper",
-        "--component-input-foreground-error",
-        "--component-input-foreground-disabled",
-        "--component-input-border-default",
-        "--component-input-border-hover",
-        "--component-input-border-focus",
-        "--component-input-border-error",
-        "--component-input-border-disabled",
-        "--component-input-radius",
-        "--component-input-padding-x",
-        "--component-input-padding-y",
+        "--color-background-default",
+        "--color-background-alt",
+        "--color-foreground-default",
+        "--color-foreground-muted",
+        "--color-foreground-alt",
+        "--color-foreground-danger",
+        "--color-foreground-disabled",
+        "--color-border-default",
+        "--color-border-hover",
+        "--color-border-focus",
+        "--color-border-disabled",
+        "--radius-sm",
+        "--spacing-element",
+        "--spacing-tight",
         "--font-label-medium",
         "--font-body-large",
         "--font-label-small"
       ],
       "rules": [
-        "Never use hex values. Always use var(--color-*) or var(--component-*)",
+        "Never use hex values. Always use var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)"
       ],
@@ -1282,7 +1250,7 @@
         "--color-foreground-muted"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
+        "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)",
         "Links are underlined by default and lose the underline on hover — do not override this inverted convention"
@@ -1585,7 +1553,7 @@
         "--motion-easing-move"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
+        "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)",
         "Always provide a label (or an external visible label) so the progressbar has an accessible name"
@@ -1673,16 +1641,15 @@
         }
       ],
       "tokensUsed": [
-        "--component-radio-border-default",
-        "--component-radio-background-unchecked",
-        "--component-radio-border-hover",
-        "--component-radio-border-checked",
-        "--component-radio-background-disabled",
-        "--component-radio-border-disabled",
-        "--component-radio-background-checked",
-        "--component-radio-foreground-disabled",
-        "--component-radio-border-focus",
-        "--component-radio-foreground-label",
+        "--color-border-default",
+        "--color-background-default",
+        "--color-border-hover",
+        "--color-background-action",
+        "--color-background-disabled",
+        "--color-border-disabled",
+        "--color-foreground-disabled",
+        "--color-border-focus",
+        "--color-foreground-alt",
         "--font-label-medium",
         "--spacing-tight",
         "--motion-duration-instant",
@@ -1690,7 +1657,7 @@
         "--motion-easing-enter"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
+        "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)",
         "Always use rr-radio inside an rr-radio-group — selection, name, and form value are managed by the group"
@@ -1807,16 +1774,15 @@
       ],
       "tokensUsed": [
         "--font-label-medium",
-        "--component-radio-foreground-label",
+        "--color-foreground-alt",
         "--spacing-tight",
-        "--component-radio-foreground-disabled",
+        "--color-foreground-disabled",
         "--spacing-element",
         "--font-label-small",
-        "--component-input-foreground-error",
-        "--component-input-foreground-label-required"
+        "--color-foreground-danger"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
+        "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)",
         "Place rr-radio elements in the default slot; the group manages their checked state and form value"
@@ -1944,32 +1910,30 @@
       ],
       "tokensUsed": [
         "--font-label-medium",
-        "--component-input-foreground-label",
-        "--component-input-foreground-label-required",
+        "--color-foreground-alt",
+        "--color-foreground-danger",
         "--font-body-large",
-        "--component-input-foreground-value",
-        "--component-input-background-default",
-        "--component-input-border-default",
-        "--component-input-radius",
-        "--component-input-padding-y",
-        "--component-input-padding-x",
+        "--color-foreground-default",
+        "--color-background-default",
+        "--color-border-default",
+        "--radius-sm",
+        "--spacing-tight",
+        "--spacing-element",
         "--motion-duration-instant",
         "--motion-easing-default",
-        "--component-input-border-hover",
-        "--component-input-border-focus",
-        "--component-input-background-disabled",
-        "--component-input-border-disabled",
-        "--component-input-foreground-disabled",
-        "--component-input-border-error",
+        "--color-border-hover",
+        "--color-border-focus",
+        "--color-background-alt",
+        "--color-border-disabled",
+        "--color-foreground-disabled",
         "--font-label-small",
-        "--component-input-foreground-helper",
-        "--component-input-foreground-error"
+        "--color-foreground-muted"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
+        "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)",
-        "Reuses the shared --component-input-* token set (covers text input, textarea, and select)"
+        "Reuses the input’s semantic token recipe (shared across text input, textarea, and select)"
       ],
       "examples": [
         {
@@ -2051,7 +2015,7 @@
         "--radius-default"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
+        "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)",
         "Decorative placeholder only — the inner element is role=presentation and aria-hidden, so it is excluded from the accessibility tree"
@@ -2116,7 +2080,7 @@
         "--color-border-elevated"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
+        "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)"
       ],
@@ -2210,7 +2174,7 @@
         "--color-foreground-disabled"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
+        "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)",
         "Do not set selected directly — control the active tab via rr-tab-list[value]."
@@ -2289,7 +2253,7 @@
         "--color-border-alt"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
+        "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)",
         "Tab panels are managed by the consuming app — listen for the change event and show/hide content accordingly."
@@ -2602,19 +2566,16 @@
       "events": [],
       "cssParts": [],
       "tokensUsed": [
-        "--component-tag-default-background",
-        "--component-tag-default-foreground",
-        "--component-tag-default-border",
-        "--component-tag-subtle-background",
-        "--component-tag-subtle-foreground",
-        "--component-tag-subtle-border",
-        "--component-tag-radius",
-        "--component-tag-padding-x",
-        "--component-tag-padding-y",
+        "--color-foreground-alt",
+        "--color-foreground-muted",
+        "--color-border-elevated",
+        "--radius-sm",
+        "--spacing-tight",
+        "--spacing-micro",
         "--font-label-small"
       ],
       "rules": [
-        "Never use hex values. Always use var(--color-*) or var(--component-*)",
+        "Never use hex values. Always use var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)",
         "The tag is the deliberate inverse of the badge: outlined (transparent fill, square radius.sm) vs the badge's filled pill. Use badge for status, tag for skills/categories/metadata.",
@@ -2749,30 +2710,27 @@
       ],
       "tokensUsed": [
         "--font-label-medium",
-        "--component-input-foreground-label",
-        "--component-input-foreground-label-required",
+        "--color-foreground-alt",
+        "--color-foreground-danger",
         "--font-body-large",
-        "--component-input-foreground-value",
-        "--component-input-background-default",
-        "--component-input-border-default",
-        "--component-input-radius",
-        "--component-input-padding-y",
-        "--component-input-padding-x",
+        "--color-foreground-default",
+        "--color-background-default",
+        "--color-border-default",
+        "--radius-sm",
+        "--spacing-tight",
+        "--spacing-element",
         "--motion-duration-instant",
         "--motion-easing-default",
-        "--component-input-foreground-placeholder",
-        "--component-input-border-hover",
-        "--component-input-border-focus",
-        "--component-input-background-disabled",
-        "--component-input-border-disabled",
-        "--component-input-foreground-disabled",
-        "--component-input-border-error",
-        "--font-label-small",
-        "--component-input-foreground-helper",
-        "--component-input-foreground-error"
+        "--color-foreground-muted",
+        "--color-border-hover",
+        "--color-border-focus",
+        "--color-background-alt",
+        "--color-border-disabled",
+        "--color-foreground-disabled",
+        "--font-label-small"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
+        "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)",
         "Setting error-text marks the field invalid via ElementInternals.setValidity and replaces the helper text."
@@ -3030,25 +2988,23 @@
       "tokensUsed": [
         "--spacing-tight",
         "--radius-full",
-        "--component-toggle-track-border-off",
-        "--component-toggle-track-background-off",
-        "--component-toggle-track-background-on",
-        "--component-toggle-track-border-on",
-        "--component-toggle-track-background-disabled",
-        "--component-toggle-track-border-disabled",
+        "--color-border-default",
+        "--color-background-alt",
+        "--color-background-action",
+        "--color-background-disabled",
+        "--color-border-disabled",
         "--motion-duration-instant",
         "--motion-easing-default",
-        "--component-toggle-knob-background-off",
+        "--color-foreground-muted",
         "--motion-easing-move",
-        "--component-toggle-knob-background-on",
-        "--component-toggle-knob-background-disabled",
+        "--color-foreground-on-action",
+        "--color-foreground-disabled",
         "--color-border-focus",
         "--font-label-medium",
-        "--component-toggle-foreground-label",
-        "--component-toggle-foreground-disabled"
+        "--color-foreground-alt"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
+        "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
         "All text/background pairings must pass WCAG AA (4.5:1)"
       ],
@@ -3439,28 +3395,8 @@
         "declarations": [
           {
             "kind": "class",
-            "description": "A status badge / chip component.\n\nUses component-level design tokens for all visual properties.\nBrand theming cascades automatically via CSS custom properties on `:root`.",
+            "description": "A status badge / chip component.\n\nUses semantic design tokens for all visual properties.\nBrand theming cascades automatically via CSS custom properties on `:root`.",
             "name": "RrBadge",
-            "cssProperties": [
-              {
-                "name": "--component-badge-{variant}-background"
-              },
-              {
-                "name": "--component-badge-{variant}-foreground"
-              },
-              {
-                "name": "--component-badge-{variant}-border"
-              },
-              {
-                "name": "--component-badge-radius"
-              },
-              {
-                "name": "--component-badge-padding-x"
-              },
-              {
-                "name": "--component-badge-padding-y"
-              }
-            ],
             "slots": [
               {
                 "description": "Badge label text",
@@ -5890,7 +5826,7 @@
         "declarations": [
           {
             "kind": "class",
-            "description": "A form-associated select dropdown with label, helper text, and error state.\n\nPass options via the `options` property (array of `{ value, label, disabled? }`).\nUses `ElementInternals` for native form participation and `delegatesFocus`\nso the host forwards focus to the inner `<select>`.\n\nReuses `--component-input-*` tokens — the input token set covers\ntext input, textarea, and select (see tokens/components/input.tokens.json).",
+            "description": "A form-associated select dropdown with label, helper text, and error state.\n\nPass options via the `options` property (array of `{ value, label, disabled? }`).\nUses `ElementInternals` for native form participation and `delegatesFocus`\nso the host forwards focus to the inner `<select>`.\n\nReuses the input’s semantic token recipe — it covers\ntext input, textarea, and select (see tokens/components/input.tokens.json).",
             "name": "RrSelect",
             "cssParts": [
               {
@@ -6913,28 +6849,8 @@
         "declarations": [
           {
             "kind": "class",
-            "description": "An outlined, uppercase tag / chip component.\n\nThe deliberate inverse of `<rr-badge>`: where the badge is a filled pill for\nstatus, the tag is a square-cornered (radius.sm), transparent-filled, bordered\nlabel for skills, categories, and metadata. Content is rendered UPPERCASE with\nall-caps letter-spacing, so authors pass normal-case text.\n\nUses component-level design tokens for all visual properties. Brand theming\ncascades automatically via CSS custom properties on `:root`.",
+            "description": "An outlined, uppercase tag / chip component.\n\nThe deliberate inverse of `<rr-badge>`: where the badge is a filled pill for\nstatus, the tag is a square-cornered (radius.sm), transparent-filled, bordered\nlabel for skills, categories, and metadata. Content is rendered UPPERCASE with\nall-caps letter-spacing, so authors pass normal-case text.\n\nUses semantic design tokens for all visual properties. Brand theming\ncascades automatically via CSS custom properties on `:root`.",
             "name": "RrTag",
-            "cssProperties": [
-              {
-                "name": "--component-tag-{variant}-background"
-              },
-              {
-                "name": "--component-tag-{variant}-foreground"
-              },
-              {
-                "name": "--component-tag-{variant}-border"
-              },
-              {
-                "name": "--component-tag-radius"
-              },
-              {
-                "name": "--component-tag-padding-x"
-              },
-              {
-                "name": "--component-tag-padding-y"
-              }
-            ],
             "slots": [
               {
                 "description": "Tag label text",

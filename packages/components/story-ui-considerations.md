@@ -32,6 +32,8 @@ generated from `design-system.json` and `ai/rules.md`.
 8. No hardcoded font sizes — use var(--font-size-*) primitives or semantic font shorthand tokens
 9. Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer
 10. Motion must respect `prefers-reduced-motion` (WCAG 2.3.3). The built brand CSS zeroes `--motion-duration-*` under `reduce`, so token-driven transitions stop automatically — never hardcode a transition/animation duration that bypasses the tokens. Any infinite animation (spin, shimmer, pulse) cannot be reached by the token override and MUST carry its own `@media (prefers-reduced-motion: reduce)` guard that stops or damps it
+11. Token custom properties (`--color-*`, `--font-*`, `--spacing-*`, `--radius-*`, etc.) are already defined at `:root` by the site's loaded brand CSS — never declare or redeclare one yourself, not even with its correct value, and not to make a standalone snippet self-contained; reference it with `var(--token-name)` and assume the surrounding page provides the definition
+12. Never partially override a font shorthand token (`font: var(--font-*)`) with an individual `font-size`, `font-weight`, or `line-height` declaration — pick a different shorthand token for the size/weight you need, or leave the shorthand alone
 
 > Generated stories that violate these are rejected by `npm run validate`
 > (rules live in `scripts/rules.mjs`). Never emit hex literals, never reference
@@ -54,7 +56,7 @@ Inline notification banner for success, warning, danger, and info messages. Opti
 **Events:** `close`
 
 **Component rules:**
-- Never use hex values — always var(--color-*) or var(--component-*)
+- Never use hex values — always var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
 - Use alert for form-level or system feedback; for field-level validation use rr-input error-text instead
@@ -74,7 +76,7 @@ Circular identity surface showing initials or an image, with size and accent-col
 **Slots:** (default) — Optional custom content to replace initials (e.g. an icon).
 
 **Component rules:**
-- Never use hex values — always var(--color-*) or var(--component-*)
+- Never use hex values — always var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
 - Always provide name (or alt when using src) so the avatar has an accessible label
@@ -91,11 +93,11 @@ semantic meaning. Accent variants are decorative emphasis tags. |
 **Slots:** (default) — Badge label text.
 
 **Component rules:**
-- Never use hex values. Always use var(--color-*) or var(--component-*)
+- Never use hex values. Always use var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
-- Variants use a subtle style: a tinted background with accent-colored text, not a solid fill. component-badge-{variant}-foreground is the accent color itself (e.g. foreground-success), not foreground-on-{variant}.
-- To make a variant solid instead (bright fill + dark text), repoint its component tokens to background-{variant} and foreground-on-{variant}; consumer code does not change.
+- Variants use a subtle style: a tinted background with accent-colored text, not a solid fill. The variant foreground is the accent color itself (e.g. foreground-accent-green), not foreground-on-{variant}.
+- To make a variant solid instead (bright fill + dark text), point the variant's styles in badge.ts at background-{variant} and foreground-on-{variant}.
 
 ### `<rr-button>`
 
@@ -115,7 +117,7 @@ Button with primary/secondary/danger/ghost variants, three sizes, loading spinne
 **Events:** `click`
 
 **Component rules:**
-- Never use hex values. Always use var(--color-*) or var(--component-*)
+- Never use hex values. Always use var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
 - Primary button: one per page maximum
@@ -133,7 +135,7 @@ Header and footer padding is always fixed at `tight/element`. |
 **Slots:** `header` — Card heading row (title, actions, avatar). Hidden when empty.; (default) — Card body content.; `footer` — Card footer row (secondary actions, metadata). Hidden when empty.
 
 **Component rules:**
-- Never use hex values — always var(--color-*) or var(--component-*)
+- Never use hex values — always var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
 - Use background.alt for surface separation rather than a shadow token
@@ -156,7 +158,7 @@ Form-associated checkbox with checked, indeterminate, and disabled states. Backe
 **Events:** `change`
 
 **Component rules:**
-- Never use hex values — always var(--color-*) or var(--component-*)
+- Never use hex values — always var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
 - Always provide a label (via the label prop or slotted content) so the control is named
@@ -176,7 +178,7 @@ Modal dialog built on the native <dialog> element with focus trap and Escape-to-
 **Events:** `rr-dialog-close`
 
 **Component rules:**
-- Never use hex values — always var(--color-*) or var(--component-*)
+- Never use hex values — always var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
 - Open and close the dialog via the open property or the show()/close() methods — both keep state and the rr-dialog-close event in sync
@@ -193,7 +195,7 @@ Sized, accessible wrapper for inline SVG icons. Decorative by default; labelled 
 **Slots:** (default) — The SVG icon element to render.
 
 **Component rules:**
-- Never use hex values — always var(--color-*) or var(--component-*)
+- Never use hex values — always var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
 - Icon color is inherited from the parent — set color on the surrounding element, not the icon
@@ -220,7 +222,7 @@ Form-associated text input with label, helper/error text, and ElementInternals f
 **Events:** `input`, `change`
 
 **Component rules:**
-- Never use hex values. Always use var(--color-*) or var(--component-*)
+- Never use hex values. Always use var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
 
@@ -239,7 +241,7 @@ Anchor enforcing the design system link style — underlined by default, underli
 **Slots:** (default) — Link label content.
 
 **Component rules:**
-- Never use hex values — always var(--color-*) or var(--component-*)
+- Never use hex values — always var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
 - Links are underlined by default and lose the underline on hover — do not override this inverted convention
@@ -298,7 +300,7 @@ Horizontal progress bar with determinate and indeterminate modes, using native r
 | `label` | string | `` | Accessible label, applied as aria-label. Required when no visible label is nearby. |
 
 **Component rules:**
-- Never use hex values — always var(--color-*) or var(--component-*)
+- Never use hex values — always var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
 - Always provide a label (or an external visible label) so the progressbar has an accessible name
@@ -318,7 +320,7 @@ Individual radio button. Must be used inside rr-radio-group, which manages name,
 **Events:** `rr-radio-change`
 
 **Component rules:**
-- Never use hex values — always var(--color-*) or var(--component-*)
+- Never use hex values — always var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
 - Always use rr-radio inside an rr-radio-group — selection, name, and form value are managed by the group
@@ -342,7 +344,7 @@ Form-associated group of radio buttons. Renders a fieldset/legend and manages se
 **Events:** `change`
 
 **Component rules:**
-- Never use hex values — always var(--color-*) or var(--component-*)
+- Never use hex values — always var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
 - Place rr-radio elements in the default slot; the group manages their checked state and form value
@@ -365,10 +367,10 @@ Form-associated select dropdown with label, helper text, and error state. Option
 **Events:** `change`
 
 **Component rules:**
-- Never use hex values — always var(--color-*) or var(--component-*)
+- Never use hex values — always var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
-- Reuses the shared --component-input-* token set (covers text input, textarea, and select)
+- Reuses the input’s semantic token recipe (shared across text input, textarea, and select)
 
 ### `<rr-skeleton>`
 
@@ -381,7 +383,7 @@ Animated shimmer placeholder for loading states. Text, circular, and rectangular
 | `height` | string | `` | CSS height value. Defaults to 40px for circular, otherwise 1em. |
 
 **Component rules:**
-- Never use hex values — always var(--color-*) or var(--component-*)
+- Never use hex values — always var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
 - Decorative placeholder only — the inner element is role=presentation and aria-hidden, so it is excluded from the accessibility tree
@@ -396,7 +398,7 @@ Animated circular loading indicator that announces its status to screen readers.
 | `label` | string | `Loading` | Accessible label announced to screen readers via the status region. |
 
 **Component rules:**
-- Never use hex values — always var(--color-*) or var(--component-*)
+- Never use hex values — always var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
 
@@ -415,7 +417,7 @@ A single tab button used inside rr-tab-list; its selection state is managed by t
 **Events:** `rr-tab-select`
 
 **Component rules:**
-- Never use hex values — always var(--color-*) or var(--component-*)
+- Never use hex values — always var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
 - Do not set selected directly — control the active tab via rr-tab-list[value].
@@ -434,7 +436,7 @@ Accessible tab strip that wraps rr-tab elements, managing selection and arrow-ke
 **Events:** `change`
 
 **Component rules:**
-- Never use hex values — always var(--color-*) or var(--component-*)
+- Never use hex values — always var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
 - Tab panels are managed by the consuming app — listen for the change event and show/hide content accordingly.
@@ -505,7 +507,7 @@ elevated-border) for dense or secondary contexts. |
 **Slots:** (default) — Tag label text. Rendered uppercase via CSS — pass normal-case text.
 
 **Component rules:**
-- Never use hex values. Always use var(--color-*) or var(--component-*)
+- Never use hex values. Always use var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
 - The tag is the deliberate inverse of the badge: outlined (transparent fill, square radius.sm) vs the badge's filled pill. Use badge for status, tag for skills/categories/metadata.
@@ -534,7 +536,7 @@ Form-associated multi-line text area with label, helper text, and error state.
 **Events:** `input`, `change`
 
 **Component rules:**
-- Never use hex values — always var(--color-*) or var(--component-*)
+- Never use hex values — always var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
 - Setting error-text marks the field invalid via ElementInternals.setValidity and replaces the helper text.
@@ -578,7 +580,7 @@ Form-associated toggle switch for binary on/off settings.
 **Events:** `change`
 
 **Component rules:**
-- Never use hex values — always var(--color-*) or var(--component-*)
+- Never use hex values — always var(--color-*)
 - Never reference --primitive-* tokens in component code
 - All text/background pairings must pass WCAG AA (4.5:1)
 

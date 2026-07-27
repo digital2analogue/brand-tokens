@@ -68,16 +68,15 @@
   ],
   "tokensUsed": [
     "--font-label-medium",
-    "--component-radio-foreground-label",
+    "--color-foreground-alt",
     "--spacing-tight",
-    "--component-radio-foreground-disabled",
+    "--color-foreground-disabled",
     "--spacing-element",
     "--font-label-small",
-    "--component-input-foreground-error",
-    "--component-input-foreground-label-required"
+    "--color-foreground-danger"
   ],
   "rules": [
-    "Never use hex values — always var(--color-*) or var(--component-*)",
+    "Never use hex values — always var(--color-*)",
     "Never reference --primitive-* tokens in component code",
     "All text/background pairings must pass WCAG AA (4.5:1)",
     "Place rr-radio elements in the default slot; the group manages their checked state and form value"

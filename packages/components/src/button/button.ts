@@ -36,13 +36,13 @@ export class RrButton extends LitElement {
       align-items: center;
       justify-content: center;
       gap: var(--spacing-tight);
-      border: 1px solid var(--component-button-primary-border-default);
+      border: 1px solid var(--color-background-action);
       border-radius: var(--radius-default);
       font: var(--font-label-strong-medium);
       cursor: pointer;
       padding: var(--spacing-tight) var(--spacing-element);
-      background: var(--component-button-primary-background-default);
-      color: var(--component-button-primary-foreground-default);
+      background: var(--color-background-action);
+      color: var(--color-foreground-on-action);
       transition:
         background-color var(--motion-duration-instant) var(--motion-easing-default),
         border-color var(--motion-duration-instant) var(--motion-easing-default);
@@ -52,13 +52,13 @@ export class RrButton extends LitElement {
     }
 
     button:hover {
-      background: var(--component-button-primary-background-hover);
-      border-color: var(--component-button-primary-border-hover);
+      background: var(--color-background-action-hover);
+      border-color: var(--color-background-action-hover);
     }
 
     button:active {
-      background: var(--component-button-primary-background-active);
-      border-color: var(--component-button-primary-border-active);
+      background: var(--color-background-action-active);
+      border-color: var(--color-background-action-active);
     }
 
     button:focus-visible {
@@ -79,35 +79,35 @@ export class RrButton extends LitElement {
 
     /* --- Variant: secondary --- */
     :host([variant='secondary']) button {
-      background: var(--component-button-secondary-background-default);
-      color: var(--component-button-secondary-foreground-default);
-      border-color: var(--component-button-secondary-border-default);
+      background: transparent;
+      color: var(--color-foreground-action);
+      border-color: var(--color-border-action);
     }
     :host([variant='secondary']) button:hover {
-      background: var(--component-button-secondary-background-hover);
-      border-color: var(--component-button-secondary-border-hover);
+      background: var(--color-background-alt);
+      border-color: var(--color-border-action);
     }
 
     /* --- Variant: danger --- */
     :host([variant='danger']) button {
-      background: var(--component-button-danger-background-default);
-      color: var(--component-button-danger-foreground-default);
-      border-color: var(--component-button-danger-border-default);
+      background: var(--color-background-default);
+      color: var(--color-foreground-danger);
+      border-color: var(--color-foreground-danger);
     }
     :host([variant='danger']) button:hover {
-      background: var(--component-button-danger-background-hover);
-      border-color: var(--component-button-danger-border-hover);
+      background: var(--color-background-danger-alt);
+      border-color: var(--color-foreground-danger);
     }
 
     /* --- Variant: ghost --- */
     :host([variant='ghost']) button {
-      background: var(--component-button-ghost-background-default);
-      color: var(--component-button-ghost-foreground-default);
-      border-color: var(--component-button-ghost-border-default);
+      background: transparent;
+      color: var(--color-foreground-action);
+      border-color: transparent;
     }
     :host([variant='ghost']) button:hover {
-      background: var(--component-button-ghost-background-hover);
-      border-color: var(--component-button-ghost-border-hover);
+      background: var(--color-background-alt);
+      border-color: transparent;
     }
 
     /* --- Disabled --- */

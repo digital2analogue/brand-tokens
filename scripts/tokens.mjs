@@ -87,7 +87,7 @@ export async function loadTokens() {
   const baseRefs = [];
   await scan("tokens/primitives/**/*.tokens.json", base, baseRefs);
   await scan("tokens/semantic/**/*.tokens.json", base, baseRefs);
-  await scan("tokens/components/**/*.tokens.json", base, baseRefs);
+  // The component tier was removed in #114 — two tiers only: primitives → semantic.
 
   const brands = new Map();
   const brandRefs = new Map();
