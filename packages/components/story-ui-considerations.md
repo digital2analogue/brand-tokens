@@ -83,7 +83,7 @@ Circular identity surface showing initials or an image, with size and accent-col
 
 ### `<rr-badge>`
 
-Status badge and accent chip. 9 variants map to component tokens; brand theming cascades via CSS custom properties.
+Status badge and accent chip. 9 variants styled by semantic tokens; brand theming cascades via CSS custom properties.
 
 | Attribute | Type | Default | Notes |
 |---|---|---|---|
