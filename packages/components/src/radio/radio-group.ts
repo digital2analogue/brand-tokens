@@ -38,7 +38,7 @@ export class RrRadioGroup extends LitElement {
     legend {
       display: block;
       font: var(--font-label-medium);
-      color: var(--component-radio-foreground-label);
+      color: var(--color-foreground-alt);
       margin-bottom: var(--spacing-tight);
       padding: 0;
       float: none;
@@ -46,7 +46,7 @@ export class RrRadioGroup extends LitElement {
     }
 
     :host([disabled]) legend {
-      color: var(--component-radio-foreground-disabled);
+      color: var(--color-foreground-disabled);
     }
 
     .options {
@@ -63,7 +63,7 @@ export class RrRadioGroup extends LitElement {
 
     .error {
       font: var(--font-label-small);
-      color: var(--component-input-foreground-error);
+      color: var(--color-foreground-danger);
       margin-top: 4px;
     }
   `;
@@ -149,7 +149,7 @@ export class RrRadioGroup extends LitElement {
       <fieldset part="fieldset" ?disabled=${this.disabled}>
         ${this.label
           ? html`<legend part="legend">${this.label}${this.required
-              ? html`<span aria-hidden="true" style="color:var(--component-input-foreground-label-required);margin-left:2px">*</span>`
+              ? html`<span aria-hidden="true" style="color:var(--color-foreground-danger);margin-left:2px">*</span>`
               : nothing}
             </legend>`
           : nothing}

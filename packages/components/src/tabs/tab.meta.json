@@ -32,7 +32,7 @@
     "--color-foreground-disabled"
   ],
   "rules": [
-    "Never use hex values — always var(--color-*) or var(--component-*)",
+    "Never use hex values — always var(--color-*)",
     "Never reference --primitive-* tokens in component code",
     "All text/background pairings must pass WCAG AA (4.5:1)",
     "Do not set selected directly — control the active tab via rr-tab-list[value]."

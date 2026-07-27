@@ -36,7 +36,7 @@
     "--color-border-alt"
   ],
   "rules": [
-    "Never use hex values — always var(--color-*) or var(--component-*)",
+    "Never use hex values — always var(--color-*)",
     "Never reference --primitive-* tokens in component code",
     "All text/background pairings must pass WCAG AA (4.5:1)",
     "Tab panels are managed by the consuming app — listen for the change event and show/hide content accordingly."

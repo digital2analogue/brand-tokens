@@ -60,10 +60,10 @@
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^--(color|font|spacing|radius|motion|shadow|icon|component)-",
+        "pattern": "^--(color|font|spacing|radius|motion|shadow|icon)-",
         "not": { "pattern": "^--primitive-" }
       },
-      "description": "CSS custom properties this component references. Must be semantic or component-level tokens — never primitives."
+      "description": "CSS custom properties this component references. Must be semantic tokens — never primitives (the component tier was removed in #114)."
     },
     "rules": {
       "type": "array",

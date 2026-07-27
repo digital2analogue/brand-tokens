@@ -11,6 +11,27 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-07-27 — Component tier deleted (#114): the two-tier model is live
+
+**What:** Executed #114. All 144 component tokens (139 at the original audit plus the
+ghost-button family added 2026-07-15/16) are deleted with `tokens/components/`; the 12
+consuming components now reference the semantic roles their component tokens aliased —
+pure 1:1 substitution, byte-identical resolved values, so visual baselines are unchanged
+by construction. The 7 non-alias values resolved as: `component.avatar.size-lg` (40px) →
+an inline intrinsic dimension in `avatar.ts` (component-intrinsic sizing is not brand
+material; no semantic size token invented for one consumer); the six transparent fills
+(button secondary/ghost, tag default/subtle) → the CSS `transparent` keyword (a keyword,
+not a color literal — no token needed). Regression fence: a new `no-component-token`
+detector in `scripts/rules.mjs` (propagates to validate, `check_usage`, and drift-lint,
+with #151 fixtures) plus `meta.schema.json` no longer admitting `--component-*` in
+`tokensUsed` — the tier cannot silently return. **Why:** the tier's re-pointable hook was
+never exercised — zero brand divergence across all 144 tokens (see #114's audit); it was
+pure carrying cost, and stage-2 anatomy (#156) needs bindings to point at exactly one
+semantic layer. **Alternative considered:** keeping the tier dormant as a future hook —
+rejected; #114 records that reintroduction-for-specific-tokens remains possible without
+carrying 144 unused pass-throughs. **Status:** live in-repo; package 0.6.0 publish +
+consumer bumps follow as #114's stage 3.
+
 ## 2026-07-27 — Governance eval run (#153): governed 95% clean vs ungoverned 70% clean
 
 **What:** Ran the #153 governed-vs-ungoverned A/B: the 20-prompt set in

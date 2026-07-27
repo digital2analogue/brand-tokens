@@ -5,53 +5,103 @@
   "summary": "Form-associated checkbox with checked, indeterminate, and disabled states. Backed by ElementInternals.",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
-    { "name": "checked", "type": "boolean", "default": "false" },
-    { "name": "indeterminate", "type": "boolean", "default": "false" },
-    { "name": "disabled", "type": "boolean", "default": "false" },
-    { "name": "value", "type": "string", "default": "on" },
-    { "name": "name", "type": "string", "default": "" },
-    { "name": "label", "type": "string", "default": "" }
+    {
+      "name": "checked",
+      "type": "boolean",
+      "default": "false"
+    },
+    {
+      "name": "indeterminate",
+      "type": "boolean",
+      "default": "false"
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false"
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": "on"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": ""
+    }
   ],
   "slots": [
-    { "name": "default", "description": "Label text (alternative to the label property)." }
+    {
+      "name": "default",
+      "description": "Label text (alternative to the label property)."
+    }
   ],
   "events": [
-    { "name": "change", "detail": "Fired when the checked state changes." }
+    {
+      "name": "change",
+      "detail": "Fired when the checked state changes."
+    }
   ],
   "cssParts": [
-    { "name": "box", "description": "The visual checkbox square." },
-    { "name": "label", "description": "The label text element." }
+    {
+      "name": "box",
+      "description": "The visual checkbox square."
+    },
+    {
+      "name": "label",
+      "description": "The label text element."
+    }
   ],
   "tokensUsed": [
     "--spacing-tight",
-    "--component-checkbox-border-default",
-    "--component-checkbox-radius",
-    "--component-checkbox-background-unchecked",
+    "--color-border-default",
+    "--radius-sm",
+    "--color-background-default",
     "--motion-duration-instant",
     "--motion-easing-default",
-    "--component-checkbox-border-hover",
-    "--component-checkbox-background-checked",
-    "--component-checkbox-border-checked",
-    "--component-checkbox-background-disabled",
-    "--component-checkbox-border-disabled",
-    "--component-checkbox-border-focus",
-    "--component-checkbox-foreground-checkmark",
+    "--color-border-hover",
+    "--color-background-action",
+    "--color-background-disabled",
+    "--color-border-disabled",
+    "--color-border-focus",
+    "--color-foreground-on-action",
     "--font-label-medium",
-    "--component-checkbox-foreground-label",
-    "--component-checkbox-foreground-disabled"
+    "--color-foreground-alt",
+    "--color-foreground-disabled"
   ],
   "rules": [
-    "Never use hex values — always var(--color-*) or var(--component-*)",
+    "Never use hex values — always var(--color-*)",
     "Never reference --primitive-* tokens in component code",
     "All text/background pairings must pass WCAG AA (4.5:1)",
     "Always provide a label (via the label prop or slotted content) so the control is named"
   ],
   "examples": [
-    { "title": "Unchecked", "html": "<rr-checkbox name=\"notify\" label=\"Send me notifications\"></rr-checkbox>" },
-    { "title": "Checked", "html": "<rr-checkbox name=\"agree\" label=\"I agree to the terms\" checked></rr-checkbox>" },
-    { "title": "Indeterminate", "html": "<rr-checkbox label=\"Select all\" indeterminate></rr-checkbox>" },
-    { "title": "Disabled", "html": "<rr-checkbox label=\"Unavailable option\" disabled></rr-checkbox>" },
-    { "title": "Slotted label", "html": "<rr-checkbox name=\"subscribe\">Subscribe</rr-checkbox>" }
+    {
+      "title": "Unchecked",
+      "html": "<rr-checkbox name=\"notify\" label=\"Send me notifications\"></rr-checkbox>"
+    },
+    {
+      "title": "Checked",
+      "html": "<rr-checkbox name=\"agree\" label=\"I agree to the terms\" checked></rr-checkbox>"
+    },
+    {
+      "title": "Indeterminate",
+      "html": "<rr-checkbox label=\"Select all\" indeterminate></rr-checkbox>"
+    },
+    {
+      "title": "Disabled",
+      "html": "<rr-checkbox label=\"Unavailable option\" disabled></rr-checkbox>"
+    },
+    {
+      "title": "Slotted label",
+      "html": "<rr-checkbox name=\"subscribe\">Subscribe</rr-checkbox>"
+    }
   ],
   "accessibility": {
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/",
@@ -72,5 +122,9 @@
       "aria-checked is set to \"mixed\" while indeterminate, otherwise \"true\"/\"false\""
     ]
   },
-  "figma": { "componentKey": "", "nodeId": "117:43", "codeConnectFile": "checkbox.figma.ts" }
+  "figma": {
+    "componentKey": "",
+    "nodeId": "117:43",
+    "codeConnectFile": "checkbox.figma.ts"
+  }
 }

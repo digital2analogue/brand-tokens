@@ -59,8 +59,8 @@ export class RrToggle extends LitElement {
       position: absolute;
       inset: 0;
       border-radius: var(--radius-full);
-      border: 1px solid var(--component-toggle-track-border-off);
-      background: var(--component-toggle-track-background-off);
+      border: 1px solid var(--color-border-default);
+      background: var(--color-background-alt);
       transition:
         background-color var(--motion-duration-instant) var(--motion-easing-default),
         border-color var(--motion-duration-instant) var(--motion-easing-default);
@@ -70,20 +70,20 @@ export class RrToggle extends LitElement {
     }
 
     :host([checked]) .track {
-      background: var(--component-toggle-track-background-on);
-      border-color: var(--component-toggle-track-border-on);
+      background: var(--color-background-action);
+      border-color: var(--color-background-action);
     }
 
     :host([disabled]) .track {
-      background: var(--component-toggle-track-background-disabled);
-      border-color: var(--component-toggle-track-border-disabled);
+      background: var(--color-background-disabled);
+      border-color: var(--color-border-disabled);
     }
 
     .knob {
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      background: var(--component-toggle-knob-background-off);
+      background: var(--color-foreground-muted);
       transition:
         transform var(--motion-duration-instant) var(--motion-easing-move),
         background-color var(--motion-duration-instant) var(--motion-easing-default);
@@ -92,11 +92,11 @@ export class RrToggle extends LitElement {
 
     :host([checked]) .knob {
       transform: translateX(16px);
-      background: var(--component-toggle-knob-background-on);
+      background: var(--color-foreground-on-action);
     }
 
     :host([disabled]) .knob {
-      background: var(--component-toggle-knob-background-disabled);
+      background: var(--color-foreground-disabled);
     }
 
     /* Focus ring on the track driven by the hidden input's focus state */
@@ -107,13 +107,13 @@ export class RrToggle extends LitElement {
 
     label {
       font: var(--font-label-medium);
-      color: var(--component-toggle-foreground-label);
+      color: var(--color-foreground-alt);
       cursor: inherit;
       line-height: 1.4;
     }
 
     :host([disabled]) label {
-      color: var(--component-toggle-foreground-disabled);
+      color: var(--color-foreground-disabled);
     }
   `;
 

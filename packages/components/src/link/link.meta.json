@@ -25,7 +25,7 @@
     "--color-foreground-muted"
   ],
   "rules": [
-    "Never use hex values — always var(--color-*) or var(--component-*)",
+    "Never use hex values — always var(--color-*)",
     "Never reference --primitive-* tokens in component code",
     "All text/background pairings must pass WCAG AA (4.5:1)",
     "Links are underlined by default and lose the underline on hover — do not override this inverted convention"

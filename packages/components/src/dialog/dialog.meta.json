@@ -37,7 +37,7 @@
     "--spacing-inline"
   ],
   "rules": [
-    "Never use hex values — always var(--color-*) or var(--component-*)",
+    "Never use hex values — always var(--color-*)",
     "Never reference --primitive-* tokens in component code",
     "All text/background pairings must pass WCAG AA (4.5:1)",
     "Open and close the dialog via the open property or the show()/close() methods — both keep state and the rr-dialog-close event in sync"

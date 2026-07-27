@@ -132,6 +132,13 @@ export const RULES = [
     find: (text) => matchAll(text, FONT_FAMILY).map((m) => m.trim()),
   },
   {
+    id: "no-component-token",
+    hardRule: 9,
+    message:
+      "The component token tier was removed (#114). Reference the semantic token the component token aliased",
+    find: (text) => matchAll(text, "--component-[a-z][a-z-]*"),
+  },
+  {
     id: "deprecated-token",
     hardRule: null,
     message:

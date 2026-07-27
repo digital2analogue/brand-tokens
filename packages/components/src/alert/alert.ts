@@ -32,32 +32,32 @@ export class RrAlert extends LitElement {
       display: flex;
       align-items: flex-start;
       gap: var(--spacing-tight);
-      padding: var(--component-alert-padding-y) var(--component-alert-padding-x);
-      border-radius: var(--component-alert-radius);
-      border: 1px solid var(--component-alert-success-border);
-      background: var(--component-alert-success-background);
-      color: var(--component-alert-success-foreground);
+      padding: var(--spacing-inline) var(--spacing-element);
+      border-radius: var(--radius-default);
+      border: 1px solid var(--color-background-success-alt);
+      background: var(--color-background-success-alt);
+      color: var(--color-foreground-success);
     }
 
     /* Variant: warning */
     :host([variant='warning']) .alert {
-      border-color: var(--component-alert-warning-border);
-      background: var(--component-alert-warning-background);
-      color: var(--component-alert-warning-foreground);
+      border-color: var(--color-background-warning-alt);
+      background: var(--color-background-warning-alt);
+      color: var(--color-foreground-warning);
     }
 
     /* Variant: danger */
     :host([variant='danger']) .alert {
-      border-color: var(--component-alert-danger-border);
-      background: var(--component-alert-danger-background);
-      color: var(--component-alert-danger-foreground);
+      border-color: var(--color-background-danger-alt);
+      background: var(--color-background-danger-alt);
+      color: var(--color-foreground-danger);
     }
 
     /* Variant: info */
     :host([variant='info']) .alert {
-      border-color: var(--component-alert-info-border);
-      background: var(--component-alert-info-background);
-      color: var(--component-alert-info-foreground);
+      border-color: var(--color-background-info-alt);
+      background: var(--color-background-info-alt);
+      color: var(--color-foreground-info);
     }
 
     .body {

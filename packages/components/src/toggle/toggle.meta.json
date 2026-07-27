@@ -5,52 +5,94 @@
   "summary": "Form-associated toggle switch for binary on/off settings.",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
-    { "name": "checked", "type": "boolean", "default": false },
-    { "name": "disabled", "type": "boolean", "default": false },
-    { "name": "value", "type": "string", "default": "on" },
-    { "name": "name", "type": "string", "default": "" },
-    { "name": "label", "type": "string", "default": "" }
+    {
+      "name": "checked",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": "on"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": ""
+    }
   ],
   "slots": [
-    { "name": "default", "description": "Label text (alternative to the label property)." }
+    {
+      "name": "default",
+      "description": "Label text (alternative to the label property)."
+    }
   ],
   "events": [
-    { "name": "change", "detail": "Fired (bubbles, composed) when the toggle state changes; read the new state from the element's checked property." }
+    {
+      "name": "change",
+      "detail": "Fired (bubbles, composed) when the toggle state changes; read the new state from the element's checked property."
+    }
   ],
   "cssParts": [
-    { "name": "track", "description": "The pill-shaped track element." },
-    { "name": "knob", "description": "The sliding knob element." },
-    { "name": "label", "description": "The label text element." }
+    {
+      "name": "track",
+      "description": "The pill-shaped track element."
+    },
+    {
+      "name": "knob",
+      "description": "The sliding knob element."
+    },
+    {
+      "name": "label",
+      "description": "The label text element."
+    }
   ],
   "tokensUsed": [
     "--spacing-tight",
     "--radius-full",
-    "--component-toggle-track-border-off",
-    "--component-toggle-track-background-off",
-    "--component-toggle-track-background-on",
-    "--component-toggle-track-border-on",
-    "--component-toggle-track-background-disabled",
-    "--component-toggle-track-border-disabled",
+    "--color-border-default",
+    "--color-background-alt",
+    "--color-background-action",
+    "--color-background-disabled",
+    "--color-border-disabled",
     "--motion-duration-instant",
     "--motion-easing-default",
-    "--component-toggle-knob-background-off",
+    "--color-foreground-muted",
     "--motion-easing-move",
-    "--component-toggle-knob-background-on",
-    "--component-toggle-knob-background-disabled",
+    "--color-foreground-on-action",
+    "--color-foreground-disabled",
     "--color-border-focus",
     "--font-label-medium",
-    "--component-toggle-foreground-label",
-    "--component-toggle-foreground-disabled"
+    "--color-foreground-alt"
   ],
   "rules": [
-    "Never use hex values — always var(--color-*) or var(--component-*)",
+    "Never use hex values — always var(--color-*)",
     "Never reference --primitive-* tokens in component code",
     "All text/background pairings must pass WCAG AA (4.5:1)"
   ],
   "examples": [
-    { "title": "Default (off)", "html": "<rr-toggle name=\"notify\">Email notifications</rr-toggle>" },
-    { "title": "Checked", "html": "<rr-toggle name=\"darkMode\" label=\"Dark mode\" checked></rr-toggle>" },
-    { "title": "Disabled", "html": "<rr-toggle label=\"Dark mode\" disabled></rr-toggle>" }
+    {
+      "title": "Default (off)",
+      "html": "<rr-toggle name=\"notify\">Email notifications</rr-toggle>"
+    },
+    {
+      "title": "Checked",
+      "html": "<rr-toggle name=\"darkMode\" label=\"Dark mode\" checked></rr-toggle>"
+    },
+    {
+      "title": "Disabled",
+      "html": "<rr-toggle label=\"Dark mode\" disabled></rr-toggle>"
+    }
   ],
   "accessibility": {
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/switch/",
@@ -71,5 +113,9 @@
       "Form-associated via ElementInternals (formAssociated = true); the value participates in native form submission when checked."
     ]
   },
-  "figma": { "componentKey": "", "nodeId": "117:56", "codeConnectFile": "toggle.figma.ts" }
+  "figma": {
+    "componentKey": "",
+    "nodeId": "117:56",
+    "codeConnectFile": "toggle.figma.ts"
+  }
 }

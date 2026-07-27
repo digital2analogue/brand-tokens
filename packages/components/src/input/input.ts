@@ -33,12 +33,12 @@ export class RrInput extends LitElement {
     label {
       display: block;
       font: var(--font-label-medium);
-      color: var(--component-input-foreground-label);
+      color: var(--color-foreground-alt);
       margin-bottom: 4px;
     }
 
     .required {
-      color: var(--component-input-foreground-label-required);
+      color: var(--color-foreground-danger);
       margin-left: 2px;
     }
 
@@ -47,57 +47,57 @@ export class RrInput extends LitElement {
       width: 100%;
       box-sizing: border-box;
       font: var(--font-body-large);
-      color: var(--component-input-foreground-value);
-      background: var(--component-input-background-default);
-      border: 1px solid var(--component-input-border-default);
-      border-radius: var(--component-input-radius);
-      padding: var(--component-input-padding-y) var(--component-input-padding-x);
+      color: var(--color-foreground-default);
+      background: var(--color-background-default);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-sm);
+      padding: var(--spacing-tight) var(--spacing-element);
       outline: none;
       transition: border-color 120ms ease;
     }
 
     input::placeholder {
-      color: var(--component-input-foreground-placeholder);
+      color: var(--color-foreground-muted);
     }
 
     input:hover {
-      border-color: var(--component-input-border-hover);
+      border-color: var(--color-border-hover);
     }
 
     input:focus {
-      border-color: var(--component-input-border-focus);
-      box-shadow: 0 0 0 1px var(--component-input-border-focus);
+      border-color: var(--color-border-focus);
+      box-shadow: 0 0 0 1px var(--color-border-focus);
     }
 
     :host([disabled]) input {
-      background: var(--component-input-background-disabled);
-      border-color: var(--component-input-border-disabled);
-      color: var(--component-input-foreground-disabled);
+      background: var(--color-background-alt);
+      border-color: var(--color-border-disabled);
+      color: var(--color-foreground-disabled);
       cursor: not-allowed;
     }
 
     :host([disabled]) label {
-      color: var(--component-input-foreground-disabled);
+      color: var(--color-foreground-disabled);
     }
 
     .helper {
       font: var(--font-label-small);
-      color: var(--component-input-foreground-helper);
+      color: var(--color-foreground-muted);
       margin-top: 4px;
     }
 
     .error {
       font: var(--font-label-small);
-      color: var(--component-input-foreground-error);
+      color: var(--color-foreground-danger);
       margin-top: 4px;
     }
 
     :host([data-invalid]) input {
-      border-color: var(--component-input-border-error);
+      border-color: var(--color-foreground-danger);
     }
 
     :host([data-invalid]) input:focus {
-      box-shadow: 0 0 0 1px var(--component-input-border-error);
+      box-shadow: 0 0 0 1px var(--color-foreground-danger);
     }
   `;
 

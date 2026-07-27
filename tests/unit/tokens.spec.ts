@@ -29,9 +29,10 @@ function collectLeaves(node: TokenNode, path: string[] = []): Array<{ path: stri
 describe('token source tree', () => {
   const files = jsonFilesUnder(tokensRoot)
 
-  it('has the expected top-level groups', () => {
+  it('has the expected top-level groups (two tiers + brands — no component tier, #114)', () => {
     const groups = readdirSync(tokensRoot)
-    expect(groups).toEqual(expect.arrayContaining(['primitives', 'semantic', 'brands', 'components']))
+    expect(groups).toEqual(expect.arrayContaining(['primitives', 'semantic', 'brands']))
+    expect(groups).not.toContain('components')
   })
 
   it('contains token files', () => {

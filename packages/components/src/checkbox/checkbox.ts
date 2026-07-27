@@ -59,9 +59,9 @@ export class RrCheckbox extends LitElement {
     .box {
       position: absolute;
       inset: 0;
-      border: 1px solid var(--component-checkbox-border-default);
-      border-radius: var(--component-checkbox-radius);
-      background: var(--component-checkbox-background-unchecked);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-sm);
+      background: var(--color-background-default);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -71,30 +71,30 @@ export class RrCheckbox extends LitElement {
     }
 
     :host(:not([disabled]):not([checked]):not([indeterminate])) .box-wrap:hover .box {
-      border-color: var(--component-checkbox-border-hover);
+      border-color: var(--color-border-hover);
     }
 
     :host([checked]) .box,
     :host([indeterminate]) .box {
-      background: var(--component-checkbox-background-checked);
-      border-color: var(--component-checkbox-border-checked);
+      background: var(--color-background-action);
+      border-color: var(--color-background-action);
     }
 
     :host([disabled]) .box {
-      background: var(--component-checkbox-background-disabled);
-      border-color: var(--component-checkbox-border-disabled);
+      background: var(--color-background-disabled);
+      border-color: var(--color-border-disabled);
     }
 
     /* Focus ring on the visual box driven by the hidden input's focus state */
     input:focus-visible ~ .box {
-      outline: 2px solid var(--component-checkbox-border-focus);
+      outline: 2px solid var(--color-border-focus);
       outline-offset: 2px;
     }
 
     .check,
     .dash {
       display: none;
-      color: var(--component-checkbox-foreground-checkmark);
+      color: var(--color-foreground-on-action);
     }
 
     :host([checked]) .check {
@@ -107,13 +107,13 @@ export class RrCheckbox extends LitElement {
 
     label {
       font: var(--font-label-medium);
-      color: var(--component-checkbox-foreground-label);
+      color: var(--color-foreground-alt);
       cursor: inherit;
       line-height: 1.4;
     }
 
     :host([disabled]) label {
-      color: var(--component-checkbox-foreground-disabled);
+      color: var(--color-foreground-disabled);
     }
   `;
 

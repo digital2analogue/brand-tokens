@@ -5,40 +5,69 @@
   "summary": "Inline notification banner for success, warning, danger, and info messages. Optionally dismissible.",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
-    { "name": "variant", "type": "'success' | 'warning' | 'danger' | 'info'", "default": "success" },
-    { "name": "heading", "type": "string", "default": "" },
-    { "name": "dismissible", "type": "boolean", "default": "false" }
+    {
+      "name": "variant",
+      "type": "'success' | 'warning' | 'danger' | 'info'",
+      "default": "success"
+    },
+    {
+      "name": "heading",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "dismissible",
+      "type": "boolean",
+      "default": "false"
+    }
   ],
   "slots": [
-    { "name": "default", "description": "Alert body content." },
-    { "name": "icon", "description": "Optional icon in front of the heading (use <rr-icon>)." }
+    {
+      "name": "default",
+      "description": "Alert body content."
+    },
+    {
+      "name": "icon",
+      "description": "Optional icon in front of the heading (use <rr-icon>)."
+    }
   ],
   "events": [
-    { "name": "close", "detail": "Fired when the dismiss button is clicked (only when dismissible)." }
+    {
+      "name": "close",
+      "detail": "Fired when the dismiss button is clicked (only when dismissible)."
+    }
   ],
   "cssParts": [
-    { "name": "alert", "description": "The root alert element." },
-    { "name": "heading", "description": "The heading text element." },
-    { "name": "content", "description": "The content slot wrapper." },
-    { "name": "dismiss", "description": "The dismiss button." }
+    {
+      "name": "alert",
+      "description": "The root alert element."
+    },
+    {
+      "name": "heading",
+      "description": "The heading text element."
+    },
+    {
+      "name": "content",
+      "description": "The content slot wrapper."
+    },
+    {
+      "name": "dismiss",
+      "description": "The dismiss button."
+    }
   ],
   "tokensUsed": [
     "--spacing-tight",
-    "--component-alert-padding-y",
-    "--component-alert-padding-x",
-    "--component-alert-radius",
-    "--component-alert-success-border",
-    "--component-alert-success-background",
-    "--component-alert-success-foreground",
-    "--component-alert-warning-border",
-    "--component-alert-warning-background",
-    "--component-alert-warning-foreground",
-    "--component-alert-danger-border",
-    "--component-alert-danger-background",
-    "--component-alert-danger-foreground",
-    "--component-alert-info-border",
-    "--component-alert-info-background",
-    "--component-alert-info-foreground",
+    "--spacing-inline",
+    "--spacing-element",
+    "--radius-default",
+    "--color-background-success-alt",
+    "--color-foreground-success",
+    "--color-background-warning-alt",
+    "--color-foreground-warning",
+    "--color-background-danger-alt",
+    "--color-foreground-danger",
+    "--color-background-info-alt",
+    "--color-foreground-info",
     "--font-label-strong-medium",
     "--font-body-medium",
     "--radius-sm",
@@ -46,15 +75,24 @@
     "--motion-easing-default"
   ],
   "rules": [
-    "Never use hex values — always var(--color-*) or var(--component-*)",
+    "Never use hex values — always var(--color-*)",
     "Never reference --primitive-* tokens in component code",
     "All text/background pairings must pass WCAG AA (4.5:1)",
     "Use alert for form-level or system feedback; for field-level validation use rr-input error-text instead"
   ],
   "examples": [
-    { "title": "Success", "html": "<rr-alert variant=\"success\" heading=\"Saved\">Your changes were saved.</rr-alert>" },
-    { "title": "Danger, dismissible", "html": "<rr-alert variant=\"danger\" heading=\"Upload failed\" dismissible>The file could not be processed.</rr-alert>" },
-    { "title": "Info with icon", "html": "<rr-alert variant=\"info\" heading=\"Heads up\">\n  <rr-icon slot=\"icon\" name=\"info\"></rr-icon>\n  Maintenance is scheduled for tonight.\n</rr-alert>" }
+    {
+      "title": "Success",
+      "html": "<rr-alert variant=\"success\" heading=\"Saved\">Your changes were saved.</rr-alert>"
+    },
+    {
+      "title": "Danger, dismissible",
+      "html": "<rr-alert variant=\"danger\" heading=\"Upload failed\" dismissible>The file could not be processed.</rr-alert>"
+    },
+    {
+      "title": "Info with icon",
+      "html": "<rr-alert variant=\"info\" heading=\"Heads up\">\n  <rr-icon slot=\"icon\" name=\"info\"></rr-icon>\n  Maintenance is scheduled for tonight.\n</rr-alert>"
+    }
   ],
   "accessibility": {
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/alert/",
@@ -75,5 +113,9 @@
       "The dismiss button carries an aria-label of \"Dismiss\""
     ]
   },
-  "figma": { "componentKey": "", "nodeId": "121:50", "codeConnectFile": "alert.figma.ts" }
+  "figma": {
+    "componentKey": "",
+    "nodeId": "121:50",
+    "codeConnectFile": "alert.figma.ts"
+  }
 }
