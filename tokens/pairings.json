@@ -6,37 +6,25 @@
       "fg": "color.foreground.accent-green",
       "bg": "color.background.accent-green",
       "kind": "text",
-      "context": "green chip/tag text on green tint fill",
-      "excludeBrands": [
-        "decision-engine"
-      ]
+      "context": "green chip/tag text on green tint fill"
     },
     {
       "fg": "color.foreground.accent-blue",
       "bg": "color.background.accent-blue",
       "kind": "text",
-      "context": "blue chip/tag text on blue tint fill",
-      "excludeBrands": [
-        "decision-engine"
-      ]
+      "context": "blue chip/tag text on blue tint fill"
     },
     {
       "fg": "color.foreground.accent-violet",
       "bg": "color.background.accent-violet",
       "kind": "text",
-      "context": "violet chip/tag text on violet tint fill",
-      "excludeBrands": [
-        "decision-engine"
-      ]
+      "context": "violet chip/tag text on violet tint fill"
     },
     {
       "fg": "color.foreground.accent-amber",
       "bg": "color.background.accent-amber",
       "kind": "text",
-      "context": "amber chip/tag text on amber tint fill",
-      "excludeBrands": [
-        "decision-engine"
-      ]
+      "context": "amber chip/tag text on amber tint fill"
     },
     {
       "fg": "color.foreground.accent-on-indigo",
