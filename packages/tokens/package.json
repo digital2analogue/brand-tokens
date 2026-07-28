@@ -1,6 +1,6 @@
 {
   "name": "@digital2analogue2/parsimony",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Built CSS custom properties for the River Romney design system — base dark theme plus the decision-engine, dot-art, and dot-blog brand themes.",
   "license": "UNLICENSED",
   "type": "module",
