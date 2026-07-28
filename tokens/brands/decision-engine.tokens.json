@@ -314,9 +314,9 @@
         "$description": "Text/icons on primary blue CTA backgrounds. White on blue. Contrast vs background.action: 5.95:1 (WCAG AA)."
       },
       "accent-green": {
-        "$value": "{primitive.color.green.600}",
+        "$value": "{primitive.color.green.positive}",
         "$type": "color",
-        "$description": "Green for Approve outcome states and success indicators. Vivid green text/icons on white background."
+        "$description": "Green accent text/icons for the DE light theme — same value as foreground.success. Pairs with background.accent-green (green.50 tint): 4.76:1 AA. Contrast vs white: 5.02:1 AA. Was green.600 (#8B9683 sage gray), which read as muted gray and failed AA on the tint (2.94:1) — parsimony#176."
       },
       "accent-blue": {
         "$value": "{primitive.color.blue.700}",
@@ -327,6 +327,16 @@
         "$value": "{primitive.color.purple.600}",
         "$type": "color",
         "$description": "Purple for Review/pending outcome states. Contrast vs white: 5.76:1 (WCAG AA)."
+      },
+      "accent-violet": {
+        "$value": "{primitive.color.purple.600}",
+        "$type": "color",
+        "$description": "Violet accent text/icons for the DE light theme — maps the base violet slot onto DE's purple family (same value as foreground.accent-purple). Pairs with background.accent-violet (violet.100 tint): 5.20:1 AA. Without this override the base dark-theme pastel (#C4B5FD) leaked through at 1.68:1 — parsimony#176."
+      },
+      "accent-amber": {
+        "$value": "{primitive.color.amber.700}",
+        "$type": "color",
+        "$description": "Amber accent text/icons for the DE light theme — same value as foreground.warning. Pairs with background.accent-amber (amber.50 tint): 6.84:1 AA. Without this override the base dark-theme amber (#FCD34D) leaked through at 1.39:1 — parsimony#176."
       },
       "secondary": {
         "$value": "{primitive.color.gray.navy}",

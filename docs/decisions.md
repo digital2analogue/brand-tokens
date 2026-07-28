@@ -11,6 +11,27 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-07-28 — DE accent foregrounds fixed brand-side (#176): same names, DE values
+
+**What:** The rr-badge accent-variant WCAG failures under decision-engine (2.94:1 green,
+1.68:1 violet, 1.39:1 amber — found by anatomy, #175) are fixed as **brand value overrides
+on the existing token names**, not a component change: `foreground.accent-green` →
+`green.positive` (#15803D, 4.76:1 on the green.50 tint; also corrects a value/intent drift —
+the old `green.600` is the sage *gray* #8B9683 while the description promised "vivid green"),
+`foreground.accent-violet` → `purple.600` (5.20:1; maps the base violet slot onto DE's
+existing purple family), `foreground.accent-amber` → `amber.700` (6.84:1; same value as DE's
+`foreground.warning`). All three reuse values DE already employs — no new primitives.
+`accent-blue` untouched (5.00:1, already passing). The four `excludeBrands:
+["decision-engine"]` entries on the accent-tint pairs in `tokens/pairings.json` are deleted,
+so `validate` §5 / `validate_brand` now hold these pairs against every brand permanently.
+**Why:** the badge (and any future consumer of these tokens) is fixed in one place, and the
+brand override mechanism is doing exactly what it exists for; the alternatives — pointing the
+badge at `accent-on-*` (changes the base theme's look) or scoping the variants out of DE
+(punts) — each cost more than they fix. **Negative control:** re-breaking amber makes
+`validate` fail naming the exact pair. **Fallout:** the MCP test that pinned the live
+exclusion inverted, per the live-data corollary (CLAUDE.md workflow rule 3); rewritten
+against a synthetic injected pairing map. **Status:** shipped; ships to consumers as 0.6.1.
+
 ## 2026-07-28 — Anatomy lands (#156 stage 2): the contract knows which tokens sit together
 
 **What:** `*.meta.json` gains a structured `anatomy` section — a named part tree, each part

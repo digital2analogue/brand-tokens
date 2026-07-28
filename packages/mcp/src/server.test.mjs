@@ -671,19 +671,36 @@ describe("validate_brand (via contrast.mjs)", () => {
     expect(all.length).toBeGreaterThan(intendedPairings(tokenStore).length);
   });
 
-  it("excludeBrands scopes map pairs per brand (DE never renders the base accent-tint pairs)", async () => {
+  it("excludeBrands scopes map pairs per brand (synthetic map — never pin the live one)", async () => {
     const { allIntendedPairings } =
       await import("../../../scripts/contrast.mjs");
-    const de = allIntendedPairings(tokenStore, "decision-engine");
-    expect(
-      de.some(
-        (p) =>
-          p.fg === "color.foreground.accent-green" &&
-          p.bg === "color.background.accent-green",
-      ),
-    ).toBe(false);
-    // ...while non-excluded map pairs still apply to DE.
-    expect(de.some((p) => p.kind === "non-text")).toBe(true);
+    // Synthetic map: one pair scoped out of DE, one unscoped. Injected so the
+    // test can't invert when the live map changes (the 2026-07-28 #176 fix
+    // un-excluded the real accent pairs and flipped the previous version of
+    // this test — live-data corollary, CLAUDE.md workflow rule 3).
+    const synthetic = [
+      {
+        fg: "color.foreground.default",
+        bg: "color.background.default",
+        kind: "text",
+        context: "scoped-out pair",
+        excludeBrands: ["decision-engine"],
+      },
+      {
+        fg: "color.foreground.default",
+        bg: "color.background.alt",
+        kind: "text",
+        context: "unscoped pair",
+      },
+    ];
+    const de = allIntendedPairings(tokenStore, "decision-engine", {
+      pairings: synthetic,
+    });
+    expect(de.some((p) => p.context === "scoped-out pair")).toBe(false);
+    expect(de.some((p) => p.context === "unscoped pair")).toBe(true);
+    // On base, the exclusion doesn't apply — both pairs survive.
+    const base = allIntendedPairings(tokenStore, null, { pairings: synthetic });
+    expect(base.some((p) => p.context === "scoped-out pair")).toBe(true);
   });
 });
 
