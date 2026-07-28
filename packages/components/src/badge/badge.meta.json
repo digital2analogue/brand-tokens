@@ -64,6 +64,89 @@
     "--spacing-micro",
     "--font-label-small"
   ],
+  "anatomy": {
+    "description": "A single part. Every variant restyles the same host — badge's whole palette lives in its state overlays.",
+    "parts": [
+      {
+        "name": "root",
+        "element": ":host",
+        "description": "The badge itself: pill-shaped inline-flex container holding the label slot.",
+        "tokens": {
+          "background": "--color-background-alt",
+          "foreground": "--color-foreground-alt",
+          "border": "--color-border-alt",
+          "spacing": ["--spacing-micro", "--spacing-inline"],
+          "font": "--font-label-small"
+        },
+        "states": [
+          {
+            "when": "variant=success",
+            "tokens": {
+              "background": "--color-background-success-alt",
+              "foreground": "--color-foreground-success",
+              "border": "--color-background-success-alt"
+            }
+          },
+          {
+            "when": "variant=warning",
+            "tokens": {
+              "background": "--color-background-warning-alt",
+              "foreground": "--color-foreground-warning",
+              "border": "--color-background-warning-alt"
+            }
+          },
+          {
+            "when": "variant=danger",
+            "tokens": {
+              "background": "--color-background-danger-alt",
+              "foreground": "--color-foreground-danger",
+              "border": "--color-background-danger-alt"
+            }
+          },
+          {
+            "when": "variant=info",
+            "tokens": {
+              "background": "--color-background-info-alt",
+              "foreground": "--color-foreground-info",
+              "border": "--color-background-info-alt"
+            }
+          },
+          {
+            "when": "variant=accent-green",
+            "tokens": {
+              "background": "--color-background-accent-green",
+              "foreground": "--color-foreground-accent-green",
+              "border": "--color-background-accent-green"
+            }
+          },
+          {
+            "when": "variant=accent-blue",
+            "tokens": {
+              "background": "--color-background-accent-blue",
+              "foreground": "--color-foreground-accent-blue",
+              "border": "--color-background-accent-blue"
+            }
+          },
+          {
+            "when": "variant=accent-violet",
+            "tokens": {
+              "background": "--color-background-accent-violet",
+              "foreground": "--color-foreground-accent-violet",
+              "border": "--color-background-accent-violet"
+            }
+          },
+          {
+            "when": "variant=accent-amber",
+            "tokens": {
+              "background": "--color-background-accent-amber",
+              "foreground": "--color-foreground-accent-amber",
+              "border": "--color-background-accent-amber"
+            }
+          }
+        ]
+      }
+    ]
+  },
   "rules": [
     "Never use hex values. Always use var(--color-*)",
     "Never reference --primitive-* tokens in component code",

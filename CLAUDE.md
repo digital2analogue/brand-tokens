@@ -28,6 +28,8 @@ scripts/
   build-brands.mjs            Runs Style Dictionary for all brands. The token build command.
   generate-docs.mjs           Regenerates docs/index.html from token JSON.
   build-design-system-json.mjs Merges *.meta.json + CEM into design-system.json (deterministic — sorted, no timestamp).
+  anatomy.mjs                 The `anatomy` part tree: build gates (dangling binding, unknown state prop)
+                              + the fg/bg pairs components declare. Imported by validate and contrast.
   rules.mjs                   Single source of truth for the lint rules (no hex / no primitive / no hardcoded size / deprecated). Imported by validate, the MCP, and drift-lint.
   validate.mjs                Build gate: meta.json schema + lint rules + token-reference resolution.
   drift-scan.mjs              Reusable consumer-repo scan (scanConsumer): walk + ignore handling + shared rules. Shared by drift-lint and the MCP lint_consumer tool.
@@ -146,7 +148,8 @@ mcp package (still scoped `@riverromney`) is not published yet.
   convention: `get_*`/`list_*` look up by exact key (one record), `find_*` search by topic
   (ranked array).
   - Components (from `design-system.json`): `list_components()` — names + summaries;
-    `get_component(name)` — full contract (props, events, tokens, rules, a11y, examples);
+    `get_component(name)` — full contract (props, events, tokens, anatomy part tree, rules,
+    a11y, examples);
     `check_usage(snippet)` — flags rule violations (hex, `--primitive-*` refs, hardcoded
     font sizes/weights, unapproved font families, deprecated tokens) **before** code is
     written. Detectors live once in `scripts/rules.mjs`, so the same set gates `validate`
@@ -170,10 +173,13 @@ mcp package (still scoped `@riverromney`) is not published yet.
   - Contrast (from `scripts/contrast.mjs`, reusing the WCAG math in `assembly.mjs`):
     `check_contrast({foreground, background, brand?, fontSize?, bold?})` — ratio + AA/AAA
     verdict for a pair (tokens or hex; large-text threshold when `fontSize` qualifies);
+    `check_contrast({component, part, state?})` also resolves the pair from a component's
+    declared anatomy instead of two named colours;
     `validate_brand(brand)` — checks every *intended* fg/bg pairing keeps AA once a
-    sub-brand's overrides apply. Intended pairs are derived by convention and v1 is
-    deliberately scoped to the unambiguous ones (`on-<role>`↔`background.<role>`, base
-    text↔base surfaces); the accent family is out of scope pending an explicit pairing map.
+    sub-brand's overrides apply. Intended pairs come from three sources: naming convention
+    (`on-<role>`↔`background.<role>`, base text↔base surfaces), the pairs components declare
+    in their `anatomy`, and the explicit map (`tokens/pairings.json`) — whose `excludeBrands`
+    scopes a pair out of brands that never render it, no matter which source named it.
   - Consumer linting (from `scripts/drift-scan.mjs`, shared with the `drift-lint` CLI +
     weekly Action): `lint_consumer({ path, ignore? })` — scans a consumer repo (or single
     file) with the same `RULES` as `check_usage`, but at file/repo level. Honours a

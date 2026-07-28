@@ -12,8 +12,9 @@
 
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { resolveToken, toCssVar } from "./tokens.mjs";
+import { resolveToken, toCssVar, cssVarToPathMap } from "./tokens.mjs";
 import { contrastRatio } from "./assembly.mjs";
+import { anatomyPairings, findPartPairing, partPaths } from "./anatomy.mjs";
 
 // WCAG 2.x thresholds.
 const AA_NORMAL = 4.5;
@@ -57,24 +58,58 @@ function resolveColor(store, cssToPath, input, brand) {
   return tok ? { value: tok.value, token: toCssVar(path) } : null;
 }
 
-function cssToPathMap(store) {
-  const m = new Map();
-  for (const path of store.base.keys()) m.set(toCssVar(path), path);
-  return m;
-}
+// The CSS-var → dotted-path index lives once, in tokens.mjs (cssVarToPathMap).
 
 /**
  * Contrast ratio + AA/AAA verdict for a foreground/background pair.
+ *
+ * Two input modes. Name both colours directly, or — when the metas are passed —
+ * name a declared pairing: { component, part, state? } resolves the pair from
+ * that component's anatomy contract (#156 stage 2) instead of the caller having
+ * to know which two tokens the component actually puts together.
+ *
  * @param {object} store   loadTokens() result
- * @param {object} input   { foreground, background, brand?, fontSize?, bold? }
- * @returns {object} verdict, or { error } for an unknown token, or
+ * @param {object} input   { foreground, background } | { component, part, state? }, + { brand?, fontSize?, bold? }
+ * @param {Array}  metas   component metas (design-system.json components), for contract mode
+ * @returns {object} verdict, or { error } for an unknown token/part, or
  *   { opinion:false } when a value isn't a flat hex (gradient / color-mix).
  */
 export function checkContrast(
   store,
-  { foreground, background, brand, fontSize, bold = false } = {},
+  {
+    foreground,
+    background,
+    component,
+    part,
+    state,
+    brand,
+    fontSize,
+    bold = false,
+  } = {},
+  metas = [],
 ) {
-  const cssToPath = cssToPathMap(store);
+  const cssToPath = cssVarToPathMap(store);
+
+  // Contract mode: resolve the declared pairing, naming what's missing rather
+  // than guessing at one (the honest-degradation rule).
+  let source = null;
+  if (component || part) {
+    if (!component || !part)
+      return { error: "Contract mode needs both component and part." };
+    const declared = findPartPairing(metas, component, part, state ?? null);
+    if (!declared) {
+      const parts = partPaths(metas, component);
+      return {
+        error: parts.length
+          ? `No declared foreground/background pairing for ${component} part "${part}"${state ? ` state "${state}"` : ""}. Parts: ${parts.join(", ")}`
+          : `${component} declares no anatomy.`,
+      };
+    }
+    foreground = declared.foreground;
+    background = declared.background;
+    source = { component, part, ...(state ? { state } : {}) };
+  }
+
   const fg = resolveColor(store, cssToPath, foreground, brand);
   const bg = resolveColor(store, cssToPath, background, brand);
   if (!fg) return { error: `Unknown colour or token: ${foreground}` };
@@ -91,6 +126,7 @@ export function checkContrast(
     foregroundValue: fg.value,
     backgroundValue: bg.value,
     ...(brand ? { brand } : {}),
+    ...(source ? { declaredBy: source } : {}),
     largeText,
   };
 
@@ -174,23 +210,54 @@ export function loadPairingMap(root = resolve(import.meta.dirname, "..")) {
 }
 
 /**
- * Union of convention-derived pairs (kind 'text') and the explicit map,
- * deduped by fg|bg (map entries win, so a map entry can re-kind a pair).
- * Pass a brand to drop entries whose excludeBrands lists it.
+ * Union of three sources, deduped by fg|bg in increasing authority:
+ *   1. convention-derived pairs (intendedPairings)
+ *   2. pairs the components *declare* in their anatomy (#156 stage 2)
+ *   3. the explicit map (tokens/pairings.json)
+ *
+ * `excludeBrands` is then applied as a filter over the merged set, not as a
+ * skip while building it. That distinction is load-bearing: a skip only keeps
+ * an excluded pair out if no *other* source contributes it, and anatomy
+ * contributes exactly the four accent-tint pairs decision-engine is excluded
+ * from (rr-badge's accent variants). Scoping a pair out of a brand has to mean
+ * the brand isn't checked on it, whoever named it.
+ *
+ * @param {object} opts.metas     component metas, for the anatomy source
+ * @param {Array}  opts.pairings  override the explicit map (tests inject synthetic pairs)
  */
-export function allIntendedPairings(store, brand = null) {
+export function allIntendedPairings(
+  store,
+  brand = null,
+  { metas = [], pairings = null } = {},
+) {
+  const map = pairings ?? loadPairingMap();
   const merged = new Map();
+  const key = (p) => `${p.fg}|${p.bg}`;
+
   for (const p of intendedPairings(store)) {
-    merged.set(`${p.fg}|${p.bg}`, { ...p, kind: "text" });
+    merged.set(key(p), { ...p, kind: "text" });
   }
-  for (const p of loadPairingMap()) {
+  for (const p of anatomyPairings(metas, store)) {
+    merged.set(key(p), {
+      fg: p.fg,
+      bg: p.bg,
+      kind: p.kind,
+      context: p.context,
+    });
+  }
+  for (const p of map) {
     if (brand && p.excludeBrands?.includes(brand)) continue;
-    merged.set(`${p.fg}|${p.bg}`, {
+    merged.set(key(p), {
       fg: p.fg,
       bg: p.bg,
       kind: p.kind ?? "text",
       context: p.context,
     });
+  }
+  if (brand) {
+    for (const p of map) {
+      if (p.excludeBrands?.includes(brand)) merged.delete(key(p));
+    }
   }
   return [...merged.values()];
 }
@@ -201,10 +268,10 @@ export function allIntendedPairings(store, brand = null) {
  * classic regression: a brand re-tints a background but not its on-colour.
  * @returns {object|null} null if the brand is unknown
  */
-export function validateBrand(store, brand) {
+export function validateBrand(store, brand, metas = []) {
   if (!store.brands.has(brand)) return null;
   const failures = [];
-  const pairs = allIntendedPairings(store, brand);
+  const pairs = allIntendedPairings(store, brand, { metas });
   for (const { fg, bg, kind } of pairs) {
     const fgVal = resolveToken(store, fg, { brand })?.value;
     const bgVal = resolveToken(store, bg, { brand })?.value;
@@ -234,10 +301,10 @@ export function validateBrand(store, brand) {
  * checked against the BASE theme and every brand. Returns one row per
  * failure; empty array = the whole system passes. Used by validate.mjs.
  */
-export function validateAllPairings(store) {
+export function validateAllPairings(store, metas = []) {
   const failures = [];
   for (const brand of [null, ...store.brands.keys()]) {
-    const pairs = allIntendedPairings(store, brand);
+    const pairs = allIntendedPairings(store, brand, { metas });
     for (const { fg, bg, kind } of pairs) {
       const opt = brand ? { brand } : {};
       const fgVal = resolveToken(store, fg, opt)?.value;

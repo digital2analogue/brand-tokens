@@ -8,6 +8,7 @@
  *   2. Component source files obey the lint rules (scripts/rules.mjs)
  *   3. Every token reference {a.b.c} resolves to a token that exists
  *      — this is what makes "a rename is a breaking change" actually true.
+ *      §1c applies the same rule to anatomy's per-part token bindings.
  *   4. Every string value a *.figma.ts Code Connect enum can emit exists
  *      in a literal union of the paired component source — so Code Connect
  *      can never emit a prop value the component doesn't implement.
@@ -27,6 +28,10 @@ import {
   findBindingMismatches,
 } from "./code-connect.mjs";
 import { unresolvedAccepts } from "./assembly.mjs";
+import {
+  unresolvedAnatomyTokens,
+  unresolvedAnatomyStates,
+} from "./anatomy.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const SCHEMA_PATH = resolve(ROOT, "schemas/meta.schema.json");
@@ -82,6 +87,17 @@ console.log(metaCount === 0 ? "  (no *.meta.json files found)\n" : "");
 for (const { component, slot, entry } of unresolvedAccepts(metas)) {
   fail(
     `${component}: slot "${slot}" accepts "${entry}" — no such component exists`,
+  );
+}
+
+// ── 1c. Anatomy state conditions resolve (#156) ─────────────────────────────
+// A state overlay whose `when` names a prop the component doesn't declare
+// would silently never fire. Same fencing as §1b — pseudo-classes (:hover) and
+// internal state attributes (data-*) are out of scope, deliberately.
+
+for (const { component, part, when, prop } of unresolvedAnatomyStates(metas)) {
+  fail(
+    `${component}: anatomy part "${part}" has state "${when}" — no prop named "${prop}"`,
   );
 }
 
@@ -146,6 +162,30 @@ for (const [name, nodes] of brands) {
 }
 
 console.log(exitCode === 0 ? `  ✓ all ${refCount} references resolve\n` : "");
+
+// ── 3b. Anatomy token bindings resolve (#156) ───────────────────────────────
+// The §3 rule applied to the other place tokens are named by string: every
+// per-part binding must point at a token that exists. Opt-in — metas without
+// an anatomy section contribute nothing here.
+
+const anatomyMetas = metas.filter((m) => m.anatomy);
+if (anatomyMetas.length) {
+  console.log("Resolving anatomy token bindings...\n");
+  let bindingFailures = 0;
+  for (const { component, part, state, key, token } of unresolvedAnatomyTokens(
+    anatomyMetas,
+    { base },
+  )) {
+    bindingFailures++;
+    fail(
+      `${component}: anatomy part "${part}"${state ? ` state "${state}"` : ""} binds ${key} to ${token} — no such token`,
+    );
+  }
+  if (bindingFailures === 0)
+    console.log(
+      `  ✓ ${anatomyMetas.length} component(s)' anatomy bindings all resolve\n`,
+    );
+}
 
 // ── 4. Code Connect ↔ component parity ──────────────────────────────────────
 // Every string a figma.enum() mapping can emit must appear in a literal union
@@ -229,8 +269,9 @@ console.log(
 );
 
 // ── §5 Intended-pairing contrast (tokens/pairings.json, #87) ────────────────
-// Every mapped pair (plus the convention-derived set) must hold its threshold
-// — AA 4.5:1 for text, 3:1 for non-text — in the base theme and every brand.
+// Every mapped pair — plus the convention-derived set, plus the pairs the
+// components declare in their anatomy (#156) — must hold its threshold, AA
+// 4.5:1 for text and 3:1 for non-text, in the base theme and every brand.
 
 console.log("Checking intended-pairing contrast (base + every brand)...\n");
 {
@@ -248,7 +289,7 @@ console.log("Checking intended-pairing contrast (base + every brand)...\n");
     const { loadTokens } = await import("./tokens.mjs");
     const { validateAllPairings } = await import("./contrast.mjs");
     const store = await loadTokens();
-    const failures = validateAllPairings(store);
+    const failures = validateAllPairings(store, anatomyMetas);
     for (const f of failures) {
       fail(
         f.ratio === null
