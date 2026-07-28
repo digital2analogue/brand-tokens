@@ -164,7 +164,7 @@ server.tool(
 
 server.tool(
   "get_component",
-  "Get full metadata for a component by name (props, slots, tokens, examples, accessibility)",
+  "Get full metadata for a component by name (props, slots, tokens, anatomy part tree with per-part token bindings, examples, accessibility)",
   { name: z.string().describe('Component name, e.g. "rr-badge"') },
   async ({ name }) => {
     const component = designSystem.components.find((c) => c.name === name);
@@ -618,10 +618,32 @@ server.tool(
 
 server.tool(
   "check_contrast",
-  "Compute the WCAG contrast ratio for a foreground/background pair and report AA/AAA pass-fail. Each colour may be a token (--color-foreground-default or color.foreground.default) or a #rrggbb hex. Pass brand to apply a sub-brand's overrides, and fontSize (+ bold) to use the large-text threshold (3:1) instead of normal (4.5:1). Returns { ratio, threshold, passesAA, passesAAA }; no opinion if a value resolves to a non-flat-hex (gradient, color-mix).",
+  "Compute the WCAG contrast ratio for a foreground/background pair and report AA/AAA pass-fail. Two input modes: name both colours directly (token — --color-foreground-default or color.foreground.default — or a #rrggbb hex), OR name a declared pairing with { component, part, state? } to resolve it from that component's anatomy contract, so you don't have to know which two tokens the component actually puts together. Pass brand to apply a sub-brand's overrides, and fontSize (+ bold) to use the large-text threshold (3:1) instead of normal (4.5:1). Returns { ratio, threshold, passesAA, passesAAA }; no opinion if a value resolves to a non-flat-hex (gradient, color-mix).",
   {
-    foreground: z.string().describe("Foreground colour: token name or #rrggbb"),
-    background: z.string().describe("Background colour: token name or #rrggbb"),
+    foreground: z
+      .string()
+      .optional()
+      .describe("Foreground colour: token name or #rrggbb"),
+    background: z
+      .string()
+      .optional()
+      .describe("Background colour: token name or #rrggbb"),
+    component: z
+      .string()
+      .optional()
+      .describe('Contract mode: component name, e.g. "rr-badge"'),
+    part: z
+      .string()
+      .optional()
+      .describe(
+        'Contract mode: anatomy part path or leaf name, e.g. "root.button" or "button"',
+      ),
+    state: z
+      .string()
+      .optional()
+      .describe(
+        'Contract mode: state overlay to apply, e.g. "variant=success" or ":hover"',
+      ),
     brand: z
       .string()
       .optional()
@@ -639,14 +661,21 @@ server.tool(
         "Whether the text is bold (lowers the large-text threshold to 18.66px)",
       ),
   },
-  async ({ foreground, background, brand, fontSize, bold }) => {
-    const result = checkContrast(tokenStore, {
-      foreground,
-      background,
-      brand,
-      fontSize,
-      bold,
-    });
+  async ({
+    foreground,
+    background,
+    component,
+    part,
+    state,
+    brand,
+    fontSize,
+    bold,
+  }) => {
+    const result = checkContrast(
+      tokenStore,
+      { foreground, background, component, part, state, brand, fontSize, bold },
+      designSystem.components,
+    );
     return {
       content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
       ...(result.error ? { isError: true } : {}),
@@ -658,10 +687,10 @@ server.tool(
 
 server.tool(
   "validate_brand",
-  "Check that every intended foreground/background text pairing still meets WCAG AA (4.5:1) once a sub-brand's overrides are applied — catches the classic regression where a brand re-tints a background but not its on-colour. Intended pairs are derived by naming convention (on-<role>↔background.<role>, accent text↔accent fills, base text↔base surfaces); disabled is exempt. Returns { checkedPairs, failures, valid }. Brands: decision-engine, dot-art, dot-blog.",
+  "Check that every intended foreground/background text pairing still meets WCAG AA (4.5:1) once a sub-brand's overrides are applied — catches the classic regression where a brand re-tints a background but not its on-colour. Intended pairs come from three sources: naming convention (on-<role>↔background.<role>, base text↔base surfaces), the pairs components declare in their anatomy contract, and the explicit map (tokens/pairings.json), whose excludeBrands scopes a pair out of brands that never render it. Disabled states are exempt. Returns { checkedPairs, failures, valid }. Brands: decision-engine, dot-art, dot-blog.",
   { brand: z.string().describe('Sub-brand name, e.g. "decision-engine"') },
   async ({ brand }) => {
-    const result = validateBrand(tokenStore, brand);
+    const result = validateBrand(tokenStore, brand, designSystem.components);
     if (!result) {
       const brands = [...tokenStore.brands.keys()].join(", ");
       return {

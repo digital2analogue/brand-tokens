@@ -65,6 +65,20 @@
       },
       "description": "CSS custom properties this component references. Must be semantic tokens — never primitives (the component tier was removed in #114)."
     },
+    "anatomy": {
+      "type": "object",
+      "required": ["parts"],
+      "description": "Structured part tree with per-part token bindings (#156 stage 2). Transcribed from the component's actual styles — never inferred. Opt-in per component; metas without it are exempt from the anatomy gate.",
+      "properties": {
+        "description": { "type": "string" },
+        "parts": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/anatomyPart" }
+        }
+      },
+      "additionalProperties": false
+    },
     "rules": {
       "type": "array",
       "items": { "type": "string" },
@@ -186,6 +200,90 @@
             }
           },
           "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "anatomyColor": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^--color-[a-z0-9-]+$",
+          "not": { "pattern": "^--(primitive|component)-" }
+        },
+        {
+          "enum": ["transparent", "currentColor"],
+          "description": "The only permitted non-token values. Per #114 `transparent` is a CSS keyword, not a colour literal — it needs no token. Contrast derivation ignores both."
+        }
+      ]
+    },
+    "anatomyTokens": {
+      "type": "object",
+      "minProperties": 1,
+      "description": "Semantic token bindings for one part. Colour keys admit only --color-* (which structurally excludes primitives and the deleted component tier, #114). v1 carries five keys; radius/shadow/motion stay in the flat tokensUsed until the anatomy v2 issue.",
+      "properties": {
+        "background": { "$ref": "#/$defs/anatomyColor" },
+        "foreground": { "$ref": "#/$defs/anatomyColor" },
+        "border": { "$ref": "#/$defs/anatomyColor" },
+        "spacing": {
+          "anyOf": [
+            { "type": "string", "pattern": "^--spacing-[a-z0-9-]+$" },
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "pattern": "^--spacing-[a-z0-9-]+$" },
+              "description": "The spacing tokens this part binds, in authored order (gap, then padding block/inline). Deduped — a token used twice is listed once."
+            }
+          ]
+        },
+        "font": { "type": "string", "pattern": "^--font-[a-z0-9-]+$" }
+      },
+      "additionalProperties": false
+    },
+    "anatomyState": {
+      "type": "object",
+      "required": ["when", "tokens"],
+      "description": "A variant/state overlay on a part's resting bindings. Only the keys that actually change are listed.",
+      "properties": {
+        "when": {
+          "type": "string",
+          "pattern": "^(:[a-z-]+|[a-z][a-zA-Z0-9-]*(=[a-zA-Z0-9-]+)?)$",
+          "description": "The condition, transcribed from the selector: \"variant=success\" (prop=value), \"disabled\" (boolean prop / attribute), or \":hover\" (CSS pseudo-class). validate resolves the prop=value and bare-prop forms against props[]; pseudo-classes are not checked."
+        },
+        "description": { "type": "string" },
+        "tokens": { "$ref": "#/$defs/anatomyTokens" }
+      },
+      "additionalProperties": false
+    },
+    "anatomyPart": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Part identifier, unique among its siblings. \"root\" conventionally names the :host."
+        },
+        "description": { "type": "string" },
+        "element": {
+          "type": "string",
+          "description": "The element or selector this part transcribes, e.g. \":host\", \"button\", \".label\"."
+        },
+        "cssPart": {
+          "type": "string",
+          "description": "The exported CSS part name, when this part is addressable via ::part(). Must match a cssParts[] entry."
+        },
+        "tokens": { "$ref": "#/$defs/anatomyTokens" },
+        "states": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/anatomyState" }
+        },
+        "parts": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/anatomyPart" },
+          "description": "Child parts — the tree."
         }
       },
       "additionalProperties": false

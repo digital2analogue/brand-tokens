@@ -11,6 +11,41 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-07-28 — Anatomy lands (#156 stage 2): the contract knows which tokens sit together
+
+**What:** `*.meta.json` gains a structured `anatomy` section — a named part tree, each part
+binding semantic tokens for `background`/`foreground`/`border`/`spacing`/`font`, with
+`states` overlays (`variant=success`, `disabled`, `:hover`). Populated for `rr-badge`,
+`rr-button`, `rr-input` by transcription from their `static styles`. `validate` gains §1c
+(a state's `when` must name a declared prop) and §3b (every binding must resolve — the §3
+rule applied to the other place tokens are named by string). Declared pairs become a third
+source of intended fg/bg pairings behind `validate`'s §5 and `validate_brand`, and
+`check_contrast` takes `{component, part, state?}` to resolve a pair from the contract.
+**Why:** a flat `tokensUsed` array knows a component *touches* two tokens but not that they
+are one part's fill and its text — so contrast could only ever be checked against naming
+convention, and stage 3's generators would have no structure to generate from.
+**Scope boundaries, all deliberate:** five binding keys (radius/shadow/motion deferred);
+text pairs only — a part's border is compared against nothing, because a badge's border
+equals its own fill and the ambient surface isn't knowable from the contract; both sides
+must be declared on the *same* part, never inherited from an ancestor; `disabled` states are
+contrast-exempt; compound conditions (`variant=secondary` AND `:hover`) have no grammar, so
+those rules exist in the components but are not transcribed. Each boundary is a case where
+the alternative was to invent a fact the code doesn't state.
+**Fallout fix:** `excludeBrands` in `tokens/pairings.json` was honoured by skipping the
+*add*, which only excludes a pair while no other source names it. Anatomy names exactly the
+four accent-tint pairs decision-engine is excluded from, so it is now applied as a filter
+over the merged set. **Alternative considered:** let those pairs fail the gate and fix the
+rendering in the same PR — rejected as two concerns in one change; the defect is filed
+instead (see below). **Status:** live; 3 of 24 metas carry anatomy, remaining 21 promoted in
+batched follow-ups.
+
+**Found by this stage:** `rr-badge`'s accent variants render **2.94:1 (green), 1.68:1
+(violet), 1.39:1 (amber)** under decision-engine — the component hardcodes
+`--color-foreground-accent-*`, which DE re-tints without re-tinting the pairing. Real and
+previously invisible: the pairing map excluded DE from those pairs, so nothing checked the
+component's own combination. Filed separately; needs an owner call between DE-local accent
+foreground overrides and a component change.
+
 ## 2026-07-27 — Component tier deleted (#114): the two-tier model is live
 
 **What:** Executed #114. All 144 component tokens (139 at the original audit plus the

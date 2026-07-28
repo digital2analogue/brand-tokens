@@ -25,18 +25,46 @@ whole model:
 | **Prop bindings** | `props[].bindings` in `*.meta.json` | `{ code: { prop }, figma: { kind, property, valueMap? } }` — how one code prop maps to a Figma variant axis and its options. Boolean derivations supported (`State=disabled → disabled: true`). |
 | **Design-only options** | `figma.ignoredOptions` in `*.meta.json` | Figma variant options that deliberately emit no code (e.g. button `State=hover` — CSS handles it). Declared, so they are covered — anything *undeclared* and unbound is drift. |
 | **Slot constraints** | `slots[].accepts` in `*.meta.json` | Element tags a slot accepts (`rr-menu` default slot → `rr-menu-item`). Omitted = unconstrained; `"*"` = explicitly anything; `"#text"` = text-only. |
+| **Anatomy** | `anatomy` in `*.meta.json` | A named part tree; each part binds semantic tokens for `background` / `foreground` / `border` / `spacing` / `font`, with `states` overlays (`variant=success`, `disabled`, `:hover`). Transcribed from the component's real styles, never inferred. Feeds per-part contrast — see below. |
 | **The dump** | `figma/components.dump.json` | Snapshot of the Figma component sets (variant symbol names per bound component), exported from the Parsimony Design System file (`4aOEBHcnAv2Kbn0g1arL78`) via the Figma MCP. Input to the parity differ. Never hand-edit. |
 
 Roll-out is **opt-in per component**: gates only fire on metas that declare bindings.
 Currently bound: `rr-badge`, `rr-button`, `rr-input` (the three `stable` components).
 The other 24 metas get promoted as #156 stages roll through them.
 
+## Anatomy and contrast
+
+Declared per-part pairings are a **third source** of intended fg/bg pairs, alongside the
+naming convention and the explicit map (`tokens/pairings.json`). `npm run validate` §5,
+`validate_brand`, and `check_contrast` all read the union.
+
+Anatomy's contribution is deliberately narrow, and the narrowness is what keeps it honest:
+
+- **Text pairs only.** A part's `border` is compared against nothing — a badge's border
+  equals its own fill, and the surrounding surface isn't knowable from the contract.
+  Non-text (SC 1.4.11) edges stay in `tokens/pairings.json`.
+- **Both sides on the same part.** No inheriting a background from an ancestor.
+- **`disabled` states are exempt** (WCAG exempts disabled controls).
+- **`excludeBrands` wins.** A pair the map scopes out of a brand is dropped from the merged
+  set no matter which source named it — including anatomy. Scoping a pair out has to mean
+  the brand isn't checked on it, or the escape hatch is a lie. (It matters concretely:
+  `rr-badge`'s accent variants declare exactly the four accent-tint pairs decision-engine
+  is excluded from.)
+
+`check_contrast` also takes `{ component, part, state? }` instead of two colours, resolving
+the pair from the contract — the way to ask "what does this component actually put together
+under this brand" without knowing its tokens.
+
+Not yet bound: `radius`, `shadow`, and `motion` keys, and compound conditions
+(`variant=secondary` AND `:hover`) — those rules live in the components but have no grammar
+in v1.
+
 ## Commands
 
 | Command | What it does | When it fails |
 |---|---|---|
 | `npm run parity` | Diffs every bound meta's bindings against `figma/components.dump.json` and classifies drift (see below). `--json` for machine output; pass a path to diff a different dump. | Exit 1 on any finding. |
-| `npm run validate` | The build gate. Contract-relevant sections: **§1b** — every `rr-*` entry in a slot's `accepts` must name a real component; **§4** — every `figma.enum` emission must exist in a component literal union; **§4b** — bindings must agree with the component's `*.figma.ts` bidirectionally (property name, full valueMap, reverse coverage). | Exit 1, offending item named. |
+| `npm run validate` | The build gate. Contract-relevant sections: **§1b** — every `rr-*` entry in a slot's `accepts` must name a real component; **§1c** — every anatomy state's `when` must name a declared prop; **§3b** — every anatomy token binding must resolve; **§4** — every `figma.enum` emission must exist in a component literal union; **§4b** — bindings must agree with the component's `*.figma.ts` bidirectionally (property name, full valueMap, reverse coverage); **§5** — every intended fg/bg pairing holds its contrast threshold. | Exit 1, offending item named. |
 | `npm run build:meta` | Regenerates the CEM + `design-system.json` (bindings, `accepts`, `ignoredOptions` all flow through to the MCP's `get_component`). Commit the regenerated artifact — CI fails on staleness. | On schema violations or missing prop JSDoc. |
 
 ## Reading parity findings
@@ -88,7 +116,6 @@ Routines UI with the Figma + GitHub connectors attached.
 
 ## Where this is heading
 
-- **#156 stage 2** — structured `anatomy` (per-part token bindings) in the schema.
 - **#156 stage 3** — the contract *generates* the surfaces: Figma library first,
   then the Lit components. From that point the differ's job flips from detecting
   drift to proving the generators faithful.

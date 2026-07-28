@@ -310,6 +310,92 @@
         "--spacing-micro",
         "--font-label-small"
       ],
+      "anatomy": {
+        "description": "A single part. Every variant restyles the same host — badge's whole palette lives in its state overlays.",
+        "parts": [
+          {
+            "name": "root",
+            "element": ":host",
+            "description": "The badge itself: pill-shaped inline-flex container holding the label slot.",
+            "tokens": {
+              "background": "--color-background-alt",
+              "foreground": "--color-foreground-alt",
+              "border": "--color-border-alt",
+              "spacing": [
+                "--spacing-micro",
+                "--spacing-inline"
+              ],
+              "font": "--font-label-small"
+            },
+            "states": [
+              {
+                "when": "variant=success",
+                "tokens": {
+                  "background": "--color-background-success-alt",
+                  "foreground": "--color-foreground-success",
+                  "border": "--color-background-success-alt"
+                }
+              },
+              {
+                "when": "variant=warning",
+                "tokens": {
+                  "background": "--color-background-warning-alt",
+                  "foreground": "--color-foreground-warning",
+                  "border": "--color-background-warning-alt"
+                }
+              },
+              {
+                "when": "variant=danger",
+                "tokens": {
+                  "background": "--color-background-danger-alt",
+                  "foreground": "--color-foreground-danger",
+                  "border": "--color-background-danger-alt"
+                }
+              },
+              {
+                "when": "variant=info",
+                "tokens": {
+                  "background": "--color-background-info-alt",
+                  "foreground": "--color-foreground-info",
+                  "border": "--color-background-info-alt"
+                }
+              },
+              {
+                "when": "variant=accent-green",
+                "tokens": {
+                  "background": "--color-background-accent-green",
+                  "foreground": "--color-foreground-accent-green",
+                  "border": "--color-background-accent-green"
+                }
+              },
+              {
+                "when": "variant=accent-blue",
+                "tokens": {
+                  "background": "--color-background-accent-blue",
+                  "foreground": "--color-foreground-accent-blue",
+                  "border": "--color-background-accent-blue"
+                }
+              },
+              {
+                "when": "variant=accent-violet",
+                "tokens": {
+                  "background": "--color-background-accent-violet",
+                  "foreground": "--color-foreground-accent-violet",
+                  "border": "--color-background-accent-violet"
+                }
+              },
+              {
+                "when": "variant=accent-amber",
+                "tokens": {
+                  "background": "--color-background-accent-amber",
+                  "foreground": "--color-foreground-accent-amber",
+                  "border": "--color-background-accent-amber"
+                }
+              }
+            ]
+          }
+        ]
+      },
       "rules": [
         "Never use hex values. Always use var(--color-*)",
         "Never reference --primitive-* tokens in component code",
@@ -516,6 +602,122 @@
         "--motion-duration-instant",
         "--motion-easing-default"
       ],
+      "anatomy": {
+        "description": "The host is a bare wrapper; every token lives on the inner <button> (the exported part) and its two children. Compound conditions (variant=secondary AND :hover) have no grammar in v1 — those hover rules are in button.ts but not transcribed here.",
+        "parts": [
+          {
+            "name": "root",
+            "element": ":host",
+            "description": "Host wrapper. Layout only (display: inline-block) — carries no tokens.",
+            "parts": [
+              {
+                "name": "button",
+                "element": "button",
+                "cssPart": "button",
+                "description": "The native <button>: fill, label colour, outline, padding, and the label font.",
+                "tokens": {
+                  "background": "--color-background-action",
+                  "foreground": "--color-foreground-on-action",
+                  "border": "--color-background-action",
+                  "spacing": [
+                    "--spacing-tight",
+                    "--spacing-element"
+                  ],
+                  "font": "--font-label-strong-medium"
+                },
+                "states": [
+                  {
+                    "when": ":hover",
+                    "tokens": {
+                      "background": "--color-background-action-hover",
+                      "border": "--color-background-action-hover"
+                    }
+                  },
+                  {
+                    "when": ":active",
+                    "tokens": {
+                      "background": "--color-background-action-active",
+                      "border": "--color-background-action-active"
+                    }
+                  },
+                  {
+                    "when": "size=sm",
+                    "tokens": {
+                      "spacing": [
+                        "--spacing-micro",
+                        "--spacing-tight"
+                      ],
+                      "font": "--font-label-strong-small"
+                    }
+                  },
+                  {
+                    "when": "size=lg",
+                    "tokens": {
+                      "spacing": [
+                        "--spacing-inline",
+                        "--spacing-element"
+                      ],
+                      "font": "--font-label-strong-large"
+                    }
+                  },
+                  {
+                    "when": "variant=secondary",
+                    "description": "Outlined: no fill, action-coloured label and edge.",
+                    "tokens": {
+                      "background": "transparent",
+                      "foreground": "--color-foreground-action",
+                      "border": "--color-border-action"
+                    }
+                  },
+                  {
+                    "when": "variant=danger",
+                    "tokens": {
+                      "background": "--color-background-default",
+                      "foreground": "--color-foreground-danger",
+                      "border": "--color-foreground-danger"
+                    }
+                  },
+                  {
+                    "when": "variant=ghost",
+                    "description": "Text-only: no fill, no edge.",
+                    "tokens": {
+                      "background": "transparent",
+                      "foreground": "--color-foreground-action",
+                      "border": "transparent"
+                    }
+                  },
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "background": "--color-background-disabled",
+                      "foreground": "--color-foreground-disabled",
+                      "border": "--color-border-disabled"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "label",
+                    "element": ".label",
+                    "description": "Inline-flex row holding the prefix, default, and suffix slots.",
+                    "tokens": {
+                      "spacing": "--spacing-tight"
+                    }
+                  },
+                  {
+                    "name": "spinner",
+                    "element": ".spinner",
+                    "description": "Loading ring, drawn from the button's own text colour so it tracks every variant.",
+                    "tokens": {
+                      "border": "currentColor"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
       "rules": [
         "Never use hex values. Always use var(--color-*)",
         "Never reference --primitive-* tokens in component code",
@@ -1128,6 +1330,121 @@
         "--font-body-large",
         "--font-label-small"
       ],
+      "anatomy": {
+        "description": "Four siblings under a layout-only host. The label/helper/error margins in input.ts are hardcoded px, not spacing tokens — they are deliberately not transcribed as bindings.",
+        "parts": [
+          {
+            "name": "root",
+            "element": ":host",
+            "description": "Host wrapper. Layout only (display: block) — carries no tokens.",
+            "parts": [
+              {
+                "name": "label",
+                "element": "label",
+                "cssPart": "label",
+                "description": "Field label above the input.",
+                "tokens": {
+                  "foreground": "--color-foreground-alt",
+                  "font": "--font-label-medium"
+                },
+                "states": [
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "foreground": "--color-foreground-disabled"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "required-marker",
+                    "element": ".required",
+                    "description": "The asterisk appended to a required field's label (aria-hidden).",
+                    "tokens": {
+                      "foreground": "--color-foreground-danger"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "input",
+                "element": "input",
+                "cssPart": "input",
+                "description": "The native <input>: field surface, text colour, and outline.",
+                "tokens": {
+                  "background": "--color-background-default",
+                  "foreground": "--color-foreground-default",
+                  "border": "--color-border-default",
+                  "spacing": [
+                    "--spacing-tight",
+                    "--spacing-element"
+                  ],
+                  "font": "--font-body-large"
+                },
+                "states": [
+                  {
+                    "when": ":hover",
+                    "tokens": {
+                      "border": "--color-border-hover"
+                    }
+                  },
+                  {
+                    "when": ":focus",
+                    "tokens": {
+                      "border": "--color-border-focus"
+                    }
+                  },
+                  {
+                    "when": "data-invalid",
+                    "description": "Set internally while error-text is non-empty.",
+                    "tokens": {
+                      "border": "--color-foreground-danger"
+                    }
+                  },
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "background": "--color-background-alt",
+                      "foreground": "--color-foreground-disabled",
+                      "border": "--color-border-disabled"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "placeholder",
+                    "element": "::placeholder",
+                    "description": "Placeholder text inside the field.",
+                    "tokens": {
+                      "foreground": "--color-foreground-muted"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "helper",
+                "element": ".helper",
+                "cssPart": "helper",
+                "description": "Helper text below the field. Replaced by the error part while invalid.",
+                "tokens": {
+                  "foreground": "--color-foreground-muted",
+                  "font": "--font-label-small"
+                }
+              },
+              {
+                "name": "error",
+                "element": ".error",
+                "cssPart": "error",
+                "description": "Error message below the field (role=alert).",
+                "tokens": {
+                  "foreground": "--color-foreground-danger",
+                  "font": "--font-label-small"
+                }
+              }
+            ]
+          }
+        ]
+      },
       "rules": [
         "Never use hex values. Always use var(--color-*)",
         "Never reference --primitive-* tokens in component code",

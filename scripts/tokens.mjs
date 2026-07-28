@@ -120,6 +120,15 @@ export function toCssVar(path) {
     .toLowerCase()}`;
 }
 
+/** The inverse index: CSS custom property name → dotted token path. Built from the
+ *  base layer, which carries every path a brand can override. Shared by every
+ *  caller that starts from a `--token-name` (contrast inputs, anatomy bindings). */
+export function cssVarToPathMap(store) {
+  const m = new Map();
+  for (const path of store.base.keys()) m.set(toCssVar(path), path);
+  return m;
+}
+
 /** Look a token up in the brand layer first, then the base layer. */
 function lookup({ base, brands }, path, brand) {
   if (brand && brands.get(brand)?.has(path)) return brands.get(brand).get(path);
