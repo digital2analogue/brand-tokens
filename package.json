@@ -12,8 +12,9 @@
   "scripts": {
     "build": "node scripts/build-brands.mjs",
     "docs": "node scripts/generate-docs.mjs",
+    "docs:design": "node scripts/generate-design-md.mjs",
     "docs:components": "node scripts/generate-component-docs.mjs",
-    "build:all": "node scripts/build-brands.mjs && node scripts/generate-docs.mjs",
+    "build:all": "node scripts/build-brands.mjs && node scripts/generate-docs.mjs && node scripts/generate-design-md.mjs",
     "validate": "node scripts/validate.mjs",
     "lint:stories": "node scripts/lint-stories.mjs",
     "build:cem": "npm run cem --workspace @digital2analogue2/parsimony-components && node scripts/normalize-cem.mjs",
