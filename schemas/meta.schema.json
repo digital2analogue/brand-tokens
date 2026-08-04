@@ -60,10 +60,10 @@
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^--(color|font|spacing|radius|motion|shadow|icon)-",
+        "pattern": "^--(color|font|spacing|radius|motion|shadow|icon|letter-spacing)-",
         "not": { "pattern": "^--primitive-" }
       },
-      "description": "CSS custom properties this component references. Must be semantic tokens — never primitives (the component tier was removed in #114)."
+      "description": "CSS custom properties this component references. Must be semantic tokens — never primitives (the component tier was removed in #114). The prefix list must cover every semantic scale: `letter-spacing` was missing until #187, so rr-dialog, rr-tag and rr-table-cell could not declare the tracking tokens their styles used."
     },
     "anatomy": {
       "type": "object",

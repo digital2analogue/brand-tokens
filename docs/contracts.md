@@ -32,6 +32,26 @@ Roll-out is **opt-in per component**: gates only fire on metas that declare bind
 Currently bound: `rr-badge`, `rr-button`, `rr-input` (the three `stable` components).
 The other 24 metas get promoted as #156 stages roll through them.
 
+**One gate is not opt-in.** §4d (contract ↔ styles, #187) runs on all 27, because
+`tokensUsed` is required by the schema — there is nothing to opt into. Before it
+existed, `tokensUsed` was checked against *nothing*: its only reader was the doc
+generator, so it could name a token the component had stopped using, or miss one it
+had started using, indefinitely. Anatomy has the same exposure by construction — it
+is transcribed from real styles by hand — which is why this landed before #179–#183
+promote anatomy across the remaining components rather than after.
+
+The gate reports three things, all mechanical:
+
+- **unknown** — a `var(--x)` naming nothing the token store defines and nothing the
+  component's own directory declares. A typo, or a rename that wasn't propagated.
+  Local knobs are collected per *directory*, not per file: `rr-table` declares the
+  padding custom properties `rr-table-cell` consumes.
+- **behind** — the styles use a token the contract never declares.
+- **ahead** — the contract declares a token the styles never reference.
+
+Primitives are excluded and left to the no-primitive lint rule — reporting one here
+would tell an author to add it to `tokensUsed`, which the schema forbids outright.
+
 ## Anatomy and contrast
 
 Declared per-part pairings are a **third source** of intended fg/bg pairs, alongside the
@@ -64,7 +84,7 @@ in v1.
 | Command | What it does | When it fails |
 |---|---|---|
 | `npm run parity` | Diffs every bound meta's bindings against `figma/components.dump.json` and classifies drift (see below). `--json` for machine output; pass a path to diff a different dump. | Exit 1 on any finding. |
-| `npm run validate` | The build gate. Contract-relevant sections: **§1b** — every `rr-*` entry in a slot's `accepts` must name a real component; **§1c** — every anatomy state's `when` must name a declared prop; **§3b** — every anatomy token binding must resolve; **§4** — every `figma.enum` emission must exist in a component literal union; **§4b** — bindings must agree with the component's `*.figma.ts` bidirectionally (property name, full valueMap, reverse coverage); **§5** — every intended fg/bg pairing holds its contrast threshold. | Exit 1, offending item named. |
+| `npm run validate` | The build gate. Contract-relevant sections: **§1b** — every `rr-*` entry in a slot's `accepts` must name a real component; **§1c** — every anatomy state's `when` must name a declared prop; **§3b** — every anatomy token binding must resolve; **§4** — every `figma.enum` emission must exist in a component literal union; **§4b** — bindings must agree with the component's `*.figma.ts` bidirectionally (property name, full valueMap, reverse coverage); **§4c** — a prop's enum `valueMap` must match that prop's own literal union, and its declared `type` must be that union (#191); **§4d** — the contract's tokens must match the tokens the component's styles actually reference, both directions (#187); **§5** — every intended fg/bg pairing holds its contrast threshold. | Exit 1, offending item named. |
 | `npm run build:meta` | Regenerates the CEM + `design-system.json` (bindings, `accepts`, `ignoredOptions` all flow through to the MCP's `get_component`). Commit the regenerated artifact — CI fails on staleness. | On schema violations or missing prop JSDoc. |
 
 ## Reading parity findings

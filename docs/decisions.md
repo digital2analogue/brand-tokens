@@ -11,6 +11,48 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-08-03 — The contract is proved against the code, not asserted (#187, #191)
+
+**What:** two new `validate` sections close the gap between what a `*.meta.json` claims
+and what its component actually does. **§4d** (`scripts/component-tokens.mjs`) compares
+every token the styles `var()`-reference against `tokensUsed` ∪ the anatomy tree, both
+directions, and additionally rejects a `var(--x)` that names no token at all. It runs on
+all 27 metas — `tokensUsed` is schema-required, so there is nothing to opt into. **§4c**
+(`findValueMapMismatches` in `scripts/code-connect.mjs`) holds a prop's enum `valueMap` to
+that prop's own literal union in both directions, and requires the meta's declared `type`
+to *be* that union rather than a bare `string`.
+
+**Why:** `tokensUsed` was checked against nothing — its only reader was the doc generator —
+and `anatomy` is transcribed from real styles by hand, so both could rot the moment a
+`static styles` block changed while per-part contrast, `check_contrast` and `validate_brand`
+kept trusting them. On the prop side, an enum's options existed in three places (the source
+union, the meta `type`, the `valueMap`) with only one pair ever compared. Prompted by Nathan
+Curtis, *Component Contracts and Schemas* (2026-07-28), principles 1 and 4.
+
+**What it caught immediately**, none of it hypothetical:
+- `rr-button` — a `stable` component with full bindings — declared `"type": "string"` for
+  both `variant` and `size` while `button.ts` declared four- and three-member unions. Its
+  published contract accepted any string at all.
+- `rr-dialog`, `rr-tag` and `rr-table-cell` used `--letter-spacing-title` /
+  `--letter-spacing-all-caps` in their styles and declared neither.
+- The reason they couldn't: `meta.schema.json`'s `tokensUsed` pattern allowed
+  `color|font|spacing|radius|motion|shadow|icon` and **omitted `letter-spacing`**. The
+  contract had no grammar for a whole semantic scale, so three components were structurally
+  unable to declare tokens they were using. Fixed here.
+
+**Alternative considered:** extracting anatomy from the styles automatically instead of
+checking the hand-transcription. Rejected for now — the transcription carries intent a
+parser can't recover (which part is "root", which overlay is a variant vs a pseudo-class),
+and a checked hand-transcription gets the durability without the guesswork. Also considered
+deferring until after #179–#183; rejected precisely backwards — promoting anatomy across 24
+more components first would multiply an unverified artifact by eight.
+
+**Status:** shipped, all 27 contracts green. Deliberately mechanical: neither gate infers
+what a component *meant*. Primitives are excluded from §4d and left to the no-primitive lint
+rule, since telling an author to add one to `tokensUsed` would contradict the schema. Local
+custom properties (`--rr-table-cell-padding-x`) are collected per *directory*, because
+`rr-table` declares knobs `rr-table-cell` consumes. Boolean derivations
+(`State=disabled → disabled: true`) stay exempt from §4c — they map to booleans, not unions.
 ## 2026-08-03 — ai/DESIGN.md's token tables are generated, not transcribed (#186)
 
 **What:** every token table in `ai/DESIGN.md` is now emitted from `tokens/**/*.tokens.json`

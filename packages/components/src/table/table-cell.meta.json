@@ -32,7 +32,8 @@
     "--font-label-strong-small",
     "--font-mono-label-small",
     "--spacing-inline",
-    "--spacing-element"
+    "--spacing-element",
+    "--letter-spacing-all-caps"
   ],
   "rules": [
     "Never use hex values. Always use var(--color-*) semantic tokens",

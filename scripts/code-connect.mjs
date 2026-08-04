@@ -68,6 +68,147 @@ export function findUnmappedEmissions(figmaSrc, componentSrc) {
   );
 }
 
+/** camelCase a kebab attribute name: helper-text → helperText. */
+function camel(name) {
+  return name.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+}
+
+/**
+ * Drop comments before searching for a declaration. Every prop here carries a
+ * JSDoc block, and prose reads like code to a regex — button's
+ * `/** Visual variant: primary (filled CTA), … *\/` matches a `variant:` search
+ * and hands back "primary (filled CTA)" as the type, which is how the first
+ * cut of this silently found no union for rr-button's most important prop.
+ *
+ * Line comments are stripped only when they start a line, so a `//` inside a
+ * string literal (a URL, say) is left intact.
+ */
+export function stripComments(src) {
+  return String(src)
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/^[ \t]*\/\/.*$/gm, "");
+}
+
+/**
+ * The literal union a *specific* prop is typed as, or null when the prop has
+ * no literal union (a plain `string`/`boolean`, or no declaration found).
+ *
+ * extractUnionLiterals collects every literal in the file, which is the right
+ * scope for "can Code Connect emit this value at all" (§4) but far too coarse
+ * to ask "does this prop's valueMap cover its options" — button.ts alone
+ * carries three separate unions (variant, size, and the native `type`
+ * attribute), and comparing one prop's map against all of them would invent
+ * mismatches. So this resolves the prop's own annotation:
+ *
+ *   variant: ButtonVariant = 'primary'      → follows the exported type alias
+ *   type: 'button' | 'submit' = 'button'    → reads the inline union
+ *
+ * Metas name props by attribute (`helper-text`); Lit declares them camelCased
+ * (`helperText`), so both spellings are tried.
+ *
+ * @param {string} componentSrc
+ * @param {string} propName
+ * @returns {Set<string>|null}
+ */
+export function extractPropUnion(componentSrc, propName) {
+  const src = stripComments(componentSrc);
+
+  const annotation = (name) => {
+    const re = new RegExp(
+      `(?:^|\\n)[^\\n]*?\\b${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*[!?]?\\s*:\\s*([^=;\\n]+)`,
+    );
+    return re.exec(src)?.[1]?.trim() ?? null;
+  };
+
+  const type = annotation(propName) ?? annotation(camel(propName));
+  if (!type) return null;
+
+  // Inline union — read it directly.
+  if (/['"]/.test(type)) {
+    const lits = extractUnionLiterals(type);
+    return lits.size ? lits : null;
+  }
+
+  // Type alias — resolve `type X = 'a' | 'b';` (single- or multi-line).
+  const alias = /^[A-Za-z_$][\w$]*/.exec(type)?.[0];
+  if (!alias) return null;
+  const aliasRe = new RegExp(`type\\s+${alias}\\s*=\\s*([^;]+);`);
+  const body = aliasRe.exec(src)?.[1];
+  if (!body) return null;
+  const lits = extractUnionLiterals(body);
+  return lits.size ? lits : null;
+}
+
+/**
+ * Check a meta's enum prop bindings against the component's own type
+ * declarations (#191).
+ *
+ * §4 already stops *.figma.ts emitting a value the component doesn't
+ * implement. This closes the other half: the meta's `valueMap` is a third
+ * copy of the same option set (source union, meta `type`, valueMap) and
+ * nothing held it to the first. rr-button shipped `"type": "string"` for
+ * `variant` and `size` while button.ts declared four- and three-member
+ * unions — a stable component publishing a contract that accepts any string.
+ *
+ * Three checks per prop that declares a string `valueMap`:
+ *   1. every mapped code value exists in the prop's union
+ *   2. every union member is covered by the valueMap
+ *   3. the meta's declared `type` is that union, not a bare `string`
+ *
+ * Boolean derivations (`State=disabled → disabled: true`) are exempt — they
+ * map to booleans, not unions, exactly as extractEnumEmissions treats them.
+ *
+ * @param {object} meta          parsed *.meta.json
+ * @param {string} componentSrc  source text of the component *.ts
+ * @returns {string[]}           human-readable mismatches (empty = agree)
+ */
+export function findValueMapMismatches(meta, componentSrc) {
+  const out = [];
+
+  for (const p of meta.props ?? []) {
+    const valueMap = p.bindings?.figma?.valueMap;
+    if (!valueMap) continue;
+
+    const mapped = Object.values(valueMap).filter((v) => typeof v === "string");
+    if (mapped.length === 0) continue; // boolean-derivation only
+
+    const union = extractPropUnion(componentSrc, p.name);
+    if (!union) {
+      out.push(
+        `prop "${p.name}": valueMap maps ${mapped.length} string value(s) but the component declares no literal union for it — type it as a union, or drop the valueMap`,
+      );
+      continue;
+    }
+
+    for (const value of mapped) {
+      if (!union.has(value)) {
+        out.push(
+          `prop "${p.name}": valueMap emits "${value}" but the component's union has no such member`,
+        );
+      }
+    }
+    for (const member of union) {
+      if (!mapped.includes(member)) {
+        out.push(
+          `prop "${p.name}": the component implements "${member}" but the valueMap does not map any Figma option to it`,
+        );
+      }
+    }
+
+    // The declared type must say what the union says. A bare "string" is the
+    // loose form this check exists to eliminate.
+    const declared = String(p.type ?? "");
+    const missing = [...union].filter((m) => !declared.includes(`'${m}'`));
+    if (missing.length) {
+      out.push(
+        `prop "${p.name}": meta type is ${JSON.stringify(declared)} — must be the literal union the component declares (missing ${missing.map((m) => `'${m}'`).join(", ")})`,
+      );
+    }
+  }
+
+  return out;
+}
+
 /**
  * Extract every `codeProp: figma.enum('Property', {...})` mapping from a
  * *.figma.ts, including boolean derivations (`disabled: figma.enum('State',

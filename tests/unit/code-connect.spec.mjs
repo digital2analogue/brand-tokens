@@ -10,6 +10,9 @@ import {
   extractEnumEmissions,
   extractUnionLiterals,
   findUnmappedEmissions,
+  extractPropUnion,
+  findValueMapMismatches,
+  stripComments,
 } from "../../scripts/code-connect.mjs";
 
 const FIGMA_SRC = `
@@ -227,5 +230,183 @@ describe("findBindingMismatches", () => {
     };
     const msgs = findBindingMismatches(meta, "");
     expect(msgs[0]).toMatch(/no figma\.enum maps it/);
+  });
+});
+
+// ── #191: enum valueMap ↔ the component's own union ─────────────────────────
+// §4 asks "can figma.ts emit a value the component lacks". This asks the
+// narrower, per-prop question the coarse whole-file union scan cannot: does
+// THIS prop's valueMap match THIS prop's type. rr-button shipped
+// `"type": "string"` for variant and size while button.ts declared four- and
+// three-member unions, and nothing failed.
+
+const BUTTON_SRC = `
+export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost';
+export type ButtonSize = 'sm' | 'md' | 'lg';
+
+export class RrButton extends LitElement {
+  /** Visual variant: primary (filled CTA), secondary (outlined), danger. */
+  @property({ reflect: true }) variant: ButtonVariant = 'primary';
+  /** Size: sm, md, lg. */
+  @property({ reflect: true }) size: ButtonSize = 'md';
+  /** Native button type. */
+  @property() type: 'button' | 'submit' | 'reset' = 'button';
+  @property({ type: Boolean }) disabled = false;
+}
+`;
+
+const buttonMeta = (props) => ({ name: "rr-button", props });
+const variantProp = (type, valueMap) => ({
+  name: "variant",
+  type,
+  bindings: {
+    code: { prop: "variant" },
+    figma: { kind: "VARIANT", property: "Variant", valueMap },
+  },
+});
+const FULL_MAP = {
+  primary: "primary",
+  secondary: "secondary",
+  danger: "danger",
+  ghost: "ghost",
+};
+const FULL_UNION = "'primary' | 'secondary' | 'danger' | 'ghost'";
+
+describe("extractPropUnion", () => {
+  it("follows a prop typed by an exported alias", () => {
+    expect([...extractPropUnion(BUTTON_SRC, "variant")]).toEqual([
+      "primary",
+      "secondary",
+      "danger",
+      "ghost",
+    ]);
+  });
+
+  it("reads an inline union without an alias", () => {
+    expect([...extractPropUnion(BUTTON_SRC, "type")]).toEqual([
+      "button",
+      "submit",
+      "reset",
+    ]);
+  });
+
+  it("resolves the right prop when the file holds several unions", () => {
+    expect([...extractPropUnion(BUTTON_SRC, "size")]).toEqual([
+      "sm",
+      "md",
+      "lg",
+    ]);
+  });
+
+  it("is not fooled by prose in a JSDoc comment", () => {
+    // "Visual variant: primary (filled CTA), secondary (outlined)…" matches a
+    // naive `variant:` search and yields "primary (filled CTA)" as the type.
+    // That is how the first cut found no union for button's main prop.
+    expect(extractPropUnion(BUTTON_SRC, "variant")).not.toBeNull();
+  });
+
+  it("returns null for a prop with no literal union", () => {
+    expect(extractPropUnion(BUTTON_SRC, "disabled")).toBeNull();
+  });
+
+  it("returns null for a prop that isn't declared", () => {
+    expect(extractPropUnion(BUTTON_SRC, "nonesuch")).toBeNull();
+  });
+
+  it("matches a kebab attribute against its camelCase declaration", () => {
+    const src = `@property({ attribute: 'helper-kind' }) helperKind: 'a' | 'b' = 'a';`;
+    expect([...extractPropUnion(src, "helper-kind")]).toEqual(["a", "b"]);
+  });
+});
+
+describe("findValueMapMismatches", () => {
+  it("passes when map, union and declared type all agree", () => {
+    const meta = buttonMeta([variantProp(FULL_UNION, FULL_MAP)]);
+    expect(findValueMapMismatches(meta, BUTTON_SRC)).toEqual([]);
+  });
+
+  it("rejects a bare string type on a bound enum prop", () => {
+    const meta = buttonMeta([variantProp("string", FULL_MAP)]);
+    const msgs = findValueMapMismatches(meta, BUTTON_SRC);
+    expect(msgs).toHaveLength(1);
+    expect(msgs[0]).toMatch(/must be the literal union/);
+  });
+
+  it("flags a mapped value the component does not implement", () => {
+    const meta = buttonMeta([
+      variantProp(`${FULL_UNION} | 'tertiary'`, {
+        ...FULL_MAP,
+        tertiary: "tertiary",
+      }),
+    ]);
+    expect(findValueMapMismatches(meta, BUTTON_SRC).join(" ")).toMatch(
+      /emits "tertiary" but the component's union has no such member/,
+    );
+  });
+
+  it("flags a union member no Figma option maps to", () => {
+    const { ghost, ...withoutGhost } = FULL_MAP;
+    const meta = buttonMeta([variantProp(FULL_UNION, withoutGhost)]);
+    expect(findValueMapMismatches(meta, BUTTON_SRC).join(" ")).toMatch(
+      /implements "ghost" but the valueMap does not map/,
+    );
+  });
+
+  it("exempts boolean derivations — they map to booleans, not unions", () => {
+    const meta = buttonMeta([
+      {
+        name: "disabled",
+        type: "boolean",
+        bindings: {
+          code: { prop: "disabled" },
+          figma: {
+            kind: "VARIANT",
+            property: "State",
+            valueMap: { disabled: true },
+          },
+        },
+      },
+    ]);
+    expect(findValueMapMismatches(meta, BUTTON_SRC)).toEqual([]);
+  });
+
+  it("reports a string valueMap on a prop the component never types", () => {
+    const meta = buttonMeta([
+      {
+        name: "tone",
+        type: "string",
+        bindings: {
+          code: { prop: "tone" },
+          figma: {
+            kind: "VARIANT",
+            property: "Tone",
+            valueMap: { loud: "loud" },
+          },
+        },
+      },
+    ]);
+    expect(findValueMapMismatches(meta, BUTTON_SRC).join(" ")).toMatch(
+      /declares no literal union/,
+    );
+  });
+
+  it("ignores props with no bindings at all", () => {
+    const meta = buttonMeta([{ name: "variant", type: "string" }]);
+    expect(findValueMapMismatches(meta, BUTTON_SRC)).toEqual([]);
+  });
+});
+
+describe("stripComments", () => {
+  it("removes block comments", () => {
+    expect(stripComments("/** hi */ const a = 1;").trim()).toBe("const a = 1;");
+  });
+
+  it("removes whole-line // comments", () => {
+    expect(stripComments("// note\nconst a = 1;").trim()).toBe("const a = 1;");
+  });
+
+  it("leaves a // inside a string literal alone", () => {
+    const src = `const url = 'https://example.com';`;
+    expect(stripComments(src)).toBe(src);
   });
 });
