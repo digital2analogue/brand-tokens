@@ -106,6 +106,118 @@
     "--color-foreground-disabled",
     "--font-label-small"
   ],
+  "anatomy": {
+    "description": "The same four-sibling shape as rr-input, on a <textarea>. The label/helper/error margins are hardcoded px, not spacing tokens — deliberately not transcribed.",
+    "parts": [
+      {
+        "name": "root",
+        "element": ":host",
+        "description": "Host wrapper. Layout only (display: block) — carries no tokens.",
+        "parts": [
+          {
+            "name": "label",
+            "element": "label",
+            "cssPart": "label",
+            "description": "Field label above the textarea.",
+            "tokens": {
+              "foreground": "--color-foreground-alt",
+              "font": "--font-label-medium"
+            },
+            "states": [
+              {
+                "when": "disabled",
+                "tokens": {
+                  "foreground": "--color-foreground-disabled"
+                }
+              }
+            ],
+            "parts": [
+              {
+                "name": "required-marker",
+                "element": ".required",
+                "description": "The asterisk appended to a required field's label (aria-hidden).",
+                "tokens": {
+                  "foreground": "--color-foreground-danger"
+                }
+              }
+            ]
+          },
+          {
+            "name": "textarea",
+            "element": "textarea",
+            "cssPart": "textarea",
+            "description": "The native <textarea>: field surface, text colour, and outline.",
+            "tokens": {
+              "background": "--color-background-default",
+              "foreground": "--color-foreground-default",
+              "border": "--color-border-default",
+              "spacing": ["--spacing-tight", "--spacing-element"],
+              "font": "--font-body-large"
+            },
+            "states": [
+              {
+                "when": ":hover",
+                "tokens": {
+                  "border": "--color-border-hover"
+                }
+              },
+              {
+                "when": ":focus",
+                "tokens": {
+                  "border": "--color-border-focus"
+                }
+              },
+              {
+                "when": "data-invalid",
+                "description": "Set internally while error-text is non-empty.",
+                "tokens": {
+                  "border": "--color-foreground-danger"
+                }
+              },
+              {
+                "when": "disabled",
+                "tokens": {
+                  "background": "--color-background-alt",
+                  "foreground": "--color-foreground-disabled",
+                  "border": "--color-border-disabled"
+                }
+              }
+            ],
+            "parts": [
+              {
+                "name": "placeholder",
+                "element": "::placeholder",
+                "description": "Placeholder text inside the field.",
+                "tokens": {
+                  "foreground": "--color-foreground-muted"
+                }
+              }
+            ]
+          },
+          {
+            "name": "helper",
+            "element": ".helper",
+            "cssPart": "helper",
+            "description": "Helper text below the field. Replaced by the error part while invalid.",
+            "tokens": {
+              "foreground": "--color-foreground-muted",
+              "font": "--font-label-small"
+            }
+          },
+          {
+            "name": "error",
+            "element": ".error",
+            "cssPart": "error",
+            "description": "Error message below the field (role=alert).",
+            "tokens": {
+              "foreground": "--color-foreground-danger",
+              "font": "--font-label-small"
+            }
+          }
+        ]
+      }
+    ]
+  },
   "rules": [
     "Never use hex values — always var(--color-*)",
     "Never reference --primitive-* tokens in component code",

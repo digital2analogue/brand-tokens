@@ -45,9 +45,7 @@
     {
       "name": "default",
       "description": "rr-radio child elements.",
-      "accepts": [
-        "rr-radio"
-      ]
+      "accepts": ["rr-radio"]
     }
   ],
   "events": [
@@ -75,6 +73,69 @@
     "--font-label-small",
     "--color-foreground-danger"
   ],
+  "anatomy": {
+    "description": "A fieldset wrapping the projected rr-radio children. The group carries the legend and the error; each option's own colours belong to rr-radio. The error margin is hardcoded px, not a spacing token.",
+    "parts": [
+      {
+        "name": "root",
+        "element": ":host",
+        "description": "Host wrapper. Layout only (display: block) — carries no tokens.",
+        "parts": [
+          {
+            "name": "fieldset",
+            "element": "fieldset",
+            "cssPart": "fieldset",
+            "description": "Semantic grouping element. Borderless and unpadded — carries no tokens."
+          },
+          {
+            "name": "legend",
+            "element": "legend",
+            "cssPart": "legend",
+            "description": "The group label.",
+            "tokens": {
+              "foreground": "--color-foreground-alt",
+              "font": "--font-label-medium",
+              "spacing": "--spacing-tight"
+            },
+            "states": [
+              {
+                "when": "disabled",
+                "tokens": {
+                  "foreground": "--color-foreground-disabled"
+                }
+              }
+            ]
+          },
+          {
+            "name": "options",
+            "element": ".options",
+            "description": "The slot container for the rr-radio children.",
+            "tokens": {
+              "spacing": "--spacing-tight"
+            },
+            "states": [
+              {
+                "when": "orientation=horizontal",
+                "description": "Row layout opens the gap one step.",
+                "tokens": {
+                  "spacing": "--spacing-element"
+                }
+              }
+            ]
+          },
+          {
+            "name": "error",
+            "element": ".error",
+            "description": "Group-level error message (role=alert).",
+            "tokens": {
+              "foreground": "--color-foreground-danger",
+              "font": "--font-label-small"
+            }
+          }
+        ]
+      }
+    ]
+  },
   "rules": [
     "Never use hex values — always var(--color-*)",
     "Never reference --primitive-* tokens in component code",

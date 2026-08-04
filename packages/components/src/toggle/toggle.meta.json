@@ -75,6 +75,90 @@
     "--font-label-medium",
     "--color-foreground-alt"
   ],
+  "anatomy": {
+    "description": "A track with a sliding knob beside a label, with the real <input> transparently overlaying the track. The 36x20 track, the 12px knob, its travel distance, and the focus-ring outline are not tokens.",
+    "parts": [
+      {
+        "name": "root",
+        "element": ":host",
+        "description": "Inline-flex row holding the track and its label.",
+        "tokens": {
+          "spacing": "--spacing-tight"
+        },
+        "parts": [
+          {
+            "name": "track",
+            "element": ".track",
+            "cssPart": "track",
+            "description": "The pill-shaped track. The native input sits transparently on top of it.",
+            "tokens": {
+              "background": "--color-background-alt",
+              "border": "--color-border-default"
+            },
+            "states": [
+              {
+                "when": "checked",
+                "tokens": {
+                  "background": "--color-background-action",
+                  "border": "--color-background-action"
+                }
+              },
+              {
+                "when": "disabled",
+                "tokens": {
+                  "background": "--color-background-disabled",
+                  "border": "--color-border-disabled"
+                }
+              }
+            ],
+            "parts": [
+              {
+                "name": "knob",
+                "element": ".knob",
+                "cssPart": "knob",
+                "description": "The circle that slides across the track.",
+                "tokens": {
+                  "background": "--color-foreground-muted"
+                },
+                "states": [
+                  {
+                    "when": "checked",
+                    "tokens": {
+                      "background": "--color-foreground-on-action"
+                    }
+                  },
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "background": "--color-foreground-disabled"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "label",
+            "element": "label",
+            "cssPart": "label",
+            "description": "The text label beside the track.",
+            "tokens": {
+              "foreground": "--color-foreground-alt",
+              "font": "--font-label-medium"
+            },
+            "states": [
+              {
+                "when": "disabled",
+                "tokens": {
+                  "foreground": "--color-foreground-disabled"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "rules": [
     "Never use hex values — always var(--color-*)",
     "Never reference --primitive-* tokens in component code",
@@ -98,10 +182,7 @@
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/switch/",
     "role": "switch",
     "focusable": true,
-    "keyboard": [
-      "Space toggles the switch",
-      "Enter toggles the switch"
-    ],
+    "keyboard": ["Space toggles the switch", "Enter toggles the switch"],
     "wcag": [
       "1.4.3 Contrast (Minimum)",
       "2.1.1 Keyboard",
