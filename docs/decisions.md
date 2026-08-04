@@ -53,6 +53,9 @@ rule, since telling an author to add one to `tokensUsed` would contradict the sc
 custom properties (`--rr-table-cell-padding-x`) are collected per *directory*, because
 `rr-table` declares knobs `rr-table-cell` consumes. Boolean derivations
 (`State=disabled → disabled: true`) stay exempt from §4c — they map to booleans, not unions.
+
+---
+
 ## 2026-08-03 — ai/DESIGN.md's token tables are generated, not transcribed (#186)
 
 **What:** every token table in `ai/DESIGN.md` is now emitted from `tokens/**/*.tokens.json`
