@@ -462,7 +462,7 @@
       "props": [
         {
           "name": "variant",
-          "type": "string",
+          "type": "'primary' | 'secondary' | 'danger' | 'ghost'",
           "default": "primary",
           "bindings": {
             "code": {
@@ -483,7 +483,7 @@
         },
         {
           "name": "size",
-          "type": "string",
+          "type": "'sm' | 'md' | 'lg'",
           "default": "md",
           "bindings": {
             "code": {
@@ -1071,7 +1071,8 @@
         "--color-border-focus",
         "--font-body-large",
         "--color-foreground-alt",
-        "--spacing-inline"
+        "--spacing-inline",
+        "--letter-spacing-title"
       ],
       "rules": [
         "Never use hex values — always var(--color-*)",
@@ -2749,7 +2750,8 @@
         "--font-label-strong-small",
         "--font-mono-label-small",
         "--spacing-inline",
-        "--spacing-element"
+        "--spacing-element",
+        "--letter-spacing-all-caps"
       ],
       "rules": [
         "Never use hex values. Always use var(--color-*) semantic tokens",
@@ -2889,7 +2891,8 @@
         "--radius-sm",
         "--spacing-tight",
         "--spacing-micro",
-        "--font-label-small"
+        "--font-label-small",
+        "--letter-spacing-all-caps"
       ],
       "rules": [
         "Never use hex values. Always use var(--color-*)",

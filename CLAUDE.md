@@ -33,6 +33,9 @@ scripts/
   build-design-system-json.mjs Merges *.meta.json + CEM into design-system.json (deterministic — sorted, no timestamp).
   anatomy.mjs                 The `anatomy` part tree: build gates (dangling binding, unknown state prop)
                               + the fg/bg pairs components declare. Imported by validate and contrast.
+  component-tokens.mjs        Holds each component's contract to the styles it ships (#187): the tokens
+                              `var()`-referenced in the source vs tokensUsed ∪ anatomy, both directions,
+                              plus unknown-token detection. Imported by validate (§4d).
   rules.mjs                   Single source of truth for the lint rules (no hex / no primitive / no hardcoded size / deprecated). Imported by validate, the MCP, and drift-lint.
   validate.mjs                Build gate: meta.json schema + lint rules + token-reference resolution.
   drift-scan.mjs              Reusable consumer-repo scan (scanConsumer): walk + ignore handling + shared rules. Shared by drift-lint and the MCP lint_consumer tool.

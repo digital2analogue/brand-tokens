@@ -12,22 +12,32 @@
  *   4. Every string value a *.figma.ts Code Connect enum can emit exists
  *      in a literal union of the paired component source — so Code Connect
  *      can never emit a prop value the component doesn't implement.
+ *      §4b holds prop bindings and *.figma.ts to each other; §4c holds a
+ *      meta's enum valueMap to the component's own union (#191); §4d holds
+ *      the whole contract to the styles the component ships (#187).
+ *   5. Every intended fg/bg pairing keeps its contrast threshold.
+ *
+ * §4c and §4d are the two directions of one idea: nothing in the contract may
+ * claim something the code does not do, and nothing the code does may go
+ * unclaimed. Both are mechanical — they never infer what a component *meant*.
  *
  * Consumer-side enforcement lives in scripts/drift-lint.mjs (the CI Action).
  */
 
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { resolve, relative, dirname, basename } from "node:path";
 import { glob } from "node:fs/promises";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 import { lintLines } from "./rules.mjs";
-import { loadTokens } from "./tokens.mjs";
+import { loadTokens, toCssVar } from "./tokens.mjs";
 import {
   findUnmappedEmissions,
   findBindingMismatches,
+  findValueMapMismatches,
 } from "./code-connect.mjs";
 import { unresolvedAccepts } from "./assembly.mjs";
+import { findTokenDrift, localCustomProperties } from "./component-tokens.mjs";
 import {
   unresolvedAnatomyTokens,
   unresolvedAnatomyStates,
@@ -55,7 +65,10 @@ const metaGlobs = ["packages/components/**/*.meta.json", "src/**/*.meta.json"];
 
 let metaCount = 0;
 const metas = [];
-const metaEntries = []; // { dir, data } — §4b pairs metas with their *.figma.ts
+// { dir, data, src } — §4b pairs metas with their *.figma.ts; §4c and §6 need
+// the meta's own component source, not the directory's (a prop name would
+// otherwise resolve against a sibling: tabs/ holds both tab.ts and tab-list.ts).
+const metaEntries = [];
 for (const pattern of metaGlobs) {
   for await (const entry of glob(pattern, { cwd: ROOT })) {
     metaCount++;
@@ -70,7 +83,11 @@ for (const pattern of metaGlobs) {
       } else {
         console.log(`  ✓ ${rel}`);
         metas.push(data);
-        metaEntries.push({ dir: dirname(resolve(ROOT, entry)), data });
+        metaEntries.push({
+          dir: dirname(resolve(ROOT, entry)),
+          data,
+          src: resolve(ROOT, entry).replace(/\.meta\.json$/, ".ts"),
+        });
       }
     } catch (e) {
       fail(`${rel}: ${e.message}`);
@@ -266,6 +283,94 @@ console.log(
     : exitCode === 0
       ? `  ✓ ${boundCount} component(s)' bindings agree with their Code Connect mapping\n`
       : "",
+);
+
+// ── 4c. Enum valueMap ↔ the component's own union (#191) ────────────────────
+// §4 stops a *.figma.ts emitting a value the component doesn't implement. This
+// closes the other half: a meta's valueMap is a third copy of the same option
+// set (source union, meta `type`, valueMap) and nothing held it to the source.
+// rr-button published `"type": "string"` for variant and size while button.ts
+// declared four- and three-member unions — a stable component whose contract
+// accepted any string at all. Boolean derivations are exempt.
+
+console.log("Checking enum valueMaps against component unions...\n");
+
+let enumCount = 0;
+for (const { data, src } of metaEntries) {
+  if (!(data.props ?? []).some((p) => p.bindings?.figma?.valueMap)) continue;
+  if (!existsSync(src)) {
+    fail(
+      `${data.name}: declares enum bindings but ${relative(ROOT, src)} does not exist`,
+    );
+    continue;
+  }
+  enumCount++;
+  for (const msg of findValueMapMismatches(data, readFileSync(src, "utf8"))) {
+    fail(`${data.name}: ${msg}`);
+  }
+}
+console.log(
+  enumCount === 0
+    ? "  (no metas declare enum valueMaps yet)\n"
+    : exitCode === 0
+      ? `  ✓ ${enumCount} component(s)' valueMaps match their declared unions\n`
+      : "",
+);
+
+// ── 4d. Contract ↔ the styles the component ships (#187) ────────────────────
+// anatomy is transcribed from real styles by hand and tokensUsed was checked
+// against nothing — its only reader was the doc generator. Both could rot the
+// moment a `static styles` block changed, while per-part contrast and
+// check_contrast kept trusting them. Applies to every meta, not just the bound
+// ones: tokensUsed is required by the schema, so there is nothing to opt into.
+
+console.log("Checking component contracts against their styles...\n");
+
+const knownTokens = new Set([...base.keys()].map(toCssVar));
+let driftCount = 0;
+for (const { dir, data, src } of metaEntries) {
+  if (!existsSync(src)) {
+    fail(`${data.name}: no component source at ${relative(ROOT, src)}`);
+    continue;
+  }
+  // Local custom properties are collected per directory, not per file — rr-table
+  // declares the padding knobs rr-table-cell consumes.
+  const dirSources = [];
+  for await (const sib of glob("*.ts", { cwd: dir })) {
+    if (
+      sib.endsWith(".figma.ts") ||
+      sib.endsWith(".test.ts") ||
+      sib.includes(".stories.")
+    )
+      continue;
+    dirSources.push(readFileSync(resolve(dir, sib), "utf8"));
+  }
+  const { unknown, behind, ahead } = findTokenDrift(
+    data,
+    readFileSync(src, "utf8"),
+    { known: knownTokens, localDefs: localCustomProperties(dirSources) },
+  );
+  driftCount++;
+  for (const t of unknown) {
+    fail(
+      `${data.name}: styles reference ${t} — no such token, and nothing in ${relative(ROOT, dir)}/ declares it`,
+    );
+  }
+  for (const t of behind) {
+    fail(
+      `${data.name}: styles use ${t} but the contract never declares it — add it to tokensUsed or an anatomy binding`,
+    );
+  }
+  for (const t of ahead) {
+    fail(
+      `${data.name}: contract declares ${t} but the styles never reference it — the contract is stale`,
+    );
+  }
+}
+console.log(
+  exitCode === 0
+    ? `  ✓ ${driftCount} component contract(s) match their styles\n`
+    : "",
 );
 
 // ── §5 Intended-pairing contrast (tokens/pairings.json, #87) ────────────────

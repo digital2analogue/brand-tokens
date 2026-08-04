@@ -26,7 +26,8 @@
     "--radius-sm",
     "--spacing-tight",
     "--spacing-micro",
-    "--font-label-small"
+    "--font-label-small",
+    "--letter-spacing-all-caps"
   ],
   "rules": [
     "Never use hex values. Always use var(--color-*)",

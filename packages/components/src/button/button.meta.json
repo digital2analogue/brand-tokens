@@ -7,7 +7,7 @@
   "props": [
     {
       "name": "variant",
-      "type": "string",
+      "type": "'primary' | 'secondary' | 'danger' | 'ghost'",
       "default": "primary",
       "bindings": {
         "code": {
@@ -27,7 +27,7 @@
     },
     {
       "name": "size",
-      "type": "string",
+      "type": "'sm' | 'md' | 'lg'",
       "default": "md",
       "bindings": {
         "code": {
@@ -316,12 +316,7 @@
     "nodeId": "98:56",
     "codeConnectFile": "button.figma.ts",
     "ignoredOptions": {
-      "State": [
-        "default",
-        "hover",
-        "active",
-        "focus"
-      ]
+      "State": ["default", "hover", "active", "focus"]
     }
   }
 }

@@ -105,8 +105,8 @@ Button with primary/secondary/danger/ghost variants, three sizes, loading spinne
 
 | Attribute | Type | Default | Notes |
 |---|---|---|---|
-| `variant` | string | `primary` | Visual variant: primary (filled CTA), secondary (outlined), danger (destructive), ghost (text-only, quiet). |
-| `size` | string | `md` | Size: sm, md, lg. Controls padding and font size. |
+| `variant` | 'primary' \| 'secondary' \| 'danger' \| 'ghost' | `primary` | Visual variant: primary (filled CTA), secondary (outlined), danger (destructive), ghost (text-only, quiet). |
+| `size` | 'sm' \| 'md' \| 'lg' | `md` | Size: sm, md, lg. Controls padding and font size. |
 | `disabled` | boolean | `false` | Disables the button. Prevents click and removes from tab order. |
 | `loading` | boolean | `false` | Shows a spinner and sets aria-busy. Click suppressed while loading. |
 | `type` | string | `button` | Button type attribute: button, submit, or reset. |
