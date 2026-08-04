@@ -91,6 +91,13 @@ jobs:
             exit 1
           fi
 
+      # ai/DESIGN.md's token tables are generated from tokens/ (#186). It is
+      # @-imported into every agent session, so a stale value here propagates
+      # into generated code before any other gate sees it. --check also fails
+      # when a semantic token exists that no region emits.
+      - name: Fail if ai/DESIGN.md is stale or missing a token
+        run: node scripts/generate-design-md.mjs --check
+
       - name: Test (components + mcp)
         run: npm test --workspaces --if-present
 

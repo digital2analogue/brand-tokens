@@ -11,6 +11,48 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-08-03 — ai/DESIGN.md's token tables are generated, not transcribed (#186)
+
+**What:** every token table in `ai/DESIGN.md` is now emitted from `tokens/**/*.tokens.json`
+by `scripts/generate-design-md.mjs` (`npm run docs:design`, folded into `build:all`), fenced
+in `GEN:` marker regions in the same idiom `generate-component-docs.mjs` and
+`generate-docs.mjs` already use. Authored prose — Visual Identity, Responsive Scaling, Hard
+Guardrails, Interaction Patterns, every heading — sits outside the markers and survives
+regeneration. CI runs `--check` and fails on a stale file. The Usage column takes leading
+whole sentences of each `$description` up to a 160-character budget (minimum two, because
+descriptions open with a short role label and put the guidance in the sentence after it);
+the full text stays authoritative via the MCP's `get_token`. The Contrast column is computed
+with the same merged pairing set `validate` §5 uses, reports the **worst** intended pairing,
+and names the background — `foreground.default` is 12.26:1 on the canvas but 9.94:1 on
+`background.alt`, and the lower number is the one that has to hold.
+
+**Why:** the file hand-transcribed every hex, resolved value and contrast ratio that the
+token JSON already carries — a second copy of a decision the tokens already make, which
+`scripts/tokens.mjs` had flagged as a drift risk in a comment since it was written. It had
+drifted: `--shadow-none` was documented as `none` (really `0 0 0 0 rgba(0,0,0,0)`), every
+`--shadow-*` row dropped the spread value, the easing rows omitted the spaces Style
+Dictionary emits, and `primitive.font.weight.medium`'s `$description` claimed it was "not
+currently mapped to any semantic token" while all four `label-strong` tokens referenced it
+(fixed here; the primitive scale tables now derive their "Referenced by" column from the
+reference graph, so that particular prose can't go stale again). This matters more than an
+ordinary doc because `CLAUDE.md` `@`-imports it into every agent session — a wrong value
+propagates into generated code before any other gate sees it. Prompted by Nathan Curtis,
+*Component Contracts and Schemas* (2026-07-28), principle 2, normalized over redundant.
+
+**Alternative considered:** keep hand-syncing (what #30 asked for — 15 tokens, filed
+2026-06-23, still open six weeks later; they were eventually added by hand, which is the
+point). Also considered emitting each `$description` whole: 27KB of prose would more than
+double a file loaded into every session, for text already reachable through `get_token`.
+
+**Status:** shipped. Coverage is enforced, not assumed — `--check` also fails when a
+semantic token exists that no region emits, so a whole new scale can't be silently
+undocumented. Primitives stay deliberately partial (font size, font weight, spacing only);
+UI code may never reference one. Follow-up worth its own issue: many `$description` fields
+embed a hand-typed hex and contrast ratio, so the generated Usage column now restates values
+its own columns compute — the remaining copy of this problem lives in the token source.
+
+---
+
 ## 2026-07-28 — DE accent foregrounds fixed brand-side (#176): same names, DE values
 
 **What:** The rr-badge accent-variant WCAG failures under decision-engine (2.94:1 green,

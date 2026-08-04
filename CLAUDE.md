@@ -27,6 +27,9 @@ schemas/
 scripts/
   build-brands.mjs            Runs Style Dictionary for all brands. The token build command.
   generate-docs.mjs           Regenerates docs/index.html from token JSON.
+  generate-design-md.mjs      Regenerates the token tables in ai/DESIGN.md from tokens/ (`npm run docs:design`).
+                              Marker-fenced GEN regions only — authored prose is preserved. `--check` is the CI
+                              staleness gate, and also fails when a semantic token exists that no region emits.
   build-design-system-json.mjs Merges *.meta.json + CEM into design-system.json (deterministic — sorted, no timestamp).
   anatomy.mjs                 The `anatomy` part tree: build gates (dangling binding, unknown state prop)
                               + the fg/bg pairs components declare. Imported by validate and contrast.
@@ -101,8 +104,9 @@ lint fences it out):
    - Semantic role change → `tokens/semantic/` or `tokens/brands/<brand>.tokens.json`
    - (There is no component tier — #114. Components reference semantic roles directly.)
 2. Build tokens: `npm run build` (or `node scripts/build-brands.mjs`)
-3. Regenerate docs: `npm run docs` (or `node scripts/generate-docs.mjs`)
-   - Or run both at once: `npm run build:all`
+3. Regenerate docs: `npm run docs` (docs/index.html) **and** `npm run docs:design`
+   (the token tables in `ai/DESIGN.md`)
+   - Or run all three at once: `npm run build:all`
 4. Validate: `npm run validate` (rejects hex literals, primitive/deprecated refs, and dangling token references)
 5. If a component's metadata changed, rebuild the artifact: `npm run build:meta` → regenerates the CEM and `design-system.json`. **Commit the regenerated artifact** — CI fails if it's stale.
 6. Check the output in `build/css/<brand>.css`
@@ -189,7 +193,11 @@ mcp package (still scoped `@riverromney`) is not published yet.
 
 ## AI Reference Files
 
-- `@ai/DESIGN.md` — resolved token tables for the **base dark theme** only.
+- `@ai/DESIGN.md` — resolved token tables for the **base dark theme** only. The tables
+  are **generated** from `tokens/` (`npm run docs:design`) and fenced in `GEN:` markers —
+  never hand-edit a value there; change the token's `$value`/`$description` and regenerate.
+  Everything outside the markers (Visual Identity, Responsive Scaling, Hard Guardrails,
+  Interaction Patterns) is authored prose and is preserved across runs.
 - `@ai/DECISION-ENGINE.md` — token decisions, naming conventions, deleted tokens, and architecture intent for the decision-engine sub-brand. Read this before touching any DE tokens.
 - `@ai/rules.md` — hard and soft rules for token usage across all sites.
 
