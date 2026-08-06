@@ -11,6 +11,39 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-08-04 — A value in a comment is not a violation (#174)
+
+**What:** `lintLines` and `lintSnippet` now strip comment bodies before running the
+rules (blanked in place, so reported line numbers stay true), the hex pattern gained a
+`(?<!\w)` guard, and `drift-scan.mjs` skips `*.test.*` / `*.spec.*` files the way
+`validate.mjs` §2 already skipped them in this repo.
+
+**Why:** the weekly drift report against portfolio-vercel (#174) was **100% false
+positives, and had been for a week**. `parsimony#114` in a comment read as the hex colour
+`#114`; a JSDoc explaining *why* a colour fails contrast ("OTKit's accent-yellow #FDAF08
+is 1.86:1") read as someone hardcoding it; and the consumer's own detector tests were
+reported for containing the deliberately-bad snippets that are the entire point of a
+detector's tests. Every rule here exists to stop a hardcoded value reaching rendered UI,
+and a comment never does. A checker that cries wolf gets ignored, which costs more than
+the rule enforces — the Curtis line about a rotted contract being worse than none,
+applied to a detector.
+
+Three of the four flagged files came clean from the upstream fix alone. The fourth,
+`lib/checkUsageRules.ts`, holds the lint playground's sample-violation snippets as
+template literals — genuinely shipped strings, correctly flagged, and correctly exempted
+by a `.driftignore` entry in the consumer.
+
+**Alternative considered:** `.driftignore` for all four. Rejected — it would have hidden
+a real detector bug behind per-consumer configuration, and every other consumer would hit
+the same false positives and write the same ignores.
+
+**Status:** shipped. Deliberately *not* stripped: string literals — a hex in one may well
+ship, which is exactly the `checkUsageRules.ts` case. `lintSnippet` (the MCP's
+`check_usage`) got the same preprocessing in the same change: two tools disagreeing about
+the same text is worse than either being wrong alone.
+
+---
+
 ## 2026-08-03 — The contract is proved against the code, not asserted (#187, #191)
 
 **What:** two new `validate` sections close the gap between what a `*.meta.json` claims

@@ -13,7 +13,12 @@
  * rule-level fence that stays put even if the tool's shape changes.
  */
 import { describe, it, expect } from "vitest";
-import { RULES, lintSnippet, lintLines } from "../../scripts/rules.mjs";
+import {
+  RULES,
+  lintSnippet,
+  lintLines,
+  stripComments,
+} from "../../scripts/rules.mjs";
 
 const FIXTURES = {
   "no-hex": {
@@ -145,5 +150,95 @@ describe("lintLines (the validate/drift-lint path)", () => {
     const v = lintLines(text);
     expect(v).toHaveLength(1);
     expect(v[0]).toMatchObject({ line: 2, id: "no-hex" });
+  });
+});
+
+// ── Comments are documentation, not styling (#174) ──────────────────────────
+// A weekly consumer drift report was 100% false positives for a week: an issue
+// reference read as a hex colour, and a JSDoc explaining why a colour fails
+// contrast read as someone hardcoding it. A checker that cries wolf gets
+// ignored, which costs more than the rule enforces.
+
+describe("stripComments", () => {
+  it("blanks a block comment but keeps the line count", () => {
+    expect(stripComments("/* a\n b */\nx").split("\n")).toHaveLength(3);
+  });
+
+  it("blanks a line comment", () => {
+    expect(stripComments("// hi").trim()).toBe("");
+  });
+
+  it("leaves the code that precedes a trailing comment", () => {
+    expect(stripComments("color: red; // note")).toMatch(/color: red;/);
+  });
+
+  it("does not treat a URL's // as a comment", () => {
+    const src = `const u = "https://example.com/x";`;
+    expect(stripComments(src)).toBe(src);
+  });
+
+  it("leaves string literals alone — a hex in one may well ship", () => {
+    const src = `const c = "#4ADE6E";`;
+    expect(stripComments(src)).toBe(src);
+  });
+});
+
+describe("lintLines ignores values written in comments", () => {
+  const notFlagged = (src) => expect(lintLines(src)).toEqual([]);
+
+  it("does not read a GitHub issue reference as a hex colour", () => {
+    notFlagged("// the component tier was removed (parsimony#114)");
+    notFlagged("// see issue #1234 for the rationale");
+  });
+
+  it("does not flag a JSDoc that explains why a colour is wrong", () => {
+    notFlagged(
+      "/** OTKit's accent-yellow #FDAF08 is 1.86:1, hence the darkened #A97405. */",
+    );
+  });
+
+  it("does not flag any rule's value inside a comment", () => {
+    notFlagged("/* font-weight: 700; font-family: Inter, sans-serif; */");
+    notFlagged("// padding: var(--primitive-space-md);");
+  });
+
+  it("still flags real code on a line that also carries a comment", () => {
+    const v = lintLines("color: #fff; // TODO: tokenise");
+    expect(v.map((x) => x.match)).toEqual(["#fff"]);
+  });
+
+  it("reports the true line number after stripping", () => {
+    const v = lintLines("/* a\n b */\ncolor: #abc;");
+    expect(v[0].line).toBe(3);
+  });
+
+  it("still flags a hex in a string literal", () => {
+    expect(lintLines(`const c = "#4ADE6E";`).map((x) => x.match)).toEqual([
+      "#4ADE6E",
+    ]);
+  });
+});
+
+describe("lintSnippet applies the same preprocessing as lintLines", () => {
+  // check_usage (MCP) and validate/drift-lint must agree about the same text.
+  // Two tools disagreeing is worse than either being wrong alone.
+  it("ignores a commented-out value", () => {
+    expect(
+      lintSnippet("/* was #4ADE6E */\ncolor: var(--color-foreground-action);"),
+    ).toEqual([]);
+  });
+
+  it("still flags the value when it is real code", () => {
+    expect(lintSnippet("color: #4ADE6E;").map((v) => v.id)).toEqual(["no-hex"]);
+  });
+});
+
+describe("hex is not preceded by a word character", () => {
+  it("ignores a bare issue reference outside a comment", () => {
+    expect(lintLines("const ref = mkRef`parsimony#114`;")).toEqual([]);
+  });
+
+  it("still flags a hex that directly follows a colon", () => {
+    expect(lintLines("background:#fff;").map((x) => x.match)).toEqual(["#fff"]);
   });
 });

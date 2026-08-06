@@ -14,7 +14,14 @@
 // ── Patterns ────────────────────────────────────────────────────────────────
 
 // Valid CSS hex colors: 3, 4, 6, or 8 digits. (Catches #RGBA / #RRGGBBAA too.)
-const HEX = "#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\\b";
+//
+// The leading (?<!\w) is load-bearing. `#114` and `#1234` are valid CSS hex
+// shorthands, so an unguarded pattern reports every GitHub issue reference in a
+// comment as a hardcoded colour — `parsimony#114` is what put lib/tokenValues.ts
+// in a weekly drift report for a week (portfolio-vercel, parsimony#174). A hex
+// colour is never preceded by a word character in real CSS; an issue reference
+// almost always is.
+const HEX = "(?<!\\w)#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\\b";
 // Primitive token references — never allowed in UI/component code.
 const PRIMITIVE = "--primitive-[a-z][a-z-]*";
 // Hardcoded numeric font-size (e.g. `font-size: 14px`) — use font tokens.
@@ -90,6 +97,35 @@ export const HEX_ALLOWLIST = [
   /url\(#/, // SVG fragment IDs, e.g. fill="url(#grad)"
   /sourceMappingURL/, // source maps
 ];
+
+/**
+ * Blank out comment bodies before linting, preserving line count and column
+ * positions so reported line numbers stay true.
+ *
+ * A value written in a comment is documentation, not styling — it ships no
+ * colour and sets no font. Every rule here exists to stop a hardcoded value
+ * reaching the rendered UI, and a comment never does.
+ *
+ * This is the fix for a whole class of false positive that had a consumer's
+ * weekly drift report crying wolf for a week (parsimony#174): `parsimony#114`
+ * read as the hex colour `#114`, `// see issue #1234` as `#1234`, and a JSDoc
+ * explaining *why* a colour fails contrast ("OTKit's accent-yellow #FDAF08 is
+ * 1.86:1") read as someone hardcoding it. A checker that cries wolf gets
+ * ignored, which costs more than the rule enforces.
+ *
+ * Deliberately not stripped: string literals. A hex inside a template literal
+ * may well be shipped — and where it genuinely isn't (a lint playground's
+ * sample-violation snippets) that is what `.driftignore` is for.
+ */
+export function stripComments(text) {
+  const blank = (m) => m.replace(/[^\n]/g, " ");
+  return String(text)
+    .replace(/\/\*[\s\S]*?\*\//g, blank) // /* block */ and /** jsdoc */
+    .replace(
+      /(^|[^:])\/\/[^\n]*/g,
+      (m, pre) => pre + blank(m.slice(pre.length)),
+    );
+}
 
 /**
  * The canonical rule set. `id` is stable for programmatic use; `message` is
@@ -173,8 +209,9 @@ function allowlisted(rule, line) {
  */
 export function lintSnippet(text) {
   const violations = [];
+  const src = stripComments(text);
   for (const rule of RULES) {
-    const matches = [...new Set(rule.find(text))];
+    const matches = [...new Set(rule.find(src))];
     if (matches.length > 0) {
       violations.push({ id: rule.id, rule: rule.message, matches });
     }
@@ -188,7 +225,7 @@ export function lintSnippet(text) {
  */
 export function lintLines(text) {
   const violations = [];
-  const lines = text.split("\n");
+  const lines = stripComments(text).split("\n");
   lines.forEach((line, i) => {
     for (const rule of RULES) {
       if (allowlisted(rule, line)) continue;

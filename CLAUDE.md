@@ -160,7 +160,9 @@ mcp package (still scoped `@riverromney`) is not published yet.
     `check_usage(snippet)` — flags rule violations (hex, `--primitive-*` refs, hardcoded
     font sizes/weights, unapproved font families, deprecated tokens) **before** code is
     written. Detectors live once in `scripts/rules.mjs`, so the same set gates `validate`
-    + `drift-lint`; the statically-undetectable hard rules (display/title weight, accent-
+    + `drift-lint`; values written inside comments are never flagged, by any of the three
+    (#174 — a comment ships no styling, and treating one as a violation had a consumer's
+    weekly drift report crying wolf for a week); the statically-undetectable hard rules (display/title weight, accent-
     green-as-resting-text) are out of scope here — they need semantic context.
   - Tokens (from `tokens/**/*.tokens.json`): `get_token(name)`, `find_token(query)`,
     `get_scale(category)` — a full semantic scale (`spacing`, `radius`, `shadow`, `motion`,
