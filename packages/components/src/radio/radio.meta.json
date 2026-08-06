@@ -59,6 +59,82 @@
     "--motion-easing-default",
     "--motion-easing-enter"
   ],
+  "anatomy": {
+    "description": "A visual circle beside a label, with the real <input> transparently overlaying the circle. The 16px circle, the 8px dot, and the focus-ring outline are not tokens.",
+    "parts": [
+      {
+        "name": "root",
+        "element": ":host",
+        "description": "Inline-flex row holding the circle and its label.",
+        "tokens": {
+          "spacing": "--spacing-tight"
+        },
+        "parts": [
+          {
+            "name": "circle",
+            "element": ".circle",
+            "cssPart": "circle",
+            "description": "The visual radio circle. The native input sits transparently on top of it.",
+            "tokens": {
+              "background": "--color-background-default",
+              "border": "--color-border-default"
+            },
+            "states": [
+              {
+                "when": "checked",
+                "tokens": {
+                  "border": "--color-background-action"
+                }
+              },
+              {
+                "when": "disabled",
+                "tokens": {
+                  "background": "--color-background-disabled",
+                  "border": "--color-border-disabled"
+                }
+              }
+            ],
+            "parts": [
+              {
+                "name": "dot",
+                "element": ".dot",
+                "description": "The inner dot, scaled from 0 to 1 when checked.",
+                "tokens": {
+                  "background": "--color-background-action"
+                },
+                "states": [
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "background": "--color-foreground-disabled"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "label",
+            "element": "label",
+            "cssPart": "label",
+            "description": "The text label beside the circle.",
+            "tokens": {
+              "foreground": "--color-foreground-alt",
+              "font": "--font-label-medium"
+            },
+            "states": [
+              {
+                "when": "disabled",
+                "tokens": {
+                  "foreground": "--color-foreground-disabled"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "rules": [
     "Never use hex values — always var(--color-*)",
     "Never reference --primitive-* tokens in component code",

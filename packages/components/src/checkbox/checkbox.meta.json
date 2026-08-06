@@ -75,6 +75,82 @@
     "--color-foreground-alt",
     "--color-foreground-disabled"
   ],
+  "anatomy": {
+    "description": "A visual box beside a label, with the real <input> transparently overlaying the box for hit-testing. The 16px box, its 2px optical nudge, and the focus-ring outline are not tokens — the outline has no key in anatomy v1 (#178).",
+    "parts": [
+      {
+        "name": "root",
+        "element": ":host",
+        "description": "Inline-flex row holding the box and its label.",
+        "tokens": {
+          "spacing": "--spacing-tight"
+        },
+        "parts": [
+          {
+            "name": "box",
+            "element": ".box",
+            "cssPart": "box",
+            "description": "The visual checkbox square. The native input sits transparently on top of it.",
+            "tokens": {
+              "background": "--color-background-default",
+              "border": "--color-border-default"
+            },
+            "states": [
+              {
+                "when": "checked",
+                "tokens": {
+                  "background": "--color-background-action",
+                  "border": "--color-background-action"
+                }
+              },
+              {
+                "when": "indeterminate",
+                "tokens": {
+                  "background": "--color-background-action",
+                  "border": "--color-background-action"
+                }
+              },
+              {
+                "when": "disabled",
+                "tokens": {
+                  "background": "--color-background-disabled",
+                  "border": "--color-border-disabled"
+                }
+              }
+            ],
+            "parts": [
+              {
+                "name": "indicator",
+                "element": ".check, .dash",
+                "description": "The tick and the indeterminate dash. Only one renders at a time.",
+                "tokens": {
+                  "foreground": "--color-foreground-on-action"
+                }
+              }
+            ]
+          },
+          {
+            "name": "label",
+            "element": "label",
+            "cssPart": "label",
+            "description": "The text label beside the box.",
+            "tokens": {
+              "foreground": "--color-foreground-alt",
+              "font": "--font-label-medium"
+            },
+            "states": [
+              {
+                "when": "disabled",
+                "tokens": {
+                  "foreground": "--color-foreground-disabled"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "rules": [
     "Never use hex values — always var(--color-*)",
     "Never reference --primitive-* tokens in component code",

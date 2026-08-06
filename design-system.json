@@ -958,6 +958,82 @@
         "--color-foreground-alt",
         "--color-foreground-disabled"
       ],
+      "anatomy": {
+        "description": "A visual box beside a label, with the real <input> transparently overlaying the box for hit-testing. The 16px box, its 2px optical nudge, and the focus-ring outline are not tokens — the outline has no key in anatomy v1 (#178).",
+        "parts": [
+          {
+            "name": "root",
+            "element": ":host",
+            "description": "Inline-flex row holding the box and its label.",
+            "tokens": {
+              "spacing": "--spacing-tight"
+            },
+            "parts": [
+              {
+                "name": "box",
+                "element": ".box",
+                "cssPart": "box",
+                "description": "The visual checkbox square. The native input sits transparently on top of it.",
+                "tokens": {
+                  "background": "--color-background-default",
+                  "border": "--color-border-default"
+                },
+                "states": [
+                  {
+                    "when": "checked",
+                    "tokens": {
+                      "background": "--color-background-action",
+                      "border": "--color-background-action"
+                    }
+                  },
+                  {
+                    "when": "indeterminate",
+                    "tokens": {
+                      "background": "--color-background-action",
+                      "border": "--color-background-action"
+                    }
+                  },
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "background": "--color-background-disabled",
+                      "border": "--color-border-disabled"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "indicator",
+                    "element": ".check, .dash",
+                    "description": "The tick and the indeterminate dash. Only one renders at a time.",
+                    "tokens": {
+                      "foreground": "--color-foreground-on-action"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "label",
+                "element": "label",
+                "cssPart": "label",
+                "description": "The text label beside the box.",
+                "tokens": {
+                  "foreground": "--color-foreground-alt",
+                  "font": "--font-label-medium"
+                },
+                "states": [
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "foreground": "--color-foreground-disabled"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
       "rules": [
         "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
@@ -1974,6 +2050,82 @@
         "--motion-easing-default",
         "--motion-easing-enter"
       ],
+      "anatomy": {
+        "description": "A visual circle beside a label, with the real <input> transparently overlaying the circle. The 16px circle, the 8px dot, and the focus-ring outline are not tokens.",
+        "parts": [
+          {
+            "name": "root",
+            "element": ":host",
+            "description": "Inline-flex row holding the circle and its label.",
+            "tokens": {
+              "spacing": "--spacing-tight"
+            },
+            "parts": [
+              {
+                "name": "circle",
+                "element": ".circle",
+                "cssPart": "circle",
+                "description": "The visual radio circle. The native input sits transparently on top of it.",
+                "tokens": {
+                  "background": "--color-background-default",
+                  "border": "--color-border-default"
+                },
+                "states": [
+                  {
+                    "when": "checked",
+                    "tokens": {
+                      "border": "--color-background-action"
+                    }
+                  },
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "background": "--color-background-disabled",
+                      "border": "--color-border-disabled"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "dot",
+                    "element": ".dot",
+                    "description": "The inner dot, scaled from 0 to 1 when checked.",
+                    "tokens": {
+                      "background": "--color-background-action"
+                    },
+                    "states": [
+                      {
+                        "when": "disabled",
+                        "tokens": {
+                          "background": "--color-foreground-disabled"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "label",
+                "element": "label",
+                "cssPart": "label",
+                "description": "The text label beside the circle.",
+                "tokens": {
+                  "foreground": "--color-foreground-alt",
+                  "font": "--font-label-medium"
+                },
+                "states": [
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "foreground": "--color-foreground-disabled"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
       "rules": [
         "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
@@ -2099,6 +2251,69 @@
         "--font-label-small",
         "--color-foreground-danger"
       ],
+      "anatomy": {
+        "description": "A fieldset wrapping the projected rr-radio children. The group carries the legend and the error; each option's own colours belong to rr-radio. The error margin is hardcoded px, not a spacing token.",
+        "parts": [
+          {
+            "name": "root",
+            "element": ":host",
+            "description": "Host wrapper. Layout only (display: block) — carries no tokens.",
+            "parts": [
+              {
+                "name": "fieldset",
+                "element": "fieldset",
+                "cssPart": "fieldset",
+                "description": "Semantic grouping element. Borderless and unpadded — carries no tokens."
+              },
+              {
+                "name": "legend",
+                "element": "legend",
+                "cssPart": "legend",
+                "description": "The group label.",
+                "tokens": {
+                  "foreground": "--color-foreground-alt",
+                  "font": "--font-label-medium",
+                  "spacing": "--spacing-tight"
+                },
+                "states": [
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "foreground": "--color-foreground-disabled"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "options",
+                "element": ".options",
+                "description": "The slot container for the rr-radio children.",
+                "tokens": {
+                  "spacing": "--spacing-tight"
+                },
+                "states": [
+                  {
+                    "when": "orientation=horizontal",
+                    "description": "Row layout opens the gap one step.",
+                    "tokens": {
+                      "spacing": "--spacing-element"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "error",
+                "element": ".error",
+                "description": "Group-level error message (role=alert).",
+                "tokens": {
+                  "foreground": "--color-foreground-danger",
+                  "font": "--font-label-small"
+                }
+              }
+            ]
+          }
+        ]
+      },
       "rules": [
         "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
@@ -2247,6 +2462,129 @@
         "--font-label-small",
         "--color-foreground-muted"
       ],
+      "anatomy": {
+        "description": "Same four-sibling shape as rr-input, plus the custom arrow that replaces the native appearance. The label/helper/error margins and the arrow's inset are hardcoded px, not spacing tokens — deliberately not transcribed.",
+        "parts": [
+          {
+            "name": "root",
+            "element": ":host",
+            "description": "Host wrapper. Layout only (display: block) — carries no tokens.",
+            "parts": [
+              {
+                "name": "label",
+                "element": "label",
+                "cssPart": "label",
+                "description": "Field label above the select.",
+                "tokens": {
+                  "foreground": "--color-foreground-alt",
+                  "font": "--font-label-medium"
+                },
+                "states": [
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "foreground": "--color-foreground-disabled"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "required-marker",
+                    "element": ".required",
+                    "description": "The asterisk appended to a required field's label (aria-hidden).",
+                    "tokens": {
+                      "foreground": "--color-foreground-danger"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "select",
+                "element": "select",
+                "cssPart": "select",
+                "description": "The native <select>: field surface, text colour, and outline.",
+                "tokens": {
+                  "background": "--color-background-default",
+                  "foreground": "--color-foreground-default",
+                  "border": "--color-border-default",
+                  "spacing": [
+                    "--spacing-tight",
+                    "--spacing-element"
+                  ],
+                  "font": "--font-body-large"
+                },
+                "states": [
+                  {
+                    "when": ":hover",
+                    "tokens": {
+                      "border": "--color-border-hover"
+                    }
+                  },
+                  {
+                    "when": ":focus",
+                    "tokens": {
+                      "border": "--color-border-focus"
+                    }
+                  },
+                  {
+                    "when": "data-invalid",
+                    "description": "Set internally while error-text is non-empty.",
+                    "tokens": {
+                      "border": "--color-foreground-danger"
+                    }
+                  },
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "background": "--color-background-alt",
+                      "foreground": "--color-foreground-disabled",
+                      "border": "--color-border-disabled"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "arrow",
+                    "element": ".arrow",
+                    "description": "The chevron overlaying the select, replacing the native appearance.",
+                    "tokens": {
+                      "foreground": "--color-foreground-alt"
+                    },
+                    "states": [
+                      {
+                        "when": "disabled",
+                        "tokens": {
+                          "foreground": "--color-foreground-disabled"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "helper",
+                "element": ".helper",
+                "cssPart": "helper",
+                "description": "Helper text below the field. Replaced by the error part while invalid.",
+                "tokens": {
+                  "foreground": "--color-foreground-muted",
+                  "font": "--font-label-small"
+                }
+              },
+              {
+                "name": "error",
+                "element": ".error",
+                "cssPart": "error",
+                "description": "Error message below the field (role=alert).",
+                "tokens": {
+                  "foreground": "--color-foreground-danger",
+                  "font": "--font-label-small"
+                }
+              }
+            ]
+          }
+        ]
+      },
       "rules": [
         "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
@@ -3049,6 +3387,121 @@
         "--color-foreground-disabled",
         "--font-label-small"
       ],
+      "anatomy": {
+        "description": "The same four-sibling shape as rr-input, on a <textarea>. The label/helper/error margins are hardcoded px, not spacing tokens — deliberately not transcribed.",
+        "parts": [
+          {
+            "name": "root",
+            "element": ":host",
+            "description": "Host wrapper. Layout only (display: block) — carries no tokens.",
+            "parts": [
+              {
+                "name": "label",
+                "element": "label",
+                "cssPart": "label",
+                "description": "Field label above the textarea.",
+                "tokens": {
+                  "foreground": "--color-foreground-alt",
+                  "font": "--font-label-medium"
+                },
+                "states": [
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "foreground": "--color-foreground-disabled"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "required-marker",
+                    "element": ".required",
+                    "description": "The asterisk appended to a required field's label (aria-hidden).",
+                    "tokens": {
+                      "foreground": "--color-foreground-danger"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "textarea",
+                "element": "textarea",
+                "cssPart": "textarea",
+                "description": "The native <textarea>: field surface, text colour, and outline.",
+                "tokens": {
+                  "background": "--color-background-default",
+                  "foreground": "--color-foreground-default",
+                  "border": "--color-border-default",
+                  "spacing": [
+                    "--spacing-tight",
+                    "--spacing-element"
+                  ],
+                  "font": "--font-body-large"
+                },
+                "states": [
+                  {
+                    "when": ":hover",
+                    "tokens": {
+                      "border": "--color-border-hover"
+                    }
+                  },
+                  {
+                    "when": ":focus",
+                    "tokens": {
+                      "border": "--color-border-focus"
+                    }
+                  },
+                  {
+                    "when": "data-invalid",
+                    "description": "Set internally while error-text is non-empty.",
+                    "tokens": {
+                      "border": "--color-foreground-danger"
+                    }
+                  },
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "background": "--color-background-alt",
+                      "foreground": "--color-foreground-disabled",
+                      "border": "--color-border-disabled"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "placeholder",
+                    "element": "::placeholder",
+                    "description": "Placeholder text inside the field.",
+                    "tokens": {
+                      "foreground": "--color-foreground-muted"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "helper",
+                "element": ".helper",
+                "cssPart": "helper",
+                "description": "Helper text below the field. Replaced by the error part while invalid.",
+                "tokens": {
+                  "foreground": "--color-foreground-muted",
+                  "font": "--font-label-small"
+                }
+              },
+              {
+                "name": "error",
+                "element": ".error",
+                "cssPart": "error",
+                "description": "Error message below the field (role=alert).",
+                "tokens": {
+                  "foreground": "--color-foreground-danger",
+                  "font": "--font-label-small"
+                }
+              }
+            ]
+          }
+        ]
+      },
       "rules": [
         "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
@@ -3323,6 +3776,90 @@
         "--font-label-medium",
         "--color-foreground-alt"
       ],
+      "anatomy": {
+        "description": "A track with a sliding knob beside a label, with the real <input> transparently overlaying the track. The 36x20 track, the 12px knob, its travel distance, and the focus-ring outline are not tokens.",
+        "parts": [
+          {
+            "name": "root",
+            "element": ":host",
+            "description": "Inline-flex row holding the track and its label.",
+            "tokens": {
+              "spacing": "--spacing-tight"
+            },
+            "parts": [
+              {
+                "name": "track",
+                "element": ".track",
+                "cssPart": "track",
+                "description": "The pill-shaped track. The native input sits transparently on top of it.",
+                "tokens": {
+                  "background": "--color-background-alt",
+                  "border": "--color-border-default"
+                },
+                "states": [
+                  {
+                    "when": "checked",
+                    "tokens": {
+                      "background": "--color-background-action",
+                      "border": "--color-background-action"
+                    }
+                  },
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "background": "--color-background-disabled",
+                      "border": "--color-border-disabled"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "knob",
+                    "element": ".knob",
+                    "cssPart": "knob",
+                    "description": "The circle that slides across the track.",
+                    "tokens": {
+                      "background": "--color-foreground-muted"
+                    },
+                    "states": [
+                      {
+                        "when": "checked",
+                        "tokens": {
+                          "background": "--color-foreground-on-action"
+                        }
+                      },
+                      {
+                        "when": "disabled",
+                        "tokens": {
+                          "background": "--color-foreground-disabled"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "label",
+                "element": "label",
+                "cssPart": "label",
+                "description": "The text label beside the track.",
+                "tokens": {
+                  "foreground": "--color-foreground-alt",
+                  "font": "--font-label-medium"
+                },
+                "states": [
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "foreground": "--color-foreground-disabled"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
       "rules": [
         "Never use hex values — always var(--color-*)",
         "Never reference --primitive-* tokens in component code",
