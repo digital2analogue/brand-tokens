@@ -57,24 +57,6 @@
       "description": "The label text element."
     }
   ],
-  "tokensUsed": [
-    "--spacing-tight",
-    "--radius-full",
-    "--color-border-default",
-    "--color-background-alt",
-    "--color-background-action",
-    "--color-background-disabled",
-    "--color-border-disabled",
-    "--motion-duration-instant",
-    "--motion-easing-default",
-    "--color-foreground-muted",
-    "--motion-easing-move",
-    "--color-foreground-on-action",
-    "--color-foreground-disabled",
-    "--color-border-focus",
-    "--font-label-medium",
-    "--color-foreground-alt"
-  ],
   "anatomy": {
     "description": "A track with a sliding knob beside a label, with the real <input> transparently overlaying the track. The 36x20 track, the 12px knob, its travel distance, and the focus-ring outline are not tokens.",
     "parts": [

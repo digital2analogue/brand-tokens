@@ -115,32 +115,6 @@
       "description": "The inner <button> element."
     }
   ],
-  "tokensUsed": [
-    "--color-background-action",
-    "--color-background-action-hover",
-    "--color-background-action-active",
-    "--color-foreground-on-action",
-    "--color-background-alt",
-    "--color-foreground-action",
-    "--color-border-action",
-    "--color-background-default",
-    "--color-background-danger-alt",
-    "--color-foreground-danger",
-    "--color-background-disabled",
-    "--color-foreground-disabled",
-    "--color-border-disabled",
-    "--color-border-focus",
-    "--font-label-strong-small",
-    "--font-label-strong-medium",
-    "--font-label-strong-large",
-    "--spacing-micro",
-    "--spacing-tight",
-    "--spacing-inline",
-    "--spacing-element",
-    "--radius-default",
-    "--motion-duration-instant",
-    "--motion-easing-default"
-  ],
   "anatomy": {
     "description": "The host is a bare wrapper; every token lives on the inner <button> (the exported part) and its two children. Compound conditions (variant=secondary AND :hover) have no grammar in v1 — those hover rules are in button.ts but not transcribed here.",
     "parts": [

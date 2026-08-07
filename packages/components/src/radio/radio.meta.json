@@ -43,22 +43,6 @@
       "description": "The label text element."
     }
   ],
-  "tokensUsed": [
-    "--color-border-default",
-    "--color-background-default",
-    "--color-border-hover",
-    "--color-background-action",
-    "--color-background-disabled",
-    "--color-border-disabled",
-    "--color-foreground-disabled",
-    "--color-border-focus",
-    "--color-foreground-alt",
-    "--font-label-medium",
-    "--spacing-tight",
-    "--motion-duration-instant",
-    "--motion-easing-default",
-    "--motion-easing-enter"
-  ],
   "anatomy": {
     "description": "A visual circle beside a label, with the real <input> transparently overlaying the circle. The 16px circle, the 8px dot, and the focus-ring outline are not tokens.",
     "parts": [

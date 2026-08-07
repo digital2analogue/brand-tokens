@@ -32,8 +32,9 @@ Roll-out is **opt-in per component**: gates only fire on metas that declare bind
 Currently bound: `rr-badge`, `rr-button`, `rr-input` (the three `stable` components).
 The other 24 metas get promoted as #156 stages roll through them.
 
-**One gate is not opt-in.** §4d (contract ↔ styles, #187) runs on all 27, because
-`tokensUsed` is required by the schema — there is nothing to opt into. Before it
+**One gate is not opt-in.** §4d (contract ↔ styles, #187) runs on all 27: a component
+either authors `tokensUsed` or derives it from an anatomy (#188), so every component has a
+token contract to check and there is nothing to opt into. Before it
 existed, `tokensUsed` was checked against *nothing*: its only reader was the doc
 generator, so it could name a token the component had stopped using, or miss one it
 had started using, indefinitely. Anatomy has the same exposure by construction — it
@@ -74,6 +75,20 @@ Anatomy's contribution is deliberately narrow, and the narrowness is what keeps 
 `check_contrast` also takes `{ component, part, state? }` instead of two colours, resolving
 the pair from the contract — the way to ask "what does this component actually put together
 under this brand" without knowing its tokens.
+
+## `tokensUsed` is derived (#188)
+
+A component that declares an `anatomy` **must not author `tokensUsed`** — the schema
+rejects it. `build:meta` computes the list from the anatomy tree and injects it into
+`design-system.json`, so the MCP and the doc generator see no difference.
+
+This is the same single-sourcing as prop descriptions, which come from the JSDoc rather
+than the meta. It became possible only once anatomy v2 could express every binding: with
+29 tokens living solely in the flat list, there was nothing to derive from.
+
+Verified as a pure deletion — the derived list reproduces all 27 previously hand-authored
+lists **exactly**. Components without an anatomy keep authoring theirs until their
+promotion batch lands.
 
 ## Anatomy v2 (#178 items 1–2)
 

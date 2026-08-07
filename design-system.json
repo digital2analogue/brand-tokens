@@ -285,31 +285,6 @@
       ],
       "events": [],
       "cssParts": [],
-      "tokensUsed": [
-        "--color-background-alt",
-        "--color-foreground-alt",
-        "--color-border-alt",
-        "--color-background-success-alt",
-        "--color-foreground-success",
-        "--color-background-warning-alt",
-        "--color-foreground-warning",
-        "--color-background-danger-alt",
-        "--color-foreground-danger",
-        "--color-background-info-alt",
-        "--color-foreground-info",
-        "--color-background-accent-green",
-        "--color-foreground-accent-green",
-        "--color-background-accent-blue",
-        "--color-foreground-accent-blue",
-        "--color-background-accent-violet",
-        "--color-foreground-accent-violet",
-        "--color-background-accent-amber",
-        "--color-foreground-accent-amber",
-        "--radius-full",
-        "--spacing-inline",
-        "--spacing-micro",
-        "--font-label-small"
-      ],
       "anatomy": {
         "description": "A single part. Every variant restyles the same host — badge's whole palette lives in its state overlays.",
         "parts": [
@@ -452,7 +427,32 @@
         "componentKey": "",
         "nodeId": "96:21",
         "codeConnectFile": "badge.figma.ts"
-      }
+      },
+      "tokensUsed": [
+        "--color-background-accent-amber",
+        "--color-background-accent-blue",
+        "--color-background-accent-green",
+        "--color-background-accent-violet",
+        "--color-background-alt",
+        "--color-background-danger-alt",
+        "--color-background-info-alt",
+        "--color-background-success-alt",
+        "--color-background-warning-alt",
+        "--color-border-alt",
+        "--color-foreground-accent-amber",
+        "--color-foreground-accent-blue",
+        "--color-foreground-accent-green",
+        "--color-foreground-accent-violet",
+        "--color-foreground-alt",
+        "--color-foreground-danger",
+        "--color-foreground-info",
+        "--color-foreground-success",
+        "--color-foreground-warning",
+        "--font-label-small",
+        "--radius-full",
+        "--spacing-inline",
+        "--spacing-micro"
+      ]
     },
     {
       "metaVersion": "1.0.0",
@@ -576,32 +576,6 @@
           "name": "button",
           "description": "The inner <button> element."
         }
-      ],
-      "tokensUsed": [
-        "--color-background-action",
-        "--color-background-action-hover",
-        "--color-background-action-active",
-        "--color-foreground-on-action",
-        "--color-background-alt",
-        "--color-foreground-action",
-        "--color-border-action",
-        "--color-background-default",
-        "--color-background-danger-alt",
-        "--color-foreground-danger",
-        "--color-background-disabled",
-        "--color-foreground-disabled",
-        "--color-border-disabled",
-        "--color-border-focus",
-        "--font-label-strong-small",
-        "--font-label-strong-medium",
-        "--font-label-strong-large",
-        "--spacing-micro",
-        "--spacing-tight",
-        "--spacing-inline",
-        "--spacing-element",
-        "--radius-default",
-        "--motion-duration-instant",
-        "--motion-easing-default"
       ],
       "anatomy": {
         "description": "The host is a bare wrapper; every token lives on the inner <button> (the exported part) and its two children. Compound conditions (variant=secondary AND :hover) have no grammar in v1 — those hover rules are in button.ts but not transcribed here.",
@@ -833,7 +807,33 @@
             "focus"
           ]
         }
-      }
+      },
+      "tokensUsed": [
+        "--color-background-action",
+        "--color-background-action-active",
+        "--color-background-action-hover",
+        "--color-background-alt",
+        "--color-background-danger-alt",
+        "--color-background-default",
+        "--color-background-disabled",
+        "--color-border-action",
+        "--color-border-disabled",
+        "--color-border-focus",
+        "--color-foreground-action",
+        "--color-foreground-danger",
+        "--color-foreground-disabled",
+        "--color-foreground-on-action",
+        "--font-label-strong-large",
+        "--font-label-strong-medium",
+        "--font-label-strong-small",
+        "--motion-duration-instant",
+        "--motion-easing-default",
+        "--radius-default",
+        "--spacing-element",
+        "--spacing-inline",
+        "--spacing-micro",
+        "--spacing-tight"
+      ]
     },
     {
       "metaVersion": "1.0.0",
@@ -980,23 +980,6 @@
           "name": "label",
           "description": "The label text element."
         }
-      ],
-      "tokensUsed": [
-        "--spacing-tight",
-        "--color-border-default",
-        "--radius-sm",
-        "--color-background-default",
-        "--motion-duration-instant",
-        "--motion-easing-default",
-        "--color-border-hover",
-        "--color-background-action",
-        "--color-background-disabled",
-        "--color-border-disabled",
-        "--color-border-focus",
-        "--color-foreground-on-action",
-        "--font-label-medium",
-        "--color-foreground-alt",
-        "--color-foreground-disabled"
       ],
       "anatomy": {
         "description": "A visual box beside a label, with the real <input> transparently overlaying the box for hit-testing. The 16px box, its 2px optical nudge, and the focus-ring outline are not tokens — the outline has no key in anatomy v1 (#178).",
@@ -1149,7 +1132,24 @@
         "componentKey": "",
         "nodeId": "117:43",
         "codeConnectFile": "checkbox.figma.ts"
-      }
+      },
+      "tokensUsed": [
+        "--color-background-action",
+        "--color-background-default",
+        "--color-background-disabled",
+        "--color-border-default",
+        "--color-border-disabled",
+        "--color-border-focus",
+        "--color-border-hover",
+        "--color-foreground-alt",
+        "--color-foreground-disabled",
+        "--color-foreground-on-action",
+        "--font-label-medium",
+        "--motion-duration-instant",
+        "--motion-easing-default",
+        "--radius-sm",
+        "--spacing-tight"
+      ]
     },
     {
       "metaVersion": "1.0.0",
@@ -1452,25 +1452,6 @@
           "description": "The error message container."
         }
       ],
-      "tokensUsed": [
-        "--color-background-default",
-        "--color-background-alt",
-        "--color-foreground-default",
-        "--color-foreground-muted",
-        "--color-foreground-alt",
-        "--color-foreground-danger",
-        "--color-foreground-disabled",
-        "--color-border-default",
-        "--color-border-hover",
-        "--color-border-focus",
-        "--color-border-disabled",
-        "--radius-sm",
-        "--spacing-element",
-        "--spacing-tight",
-        "--font-label-medium",
-        "--font-body-large",
-        "--font-label-small"
-      ],
       "anatomy": {
         "description": "Four siblings under a layout-only host. The label/helper/error margins in input.ts are hardcoded px, not spacing tokens — they are deliberately not transcribed as bindings.",
         "parts": [
@@ -1662,7 +1643,26 @@
             "error"
           ]
         }
-      }
+      },
+      "tokensUsed": [
+        "--color-background-alt",
+        "--color-background-default",
+        "--color-border-default",
+        "--color-border-disabled",
+        "--color-border-focus",
+        "--color-border-hover",
+        "--color-foreground-alt",
+        "--color-foreground-danger",
+        "--color-foreground-default",
+        "--color-foreground-disabled",
+        "--color-foreground-muted",
+        "--font-body-large",
+        "--font-label-medium",
+        "--font-label-small",
+        "--radius-sm",
+        "--spacing-element",
+        "--spacing-tight"
+      ]
     },
     {
       "metaVersion": "1.0.0",
@@ -2109,22 +2109,6 @@
           "description": "The label text element."
         }
       ],
-      "tokensUsed": [
-        "--color-border-default",
-        "--color-background-default",
-        "--color-border-hover",
-        "--color-background-action",
-        "--color-background-disabled",
-        "--color-border-disabled",
-        "--color-foreground-disabled",
-        "--color-border-focus",
-        "--color-foreground-alt",
-        "--font-label-medium",
-        "--spacing-tight",
-        "--motion-duration-instant",
-        "--motion-easing-default",
-        "--motion-easing-enter"
-      ],
       "anatomy": {
         "description": "A visual circle beside a label, with the real <input> transparently overlaying the circle. The 16px circle, the 8px dot, and the focus-ring outline are not tokens.",
         "parts": [
@@ -2266,7 +2250,23 @@
         "componentKey": "",
         "nodeId": "121:77",
         "codeConnectFile": "radio.figma.ts"
-      }
+      },
+      "tokensUsed": [
+        "--color-background-action",
+        "--color-background-default",
+        "--color-background-disabled",
+        "--color-border-default",
+        "--color-border-disabled",
+        "--color-border-focus",
+        "--color-border-hover",
+        "--color-foreground-alt",
+        "--color-foreground-disabled",
+        "--font-label-medium",
+        "--motion-duration-instant",
+        "--motion-easing-default",
+        "--motion-easing-enter",
+        "--spacing-tight"
+      ]
     },
     {
       "metaVersion": "1.0.0",
@@ -2342,15 +2342,6 @@
           "name": "legend",
           "description": "The legend / label element."
         }
-      ],
-      "tokensUsed": [
-        "--font-label-medium",
-        "--color-foreground-alt",
-        "--spacing-tight",
-        "--color-foreground-disabled",
-        "--spacing-element",
-        "--font-label-small",
-        "--color-foreground-danger"
       ],
       "anatomy": {
         "description": "A fieldset wrapping the projected rr-radio children. The group carries the legend and the error; each option's own colours belong to rr-radio. The error margin is hardcoded px, not a spacing token.",
@@ -2459,7 +2450,16 @@
         "componentKey": "",
         "nodeId": "121:77",
         "codeConnectFile": "radio.figma.ts"
-      }
+      },
+      "tokensUsed": [
+        "--color-foreground-alt",
+        "--color-foreground-danger",
+        "--color-foreground-disabled",
+        "--font-label-medium",
+        "--font-label-small",
+        "--spacing-element",
+        "--spacing-tight"
+      ]
     },
     {
       "metaVersion": "1.0.0",
@@ -2541,27 +2541,6 @@
           "name": "error",
           "description": "The error message container."
         }
-      ],
-      "tokensUsed": [
-        "--font-label-medium",
-        "--color-foreground-alt",
-        "--color-foreground-danger",
-        "--font-body-large",
-        "--color-foreground-default",
-        "--color-background-default",
-        "--color-border-default",
-        "--radius-sm",
-        "--spacing-tight",
-        "--spacing-element",
-        "--motion-duration-instant",
-        "--motion-easing-default",
-        "--color-border-hover",
-        "--color-border-focus",
-        "--color-background-alt",
-        "--color-border-disabled",
-        "--color-foreground-disabled",
-        "--font-label-small",
-        "--color-foreground-muted"
       ],
       "anatomy": {
         "description": "Same four-sibling shape as rr-input, plus the custom arrow that replaces the native appearance. The label/helper/error margins and the arrow's inset are hardcoded px, not spacing tokens — deliberately not transcribed.",
@@ -2748,7 +2727,28 @@
         "componentKey": "",
         "nodeId": "117:28",
         "codeConnectFile": "select.figma.ts"
-      }
+      },
+      "tokensUsed": [
+        "--color-background-alt",
+        "--color-background-default",
+        "--color-border-default",
+        "--color-border-disabled",
+        "--color-border-focus",
+        "--color-border-hover",
+        "--color-foreground-alt",
+        "--color-foreground-danger",
+        "--color-foreground-default",
+        "--color-foreground-disabled",
+        "--color-foreground-muted",
+        "--font-body-large",
+        "--font-label-medium",
+        "--font-label-small",
+        "--motion-duration-instant",
+        "--motion-easing-default",
+        "--radius-sm",
+        "--spacing-element",
+        "--spacing-tight"
+      ]
     },
     {
       "metaVersion": "1.0.0",
@@ -3482,27 +3482,6 @@
           "description": "The error message container."
         }
       ],
-      "tokensUsed": [
-        "--font-label-medium",
-        "--color-foreground-alt",
-        "--color-foreground-danger",
-        "--font-body-large",
-        "--color-foreground-default",
-        "--color-background-default",
-        "--color-border-default",
-        "--radius-sm",
-        "--spacing-tight",
-        "--spacing-element",
-        "--motion-duration-instant",
-        "--motion-easing-default",
-        "--color-foreground-muted",
-        "--color-border-hover",
-        "--color-border-focus",
-        "--color-background-alt",
-        "--color-border-disabled",
-        "--color-foreground-disabled",
-        "--font-label-small"
-      ],
       "anatomy": {
         "description": "The same four-sibling shape as rr-input, on a <textarea>. The label/helper/error margins are hardcoded px, not spacing tokens — deliberately not transcribed.",
         "parts": [
@@ -3686,7 +3665,28 @@
         "componentKey": "",
         "nodeId": "119:24",
         "codeConnectFile": "textarea.figma.ts"
-      }
+      },
+      "tokensUsed": [
+        "--color-background-alt",
+        "--color-background-default",
+        "--color-border-default",
+        "--color-border-disabled",
+        "--color-border-focus",
+        "--color-border-hover",
+        "--color-foreground-alt",
+        "--color-foreground-danger",
+        "--color-foreground-default",
+        "--color-foreground-disabled",
+        "--color-foreground-muted",
+        "--font-body-large",
+        "--font-label-medium",
+        "--font-label-small",
+        "--motion-duration-instant",
+        "--motion-easing-default",
+        "--radius-sm",
+        "--spacing-element",
+        "--spacing-tight"
+      ]
     },
     {
       "metaVersion": "1.0.0",
@@ -3889,24 +3889,6 @@
           "description": "The label text element."
         }
       ],
-      "tokensUsed": [
-        "--spacing-tight",
-        "--radius-full",
-        "--color-border-default",
-        "--color-background-alt",
-        "--color-background-action",
-        "--color-background-disabled",
-        "--color-border-disabled",
-        "--motion-duration-instant",
-        "--motion-easing-default",
-        "--color-foreground-muted",
-        "--motion-easing-move",
-        "--color-foreground-on-action",
-        "--color-foreground-disabled",
-        "--color-border-focus",
-        "--font-label-medium",
-        "--color-foreground-alt"
-      ],
       "anatomy": {
         "description": "A track with a sliding knob beside a label, with the real <input> transparently overlaying the track. The 36x20 track, the 12px knob, its travel distance, and the focus-ring outline are not tokens.",
         "parts": [
@@ -4050,7 +4032,25 @@
         "componentKey": "",
         "nodeId": "117:56",
         "codeConnectFile": "toggle.figma.ts"
-      }
+      },
+      "tokensUsed": [
+        "--color-background-action",
+        "--color-background-alt",
+        "--color-background-disabled",
+        "--color-border-default",
+        "--color-border-disabled",
+        "--color-border-focus",
+        "--color-foreground-alt",
+        "--color-foreground-disabled",
+        "--color-foreground-muted",
+        "--color-foreground-on-action",
+        "--font-label-medium",
+        "--motion-duration-instant",
+        "--motion-easing-default",
+        "--motion-easing-move",
+        "--radius-full",
+        "--spacing-tight"
+      ]
     }
   ],
   "customElements": {

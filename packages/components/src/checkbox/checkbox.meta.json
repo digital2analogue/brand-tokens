@@ -58,23 +58,6 @@
       "description": "The label text element."
     }
   ],
-  "tokensUsed": [
-    "--spacing-tight",
-    "--color-border-default",
-    "--radius-sm",
-    "--color-background-default",
-    "--motion-duration-instant",
-    "--motion-easing-default",
-    "--color-border-hover",
-    "--color-background-action",
-    "--color-background-disabled",
-    "--color-border-disabled",
-    "--color-border-focus",
-    "--color-foreground-on-action",
-    "--font-label-medium",
-    "--color-foreground-alt",
-    "--color-foreground-disabled"
-  ],
   "anatomy": {
     "description": "A visual box beside a label, with the real <input> transparently overlaying the box for hit-testing. The 16px box, its 2px optical nudge, and the focus-ring outline are not tokens — the outline has no key in anatomy v1 (#178).",
     "parts": [
