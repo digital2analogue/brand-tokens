@@ -93,7 +93,9 @@
             "description": "The pill-shaped track. The native input sits transparently on top of it.",
             "tokens": {
               "background": "--color-background-alt",
-              "border": "--color-border-default"
+              "border": "--color-border-default",
+              "radius": "--radius-full",
+              "motion": ["--motion-duration-instant", "--motion-easing-default"]
             },
             "states": [
               {
@@ -109,6 +111,13 @@
                   "background": "--color-background-disabled",
                   "border": "--color-border-disabled"
                 }
+              },
+              {
+                "when": ":focus-visible",
+                "description": "Keyboard focus ring on the track, driven by the hidden input's focus state.",
+                "tokens": {
+                  "focus": "--color-border-focus"
+                }
               }
             ],
             "parts": [
@@ -118,7 +127,12 @@
                 "cssPart": "knob",
                 "description": "The circle that slides across the track.",
                 "tokens": {
-                  "background": "--color-foreground-muted"
+                  "background": "--color-foreground-muted",
+                  "motion": [
+                    "--motion-duration-instant",
+                    "--motion-easing-move",
+                    "--motion-easing-default"
+                  ]
                 },
                 "states": [
                   {

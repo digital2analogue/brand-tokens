@@ -19,6 +19,11 @@ import {
   anatomyPairings,
   findPartPairing,
   partPaths,
+  whenTerms,
+  stateLabel,
+  parseCondition,
+  isDisabledState,
+  effectiveTokens,
 } from "../../scripts/anatomy.mjs";
 import { allIntendedPairings } from "../../scripts/contrast.mjs";
 
@@ -513,5 +518,197 @@ describe("meta.schema.json: anatomy", () => {
         ],
       }),
     ).toBe(false);
+  });
+});
+
+// ── v2: new keys, compound conditions, cascade (#178 items 1-2) ─────────────
+
+describe("whenTerms / stateLabel", () => {
+  it("treats a string as a one-term condition", () => {
+    expect(whenTerms("disabled")).toEqual(["disabled"]);
+  });
+
+  it("passes an array through", () => {
+    expect(whenTerms(["variant=secondary", ":hover"])).toEqual([
+      "variant=secondary",
+      ":hover",
+    ]);
+  });
+
+  it("joins a compound into an unambiguous label", () => {
+    expect(stateLabel(["variant=secondary", ":hover"])).toBe(
+      "variant=secondary + :hover",
+    );
+    expect(stateLabel("disabled")).toBe("disabled");
+  });
+});
+
+describe("parseCondition", () => {
+  it("classifies the three term kinds", () => {
+    expect(parseCondition(":hover")).toEqual({ kind: "pseudo", name: "hover" });
+    expect(parseCondition("data-invalid")).toEqual({
+      kind: "attribute",
+      name: "data-invalid",
+    });
+    expect(parseCondition("variant=success")).toEqual({
+      kind: "prop",
+      name: "variant",
+    });
+  });
+
+  it("strips negation before classifying", () => {
+    // A misspelled prop is a typo whether the selector guards on presence or
+    // absence — negation must not be an escape hatch from the prop check.
+    expect(parseCondition("!checked")).toEqual({
+      kind: "prop",
+      name: "checked",
+    });
+  });
+});
+
+describe("isDisabledState", () => {
+  it("exempts a bare disabled state", () => {
+    expect(isDisabledState("disabled")).toBe(true);
+  });
+
+  it("exempts a compound that contains disabled", () => {
+    expect(isDisabledState(["disabled", ":hover"])).toBe(true);
+  });
+
+  it("does NOT exempt a negated disabled", () => {
+    // !disabled asserts the control is enabled; treating it as exempt would
+    // silently drop a pairing that has to hold.
+    expect(isDisabledState(["!disabled", ":hover"])).toBe(false);
+  });
+});
+
+describe("unresolvedAnatomyStates with compound conditions", () => {
+  const metaWith = (when) => ({
+    name: "rr-thing",
+    props: [{ name: "variant" }, { name: "disabled" }],
+    anatomy: { parts: [{ name: "root", states: [{ when, tokens: {} }] }] },
+  });
+
+  it("accepts a compound whose terms all resolve", () => {
+    expect(
+      unresolvedAnatomyStates([metaWith(["variant=secondary", ":hover"])]),
+    ).toEqual([]);
+  });
+
+  it("catches a typo in a NON-leading term", () => {
+    const out = unresolvedAnatomyStates([metaWith([":hover", "varaint=x"])]);
+    expect(out).toHaveLength(1);
+    expect(out[0].prop).toBe("varaint");
+  });
+
+  it("checks negated terms too", () => {
+    const out = unresolvedAnatomyStates([metaWith(["!nosuchprop", ":hover"])]);
+    expect(out[0].prop).toBe("nosuchprop");
+  });
+});
+
+describe("effectiveTokens — a compound state refines, it does not restart", () => {
+  const resting = { background: "--bg-rest", foreground: "--fg-rest" };
+  const secondary = {
+    when: "variant=secondary",
+    tokens: { background: "--bg-sec", foreground: "--fg-sec" },
+  };
+  const hover = { when: ":hover", tokens: { background: "--bg-hover" } };
+  const secondaryHover = {
+    when: ["variant=secondary", ":hover"],
+    tokens: { background: "--bg-sec-hover" },
+  };
+  const states = [hover, secondary, secondaryHover];
+
+  it("inherits from the simpler states its terms contain", () => {
+    // The real bug this prevents: composing against resting alone paired
+    // rr-button's hover background with its resting foreground — 1.23:1 for a
+    // combination that never renders.
+    expect(effectiveTokens(resting, states, secondaryHover)).toEqual({
+      background: "--bg-sec-hover",
+      foreground: "--fg-sec",
+    });
+  });
+
+  it("applies the target's own tokens last", () => {
+    expect(effectiveTokens(resting, states, secondary).background).toBe(
+      "--bg-sec",
+    );
+  });
+
+  it("does not inherit from an unrelated state", () => {
+    // :hover is not a subset of variant=secondary, so it must not apply.
+    expect(effectiveTokens(resting, states, secondary).background).not.toBe(
+      "--bg-hover",
+    );
+  });
+
+  it("leaves a single-term state composed on resting", () => {
+    expect(effectiveTokens(resting, states, hover)).toEqual({
+      background: "--bg-hover",
+      foreground: "--fg-rest",
+    });
+  });
+});
+
+describe("v2 binding keys resolve like the v1 ones", () => {
+  const store = storeOf(
+    "color.border.focus",
+    "radius.sm",
+    "motion.duration.instant",
+    "motion.easing.default",
+    "shadow.raised",
+  );
+  const metaWith = (tokens) => ({
+    name: "rr-thing",
+    props: [],
+    anatomy: { parts: [{ name: "root", tokens }] },
+  });
+
+  it("accepts radius, shadow, motion and focus bindings", () => {
+    expect(
+      unresolvedAnatomyTokens(
+        [
+          metaWith({
+            radius: "--radius-sm",
+            shadow: "--shadow-raised",
+            focus: "--color-border-focus",
+            motion: ["--motion-duration-instant", "--motion-easing-default"],
+          }),
+        ],
+        store,
+      ),
+    ).toEqual([]);
+  });
+
+  it("catches a dangling focus binding", () => {
+    const out = unresolvedAnatomyTokens(
+      [metaWith({ focus: "--color-border-focsu" })],
+      store,
+    );
+    expect(out).toHaveLength(1);
+    expect(out[0].key).toBe("focus");
+  });
+
+  it("catches one bad entry in a motion array", () => {
+    const out = unresolvedAnatomyTokens(
+      [
+        metaWith({
+          motion: ["--motion-duration-instant", "--motion-easing-nope"],
+        }),
+      ],
+      store,
+    );
+    expect(out.map((o) => o.token)).toEqual(["--motion-easing-nope"]);
+  });
+
+  it("keeps the new keys out of contrast derivation", () => {
+    // focus/radius/shadow/motion are not fg/bg pairs — extending pairing
+    // derivation is #178 item 3, deliberately not this change.
+    const pairs = anatomyPairings(
+      [metaWith({ focus: "--color-border-focus", radius: "--radius-sm" })],
+      store,
+    );
+    expect(pairs).toEqual([]);
   });
 });

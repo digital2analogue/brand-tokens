@@ -2,9 +2,16 @@
  * anatomy.mjs — the `anatomy` section of *.meta.json (#156 stage 2).
  *
  * A component's anatomy is a named part tree; each part binds semantic tokens
- * for background / foreground / border / spacing / font, with optional state
- * overlays (`variant=success`, `disabled`, `:hover`). It is *transcribed* from
- * the component's real styles — this module never infers one.
+ * for background / foreground / border / spacing / font / radius / shadow /
+ * motion / focus, with optional state overlays (`variant=success`, `disabled`,
+ * `:hover`, or several of those ANDed). It is *transcribed* from the
+ * component's real styles — this module never infers one.
+ *
+ * v2 (#178 items 1-2) added the last four keys and compound/negated conditions.
+ * Together they took the count of tokens declared in `tokensUsed` but attached
+ * to no part from 29 to zero, which is what unblocks deriving `tokensUsed` from
+ * anatomy (#188). `focus` is bound by role rather than by the CSS that draws it
+ * — see the schema for why.
  *
  * Pure functions only, in the shape assembly.mjs established: validate.mjs
  * consumes the `unresolved*` checks as build gates, contrast.mjs consumes
@@ -42,7 +49,7 @@ function bindingSets(part) {
   const sets = [];
   if (part.tokens) sets.push({ state: null, tokens: part.tokens });
   for (const s of part.states ?? []) {
-    if (s.tokens) sets.push({ state: s.when, tokens: s.tokens });
+    if (s.tokens) sets.push({ state: stateLabel(s.when), tokens: s.tokens });
   }
   return sets;
 }
@@ -86,15 +93,82 @@ export function unresolvedAnatomyTokens(metas, store) {
 }
 
 /**
- * The condition a state overlay fires on. `:hover` → pseudo-class (not checked
- * against anything); `variant=success` / `disabled` → a declared prop; `data-*`
- * → an internal state attribute the component sets itself, not a public prop.
+ * One condition term. `:hover` → pseudo-class (not checked against anything);
+ * `variant=success` / `disabled` → a declared prop; `data-*` → an internal
+ * state attribute the component sets itself, not a public prop.
+ *
+ * A leading `!` negates the term and is stripped before classification — a
+ * misspelled prop is a typo whether the selector guards on its presence or its
+ * absence, so negation must not become an escape hatch from the prop check.
  */
-function parseWhen(when) {
+export function parseCondition(term) {
+  const when = term.startsWith("!") ? term.slice(1) : term;
   if (when.startsWith(":")) return { kind: "pseudo", name: when.slice(1) };
   const name = when.split("=")[0];
   if (name.startsWith("data-")) return { kind: "attribute", name };
   return { kind: "prop", name };
+}
+
+/**
+ * A state's `when` as a list of terms. One string is a single-term condition;
+ * an array is several ANDed (#178 item 2). Callers always see a list, so the
+ * two forms need no branching downstream.
+ */
+export function whenTerms(when) {
+  return Array.isArray(when) ? when : [when];
+}
+
+/**
+ * Canonical string form of a condition, for display and for lookup by name.
+ * Terms cannot contain spaces (the schema pattern forbids them), so " + " is an
+ * unambiguous join: `["variant=secondary", ":hover"]` → "variant=secondary + :hover".
+ */
+export function stateLabel(when) {
+  return whenTerms(when).join(" + ");
+}
+
+/**
+ * What a part actually renders under one state overlay.
+ *
+ * A compound state is a *refinement* of the simpler states it contains, not an
+ * independent overlay on the resting set — `:host([variant='secondary'])
+ * button:hover` cascades over both `button:hover` and
+ * `:host([variant='secondary']) button`. Composing it against resting alone
+ * pairs the hover background with the resting foreground, a combination that
+ * never renders: for rr-button that produced `foreground.on-action` on
+ * `background.alt` at 1.23:1 and failed the build with a defect that does not
+ * exist. Confident wrong answers are the failure mode anatomy is supposed to
+ * avoid, so the cascade is modelled rather than approximated.
+ *
+ * Applied in authored order, narrower states last — matching CSS, where the
+ * more specific rule appears later in the sheet.
+ */
+export function effectiveTokens(resting, states, target) {
+  const targetTerms = new Set(whenTerms(target.when));
+  const applies = states.filter(
+    (s) =>
+      s !== target &&
+      whenTerms(s.when).every((t) => targetTerms.has(t)) &&
+      whenTerms(s.when).length < targetTerms.size,
+  );
+  const inherited = applies.reduce((acc, s) => ({ ...acc, ...s.tokens }), {
+    ...resting,
+  });
+  return { ...inherited, ...target.tokens };
+}
+
+/**
+ * Whether a condition means the control is disabled — WCAG exempts disabled
+ * controls from contrast, so anatomyPairings skips these overlays.
+ *
+ * Any non-negated `disabled` term qualifies, at any position in a compound.
+ * `!disabled` does NOT: it asserts the control is *enabled*, and treating it as
+ * exempt would silently drop a pairing that has to hold.
+ */
+export function isDisabledState(when) {
+  return whenTerms(when).some(
+    (t) => !t.startsWith("!") && parseCondition(t).name === "disabled",
+  );
 }
 
 /**
@@ -109,14 +183,18 @@ export function unresolvedAnatomyStates(metas) {
     const props = new Set((meta.props ?? []).map((p) => p.name));
     for (const { path, part } of flattenParts(meta)) {
       for (const state of part.states ?? []) {
-        const { kind, name } = parseWhen(state.when);
-        if (kind === "prop" && !props.has(name)) {
-          out.push({
-            component: meta.name,
-            part: path,
-            when: state.when,
-            prop: name,
-          });
+        // Every term of a compound condition is checked, not just the first —
+        // otherwise a typo hides behind a valid leading term.
+        for (const term of whenTerms(state.when)) {
+          const { kind, name } = parseCondition(term);
+          if (kind === "prop" && !props.has(name)) {
+            out.push({
+              component: meta.name,
+              part: path,
+              when: term,
+              prop: name,
+            });
+          }
         }
       }
     }
@@ -152,15 +230,17 @@ export function anatomyPairings(metas, store) {
   for (const meta of metas) {
     for (const { path, part } of flattenParts(meta)) {
       const resting = part.tokens ?? {};
+      const states = part.states ?? [];
       const overlays = [
         { state: null, tokens: resting },
-        ...(part.states ?? []).map((s) => ({
-          state: s.when,
-          tokens: { ...resting, ...s.tokens },
+        ...states.map((s) => ({
+          state: stateLabel(s.when),
+          when: s.when,
+          tokens: effectiveTokens(resting, states, s),
         })),
       ];
-      for (const { state, tokens } of overlays) {
-        if (state && parseWhen(state).name === "disabled") continue;
+      for (const { state, when, tokens } of overlays) {
+        if (when && isDisabledState(when)) continue;
         const fg = cssToPath.get(tokens.foreground);
         const bg = cssToPath.get(tokens.background);
         if (!fg || !bg) continue;
@@ -199,7 +279,12 @@ export function findPartPairing(metas, component, part, state = null) {
       ? { foreground: resting.foreground, background: resting.background }
       : null;
   }
-  const overlay = (hit.part.states ?? []).find((s) => s.when === state);
+  // Compared by canonical label, so a caller can name a compound condition as
+  // either the array or the joined string check_contrast reports back to them.
+  const wanted = stateLabel(state);
+  const overlay = (hit.part.states ?? []).find(
+    (s) => stateLabel(s.when) === wanted,
+  );
   if (!overlay) return null;
   const tokens = { ...resting, ...overlay.tokens };
   return tokens.foreground && tokens.background
