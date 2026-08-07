@@ -25,7 +25,7 @@ whole model:
 | **Prop bindings** | `props[].bindings` in `*.meta.json` | `{ code: { prop }, figma: { kind, property, valueMap? } }` — how one code prop maps to a Figma variant axis and its options. Boolean derivations supported (`State=disabled → disabled: true`). |
 | **Design-only options** | `figma.ignoredOptions` in `*.meta.json` | Figma variant options that deliberately emit no code (e.g. button `State=hover` — CSS handles it). Declared, so they are covered — anything *undeclared* and unbound is drift. |
 | **Slot constraints** | `slots[].accepts` in `*.meta.json` | Element tags a slot accepts (`rr-menu` default slot → `rr-menu-item`). Omitted = unconstrained; `"*"` = explicitly anything; `"#text"` = text-only. |
-| **Anatomy** | `anatomy` in `*.meta.json` | A named part tree; each part binds semantic tokens for `background` / `foreground` / `border` / `spacing` / `font`, with `states` overlays (`variant=success`, `disabled`, `:hover`). Transcribed from the component's real styles, never inferred. Feeds per-part contrast — see below. |
+| **Anatomy** | `anatomy` in `*.meta.json` | A named part tree; each part binds semantic tokens for `background` / `foreground` / `border` / `spacing` / `font` / `radius` / `shadow` / `motion` / `focus`, with `states` overlays (`variant=success`, `disabled`, `:hover`, or several ANDed). Transcribed from the component's real styles, never inferred. Feeds per-part contrast — see below. |
 | **The dump** | `figma/components.dump.json` | Snapshot of the Figma component sets (variant symbol names per bound component), exported from the Parsimony Design System file (`4aOEBHcnAv2Kbn0g1arL78`) via the Figma MCP. Input to the parity differ. Never hand-edit. |
 
 Roll-out is **opt-in per component**: gates only fire on metas that declare bindings.
@@ -75,9 +75,40 @@ Anatomy's contribution is deliberately narrow, and the narrowness is what keeps 
 the pair from the contract — the way to ask "what does this component actually put together
 under this brand" without knowing its tokens.
 
-Not yet bound: `radius`, `shadow`, and `motion` keys, and compound conditions
-(`variant=secondary` AND `:hover`) — those rules live in the components but have no grammar
-in v1.
+## Anatomy v2 (#178 items 1–2)
+
+Four keys and a richer condition grammar landed together, taking the count of tokens
+declared in `tokensUsed` but attached to no part from **29 to zero** — which is what
+unblocks deriving `tokensUsed` from anatomy (#188).
+
+- **`radius`, `shadow`, `motion`** — mechanical additions. `motion` takes an array,
+  because a transition binds a duration *and* an easing.
+- **`focus`** — the focus indicator, bound **by role, not by the CSS that draws it**. The
+  library draws focus rings three ways (`outline` in 7 components, `box-shadow` in 5,
+  `border-color` in 3) for no design reason. Keying on the mechanism would need three keys
+  and still couldn't answer *"does this component's focus indicator meet SC 1.4.11?"* —
+  the question #29 exists to audit. This is the one deliberate abstraction over the CSS in
+  anatomy; every other key transcribes literally. A `box-shadow` focus ring binds `focus`,
+  not `shadow`; `shadow` means genuine elevation.
+- **Compound conditions** — `when` takes an array of ANDed terms
+  (`["variant=secondary", ":hover"]`). Every term is validated separately, so a typo in a
+  non-leading term still fails the build.
+- **Negation** — `!disabled`, `!checked`. Real selectors guard on absence: checkbox's hover
+  rule is `:host(:not([disabled]):not([checked]):not([indeterminate])) …:hover`. Without
+  negation it is inexpressible. `!disabled` does **not** earn the disabled contrast
+  exemption — it asserts the opposite.
+
+**A compound state refines, it does not restart.** `variant=secondary + :hover` cascades
+over both `variant=secondary` and `:hover`, exactly as the CSS does. Composing it against
+the resting set alone paired rr-button's hover background with its *resting* foreground —
+1.23:1 for a combination that never renders — and failed the build on a defect that does
+not exist. `effectiveTokens()` models the cascade instead.
+
+Still deferred to #178 item 3: the ambient-surface model, and with it per-part non-text
+(SC 1.4.11) checking. Adding the `focus` key does **not** create contrast pairs — anatomy
+still derives text pairs only, and the pairing count is unchanged (40 with anatomy, 38
+without, before and after v2). Checking a focus ring against what surrounds it needs to
+know what the component sits *on*, which is precisely item 3.
 
 ## Commands
 

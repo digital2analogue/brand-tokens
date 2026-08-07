@@ -11,6 +11,55 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-08-06 — Anatomy v2: the focus indicator is bound by role, not by CSS (#178 items 1–2)
+
+**What:** `anatomy` gained four binding keys (`radius`, `shadow`, `motion`, `focus`) and a
+richer condition grammar — `when` now takes an array of ANDed terms, and terms may be
+negated (`!disabled`). All nine promoted components were backfilled. **29 tokens that were
+declared in `tokensUsed` but attached to no part are now zero.**
+
+**Why now, rather than after the promotion batches:** those 29 orphans decompose exactly
+into the gaps v1 deferred — 11 motion, 5 radius, 4 focus rings, 4 needing compound
+conditions. Promoting the remaining 18 components at v1 depth would have multiplied the
+count and forced revisiting all 27 later. It also corrects a claim made a few days earlier:
+#188 (derive `tokensUsed` from anatomy) is blocked by **this**, not by the batches — you
+cannot derive a list from anatomy while 29 of its entries exist only in the list.
+
+**The `focus` decision.** The library draws focus rings three ways — `outline` (checkbox,
+dialog, link, radio, tab, toast, toggle), `box-shadow` (button, input, menu-item, select,
+textarea), `border-color` (input, select, textarea) — for no design reason anyone recorded.
+#178 anticipated only `shadow`. Binding the *mechanism* would need three keys and still
+leave "does this component's focus indicator meet SC 1.4.11 (3:1)?" unanswerable, which is
+the question #29 exists to audit. So `focus` states the role and the CSS stays an
+implementation detail. **This is the one place anatomy abstracts over the code rather than
+transcribing it**, and it is called out in the schema so the exception stays visible.
+Consequence: where a focus ring is drawn as `border-color` and the token equals the focus
+token (input, select, textarea), the `:focus` state now binds `focus` instead of `border` —
+the same fact, named once.
+
+**A bug the compound conditions surfaced immediately.** State overlays composed against the
+part's *resting* set. That is wrong for a refinement: `variant=secondary + :hover` cascades
+over `variant=secondary`, so composing it on resting paired rr-button's hover background
+with its resting foreground — 1.23:1, a combination that never renders — and failed the
+build on a defect that does not exist. `effectiveTokens()` now models the cascade: apply
+every state whose terms are a subset, in authored order, then the state itself. Confident
+wrong answers are the failure mode anatomy exists to avoid.
+
+**Alternative considered:** mechanism keys (`shadow` + `outline`) for strict transcription.
+Rejected — three focus languages stay three things, and no single query can audit focus
+contrast. The right long-term fix is for the components to converge on one mechanism; the
+contract naming the role makes that divergence visible instead of encoding it.
+
+**Status:** shipped, contrast-neutral by construction. The `focus` key creates **no** new
+pairs — anatomy still derives text pairs only, and the intended-pairing count is unchanged
+(40 with anatomy, 38 without, before and after). Checking a focus ring against what
+surrounds it needs the ambient-surface model, which stays deferred as #178 item 3: it is
+the first piece of anatomy that would describe *context* rather than the component, and a
+wrong default there silently produces confident wrong answers of exactly the kind this
+change had to fix.
+
+---
+
 ## 2026-08-04 — A value in a comment is not a violation (#174)
 
 **What:** `lintLines` and `lintSnippet` now strip comment bodies before running the

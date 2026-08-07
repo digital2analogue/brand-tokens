@@ -141,7 +141,9 @@
             "states": [
               {
                 "when": "disabled",
-                "tokens": { "foreground": "--color-foreground-disabled" }
+                "tokens": {
+                  "foreground": "--color-foreground-disabled"
+                }
               }
             ],
             "parts": [
@@ -149,7 +151,9 @@
                 "name": "required-marker",
                 "element": ".required",
                 "description": "The asterisk appended to a required field's label (aria-hidden).",
-                "tokens": { "foreground": "--color-foreground-danger" }
+                "tokens": {
+                  "foreground": "--color-foreground-danger"
+                }
               }
             ]
           },
@@ -163,21 +167,28 @@
               "foreground": "--color-foreground-default",
               "border": "--color-border-default",
               "spacing": ["--spacing-tight", "--spacing-element"],
-              "font": "--font-body-large"
+              "font": "--font-body-large",
+              "radius": "--radius-sm"
             },
             "states": [
               {
                 "when": ":hover",
-                "tokens": { "border": "--color-border-hover" }
+                "tokens": {
+                  "border": "--color-border-hover"
+                }
               },
               {
                 "when": ":focus",
-                "tokens": { "border": "--color-border-focus" }
+                "tokens": {
+                  "focus": "--color-border-focus"
+                }
               },
               {
                 "when": "data-invalid",
                 "description": "Set internally while error-text is non-empty.",
-                "tokens": { "border": "--color-foreground-danger" }
+                "tokens": {
+                  "border": "--color-foreground-danger"
+                }
               },
               {
                 "when": "disabled",
@@ -186,6 +197,13 @@
                   "foreground": "--color-foreground-disabled",
                   "border": "--color-border-disabled"
                 }
+              },
+              {
+                "when": ["data-invalid", ":focus"],
+                "description": "Focus ring while invalid — the ring turns danger red.",
+                "tokens": {
+                  "focus": "--color-foreground-danger"
+                }
               }
             ],
             "parts": [
@@ -193,7 +211,9 @@
                 "name": "placeholder",
                 "element": "::placeholder",
                 "description": "Placeholder text inside the field.",
-                "tokens": { "foreground": "--color-foreground-muted" }
+                "tokens": {
+                  "foreground": "--color-foreground-muted"
+                }
               }
             ]
           },
@@ -279,12 +299,7 @@
     "nodeId": "103:27",
     "codeConnectFile": "input.figma.ts",
     "ignoredOptions": {
-      "State": [
-        "default",
-        "hover",
-        "focus",
-        "error"
-      ]
+      "State": ["default", "hover", "focus", "error"]
     }
   }
 }

@@ -159,7 +159,9 @@
               "foreground": "--color-foreground-on-action",
               "border": "--color-background-action",
               "spacing": ["--spacing-tight", "--spacing-element"],
-              "font": "--font-label-strong-medium"
+              "font": "--font-label-strong-medium",
+              "radius": "--radius-default",
+              "motion": ["--motion-duration-instant", "--motion-easing-default"]
             },
             "states": [
               {
@@ -222,6 +224,31 @@
                   "background": "--color-background-disabled",
                   "foreground": "--color-foreground-disabled",
                   "border": "--color-border-disabled"
+                }
+              },
+              {
+                "when": ":focus-visible",
+                "description": "Keyboard focus ring, drawn as a 2px box-shadow.",
+                "tokens": {
+                  "focus": "--color-border-focus"
+                }
+              },
+              {
+                "when": ["variant=secondary", ":hover"],
+                "tokens": {
+                  "background": "--color-background-alt"
+                }
+              },
+              {
+                "when": ["variant=ghost", ":hover"],
+                "tokens": {
+                  "background": "--color-background-alt"
+                }
+              },
+              {
+                "when": ["variant=danger", ":hover"],
+                "tokens": {
+                  "background": "--color-background-danger-alt"
                 }
               }
             ],

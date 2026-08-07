@@ -77,7 +77,8 @@
             "description": "The visual radio circle. The native input sits transparently on top of it.",
             "tokens": {
               "background": "--color-background-default",
-              "border": "--color-border-default"
+              "border": "--color-border-default",
+              "motion": ["--motion-duration-instant", "--motion-easing-default"]
             },
             "states": [
               {
@@ -92,6 +93,20 @@
                   "background": "--color-background-disabled",
                   "border": "--color-border-disabled"
                 }
+              },
+              {
+                "when": ["!disabled", "!checked", ":hover"],
+                "description": "Hover only while unchecked and enabled.",
+                "tokens": {
+                  "border": "--color-border-hover"
+                }
+              },
+              {
+                "when": ":focus-visible",
+                "description": "Keyboard focus ring on the circle, driven by the hidden input's focus state.",
+                "tokens": {
+                  "focus": "--color-border-focus"
+                }
               }
             ],
             "parts": [
@@ -100,7 +115,11 @@
                 "element": ".dot",
                 "description": "The inner dot, scaled from 0 to 1 when checked.",
                 "tokens": {
-                  "background": "--color-background-action"
+                  "background": "--color-background-action",
+                  "motion": [
+                    "--motion-duration-instant",
+                    "--motion-easing-enter"
+                  ]
                 },
                 "states": [
                   {

@@ -138,7 +138,9 @@
               "foreground": "--color-foreground-default",
               "border": "--color-border-default",
               "spacing": ["--spacing-tight", "--spacing-element"],
-              "font": "--font-body-large"
+              "font": "--font-body-large",
+              "radius": "--radius-sm",
+              "motion": ["--motion-duration-instant", "--motion-easing-default"]
             },
             "states": [
               {
@@ -150,7 +152,7 @@
               {
                 "when": ":focus",
                 "tokens": {
-                  "border": "--color-border-focus"
+                  "focus": "--color-border-focus"
                 }
               },
               {
@@ -166,6 +168,13 @@
                   "background": "--color-background-alt",
                   "foreground": "--color-foreground-disabled",
                   "border": "--color-border-disabled"
+                }
+              },
+              {
+                "when": ["data-invalid", ":focus"],
+                "description": "Focus ring while invalid — the ring turns danger red.",
+                "tokens": {
+                  "focus": "--color-foreground-danger"
                 }
               }
             ],

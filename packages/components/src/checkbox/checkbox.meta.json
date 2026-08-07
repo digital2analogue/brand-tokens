@@ -93,7 +93,9 @@
             "description": "The visual checkbox square. The native input sits transparently on top of it.",
             "tokens": {
               "background": "--color-background-default",
-              "border": "--color-border-default"
+              "border": "--color-border-default",
+              "radius": "--radius-sm",
+              "motion": ["--motion-duration-instant", "--motion-easing-default"]
             },
             "states": [
               {
@@ -115,6 +117,20 @@
                 "tokens": {
                   "background": "--color-background-disabled",
                   "border": "--color-border-disabled"
+                }
+              },
+              {
+                "when": ["!disabled", "!checked", "!indeterminate", ":hover"],
+                "description": "Hover only while resting — a checked or disabled box does not react.",
+                "tokens": {
+                  "border": "--color-border-hover"
+                }
+              },
+              {
+                "when": ":focus-visible",
+                "description": "Keyboard focus ring on the box, driven by the hidden input's focus state.",
+                "tokens": {
+                  "focus": "--color-border-focus"
                 }
               }
             ],

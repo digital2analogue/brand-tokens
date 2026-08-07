@@ -220,7 +220,7 @@
     "anatomyTokens": {
       "type": "object",
       "minProperties": 1,
-      "description": "Semantic token bindings for one part. Colour keys admit only --color-* (which structurally excludes primitives and the deleted component tier, #114). v1 carries five keys; radius/shadow/motion stay in the flat tokensUsed until the anatomy v2 issue.",
+      "description": "Semantic token bindings for one part. Colour keys admit only --color-* (which structurally excludes primitives and the deleted component tier, #114). v2 adds radius/shadow/motion/focus (#178 items 1-2), which took 29 tokens that were declared in tokensUsed but attached to no part down to zero.",
       "properties": {
         "background": { "$ref": "#/$defs/anatomyColor" },
         "foreground": { "$ref": "#/$defs/anatomyColor" },
@@ -236,9 +236,35 @@
             }
           ]
         },
-        "font": { "type": "string", "pattern": "^--font-[a-z0-9-]+$" }
+        "font": { "type": "string", "pattern": "^--font-[a-z0-9-]+$" },
+        "radius": { "type": "string", "pattern": "^--radius-[a-z0-9-]+$" },
+        "shadow": {
+          "type": "string",
+          "pattern": "^--shadow-[a-z0-9-]+$",
+          "description": "Genuine elevation. NOT the focus ring — a focus indicator drawn with box-shadow binds `focus`, so that the fact survives the mechanism."
+        },
+        "motion": {
+          "anyOf": [
+            { "type": "string", "pattern": "^--motion-[a-z0-9-]+$" },
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "pattern": "^--motion-[a-z0-9-]+$" },
+              "description": "A transition binds a duration AND an easing, so the array form is the common case — same shape as spacing."
+            }
+          ]
+        },
+        "focus": {
+          "$ref": "#/$defs/anatomyColor",
+          "description": "The part's focus indicator, bound BY ROLE rather than by the CSS that draws it. The library draws focus rings three ways — `outline` (checkbox, dialog, link, radio, tab, toast, toggle), `box-shadow` (button, input, menu-item, select, textarea) and `border-color` (input, select, textarea) — for no design reason. Keying on the mechanism would need three keys and still could not answer 'does this component's focus indicator meet SC 1.4.11 (3:1)', which is the fact the contract exists to state. This is the one deliberate abstraction over the CSS in anatomy; every other key transcribes literally."
+        }
       },
       "additionalProperties": false
+    },
+    "anatomyCondition": {
+      "type": "string",
+      "pattern": "^!?(:[a-z-]+|[a-z][a-zA-Z0-9-]*(=[a-zA-Z0-9-]+)?)$",
+      "description": "One condition term: \"variant=success\" (prop=value), \"disabled\" (boolean prop / attribute), \":hover\" (CSS pseudo-class), or any of those negated with a leading \"!\". validate resolves the prop=value and bare-prop forms against props[] — negation does not exempt a term from that check; pseudo-classes are not checked. Negation exists because real selectors guard on absence: checkbox's hover rule is `:host(:not([disabled]):not([checked]):not([indeterminate])) .box-wrap:hover .box`, which without it is inexpressible and leaves --color-border-hover attached to no part."
     },
     "anatomyState": {
       "type": "object",
@@ -246,9 +272,16 @@
       "description": "A variant/state overlay on a part's resting bindings. Only the keys that actually change are listed.",
       "properties": {
         "when": {
-          "type": "string",
-          "pattern": "^(:[a-z-]+|[a-z][a-zA-Z0-9-]*(=[a-zA-Z0-9-]+)?)$",
-          "description": "The condition, transcribed from the selector: \"variant=success\" (prop=value), \"disabled\" (boolean prop / attribute), or \":hover\" (CSS pseudo-class). validate resolves the prop=value and bare-prop forms against props[]; pseudo-classes are not checked."
+          "anyOf": [
+            { "$ref": "#/$defs/anatomyCondition" },
+            {
+              "type": "array",
+              "minItems": 2,
+              "items": { "$ref": "#/$defs/anatomyCondition" },
+              "description": "Compound condition — every term must hold (AND). Transcribed from a selector that stacks them, e.g. `:host([variant='secondary']) button:hover` → [\"variant=secondary\", \":hover\"]. Each term is validated separately by the same parser, so a typo in any one of them fails the build. A single-term array is pointless — use the string form."
+            }
+          ],
+          "description": "The condition this overlay fires on, transcribed from the selector. One term or several ANDed. See $defs/anatomyCondition for the term grammar."
         },
         "description": { "type": "string" },
         "tokens": { "$ref": "#/$defs/anatomyTokens" }
