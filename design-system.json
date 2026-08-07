@@ -81,9 +81,23 @@
         "--motion-easing-default"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Use alert for form-level or system feedback; for field-level validation use rr-input error-text instead"
       ],
       "examples": [
@@ -203,9 +217,23 @@
         "--color-foreground-accent-on-amber-bold"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Always provide name (or alt when using src) so the avatar has an accessible label"
       ],
       "examples": [
@@ -373,9 +401,23 @@
         ]
       },
       "rules": [
-        "Never use hex values. Always use var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Variants use a subtle style: a tinted background with accent-colored text, not a solid fill. The variant foreground is the accent color itself (e.g. foreground-accent-green), not foreground-on-{variant}.",
         "To make a variant solid instead (bright fill + dark text), point the variant's styles in badge.ts at background-{variant} and foreground-on-{variant}."
       ],
@@ -733,9 +775,23 @@
         ]
       },
       "rules": [
-        "Never use hex values. Always use var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Primary button: one per page maximum",
         "Icon-only buttons must have aria-label"
       ],
@@ -878,9 +934,23 @@
         "--font-label-small"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Use background.alt for surface separation rather than a shadow token"
       ],
       "examples": [
@@ -1082,9 +1152,23 @@
         ]
       },
       "rules": [
-        "Never use hex values — always var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Always provide a label (via the label prop or slotted content) so the control is named"
       ],
       "examples": [
@@ -1215,9 +1299,23 @@
         "--letter-spacing-title"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Open and close the dialog via the open property or the show()/close() methods — both keep state and the rr-dialog-close event in sync"
       ],
       "examples": [
@@ -1299,9 +1397,23 @@
         "--icon-size-xl"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Icon color is inherited from the parent — set color on the surrounding element, not the icon"
       ],
       "examples": [
@@ -1579,9 +1691,21 @@
         ]
       },
       "rules": [
-        "Never use hex values. Always use var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)"
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
       ],
       "examples": [
         {
@@ -1719,9 +1843,23 @@
         "--color-foreground-muted"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Links are underlined by default and lose the underline on hover — do not override this inverted convention"
       ],
       "examples": [
@@ -1831,9 +1969,23 @@
         "--spacing-micro"
       ],
       "rules": [
-        "Never use hex values. Always use var(--color-*) semantic tokens",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Always set label — it names the menu popup for assistive tech",
         "The popup positions with CSS below the trigger (no portal) — keep the menu outside overflow:hidden ancestors"
       ],
@@ -1935,9 +2087,23 @@
         "--motion-easing-default"
       ],
       "rules": [
-        "Never use hex values. Always use var(--color-*) semantic tokens",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Reserve danger for genuinely destructive actions — one per menu is the norm",
         "Do not rely on color alone for the danger signal — the label must say what is destroyed"
       ],
@@ -2022,9 +2188,23 @@
         "--motion-easing-move"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Always provide a label (or an external visible label) so the progressbar has an accessible name"
       ],
       "examples": [
@@ -2212,9 +2392,23 @@
         ]
       },
       "rules": [
-        "Never use hex values — always var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Always use rr-radio inside an rr-radio-group — selection, name, and form value are managed by the group"
       ],
       "examples": [
@@ -2407,9 +2601,23 @@
         ]
       },
       "rules": [
-        "Never use hex values — always var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Place rr-radio elements in the default slot; the group manages their checked state and form value"
       ],
       "examples": [
@@ -2681,9 +2889,23 @@
         ]
       },
       "rules": [
-        "Never use hex values — always var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Reuses the input’s semantic token recipe (shared across text input, textarea, and select)"
       ],
       "examples": [
@@ -2787,9 +3009,23 @@
         "--radius-default"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Decorative placeholder only — the inner element is role=presentation and aria-hidden, so it is excluded from the accessibility tree"
       ],
       "examples": [
@@ -2852,9 +3088,21 @@
         "--color-border-elevated"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)"
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
       ],
       "examples": [
         {
@@ -2946,9 +3194,23 @@
         "--color-foreground-disabled"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Do not set selected directly — control the active tab via rr-tab-list[value]."
       ],
       "examples": [
@@ -3025,9 +3287,23 @@
         "--color-border-alt"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Tab panels are managed by the consuming app — listen for the change event and show/hide content accordingly."
       ],
       "examples": [
@@ -3132,9 +3408,23 @@
         "--radius-none"
       ],
       "rules": [
-        "Never use hex values. Always use var(--color-*) semantic tokens",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Always set label — it names the table for assistive tech",
         "Set interactive only when rows actually respond to clicks — the hover tint is an interactivity signal, never decoration"
       ],
@@ -3208,9 +3498,23 @@
         "--letter-spacing-all-caps"
       ],
       "rules": [
-        "Never use hex values. Always use var(--color-*) semantic tokens",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Use numeric for amounts, counts, and IDs so digit columns align — not for text that happens to contain digits"
       ],
       "examples": [
@@ -3280,8 +3584,18 @@
         "--motion-easing-default"
       ],
       "rules": [
-        "Never use hex values. Always use var(--color-*) semantic tokens",
-        "Never reference --primitive-* tokens in component code",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Drive selected from your selection model — it is the only state the row owns"
       ],
       "examples": [
@@ -3349,9 +3663,23 @@
         "--letter-spacing-all-caps"
       ],
       "rules": [
-        "Never use hex values. Always use var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "The tag is the deliberate inverse of the badge: outlined (transparent fill, square radius.sm) vs the badge's filled pill. Use badge for status, tag for skills/categories/metadata.",
         "Do not point a tag border at --color-border-default: it equals background.alt and disappears on the page canvas. The default variant uses foreground.muted and the subtle variant uses border.elevated so both stay visible standalone.",
         "Content is transformed to uppercase with --letter-spacing-all-caps in CSS; authors pass normal-case text and must not pre-uppercase it.",
@@ -3613,9 +3941,23 @@
         ]
       },
       "rules": [
-        "Never use hex values — always var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Setting error-text marks the field invalid via ElementInternals.setValidity and replaces the helper text."
       ],
       "examples": [
@@ -3778,9 +4120,23 @@
         "--motion-easing-default"
       ],
       "rules": [
-        "Never use hex values. Always use var(--color-*) semantic tokens",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Placement is the consumer's job — render toasts inside a fixed-position region; the component owns the surface, not the position",
         "Do not rely on the accent color alone to convey the variant — pair with a heading"
       ],
@@ -3991,9 +4347,21 @@
         ]
       },
       "rules": [
-        "Never use hex values — always var(--color-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)"
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
       ],
       "examples": [
         {

@@ -30,9 +30,11 @@
     "--letter-spacing-all-caps"
   ],
   "rules": [
-    "Never use hex values. Always use var(--color-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
     "The tag is the deliberate inverse of the badge: outlined (transparent fill, square radius.sm) vs the badge's filled pill. Use badge for status, tag for skills/categories/metadata.",
     "Do not point a tag border at --color-border-default: it equals background.alt and disappears on the page canvas. The default variant uses foreground.muted and the subtle variant uses border.elevated so both stay visible standalone.",
     "Content is transformed to uppercase with --letter-spacing-all-caps in CSS; authors pass normal-case text and must not pre-uppercase it.",

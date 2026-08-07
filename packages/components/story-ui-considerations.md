@@ -22,18 +22,18 @@ generated from `design-system.json` and `ai/rules.md`.
 ## Non-negotiable rules
 
 ## Hard Rules (never break these)
-1. No hardcoded colors — use var(--color-*) custom properties
-2. No hardcoded font weights — use var(--font-weight-*) custom properties
-3. No font families other than Space Grotesk, Spectral, and JetBrains Mono
-4. Display and title tokens use weight 300 (light) — body, label, and code tokens use weight 400 (regular) — label-strong tokens use weight 500 (medium) for emphasis — 600/700 are ad-hoc only via --font-weight-semibold / --font-weight-bold
-5. Accent green (foreground.action, foreground.accent, background.action, background.accent) is never resting text or decoration — it signals interactivity or intentional emphasis only
-6. All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking
-7. Spacing values must come from the defined scale — do not introduce arbitrary values
-8. No hardcoded font sizes — use var(--font-size-*) primitives or semantic font shorthand tokens
-9. Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer
-10. Motion must respect `prefers-reduced-motion` (WCAG 2.3.3). The built brand CSS zeroes `--motion-duration-*` under `reduce`, so token-driven transitions stop automatically — never hardcode a transition/animation duration that bypasses the tokens. Any infinite animation (spin, shimmer, pulse) cannot be reached by the token override and MUST carry its own `@media (prefers-reduced-motion: reduce)` guard that stops or damps it
-11. Token custom properties (`--color-*`, `--font-*`, `--spacing-*`, `--radius-*`, etc.) are already defined at `:root` by the site's loaded brand CSS — never declare or redeclare one yourself, not even with its correct value, and not to make a standalone snippet self-contained; reference it with `var(--token-name)` and assume the surrounding page provides the definition
-12. Never partially override a font shorthand token (`font: var(--font-*)`) with an individual `font-size`, `font-weight`, or `line-height` declaration — pick a different shorthand token for the size/weight you need, or leave the shorthand alone
+1. **[lint]** No hardcoded colors — use var(--color-*) custom properties
+2. **[lint]** No hardcoded font weights — use var(--font-weight-*) custom properties
+3. **[lint]** No font families other than Space Grotesk, Spectral, and JetBrains Mono
+4. **[manual]** Display and title tokens use weight 300 (light) — body, label, and code tokens use weight 400 (regular) — label-strong tokens use weight 500 (medium) for emphasis — 600/700 are ad-hoc only via --font-weight-semibold / --font-weight-bold
+5. **[manual]** Accent green (foreground.action, foreground.accent, background.action, background.accent) is never resting text or decoration — it signals interactivity or intentional emphasis only
+6. **[gate]** All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking
+7. **[manual]** Spacing values must come from the defined scale — do not introduce arbitrary values
+8. **[lint]** No hardcoded font sizes — use var(--font-size-*) primitives or semantic font shorthand tokens
+9. **[lint]** Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer
+10. **[manual]** Motion must respect `prefers-reduced-motion` (WCAG 2.3.3). The built brand CSS zeroes `--motion-duration-*` under `reduce`, so token-driven transitions stop automatically — never hardcode a transition/animation duration that bypasses the tokens. Any infinite animation (spin, shimmer, pulse) cannot be reached by the token override and MUST carry its own `@media (prefers-reduced-motion: reduce)` guard that stops or damps it
+11. **[manual]** Token custom properties (`--color-*`, `--font-*`, `--spacing-*`, `--radius-*`, etc.) are already defined at `:root` by the site's loaded brand CSS — never declare or redeclare one yourself, not even with its correct value, and not to make a standalone snippet self-contained; reference it with `var(--token-name)` and assume the surrounding page provides the definition
+12. **[manual]** Never partially override a font shorthand token (`font: var(--font-*)`) with an individual `font-size`, `font-weight`, or `line-height` declaration — pick a different shorthand token for the size/weight you need, or leave the shorthand alone
 
 > Generated stories that violate these are rejected by `npm run validate`
 > (rules live in `scripts/rules.mjs`). Never emit hex literals, never reference
@@ -56,10 +56,9 @@ Inline notification banner for success, warning, danger, and info messages. Opti
 **Events:** `close`
 
 **Component rules:**
-- Never use hex values — always var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Use alert for form-level or system feedback; for field-level validation use rr-input error-text instead
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-avatar>`
 
@@ -76,10 +75,9 @@ Circular identity surface showing initials or an image, with size and accent-col
 **Slots:** (default) — Optional custom content to replace initials (e.g. an icon).
 
 **Component rules:**
-- Never use hex values — always var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Always provide name (or alt when using src) so the avatar has an accessible label
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-badge>`
 
@@ -93,11 +91,9 @@ semantic meaning. Accent variants are decorative emphasis tags. |
 **Slots:** (default) — Badge label text.
 
 **Component rules:**
-- Never use hex values. Always use var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Variants use a subtle style: a tinted background with accent-colored text, not a solid fill. The variant foreground is the accent color itself (e.g. foreground-accent-green), not foreground-on-{variant}.
-- To make a variant solid instead (bright fill + dark text), point the variant's styles in badge.ts at background-{variant} and foreground-on-{variant}.
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-button>`
 
@@ -117,11 +113,9 @@ Button with primary/secondary/danger/ghost variants, three sizes, loading spinne
 **Events:** `click`
 
 **Component rules:**
-- Never use hex values. Always use var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Primary button: one per page maximum
-- Icon-only buttons must have aria-label
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-card>`
 
@@ -135,10 +129,9 @@ Header and footer padding is always fixed at `tight/element`. |
 **Slots:** `header` — Card heading row (title, actions, avatar). Hidden when empty.; (default) — Card body content.; `footer` — Card footer row (secondary actions, metadata). Hidden when empty.
 
 **Component rules:**
-- Never use hex values — always var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Use background.alt for surface separation rather than a shadow token
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-checkbox>`
 
@@ -158,10 +151,9 @@ Form-associated checkbox with checked, indeterminate, and disabled states. Backe
 **Events:** `change`
 
 **Component rules:**
-- Never use hex values — always var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Always provide a label (via the label prop or slotted content) so the control is named
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-dialog>`
 
@@ -178,10 +170,9 @@ Modal dialog built on the native <dialog> element with focus trap and Escape-to-
 **Events:** `rr-dialog-close`
 
 **Component rules:**
-- Never use hex values — always var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Open and close the dialog via the open property or the show()/close() methods — both keep state and the rr-dialog-close event in sync
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-icon>`
 
@@ -195,10 +186,9 @@ Sized, accessible wrapper for inline SVG icons. Decorative by default; labelled 
 **Slots:** (default) — The SVG icon element to render.
 
 **Component rules:**
-- Never use hex values — always var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Icon color is inherited from the parent — set color on the surrounding element, not the icon
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-input>`
 
@@ -222,9 +212,9 @@ Form-associated text input with label, helper/error text, and ElementInternals f
 **Events:** `input`, `change`
 
 **Component rules:**
-- Never use hex values. Always use var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-link>`
 
@@ -241,10 +231,9 @@ Anchor enforcing the design system link style — underlined by default, underli
 **Slots:** (default) — Link label content.
 
 **Component rules:**
-- Never use hex values — always var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Links are underlined by default and lose the underline on hover — do not override this inverted convention
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-menu>`
 
@@ -261,11 +250,9 @@ Dropdown action menu (WAI-ARIA menu-button pattern) with full keyboard navigatio
 **Events:** `rr-menu-select`, `rr-menu-toggle`
 
 **Component rules:**
-- Never use hex values. Always use var(--color-*) semantic tokens
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Always set label — it names the menu popup for assistive tech
-- The popup positions with CSS below the trigger (no portal) — keep the menu outside overflow:hidden ancestors
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-menu-item>`
 
@@ -282,11 +269,9 @@ A single action inside rr-menu; the host carries role=menuitem and focus is mana
 **Events:** `rr-menu-item-select`
 
 **Component rules:**
-- Never use hex values. Always use var(--color-*) semantic tokens
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Reserve danger for genuinely destructive actions — one per menu is the norm
-- Do not rely on color alone for the danger signal — the label must say what is destroyed
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-progress>`
 
@@ -300,10 +285,9 @@ Horizontal progress bar with determinate and indeterminate modes, using native r
 | `label` | string | `` | Accessible label, applied as aria-label. Required when no visible label is nearby. |
 
 **Component rules:**
-- Never use hex values — always var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Always provide a label (or an external visible label) so the progressbar has an accessible name
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-radio>`
 
@@ -320,10 +304,9 @@ Individual radio button. Must be used inside rr-radio-group, which manages name,
 **Events:** `rr-radio-change`
 
 **Component rules:**
-- Never use hex values — always var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Always use rr-radio inside an rr-radio-group — selection, name, and form value are managed by the group
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-radio-group>`
 
@@ -344,10 +327,9 @@ Form-associated group of radio buttons. Renders a fieldset/legend and manages se
 **Events:** `change`
 
 **Component rules:**
-- Never use hex values — always var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Place rr-radio elements in the default slot; the group manages their checked state and form value
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-select>`
 
@@ -367,10 +349,9 @@ Form-associated select dropdown with label, helper text, and error state. Option
 **Events:** `change`
 
 **Component rules:**
-- Never use hex values — always var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Reuses the input’s semantic token recipe (shared across text input, textarea, and select)
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-skeleton>`
 
@@ -383,10 +364,9 @@ Animated shimmer placeholder for loading states. Text, circular, and rectangular
 | `height` | string | `` | CSS height value. Defaults to 40px for circular, otherwise 1em. |
 
 **Component rules:**
-- Never use hex values — always var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Decorative placeholder only — the inner element is role=presentation and aria-hidden, so it is excluded from the accessibility tree
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-spinner>`
 
@@ -398,9 +378,9 @@ Animated circular loading indicator that announces its status to screen readers.
 | `label` | string | `Loading` | Accessible label announced to screen readers via the status region. |
 
 **Component rules:**
-- Never use hex values — always var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-tab>`
 
@@ -417,10 +397,9 @@ A single tab button used inside rr-tab-list; its selection state is managed by t
 **Events:** `rr-tab-select`
 
 **Component rules:**
-- Never use hex values — always var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Do not set selected directly — control the active tab via rr-tab-list[value].
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-tab-list>`
 
@@ -436,10 +415,9 @@ Accessible tab strip that wraps rr-tab elements, managing selection and arrow-ke
 **Events:** `change`
 
 **Component rules:**
-- Never use hex values — always var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Tab panels are managed by the consuming app — listen for the change event and show/hide content accordingly.
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-table>`
 
@@ -455,11 +433,9 @@ Structural data table (CSS table layout + ARIA table roles) owning zebra, hover,
 **Slots:** `header` — A single rr-table-row of header cells (rr-table-cell header).; `(default)` — Body rr-table-row elements.
 
 **Component rules:**
-- Never use hex values. Always use var(--color-*) semantic tokens
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Always set label — it names the table for assistive tech
-- Set interactive only when rows actually respond to clicks — the hover tint is an interactivity signal, never decoration
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-table-cell>`
 
@@ -473,10 +449,9 @@ A cell inside rr-table-row; header cells get the muted all-caps recipe, numeric 
 **Slots:** `(default)` — Cell content — text, badges, menus, buttons.
 
 **Component rules:**
-- Never use hex values. Always use var(--color-*) semantic tokens
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Use numeric for amounts, counts, and IDs so digit columns align — not for text that happens to contain digits
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-table-row>`
 
@@ -489,9 +464,8 @@ A row inside rr-table; carries role=row, its zebra/hover/selected visuals are pa
 **Slots:** `(default)` — rr-table-cell elements.
 
 **Component rules:**
-- Never use hex values. Always use var(--color-*) semantic tokens
-- Never reference --primitive-* tokens in component code
-- Drive selected from your selection model — it is the only state the row owns
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-tag>`
 
@@ -507,13 +481,9 @@ elevated-border) for dense or secondary contexts. |
 **Slots:** (default) — Tag label text. Rendered uppercase via CSS — pass normal-case text.
 
 **Component rules:**
-- Never use hex values. Always use var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- The tag is the deliberate inverse of the badge: outlined (transparent fill, square radius.sm) vs the badge's filled pill. Use badge for status, tag for skills/categories/metadata.
-- Do not point a tag border at --color-border-default: it equals background.alt and disappears on the page canvas. The default variant uses foreground.muted and the subtle variant uses border.elevated so both stay visible standalone.
-- Content is transformed to uppercase with --letter-spacing-all-caps in CSS; authors pass normal-case text and must not pre-uppercase it.
-- Tags are non-interactive labels. If a tag must be clickable (e.g. a filter), wrap it in an rr-button or rr-link — do not attach handlers to the tag host.
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-textarea>`
 
@@ -536,10 +506,9 @@ Form-associated multi-line text area with label, helper text, and error state.
 **Events:** `input`, `change`
 
 **Component rules:**
-- Never use hex values — always var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Setting error-text marks the field invalid via ElementInternals.setValidity and replaces the helper text.
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-toast>`
 
@@ -557,11 +526,9 @@ Transient floating notification with status variants, optional auto-dismiss (hov
 **Events:** `rr-toast-close`
 
 **Component rules:**
-- Never use hex values. Always use var(--color-*) semantic tokens
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
-- Placement is the consumer's job — render toasts inside a fixed-position region; the component owns the surface, not the position
-- Do not rely on the accent color alone to convey the variant — pair with a heading
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-toggle>`
 
@@ -580,7 +547,7 @@ Form-associated toggle switch for binary on/off settings.
 **Events:** `change`
 
 **Component rules:**
-- Never use hex values — always var(--color-*)
-- Never reference --primitive-* tokens in component code
-- All text/background pairings must pass WCAG AA (4.5:1)
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 

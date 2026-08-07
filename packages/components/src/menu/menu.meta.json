@@ -58,9 +58,11 @@
     "--spacing-micro"
   ],
   "rules": [
-    "Never use hex values. Always use var(--color-*) semantic tokens",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
     "Always set label — it names the menu popup for assistive tech",
     "The popup positions with CSS below the trigger (no portal) — keep the menu outside overflow:hidden ancestors"
   ],

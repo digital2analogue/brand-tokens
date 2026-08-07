@@ -19,6 +19,7 @@ import {
   lintLines,
   stripComments,
 } from "../../scripts/rules.mjs";
+import { loadRules, getRule } from "../../scripts/reasoning.mjs";
 
 const FIXTURES = {
   "no-hex": {
@@ -240,5 +241,57 @@ describe("hex is not preceded by a word character", () => {
 
   it("still flags a hex that directly follows a colon", () => {
     expect(lintLines("background:#fff;").map((x) => x.match)).toEqual(["#fff"]);
+  });
+});
+
+// ── #189: a `lint` claim must have a detector behind it ────────────────────
+// ai/rules.md now declares HOW each rule is verified. `lint` is a promise that
+// scripts/rules.mjs catches it; this is the eval behind that claim, in both
+// directions, so the annotation cannot drift from the detector set.
+
+describe("verification modes are backed by the detector set", () => {
+  const rules = loadRules();
+  const lintRules = rules.filter((r) => r.verify === "lint");
+  const detectorHardRules = new Set(
+    RULES.map((r) => r.hardRule).filter((n) => typeof n === "number"),
+  );
+
+  it("annotates every rule with a verification mode", () => {
+    expect(rules.filter((r) => !r.verify)).toEqual([]);
+  });
+
+  it("only uses modes the file documents", () => {
+    for (const r of rules) {
+      expect(["lint", "gate", "schema", "manual"]).toContain(r.verify);
+    }
+  });
+
+  it("has a detector for every rule claiming lint", () => {
+    const unbacked = lintRules
+      .filter((r) => r.type === "hard" && !detectorHardRules.has(r.number))
+      .map((r) => r.id);
+    expect(unbacked).toEqual([]);
+  });
+
+  it("marks every rule a detector targets as lint, not manual", () => {
+    // The reverse arrow: a detector exists, so the rule must not claim to be
+    // unenforced. Otherwise an agent does judgement work a gate already does.
+    const understated = [...detectorHardRules]
+      .map((n) => rules.find((r) => r.type === "hard" && r.number === n))
+      .filter((r) => r && r.verify !== "lint")
+      .map((r) => r.id);
+    expect(understated).toEqual([]);
+  });
+
+  it("keeps the statically-undetectable rules honest", () => {
+    // hard-4 (display/title weight) and hard-5 (accent green as resting text)
+    // need semantic context. CLAUDE.md admitted this in prose; now it is data,
+    // and an agent can see its own judgement is the only thing enforcing them.
+    expect(getRule(rules, "hard-4").verify).toBe("manual");
+    expect(getRule(rules, "hard-5").verify).toBe("manual");
+  });
+
+  it("strips the marker from the rule text", () => {
+    for (const r of rules) expect(r.rule).not.toMatch(/^\*\*\[/);
   });
 });

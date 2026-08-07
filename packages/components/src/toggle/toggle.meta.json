@@ -77,7 +77,10 @@
               "background": "--color-background-alt",
               "border": "--color-border-default",
               "radius": "--radius-full",
-              "motion": ["--motion-duration-instant", "--motion-easing-default"]
+              "motion": [
+                "--motion-duration-instant",
+                "--motion-easing-default"
+              ]
             },
             "states": [
               {
@@ -156,9 +159,9 @@
     ]
   },
   "rules": [
-    "Never use hex values — always var(--color-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)"
+    "hard-1",
+    "hard-6",
+    "hard-9"
   ],
   "examples": [
     {
@@ -178,7 +181,10 @@
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/switch/",
     "role": "switch",
     "focusable": true,
-    "keyboard": ["Space toggles the switch", "Enter toggles the switch"],
+    "keyboard": [
+      "Space toggles the switch",
+      "Enter toggles the switch"
+    ],
     "wcag": [
       "1.4.3 Contrast (Minimum)",
       "2.1.1 Keyboard",

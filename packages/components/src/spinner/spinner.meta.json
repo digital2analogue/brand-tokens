@@ -5,8 +5,16 @@
   "summary": "Animated circular loading indicator that announces its status to screen readers.",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
-    { "name": "size", "type": "'sm' | 'md' | 'lg'", "default": "md" },
-    { "name": "label", "type": "string", "default": "Loading" }
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg'",
+      "default": "md"
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "Loading"
+    }
   ],
   "slots": [],
   "events": [],
@@ -16,14 +24,23 @@
     "--color-border-elevated"
   ],
   "rules": [
-    "Never use hex values — always var(--color-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)"
+    "hard-1",
+    "hard-6",
+    "hard-9"
   ],
   "examples": [
-    { "title": "Default", "html": "<rr-spinner></rr-spinner>" },
-    { "title": "Small with custom label", "html": "<rr-spinner size=\"sm\" label=\"Saving…\"></rr-spinner>" },
-    { "title": "Large", "html": "<rr-spinner size=\"lg\" label=\"Processing payment\"></rr-spinner>" }
+    {
+      "title": "Default",
+      "html": "<rr-spinner></rr-spinner>"
+    },
+    {
+      "title": "Small with custom label",
+      "html": "<rr-spinner size=\"sm\" label=\"Saving…\"></rr-spinner>"
+    },
+    {
+      "title": "Large",
+      "html": "<rr-spinner size=\"lg\" label=\"Processing payment\"></rr-spinner>"
+    }
   ],
   "accessibility": {
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/",
@@ -40,5 +57,9 @@
       "The decorative SVG is aria-hidden; the visible label lives in a visually hidden role=status region with aria-live=polite."
     ]
   },
-  "figma": { "componentKey": "", "nodeId": "124:11", "codeConnectFile": "spinner.figma.ts" }
+  "figma": {
+    "componentKey": "",
+    "nodeId": "124:11",
+    "codeConnectFile": "spinner.figma.ts"
+  }
 }

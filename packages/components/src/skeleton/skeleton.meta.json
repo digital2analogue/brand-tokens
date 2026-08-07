@@ -5,9 +5,21 @@
   "summary": "Animated shimmer placeholder for loading states. Text, circular, and rectangular shape variants.",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
-    { "name": "variant", "type": "'text' | 'circular' | 'rectangular'", "default": "text" },
-    { "name": "width", "type": "string", "default": "" },
-    { "name": "height", "type": "string", "default": "" }
+    {
+      "name": "variant",
+      "type": "'text' | 'circular' | 'rectangular'",
+      "default": "text"
+    },
+    {
+      "name": "width",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "height",
+      "type": "string",
+      "default": ""
+    }
   ],
   "slots": [],
   "events": [],
@@ -20,15 +32,26 @@
     "--radius-default"
   ],
   "rules": [
-    "Never use hex values — always var(--color-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
     "Decorative placeholder only — the inner element is role=presentation and aria-hidden, so it is excluded from the accessibility tree"
   ],
   "examples": [
-    { "title": "Text line", "html": "<rr-skeleton></rr-skeleton>" },
-    { "title": "Avatar", "html": "<rr-skeleton variant=\"circular\" width=\"40px\" height=\"40px\"></rr-skeleton>" },
-    { "title": "Card image", "html": "<rr-skeleton variant=\"rectangular\" height=\"200px\"></rr-skeleton>" }
+    {
+      "title": "Text line",
+      "html": "<rr-skeleton></rr-skeleton>"
+    },
+    {
+      "title": "Avatar",
+      "html": "<rr-skeleton variant=\"circular\" width=\"40px\" height=\"40px\"></rr-skeleton>"
+    },
+    {
+      "title": "Card image",
+      "html": "<rr-skeleton variant=\"rectangular\" height=\"200px\"></rr-skeleton>"
+    }
   ],
   "accessibility": {
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/",
@@ -42,5 +65,9 @@
       "Decorative only: marked role=presentation and aria-hidden. Announce loading state with a separate live region if needed."
     ]
   },
-  "figma": { "componentKey": "", "nodeId": "126:5", "codeConnectFile": "skeleton.figma.ts" }
+  "figma": {
+    "componentKey": "",
+    "nodeId": "126:5",
+    "codeConnectFile": "skeleton.figma.ts"
+  }
 }

@@ -45,7 +45,9 @@
     {
       "name": "default",
       "description": "rr-radio child elements.",
-      "accepts": ["rr-radio"]
+      "accepts": [
+        "rr-radio"
+      ]
     }
   ],
   "events": [
@@ -128,9 +130,11 @@
     ]
   },
   "rules": [
-    "Never use hex values — always var(--color-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
     "Place rr-radio elements in the default slot; the group manages their checked state and form value"
   ],
   "examples": [

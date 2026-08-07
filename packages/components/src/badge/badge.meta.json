@@ -50,7 +50,10 @@
           "background": "--color-background-alt",
           "foreground": "--color-foreground-alt",
           "border": "--color-border-alt",
-          "spacing": ["--spacing-micro", "--spacing-inline"],
+          "spacing": [
+            "--spacing-micro",
+            "--spacing-inline"
+          ],
           "font": "--font-label-small",
           "radius": "--radius-full"
         },
@@ -124,9 +127,11 @@
     ]
   },
   "rules": [
-    "Never use hex values. Always use var(--color-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
     "Variants use a subtle style: a tinted background with accent-colored text, not a solid fill. The variant foreground is the accent color itself (e.g. foreground-accent-green), not foreground-on-{variant}.",
     "To make a variant solid instead (bright fill + dark text), point the variant's styles in badge.ts at background-{variant} and foreground-on-{variant}."
   ],
@@ -164,7 +169,10 @@
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/badge/",
     "focusable": false,
     "keyboard": [],
-    "wcag": ["1.4.3 Contrast (Minimum)", "1.4.11 Non-text Contrast"],
+    "wcag": [
+      "1.4.3 Contrast (Minimum)",
+      "1.4.11 Non-text Contrast"
+    ],
     "rules": [
       "Add role=\"status\" on the host element when badge content updates dynamically to create an ARIA live region.",
       "Decorative badges (accent-*) do not need role=\"status\"; they are static labels.",

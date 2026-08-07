@@ -62,7 +62,10 @@
             "tokens": {
               "background": "--color-background-default",
               "border": "--color-border-default",
-              "motion": ["--motion-duration-instant", "--motion-easing-default"]
+              "motion": [
+                "--motion-duration-instant",
+                "--motion-easing-default"
+              ]
             },
             "states": [
               {
@@ -79,7 +82,11 @@
                 }
               },
               {
-                "when": ["!disabled", "!checked", ":hover"],
+                "when": [
+                  "!disabled",
+                  "!checked",
+                  ":hover"
+                ],
                 "description": "Hover only while unchecked and enabled.",
                 "tokens": {
                   "border": "--color-border-hover"
@@ -139,9 +146,11 @@
     ]
   },
   "rules": [
-    "Never use hex values — always var(--color-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
     "Always use rr-radio inside an rr-radio-group — selection, name, and form value are managed by the group"
   ],
   "examples": [
