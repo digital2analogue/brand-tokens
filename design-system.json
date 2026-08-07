@@ -325,7 +325,8 @@
                 "--spacing-micro",
                 "--spacing-inline"
               ],
-              "font": "--font-label-small"
+              "font": "--font-label-small",
+              "radius": "--radius-full"
             },
             "states": [
               {
@@ -623,7 +624,12 @@
                     "--spacing-tight",
                     "--spacing-element"
                   ],
-                  "font": "--font-label-strong-medium"
+                  "font": "--font-label-strong-medium",
+                  "radius": "--radius-default",
+                  "motion": [
+                    "--motion-duration-instant",
+                    "--motion-easing-default"
+                  ]
                 },
                 "states": [
                   {
@@ -692,6 +698,40 @@
                       "background": "--color-background-disabled",
                       "foreground": "--color-foreground-disabled",
                       "border": "--color-border-disabled"
+                    }
+                  },
+                  {
+                    "when": ":focus-visible",
+                    "description": "Keyboard focus ring, drawn as a 2px box-shadow.",
+                    "tokens": {
+                      "focus": "--color-border-focus"
+                    }
+                  },
+                  {
+                    "when": [
+                      "variant=secondary",
+                      ":hover"
+                    ],
+                    "tokens": {
+                      "background": "--color-background-alt"
+                    }
+                  },
+                  {
+                    "when": [
+                      "variant=ghost",
+                      ":hover"
+                    ],
+                    "tokens": {
+                      "background": "--color-background-alt"
+                    }
+                  },
+                  {
+                    "when": [
+                      "variant=danger",
+                      ":hover"
+                    ],
+                    "tokens": {
+                      "background": "--color-background-danger-alt"
                     }
                   }
                 ],
@@ -976,7 +1016,12 @@
                 "description": "The visual checkbox square. The native input sits transparently on top of it.",
                 "tokens": {
                   "background": "--color-background-default",
-                  "border": "--color-border-default"
+                  "border": "--color-border-default",
+                  "radius": "--radius-sm",
+                  "motion": [
+                    "--motion-duration-instant",
+                    "--motion-easing-default"
+                  ]
                 },
                 "states": [
                   {
@@ -998,6 +1043,25 @@
                     "tokens": {
                       "background": "--color-background-disabled",
                       "border": "--color-border-disabled"
+                    }
+                  },
+                  {
+                    "when": [
+                      "!disabled",
+                      "!checked",
+                      "!indeterminate",
+                      ":hover"
+                    ],
+                    "description": "Hover only while resting — a checked or disabled box does not react.",
+                    "tokens": {
+                      "border": "--color-border-hover"
+                    }
+                  },
+                  {
+                    "when": ":focus-visible",
+                    "description": "Keyboard focus ring on the box, driven by the hidden input's focus state.",
+                    "tokens": {
+                      "focus": "--color-border-focus"
                     }
                   }
                 ],
@@ -1456,7 +1520,8 @@
                     "--spacing-tight",
                     "--spacing-element"
                   ],
-                  "font": "--font-body-large"
+                  "font": "--font-body-large",
+                  "radius": "--radius-sm"
                 },
                 "states": [
                   {
@@ -1468,7 +1533,7 @@
                   {
                     "when": ":focus",
                     "tokens": {
-                      "border": "--color-border-focus"
+                      "focus": "--color-border-focus"
                     }
                   },
                   {
@@ -1484,6 +1549,16 @@
                       "background": "--color-background-alt",
                       "foreground": "--color-foreground-disabled",
                       "border": "--color-border-disabled"
+                    }
+                  },
+                  {
+                    "when": [
+                      "data-invalid",
+                      ":focus"
+                    ],
+                    "description": "Focus ring while invalid — the ring turns danger red.",
+                    "tokens": {
+                      "focus": "--color-foreground-danger"
                     }
                   }
                 ],
@@ -2068,7 +2143,11 @@
                 "description": "The visual radio circle. The native input sits transparently on top of it.",
                 "tokens": {
                   "background": "--color-background-default",
-                  "border": "--color-border-default"
+                  "border": "--color-border-default",
+                  "motion": [
+                    "--motion-duration-instant",
+                    "--motion-easing-default"
+                  ]
                 },
                 "states": [
                   {
@@ -2083,6 +2162,24 @@
                       "background": "--color-background-disabled",
                       "border": "--color-border-disabled"
                     }
+                  },
+                  {
+                    "when": [
+                      "!disabled",
+                      "!checked",
+                      ":hover"
+                    ],
+                    "description": "Hover only while unchecked and enabled.",
+                    "tokens": {
+                      "border": "--color-border-hover"
+                    }
+                  },
+                  {
+                    "when": ":focus-visible",
+                    "description": "Keyboard focus ring on the circle, driven by the hidden input's focus state.",
+                    "tokens": {
+                      "focus": "--color-border-focus"
+                    }
                   }
                 ],
                 "parts": [
@@ -2091,7 +2188,11 @@
                     "element": ".dot",
                     "description": "The inner dot, scaled from 0 to 1 when checked.",
                     "tokens": {
-                      "background": "--color-background-action"
+                      "background": "--color-background-action",
+                      "motion": [
+                        "--motion-duration-instant",
+                        "--motion-easing-enter"
+                      ]
                     },
                     "states": [
                       {
@@ -2511,7 +2612,12 @@
                     "--spacing-tight",
                     "--spacing-element"
                   ],
-                  "font": "--font-body-large"
+                  "font": "--font-body-large",
+                  "radius": "--radius-sm",
+                  "motion": [
+                    "--motion-duration-instant",
+                    "--motion-easing-default"
+                  ]
                 },
                 "states": [
                   {
@@ -2523,7 +2629,7 @@
                   {
                     "when": ":focus",
                     "tokens": {
-                      "border": "--color-border-focus"
+                      "focus": "--color-border-focus"
                     }
                   },
                   {
@@ -2539,6 +2645,16 @@
                       "background": "--color-background-alt",
                       "foreground": "--color-foreground-disabled",
                       "border": "--color-border-disabled"
+                    }
+                  },
+                  {
+                    "when": [
+                      "data-invalid",
+                      ":focus"
+                    ],
+                    "description": "Focus ring while invalid — the ring turns danger red.",
+                    "tokens": {
+                      "focus": "--color-foreground-danger"
                     }
                   }
                 ],
@@ -3436,7 +3552,12 @@
                     "--spacing-tight",
                     "--spacing-element"
                   ],
-                  "font": "--font-body-large"
+                  "font": "--font-body-large",
+                  "radius": "--radius-sm",
+                  "motion": [
+                    "--motion-duration-instant",
+                    "--motion-easing-default"
+                  ]
                 },
                 "states": [
                   {
@@ -3448,7 +3569,7 @@
                   {
                     "when": ":focus",
                     "tokens": {
-                      "border": "--color-border-focus"
+                      "focus": "--color-border-focus"
                     }
                   },
                   {
@@ -3464,6 +3585,16 @@
                       "background": "--color-background-alt",
                       "foreground": "--color-foreground-disabled",
                       "border": "--color-border-disabled"
+                    }
+                  },
+                  {
+                    "when": [
+                      "data-invalid",
+                      ":focus"
+                    ],
+                    "description": "Focus ring while invalid — the ring turns danger red.",
+                    "tokens": {
+                      "focus": "--color-foreground-danger"
                     }
                   }
                 ],
@@ -3794,7 +3925,12 @@
                 "description": "The pill-shaped track. The native input sits transparently on top of it.",
                 "tokens": {
                   "background": "--color-background-alt",
-                  "border": "--color-border-default"
+                  "border": "--color-border-default",
+                  "radius": "--radius-full",
+                  "motion": [
+                    "--motion-duration-instant",
+                    "--motion-easing-default"
+                  ]
                 },
                 "states": [
                   {
@@ -3810,6 +3946,13 @@
                       "background": "--color-background-disabled",
                       "border": "--color-border-disabled"
                     }
+                  },
+                  {
+                    "when": ":focus-visible",
+                    "description": "Keyboard focus ring on the track, driven by the hidden input's focus state.",
+                    "tokens": {
+                      "focus": "--color-border-focus"
+                    }
                   }
                 ],
                 "parts": [
@@ -3819,7 +3962,12 @@
                     "cssPart": "knob",
                     "description": "The circle that slides across the track.",
                     "tokens": {
-                      "background": "--color-foreground-muted"
+                      "background": "--color-foreground-muted",
+                      "motion": [
+                        "--motion-duration-instant",
+                        "--motion-easing-move",
+                        "--motion-easing-default"
+                      ]
                     },
                     "states": [
                       {
