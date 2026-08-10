@@ -147,7 +147,10 @@
               "background": "--color-background-default",
               "foreground": "--color-foreground-default",
               "border": "--color-border-default",
-              "spacing": ["--spacing-tight", "--spacing-element"],
+              "spacing": [
+                "--spacing-tight",
+                "--spacing-element"
+              ],
               "font": "--font-body-large",
               "radius": "--radius-sm"
             },
@@ -180,7 +183,10 @@
                 }
               },
               {
-                "when": ["data-invalid", ":focus"],
+                "when": [
+                  "data-invalid",
+                  ":focus"
+                ],
                 "description": "Focus ring while invalid — the ring turns danger red.",
                 "tokens": {
                   "focus": "--color-foreground-danger"
@@ -223,9 +229,9 @@
     ]
   },
   "rules": [
-    "Never use hex values. Always use var(--color-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)"
+    "hard-1",
+    "hard-6",
+    "hard-9"
   ],
   "examples": [
     {
@@ -280,7 +286,12 @@
     "nodeId": "103:27",
     "codeConnectFile": "input.figma.ts",
     "ignoredOptions": {
-      "State": ["default", "hover", "focus", "error"]
+      "State": [
+        "default",
+        "hover",
+        "focus",
+        "error"
+      ]
     }
   }
 }

@@ -132,10 +132,16 @@
               "background": "--color-background-action",
               "foreground": "--color-foreground-on-action",
               "border": "--color-background-action",
-              "spacing": ["--spacing-tight", "--spacing-element"],
+              "spacing": [
+                "--spacing-tight",
+                "--spacing-element"
+              ],
               "font": "--font-label-strong-medium",
               "radius": "--radius-default",
-              "motion": ["--motion-duration-instant", "--motion-easing-default"]
+              "motion": [
+                "--motion-duration-instant",
+                "--motion-easing-default"
+              ]
             },
             "states": [
               {
@@ -155,14 +161,20 @@
               {
                 "when": "size=sm",
                 "tokens": {
-                  "spacing": ["--spacing-micro", "--spacing-tight"],
+                  "spacing": [
+                    "--spacing-micro",
+                    "--spacing-tight"
+                  ],
                   "font": "--font-label-strong-small"
                 }
               },
               {
                 "when": "size=lg",
                 "tokens": {
-                  "spacing": ["--spacing-inline", "--spacing-element"],
+                  "spacing": [
+                    "--spacing-inline",
+                    "--spacing-element"
+                  ],
                   "font": "--font-label-strong-large"
                 }
               },
@@ -208,19 +220,28 @@
                 }
               },
               {
-                "when": ["variant=secondary", ":hover"],
+                "when": [
+                  "variant=secondary",
+                  ":hover"
+                ],
                 "tokens": {
                   "background": "--color-background-alt"
                 }
               },
               {
-                "when": ["variant=ghost", ":hover"],
+                "when": [
+                  "variant=ghost",
+                  ":hover"
+                ],
                 "tokens": {
                   "background": "--color-background-alt"
                 }
               },
               {
-                "when": ["variant=danger", ":hover"],
+                "when": [
+                  "variant=danger",
+                  ":hover"
+                ],
                 "tokens": {
                   "background": "--color-background-danger-alt"
                 }
@@ -250,9 +271,11 @@
     ]
   },
   "rules": [
-    "Never use hex values. Always use var(--color-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
     "Primary button: one per page maximum",
     "Icon-only buttons must have aria-label"
   ],
@@ -317,7 +340,12 @@
     "nodeId": "98:56",
     "codeConnectFile": "button.figma.ts",
     "ignoredOptions": {
-      "State": ["default", "hover", "active", "focus"]
+      "State": [
+        "default",
+        "hover",
+        "active",
+        "focus"
+      ]
     }
   }
 }

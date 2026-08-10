@@ -89,8 +89,13 @@
     },
     "rules": {
       "type": "array",
+      "items": { "type": "string", "pattern": "^(hard|soft)-[0-9]+$" },
+      "description": "System rules from ai/rules.md that apply to this component, BY ID (#189) — e.g. \"hard-1\". Never the rule's prose: three metas restated \"never use hex\" in three different wordings across 27 files, which is the drift this contract exists to end. validate fails on an id that does not resolve, and build:meta expands each to its full text (plus its verify mode) in design-system.json, so consumers read no differently. Component-specific guidance goes in `guidance`, not here."
+    },
+    "guidance": {
+      "type": "array",
       "items": { "type": "string" },
-      "description": "Usage rules and constraints from ai/rules.md that apply to this component."
+      "description": "Usage guidance specific to THIS component — the ~35 genuinely per-component notes that are not restatements of a system rule (e.g. \"Icon-only buttons must have aria-label\"). Prose by design; it carries judgement a rule id cannot. Split out of `rules` in #189 so that field can be pure references."
     },
     "examples": {
       "type": "array",

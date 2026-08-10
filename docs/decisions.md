@@ -11,6 +11,48 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-08-07 — Rules are referenced by id, and declare how they are verified (#189)
+
+**What:** `ai/rules.md` annotates every rule with a **verification mode** —
+`lint` | `gate` | `schema` | `manual` — parsed into a `verify` field by
+`scripts/reasoning.mjs` and returned by `get_rule` / `find_rule`. A meta's `rules[]` now
+holds **ids** (`hard-1`) rather than prose; `validate` §4e fails on an id that does not
+resolve, and `build:meta` expands each to `{ id, verify, rule }` so consumers read no
+differently. Component-specific prose moved to a new `guidance[]`.
+
+**Why the ids:** three system rules were restated **80 times across 27 metas**, and "never
+use hex" appeared in **three different wordings**. Nothing held any copy to the source.
+That is the same de-normalization the rest of this work has been removing, at component
+scale.
+
+**Why the modes — the more important half.** Before this, every rule looked equally
+enforced to an agent, while `CLAUDE.md` admitted *in prose* that several are statically
+undetectable. Now it is data: **12 of the 18 rules are `manual`**, 5 are `lint`, 1 is a
+`gate`. An agent reading `hard-5` (accent green is never resting text) can see that its own
+judgement is the only thing checking it, rather than assuming a gate has it covered.
+
+**`lint` is a promise, not a label.** `tests/unit/rules-fixtures.spec.mjs` fails in **both
+directions**: a rule claiming `lint` with no detector in `scripts/rules.mjs` behind it, and
+a rule a detector targets that claims to be unenforced. Both arrows were verified by
+deliberately breaking them. This is the repo's "no capability claim without an eval" rule
+turned on the rules themselves.
+
+**Known weakness, recorded rather than hidden:** ids are **positional** — `hard-5` is the
+fifth hard rule. Inserting a rule mid-list would silently repoint every meta that cites a
+later one, and the resolve-check would not catch it because the shifted id still resolves.
+`ai/rules.md` now says append-only in its header. A stronger fix (explicit ids in the file)
+is available if that constraint ever gets violated.
+
+**Alternative considered:** keeping prose in `rules[]` and adding a checker that each
+string matches a rule in `ai/rules.md`. Rejected for the same reason as #188 — it guards a
+redundancy instead of removing it.
+
+**Status:** shipped. Three downstream renderers needed updating for the new shape and all
+three were caught before merge: the component MDX generator (which rendered
+`[object Object]` on first run), the story-ui briefing, and the MCP's expansion path.
+
+---
+
 ## 2026-08-07 — tokensUsed is derived from anatomy, not authored beside it (#188)
 
 **What:** `build-design-system-json.mjs` now computes `tokensUsed` from the anatomy tree

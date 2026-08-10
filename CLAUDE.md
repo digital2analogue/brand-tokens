@@ -173,7 +173,12 @@ mcp package (still scoped `@riverromney`) is not published yet.
     `icon`, `letter-spacing`, `typography`) with resolved values + usage; `get_spacing()`
     is the back-compat alias for `get_scale('spacing')`.
   - Design reasoning (from `ai/rules.md` + `docs/decisions.md`): `find_rule(topic)` /
-    `get_rule(id)` — the hard/soft rules; `find_decision(topic)` / `get_decision(id)` —
+    `get_rule(id)` — the hard/soft rules, each carrying a **`verify` mode** (#189):
+    `lint` (a detector in `scripts/rules.mjs` catches it), `gate` (a `validate` check),
+    `schema` (structurally impossible), or `manual` (**no automated check** — the reader's
+    judgement is the only thing enforcing it; 12 of the 18 rules are `manual`, which is the
+    honest picture, not an oversight). A rule claiming `lint` without a detector fails the
+    test suite, in both directions. Component metas cite these by id in `rules[]`; `find_decision(topic)` / `get_decision(id)` —
     the decision log (dated entries + archived ADR D-NN log).
   - Brand awareness (from `tokens/brands/*.tokens.json`): `get_brand(brand)` — a
     sub-brand's full override set (base vs brand value per token); `compare_brands(a, b)` —

@@ -78,7 +78,10 @@
               "background": "--color-background-default",
               "border": "--color-border-default",
               "radius": "--radius-sm",
-              "motion": ["--motion-duration-instant", "--motion-easing-default"]
+              "motion": [
+                "--motion-duration-instant",
+                "--motion-easing-default"
+              ]
             },
             "states": [
               {
@@ -103,7 +106,12 @@
                 }
               },
               {
-                "when": ["!disabled", "!checked", "!indeterminate", ":hover"],
+                "when": [
+                  "!disabled",
+                  "!checked",
+                  "!indeterminate",
+                  ":hover"
+                ],
                 "description": "Hover only while resting — a checked or disabled box does not react.",
                 "tokens": {
                   "border": "--color-border-hover"
@@ -151,9 +159,11 @@
     ]
   },
   "rules": [
-    "Never use hex values — always var(--color-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
     "Always provide a label (via the label prop or slotted content) so the control is named"
   ],
   "examples": [

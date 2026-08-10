@@ -27,8 +27,10 @@
     "--motion-easing-default"
   ],
   "rules": [
-    "Never use hex values. Always use var(--color-*) semantic tokens",
-    "Never reference --primitive-* tokens in component code",
+    "hard-1",
+    "hard-9"
+  ],
+  "guidance": [
     "Drive selected from your selection model — it is the only state the row owns"
   ],
   "examples": [

@@ -202,10 +202,32 @@ export function renderAccessibility(c) {
   return `## Accessibility\n\n${body}`;
 }
 
+/**
+ * Guardrails = the system rules this component is held to, plus its own usage
+ * guidance (#189).
+ *
+ * `rules` arrives from design-system.json already expanded from ids to
+ * `{ id, verify, rule }`. The verify mode is rendered, not dropped: a reader
+ * needs to know which of these a gate actually catches and which rest on their
+ * own judgement — twelve of the eighteen system rules are `manual`.
+ */
 export function renderGuardrails(c) {
-  const rules = c.rules ?? [];
-  if (!rules.length) return "## Guardrails\n\n_None._";
-  return `## Guardrails\n\n${rules.map((r) => `- ${cell(r)}`).join("\n")}`;
+  const rules = (c.rules ?? []).map((r) =>
+    typeof r === "string"
+      ? `- ${cell(r)}`
+      : `- \`${cell(r.id)}\`${r.verify ? ` _(${cell(r.verify)})_` : ""} — ${cell(r.rule ?? "")}`,
+  );
+  const guidance = (c.guidance ?? []).map((g) => `- ${cell(g)}`);
+  if (!rules.length && !guidance.length) return "## Guardrails\n\n_None._";
+
+  const parts = [];
+  if (rules.length)
+    parts.push(
+      `**System rules** — how each is enforced in parentheses; \`manual\` means nothing checks it for you.\n\n${rules.join("\n")}`,
+    );
+  if (guidance.length)
+    parts.push(`**Using ${c.name}**\n\n${guidance.join("\n")}`);
+  return `## Guardrails\n\n${parts.join("\n\n")}`;
 }
 
 export function renderImplementation(c) {

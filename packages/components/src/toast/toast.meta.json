@@ -84,11 +84,13 @@
     "--motion-easing-default"
   ],
   "rules": [
-    "Never use hex values. Always use var(--color-*) semantic tokens",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
-    "Placement is the consumer's job \u2014 render toasts inside a fixed-position region; the component owns the surface, not the position",
-    "Do not rely on the accent color alone to convey the variant \u2014 pair with a heading"
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
+    "Placement is the consumer's job — render toasts inside a fixed-position region; the component owns the surface, not the position",
+    "Do not rely on the accent color alone to convey the variant — pair with a heading"
   ],
   "examples": [
     {
@@ -122,7 +124,7 @@
     "rules": [
       "role=status with aria-live=polite by default; the danger variant escalates to role=alert / assertive",
       "The dismiss button carries an aria-label of \"Dismiss\"",
-      "Never put the only path to an action inside an auto-dismissing toast \u2014 duration must be 0 when an action slot is used, or the action must exist elsewhere"
+      "Never put the only path to an action inside an auto-dismissing toast — duration must be 0 when an action slot is used, or the action must exist elsewhere"
     ]
   },
   "figma": {

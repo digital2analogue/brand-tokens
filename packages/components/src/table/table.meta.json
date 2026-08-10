@@ -59,9 +59,11 @@
     "--radius-none"
   ],
   "rules": [
-    "Never use hex values. Always use var(--color-*) semantic tokens",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
     "Always set label — it names the table for assistive tech",
     "Set interactive only when rows actually respond to clicks — the hover tint is an interactivity signal, never decoration"
   ],

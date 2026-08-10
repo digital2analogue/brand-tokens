@@ -37,6 +37,7 @@ import {
   findValueMapMismatches,
 } from "./code-connect.mjs";
 import { unresolvedAccepts } from "./assembly.mjs";
+import { loadRules, getRule } from "./reasoning.mjs";
 import { findTokenDrift, localCustomProperties } from "./component-tokens.mjs";
 import {
   unresolvedAnatomyTokens,
@@ -370,6 +371,34 @@ for (const { dir, data, src } of metaEntries) {
 console.log(
   exitCode === 0
     ? `  ✓ ${driftCount} component contract(s) match their styles\n`
+    : "",
+);
+
+// ── 4e. Rule references resolve (#189) ─────────────────────────────────────
+// A meta's `rules` are ids into ai/rules.md, not prose. Before that they were
+// copied sentences: three metas restated "never use hex" in three different
+// wordings across 27 files, and nothing held any of them to the source. Same
+// dangling-reference fencing as §1b (slot accepts) and §3b (anatomy tokens) —
+// an id that does not resolve fails the build rather than shipping a reference
+// to a rule that no longer exists.
+
+console.log("Resolving rule references...\n");
+
+const allRules = loadRules();
+let ruleRefs = 0;
+for (const { data } of metaEntries) {
+  for (const id of data.rules ?? []) {
+    ruleRefs++;
+    if (!getRule(allRules, id)) {
+      fail(
+        `${data.name}: rules references "${id}" — no such rule in ai/rules.md`,
+      );
+    }
+  }
+}
+console.log(
+  exitCode === 0
+    ? `  ✓ all ${ruleRefs} rule references resolve (${allRules.length} rules defined)\n`
     : "",
 );
 

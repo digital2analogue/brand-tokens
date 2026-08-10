@@ -54,11 +54,13 @@
     "--motion-easing-default"
   ],
   "rules": [
-    "Never use hex values. Always use var(--color-*) semantic tokens",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
-    "Reserve danger for genuinely destructive actions \u2014 one per menu is the norm",
-    "Do not rely on color alone for the danger signal \u2014 the label must say what is destroyed"
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
+    "Reserve danger for genuinely destructive actions — one per menu is the norm",
+    "Do not rely on color alone for the danger signal — the label must say what is destroyed"
   ],
   "examples": [
     {
@@ -88,8 +90,8 @@
       "4.1.2 Name, Role, Value"
     ],
     "rules": [
-      "role=menuitem and tabindex=-1 live on the host so the flattened tree reads menu \u2192 menuitem",
-      "Disabled items expose aria-disabled=true and stay visible \u2014 hidden options are undiscoverable options"
+      "role=menuitem and tabindex=-1 live on the host so the flattened tree reads menu → menuitem",
+      "Disabled items expose aria-disabled=true and stay visible — hidden options are undiscoverable options"
     ]
   },
   "figma": {

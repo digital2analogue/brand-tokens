@@ -75,9 +75,11 @@
     "--motion-easing-default"
   ],
   "rules": [
-    "Never use hex values — always var(--color-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
     "Use alert for form-level or system feedback; for field-level validation use rr-input error-text instead"
   ],
   "examples": [

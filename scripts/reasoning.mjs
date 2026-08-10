@@ -72,11 +72,21 @@ function extractFields(block) {
 /**
  * Parse the Hard Rules and Soft Rules numbered lists out of ai/rules.md.
  * Pure — takes the markdown text so tests can pass fixtures.
- * Returns Rule[] of { id, type, number, rule, rationale } where:
+ * Returns Rule[] of { id, type, number, verify, rule, rationale } where:
  *   - id        : `${type}-${number}`, e.g. "hard-5"
  *   - type      : "hard" | "soft"
+ *   - verify    : how the rule is actually enforced — "lint" | "gate" | "schema"
+ *                 | "manual" (#189). Parsed from a leading `**[mode]**` marker and
+ *                 stripped from `rule`, so callers get the directive clean.
  *   - rule      : the full rule text
  *   - rationale : the clause after the first " — " separator, or null
+ *
+ * `verify` exists because "this is a rule" and "something checks this rule" are
+ * different claims. Before it, every rule looked equally enforced to an agent,
+ * while CLAUDE.md admitted in prose that several are statically undetectable.
+ * A `manual` rule is an honest gap the reader has to cover themselves; a `lint`
+ * rule is a promise, and tests/unit/rules-fixtures.spec.mjs fails if one is made
+ * without a detector in scripts/rules.mjs behind it.
  * Scope is the hard + soft lists only (Typography Hierarchy / Per-Site Variations
  * are usage prose, served by the token tools, not rule queries).
  */
@@ -98,7 +108,11 @@ export function parseRules(markdown) {
     const item = line.match(/^(\d+)\.\s+(.+?)\s*$/);
     if (!item) continue;
     const number = Number(item[1]);
-    const text = item[2].trim();
+    let text = item[2].trim();
+    // Leading `**[lint]**` marker → the verify mode, removed from the directive.
+    const marked = text.match(/^\*\*\[(lint|gate|schema|manual)\]\*\*\s+(.*)$/);
+    const verify = marked ? marked[1] : null;
+    if (marked) text = marked[2].trim();
     const parts = text.split(/\s*—\s*/); // em-dash separates directive from its inline reason
     const rationale =
       parts.length > 1 ? parts.slice(1).join(" — ").trim() : null;
@@ -106,6 +120,7 @@ export function parseRules(markdown) {
       id: `${type}-${number}`,
       type,
       number,
+      verify,
       rule: text,
       rationale,
     });

@@ -19,6 +19,7 @@ import { resolve, relative } from "node:path";
 import { glob } from "node:fs/promises";
 import { injectPropDescriptions } from "./cem-descriptions.mjs";
 import { contractTokens } from "./component-tokens.mjs";
+import { loadRules, getRule } from "./reasoning.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const OUTPUT = resolve(ROOT, "design-system.json");
@@ -60,12 +61,40 @@ function withDerivedTokens(meta) {
   return { ...meta, tokensUsed: [...contractTokens(meta)].sort() };
 }
 
+/**
+ * Rule ids are the authored form (#189); consumers get the full text, so the
+ * MCP's get_component reads no differently than before the split.
+ *
+ * `verify` rides along, because "which rules apply here" is only half the
+ * answer — an agent also needs to know which of them anything actually checks.
+ * Twelve of the eighteen rules are `manual`, and an agent that cannot tell those
+ * apart from the linted ones will either duplicate a gate's work or trust a
+ * check that does not exist.
+ */
+const RULES = loadRules();
+function expandRules(meta) {
+  if (!meta.rules?.length) return meta;
+  return {
+    ...meta,
+    rules: meta.rules.map((id) => {
+      const r = getRule(RULES, id);
+      // validate §4e fails the build on an unresolvable id; this stays
+      // defensive so a direct invocation degrades instead of throwing.
+      return r ? { id, verify: r.verify, rule: r.rule } : { id };
+    }),
+  };
+}
+
 const components = [];
 for (const entry of metaFiles) {
   const rel = relative(ROOT, resolve(ROOT, entry));
   try {
     components.push(
-      withDerivedTokens(JSON.parse(readFileSync(resolve(ROOT, entry), "utf8"))),
+      expandRules(
+        withDerivedTokens(
+          JSON.parse(readFileSync(resolve(ROOT, entry), "utf8")),
+        ),
+      ),
     );
     console.log(`  + ${rel}`);
   } catch (e) {

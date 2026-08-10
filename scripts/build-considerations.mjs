@@ -56,9 +56,17 @@ function componentSection(c) {
     );
   }
 
+  // Rules arrive expanded from ids to { id, verify, rule } (#189). story-ui reads
+  // this briefing as plain prose, so render the directive and say what enforces it.
   if (c.rules?.length) {
     lines.push("**Component rules:**");
-    for (const r of c.rules) lines.push(`- ${r}`);
+    for (const r of c.rules) {
+      lines.push(
+        typeof r === "string"
+          ? `- ${r}`
+          : `- ${r.rule ?? r.id} _(${r.verify ?? "?"})_`,
+      );
+    }
     lines.push("");
   }
 
