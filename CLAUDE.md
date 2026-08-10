@@ -36,7 +36,9 @@ scripts/
   component-tokens.mjs        Holds each component's contract to the styles it ships (#187): the tokens
                               `var()`-referenced in the source vs tokensUsed ∪ anatomy, both directions,
                               plus unknown-token detection. Imported by validate (§4d).
-  rules.mjs                   Single source of truth for the lint rules (no hex / no primitive / no hardcoded size / deprecated). Imported by validate, the MCP, and drift-lint.
+  rules.mjs                   Single source of truth for the lint rules (no hex / no primitive / no hardcoded size / no hardcoded
+                              motion duration / deprecated). Imported by validate, the MCP, and drift-lint. Also holds
+                              missingReduceGuard — hard-10's other half, a validate gate rather than a portable rule.
   validate.mjs                Build gate: meta.json schema + lint rules + token-reference resolution.
   drift-scan.mjs              Reusable consumer-repo scan (scanConsumer): walk + ignore handling + shared rules. Shared by drift-lint and the MCP lint_consumer tool.
   drift-lint.mjs              Thin CLI over drift-scan: scans a consumer repo using the shared rules. `npm run drift -- <dir>`.
@@ -162,11 +164,14 @@ mcp package (still scoped `@riverromney`) is not published yet.
     `get_component(name)` — full contract (props, events, tokens, anatomy part tree, rules,
     a11y, examples);
     `check_usage(snippet)` — flags rule violations (hex, `--primitive-*` refs, hardcoded
-    font sizes/weights, unapproved font families, deprecated tokens) **before** code is
+    font sizes/weights, hardcoded transition/animation durations, unapproved font families,
+    deprecated tokens) **before** code is
     written. Detectors live once in `scripts/rules.mjs`, so the same set gates `validate`
     + `drift-lint`; values written inside comments are never flagged, by any of the three
     (#174 — a comment ships no styling, and treating one as a violation had a consumer's
-    weekly drift report crying wolf for a week); the statically-undetectable hard rules (display/title weight, accent-
+    weekly drift report crying wolf for a week); the duration rule goes quiet on any file
+    that does reduced-motion work at all, because whether a literal is protected is a
+    cascade question a lexical checker cannot answer (same lesson); the statically-undetectable hard rules (display/title weight, accent-
     green-as-resting-text) are out of scope here — they need semantic context.
   - Tokens (from `tokens/**/*.tokens.json`): `get_token(name)`, `find_token(query)`,
     `get_scale(category)` — a full semantic scale (`spacing`, `radius`, `shadow`, `motion`,

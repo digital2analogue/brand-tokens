@@ -53,7 +53,7 @@ export class RrInput extends LitElement {
       border-radius: var(--radius-sm);
       padding: var(--spacing-tight) var(--spacing-element);
       outline: none;
-      transition: border-color 120ms ease;
+      transition: border-color var(--motion-duration-instant) var(--motion-easing-default);
     }
 
     input::placeholder {

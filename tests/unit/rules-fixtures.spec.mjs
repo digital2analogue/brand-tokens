@@ -17,6 +17,7 @@ import {
   RULES,
   lintSnippet,
   lintLines,
+  missingReduceGuard,
   stripComments,
 } from "../../scripts/rules.mjs";
 import { loadRules, getRule } from "../../scripts/reasoning.mjs";
@@ -79,6 +80,31 @@ const FIXTURES = {
       // The semantic roles the tier aliased — the correct post-#114 form.
       "background: var(--color-background-success-alt);",
       "height: 40px;",
+    ],
+  },
+  "no-hardcoded-duration": {
+    violating: [
+      "transition: border-color 120ms ease;",
+      "transition: all 0.2s;",
+      "animation-delay: 640ms;",
+      "transition-duration: 40ms;",
+      // A token supplies the easing but the duration is still a literal — the
+      // reduce override zeroes durations, so this half is what matters.
+      "transition: opacity 300ms var(--motion-easing-enter);",
+    ],
+    clean: [
+      "transition: border-color var(--motion-duration-instant) var(--motion-easing-default);",
+      "transition: var(--motion-transition-standard);",
+      // A var() fallback is not a hardcoded duration: the token is what
+      // applies, and the literal is dead unless the token is undefined.
+      "transition: transform var(--motion-duration-standard, 200ms) ease;",
+      // Infinite animations are outside the token override's reach by design
+      // and carry their own reduce guard instead (hard-10, second clause).
+      "animation: rr-spin 0.8s linear infinite;",
+      // A time-like fragment inside an identifier is not a duration.
+      "animation-name: slide-in-2s-variant;",
+      // Not a duration property at all.
+      "transition-property: transform;",
     ],
   },
   "deprecated-token": {
@@ -241,6 +267,88 @@ describe("hex is not preceded by a word character", () => {
 
   it("still flags a hex that directly follows a colon", () => {
     expect(lintLines("background:#fff;").map((x) => x.match)).toEqual(["#fff"]);
+  });
+});
+
+// ── hard-10: the file-level half of the motion rule ────────────────────────
+// Whether a hardcoded duration is protected is a cascade question, not a
+// lexical one, so the detector stays silent on any file that does
+// reduced-motion work at all. These pin that opt-out in both directions.
+
+describe("no-hardcoded-duration opts out of files that handle reduced motion", () => {
+  const withGuard = [
+    ".rise { animation: rise 640ms ease forwards; }",
+    "@media (prefers-reduced-motion: reduce) { .rise { animation: none; } }",
+  ].join("\n");
+
+  const withoutGuard = ".rise { animation: rise 640ms ease forwards; }";
+
+  it("flags a literal duration when the file has no guard anywhere", () => {
+    expect(lintLines(withoutGuard).map((v) => v.id)).toContain(
+      "no-hardcoded-duration",
+    );
+  });
+
+  it("stays silent once the file carries a reduce guard", () => {
+    expect(lintLines(withGuard).map((v) => v.id)).not.toContain(
+      "no-hardcoded-duration",
+    );
+  });
+
+  it("decides per file, not per line", () => {
+    // The guard is on a different line from the violation. A rule evaluated
+    // line-by-line would never see it and would flag every such file — which
+    // is how a checker starts crying wolf (#174).
+    const perLine = withGuard
+      .split("\n")
+      .flatMap((line) => lintLines(line).map((v) => v.id));
+    expect(perLine).toContain("no-hardcoded-duration");
+    expect(lintLines(withGuard).map((v) => v.id)).not.toContain(
+      "no-hardcoded-duration",
+    );
+  });
+
+  it("does not disable the other rules for a guarded file", () => {
+    // skipFile is scoped to the one rule that declares it.
+    const text = [
+      "@media (prefers-reduced-motion: reduce) { .x { animation: none; } }",
+      "color: #ff0000;",
+    ].join("\n");
+    expect(lintLines(text).map((v) => v.id)).toContain("no-hex");
+  });
+});
+
+describe("missingReduceGuard (the validate gate for infinite animations)", () => {
+  it("flags an infinite animation with no guard", () => {
+    expect(missingReduceGuard("animation: rr-spin 0.8s linear infinite;")).toBe(
+      true,
+    );
+  });
+
+  it("passes once the source carries a guard", () => {
+    expect(
+      missingReduceGuard(
+        [
+          "animation: rr-spin 0.8s linear infinite;",
+          "@media (prefers-reduced-motion: reduce) { :host { animation: none; } }",
+        ].join("\n"),
+      ),
+    ).toBe(false);
+  });
+
+  it("ignores sources with no infinite animation", () => {
+    expect(missingReduceGuard("transition: opacity 120ms ease;")).toBe(false);
+  });
+
+  it("does not accept a guard that exists only in a comment", () => {
+    expect(
+      missingReduceGuard(
+        [
+          "// TODO: add a prefers-reduced-motion guard",
+          "animation: rr-spin 0.8s linear infinite;",
+        ].join("\n"),
+      ),
+    ).toBe(true);
   });
 });
 

@@ -29,7 +29,7 @@ import { resolve, relative, dirname, basename } from "node:path";
 import { glob } from "node:fs/promises";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
-import { lintLines } from "./rules.mjs";
+import { lintLines, missingReduceGuard } from "./rules.mjs";
 import { loadTokens, toCssVar } from "./tokens.mjs";
 import {
   findUnmappedEmissions,
@@ -148,6 +148,48 @@ for (const pattern of lintGlobs) {
   }
 }
 console.log(lintCount === 0 ? "  (no component source files found)\n" : "");
+
+// ── 2b. Infinite animations carry their own reduce guard (hard-10) ──────────
+//
+// The other half of hard-10, and the half the lint detector deliberately does
+// not touch. Zeroing --motion-duration-* cannot reach an infinite animation —
+// a 0s spinner stops rather than damps — so those durations are legitimately
+// off-token and the rule requires the component to guard them itself.
+//
+// This is a gate rather than a lint rule because it is only sound where styles
+// are self-contained: each rr-* component ships its own shadow-DOM styles, so
+// the guard for its animation must live in its own source. That assumption
+// does not hold in a consumer stylesheet, which is why drift-lint is not given
+// this check.
+
+console.log("Checking infinite animations for reduced-motion guards...\n");
+
+let infiniteCount = 0;
+for (const pattern of lintGlobs) {
+  for await (const entry of glob(pattern, { cwd: ROOT })) {
+    if (
+      entry.endsWith(".figma.ts") ||
+      entry.endsWith(".test.ts") ||
+      entry.includes(".stories.")
+    )
+      continue;
+    const content = readFileSync(resolve(ROOT, entry), "utf8");
+    if (!/\binfinite\b/.test(content)) continue;
+    infiniteCount++;
+    if (missingReduceGuard(content)) {
+      fail(
+        `${relative(ROOT, resolve(ROOT, entry))}: infinite animation with no ` +
+          `@media (prefers-reduced-motion: reduce) guard — the token override ` +
+          `cannot reach it (hard-10)`,
+      );
+    }
+  }
+}
+console.log(
+  exitCode === 0
+    ? `  ✓ ${infiniteCount} infinite animation(s) carry a reduce guard\n`
+    : "",
+);
 
 // ── 3. Token reference resolution ───────────────────────────────────────────
 // Every {a.b.c} alias must point at a token that actually exists, including

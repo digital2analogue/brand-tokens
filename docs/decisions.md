@@ -11,6 +11,57 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-08-10 — hard-10 becomes enforced, in two pieces, and deliberately stays incomplete (#177)
+
+**What.** `rr-input` shipped `transition: border-color 120ms ease` — the only
+finite transition in 27 components that bypassed the motion tokens, so it kept
+animating for users with `prefers-reduced-motion` set. Fixed to
+`var(--motion-duration-instant) var(--motion-easing-default)`. hard-10 moves
+`manual` → `lint`, enforced by two new checks:
+
+- `no-hardcoded-duration` in `scripts/rules.mjs` — a literal time in a
+  transition/animation declaration. Portable; gates `validate`, `drift-lint`
+  and `check_usage`.
+- `missingReduceGuard`, used as a `validate` gate — an infinite animation with
+  no reduce guard in its own source. Not given to `drift-lint` (see below).
+
+**Why now.** #189 shipped three days earlier and made visible that 12 of 18
+rules had nothing checking them. The first `manual` rule examined had already
+produced a live accessibility defect. That is the argument for converting the
+detectable ones, made by the codebase rather than in the abstract.
+
+**Why the rule is deliberately incomplete.** Three things are not flagged:
+`infinite` animations (the token override cannot reach them — a 0s spinner
+stops rather than damps — so hard-10 requires a hand-written guard instead),
+`var(--token, 120ms)` fallbacks (the token is what applies), and **any file that
+contains a reduced-motion guard at all**. That last opt-out is the load-bearing
+one: whether a literal duration is protected depends on a guard that usually
+lives in a separate `@media` block selecting the element from far away — a
+cascade question, not a lexical one.
+
+Measured before shipping rather than assumed: the rule reports the one genuine
+defect across 27 components and **nothing** across portfolio-vercel, where all
+22 candidate hits were either `var()` fallbacks or sat under an explicit guard.
+Without the opt-out it would have filed 19 false positives into the consumer's
+weekly drift issue — a rerun of #174, where a checker that cried wolf for a
+week cost more than the rule it enforced.
+
+**Alternative considered.** Ship the naive detector and accept the noise, on
+the theory that hardcoded durations are technically violations regardless.
+Rejected: a report nobody trusts enforces nothing, and the consumer's
+`.rise` durations are explicitly guarded, so the reports would have been
+wrong on the merits as well as unwelcome.
+
+**Known gap, stated rather than papered over.** A hardcoded duration in a file
+that guards *something else* is not caught. The rule is sound, not complete —
+it never reports a violation that isn't one, and it misses some that are.
+
+**Status.** Shipped. The spacing half of #177 (4px margins in input/select/
+textarea, and the 1–2px optical nudges) is untouched and still blocked on the
+exemption decision in #63.
+
+---
+
 ## 2026-08-07 — Rules are referenced by id, and declare how they are verified (#189)
 
 **What:** `ai/rules.md` annotates every rule with a **verification mode** —

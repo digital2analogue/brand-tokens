@@ -152,7 +152,11 @@
                 "--spacing-element"
               ],
               "font": "--font-body-large",
-              "radius": "--radius-sm"
+              "radius": "--radius-sm",
+              "motion": [
+                "--motion-duration-instant",
+                "--motion-easing-default"
+              ]
             },
             "states": [
               {
