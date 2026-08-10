@@ -40,7 +40,7 @@ export class RrCheckbox extends LitElement {
       flex-shrink: 0;
       width: 16px;
       height: 16px;
-      margin-top: 2px; /* align with cap-height of label text */
+      margin-top: var(--spacing-align); /* cap-height of the label */
     }
 
     /* Visually hidden native input — physically covers the box-wrap area

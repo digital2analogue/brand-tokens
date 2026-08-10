@@ -32,7 +32,7 @@ export class RrRadio extends LitElement {
       flex-shrink: 0;
       width: 16px;
       height: 16px;
-      margin-top: 2px;
+      margin-top: var(--spacing-align);
     }
 
     input {

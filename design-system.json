@@ -62,23 +62,24 @@
         }
       ],
       "tokensUsed": [
-        "--spacing-tight",
-        "--spacing-inline",
-        "--spacing-element",
-        "--radius-default",
-        "--color-background-success-alt",
-        "--color-foreground-success",
-        "--color-background-warning-alt",
-        "--color-foreground-warning",
         "--color-background-danger-alt",
-        "--color-foreground-danger",
         "--color-background-info-alt",
+        "--color-background-success-alt",
+        "--color-background-warning-alt",
+        "--color-foreground-danger",
         "--color-foreground-info",
-        "--font-label-strong-medium",
+        "--color-foreground-success",
+        "--color-foreground-warning",
         "--font-body-medium",
-        "--radius-sm",
+        "--font-label-strong-medium",
         "--motion-duration-instant",
-        "--motion-easing-default"
+        "--motion-easing-default",
+        "--radius-default",
+        "--radius-sm",
+        "--spacing-align",
+        "--spacing-element",
+        "--spacing-inline",
+        "--spacing-tight"
       ],
       "rules": [
         {
@@ -1066,7 +1067,7 @@
                 "name": "box",
                 "element": ".box",
                 "cssPart": "box",
-                "description": "The visual checkbox square. The native input sits transparently on top of it.",
+                "description": "The visual checkbox square. The native input sits transparently on top of it. The cap-height offset is carried by its positioning wrapper, not the box itself.",
                 "tokens": {
                   "background": "--color-background-default",
                   "border": "--color-border-default",
@@ -1074,7 +1075,8 @@
                   "motion": [
                     "--motion-duration-instant",
                     "--motion-easing-default"
-                  ]
+                  ],
+                  "spacing": "--spacing-align"
                 },
                 "states": [
                   {
@@ -1232,6 +1234,7 @@
         "--motion-duration-instant",
         "--motion-easing-default",
         "--radius-sm",
+        "--spacing-align",
         "--spacing-tight"
       ]
     },
@@ -1565,7 +1568,7 @@
         }
       ],
       "anatomy": {
-        "description": "Four siblings under a layout-only host. The label/helper/error margins in input.ts are hardcoded px, not spacing tokens — they are deliberately not transcribed as bindings.",
+        "description": "Four siblings under a layout-only host.",
         "parts": [
           {
             "name": "root",
@@ -1579,7 +1582,8 @@
                 "description": "Field label above the input.",
                 "tokens": {
                   "foreground": "--color-foreground-alt",
-                  "font": "--font-label-medium"
+                  "font": "--font-label-medium",
+                  "spacing": "--spacing-micro"
                 },
                 "states": [
                   {
@@ -1595,7 +1599,8 @@
                     "element": ".required",
                     "description": "The asterisk appended to a required field's label (aria-hidden).",
                     "tokens": {
-                      "foreground": "--color-foreground-danger"
+                      "foreground": "--color-foreground-danger",
+                      "spacing": "--spacing-align"
                     }
                   }
                 ]
@@ -1677,7 +1682,8 @@
                 "description": "Helper text below the field. Replaced by the error part while invalid.",
                 "tokens": {
                   "foreground": "--color-foreground-muted",
-                  "font": "--font-label-small"
+                  "font": "--font-label-small",
+                  "spacing": "--spacing-micro"
                 }
               },
               {
@@ -1687,7 +1693,8 @@
                 "description": "Error message below the field (role=alert).",
                 "tokens": {
                   "foreground": "--color-foreground-danger",
-                  "font": "--font-label-small"
+                  "font": "--font-label-small",
+                  "spacing": "--spacing-micro"
                 }
               }
             ]
@@ -1790,7 +1797,9 @@
         "--motion-duration-instant",
         "--motion-easing-default",
         "--radius-sm",
+        "--spacing-align",
         "--spacing-element",
+        "--spacing-micro",
         "--spacing-tight"
       ]
     },
@@ -2310,14 +2319,15 @@
                 "name": "circle",
                 "element": ".circle",
                 "cssPart": "circle",
-                "description": "The visual radio circle. The native input sits transparently on top of it.",
+                "description": "The visual radio circle. The native input sits transparently on top of it. The cap-height offset is carried by its positioning wrapper, not the circle itself.",
                 "tokens": {
                   "background": "--color-background-default",
                   "border": "--color-border-default",
                   "motion": [
                     "--motion-duration-instant",
                     "--motion-easing-default"
-                  ]
+                  ],
+                  "spacing": "--spacing-align"
                 },
                 "states": [
                   {
@@ -2465,6 +2475,7 @@
         "--motion-duration-instant",
         "--motion-easing-default",
         "--motion-easing-enter",
+        "--spacing-align",
         "--spacing-tight"
       ]
     },
@@ -2544,7 +2555,7 @@
         }
       ],
       "anatomy": {
-        "description": "A fieldset wrapping the projected rr-radio children. The group carries the legend and the error; each option's own colours belong to rr-radio. The error margin is hardcoded px, not a spacing token.",
+        "description": "A fieldset wrapping the projected rr-radio children. The group carries the legend and the error; each option's own colours belong to rr-radio.",
         "parts": [
           {
             "name": "root",
@@ -2565,7 +2576,10 @@
                 "tokens": {
                   "foreground": "--color-foreground-alt",
                   "font": "--font-label-medium",
-                  "spacing": "--spacing-tight"
+                  "spacing": [
+                    "--spacing-align",
+                    "--spacing-tight"
+                  ]
                 },
                 "states": [
                   {
@@ -2599,7 +2613,8 @@
                 "description": "Group-level error message (role=alert).",
                 "tokens": {
                   "foreground": "--color-foreground-danger",
-                  "font": "--font-label-small"
+                  "font": "--font-label-small",
+                  "spacing": "--spacing-micro"
                 }
               }
             ]
@@ -2671,7 +2686,9 @@
         "--color-foreground-disabled",
         "--font-label-medium",
         "--font-label-small",
+        "--spacing-align",
         "--spacing-element",
+        "--spacing-micro",
         "--spacing-tight"
       ]
     },
@@ -2757,7 +2774,7 @@
         }
       ],
       "anatomy": {
-        "description": "Same four-sibling shape as rr-input, plus the custom arrow that replaces the native appearance. The label/helper/error margins and the arrow's inset are hardcoded px, not spacing tokens — deliberately not transcribed.",
+        "description": "Same four-sibling shape as rr-input, plus the custom arrow that replaces the native appearance. The arrow's inset and the select's matching right padding are geometry sized to the arrow itself, not spacing-scale values — deliberately not transcribed.",
         "parts": [
           {
             "name": "root",
@@ -2771,7 +2788,8 @@
                 "description": "Field label above the select.",
                 "tokens": {
                   "foreground": "--color-foreground-alt",
-                  "font": "--font-label-medium"
+                  "font": "--font-label-medium",
+                  "spacing": "--spacing-micro"
                 },
                 "states": [
                   {
@@ -2787,7 +2805,8 @@
                     "element": ".required",
                     "description": "The asterisk appended to a required field's label (aria-hidden).",
                     "tokens": {
-                      "foreground": "--color-foreground-danger"
+                      "foreground": "--color-foreground-danger",
+                      "spacing": "--spacing-align"
                     }
                   }
                 ]
@@ -2877,7 +2896,8 @@
                 "description": "Helper text below the field. Replaced by the error part while invalid.",
                 "tokens": {
                   "foreground": "--color-foreground-muted",
-                  "font": "--font-label-small"
+                  "font": "--font-label-small",
+                  "spacing": "--spacing-micro"
                 }
               },
               {
@@ -2887,7 +2907,8 @@
                 "description": "Error message below the field (role=alert).",
                 "tokens": {
                   "foreground": "--color-foreground-danger",
-                  "font": "--font-label-small"
+                  "font": "--font-label-small",
+                  "spacing": "--spacing-micro"
                 }
               }
             ]
@@ -2974,7 +2995,9 @@
         "--motion-duration-instant",
         "--motion-easing-default",
         "--radius-sm",
+        "--spacing-align",
         "--spacing-element",
+        "--spacing-micro",
         "--spacing-tight"
       ]
     },
@@ -3817,7 +3840,7 @@
         }
       ],
       "anatomy": {
-        "description": "The same four-sibling shape as rr-input, on a <textarea>. The label/helper/error margins are hardcoded px, not spacing tokens — deliberately not transcribed.",
+        "description": "The same four-sibling shape as rr-input, on a <textarea>.",
         "parts": [
           {
             "name": "root",
@@ -3831,7 +3854,8 @@
                 "description": "Field label above the textarea.",
                 "tokens": {
                   "foreground": "--color-foreground-alt",
-                  "font": "--font-label-medium"
+                  "font": "--font-label-medium",
+                  "spacing": "--spacing-micro"
                 },
                 "states": [
                   {
@@ -3847,7 +3871,8 @@
                     "element": ".required",
                     "description": "The asterisk appended to a required field's label (aria-hidden).",
                     "tokens": {
-                      "foreground": "--color-foreground-danger"
+                      "foreground": "--color-foreground-danger",
+                      "spacing": "--spacing-align"
                     }
                   }
                 ]
@@ -3929,7 +3954,8 @@
                 "description": "Helper text below the field. Replaced by the error part while invalid.",
                 "tokens": {
                   "foreground": "--color-foreground-muted",
-                  "font": "--font-label-small"
+                  "font": "--font-label-small",
+                  "spacing": "--spacing-micro"
                 }
               },
               {
@@ -3939,7 +3965,8 @@
                 "description": "Error message below the field (role=alert).",
                 "tokens": {
                   "foreground": "--color-foreground-danger",
-                  "font": "--font-label-small"
+                  "font": "--font-label-small",
+                  "spacing": "--spacing-micro"
                 }
               }
             ]
@@ -4032,7 +4059,9 @@
         "--motion-duration-instant",
         "--motion-easing-default",
         "--radius-sm",
+        "--spacing-align",
         "--spacing-element",
+        "--spacing-micro",
         "--spacing-tight"
       ]
     },

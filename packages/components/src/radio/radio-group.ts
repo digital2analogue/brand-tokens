@@ -64,7 +64,7 @@ export class RrRadioGroup extends LitElement {
     .error {
       font: var(--font-label-small);
       color: var(--color-foreground-danger);
-      margin-top: 4px;
+      margin-top: var(--spacing-micro);
     }
   `;
 
@@ -149,7 +149,7 @@ export class RrRadioGroup extends LitElement {
       <fieldset part="fieldset" ?disabled=${this.disabled}>
         ${this.label
           ? html`<legend part="legend">${this.label}${this.required
-              ? html`<span aria-hidden="true" style="color:var(--color-foreground-danger);margin-left:2px">*</span>`
+              ? html`<span aria-hidden="true" style="color:var(--color-foreground-danger);margin-left:var(--spacing-align)">*</span>`
               : nothing}
             </legend>`
           : nothing}

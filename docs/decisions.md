@@ -11,6 +11,54 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-08-10 — The 2px rung gets a semantic name instead of an exemption (#63, #177)
+
+**What.** Added `spacing.align` → `{primitive.space.3xs}` (2px) and converted 18
+literal-px sites across seven components: ten `4px` values that were
+`spacing.micro` written out longhand, and eight `2px` values that are now
+`spacing.align`. No exemption to hard-7 was granted.
+
+**Why.** #63 was framed as "do we allow 1–2px optical nudges to break the
+spacing rule." Auditing the actual values showed the premise was wrong.
+`primitive.space.3xs` is 2px and **was referenced by nothing** — the semantic
+scale started at `micro` (4px), so the system had a 2px rung with no semantic
+name. Since hard-9 forbids reaching a primitive from UI code, every component
+needing 2px had no legal path and wrote a literal. That is not components being
+sloppy; it is the rule and the token set disagreeing, with the components caught
+between them. Naming the rung dissolves the conflict rather than carving an
+exception into the rule.
+
+Corroboration that the role was already understood: the hand-authored row in
+`docs/index.html` had described `space.3xs` as *"Hairline — optical adjustments
+and icon nudges. Not real spacing"* long before this. The token names an intent
+the system already had; it just wasn't reachable.
+
+**Alternative considered.** A blanket "≤3px is exempt from hard-7" rule.
+Rejected as the worst option available: unfalsifiable, it licenses 3px anywhere
+forever, and it would still miss the point — the genuinely arbitrary values in
+the library are `padding-right: 36px` and `right: 10px` in rr-select, which sail
+past a ≤3px threshold while being far less defensible than the 2px it would
+excuse.
+
+**What is deliberately still literal.** Three classes, none of them spacing-scale
+candidates: 1px optical hairlines in rr-alert; the standard `.sr-only`
+visually-hidden recipe in rr-spinner (`width:1px; height:1px; margin:-1px`),
+which is boilerplate accessibility and would be a false positive for any hard-7
+detector; and geometry sized to an adjacent element (rr-select's arrow inset and
+matching right padding, rr-toggle's knob inset). Each component's anatomy
+description now says which of these it carries and why, rather than the contract
+claiming a blanket omission.
+
+**Status.** Shipped. hard-7 stays `manual` — after this pass, what remains is
+genuine judgement, which is what `manual` is supposed to mean. A detector would
+need an allowlist for the sr-only idiom before it could be honest.
+
+**Publishing.** `@digital2analogue2/parsimony` bumped 0.6.1 → 0.7.0 (additive:
+one new semantic token). The publish workflow is on-demand and has not been
+dispatched.
+
+---
+
 ## 2026-08-10 — hard-10 becomes enforced, in two pieces, and deliberately stays incomplete (#177)
 
 **What.** `rr-input` shipped `transition: border-color 120ms ease` — the only

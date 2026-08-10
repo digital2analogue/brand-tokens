@@ -67,7 +67,7 @@
     }
   ],
   "anatomy": {
-    "description": "A fieldset wrapping the projected rr-radio children. The group carries the legend and the error; each option's own colours belong to rr-radio. The error margin is hardcoded px, not a spacing token.",
+    "description": "A fieldset wrapping the projected rr-radio children. The group carries the legend and the error; each option's own colours belong to rr-radio.",
     "parts": [
       {
         "name": "root",
@@ -88,7 +88,10 @@
             "tokens": {
               "foreground": "--color-foreground-alt",
               "font": "--font-label-medium",
-              "spacing": "--spacing-tight"
+              "spacing": [
+                "--spacing-align",
+                "--spacing-tight"
+              ]
             },
             "states": [
               {
@@ -122,7 +125,8 @@
             "description": "Group-level error message (role=alert).",
             "tokens": {
               "foreground": "--color-foreground-danger",
-              "font": "--font-label-small"
+              "font": "--font-label-small",
+              "spacing": "--spacing-micro"
             }
           }
         ]

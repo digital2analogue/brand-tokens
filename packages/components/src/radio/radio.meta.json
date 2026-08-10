@@ -58,14 +58,15 @@
             "name": "circle",
             "element": ".circle",
             "cssPart": "circle",
-            "description": "The visual radio circle. The native input sits transparently on top of it.",
+            "description": "The visual radio circle. The native input sits transparently on top of it. The cap-height offset is carried by its positioning wrapper, not the circle itself.",
             "tokens": {
               "background": "--color-background-default",
               "border": "--color-border-default",
               "motion": [
                 "--motion-duration-instant",
                 "--motion-easing-default"
-              ]
+              ],
+              "spacing": "--spacing-align"
             },
             "states": [
               {
