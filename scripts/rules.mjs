@@ -40,6 +40,17 @@ const FONT_WEIGHT = "font-weight:\\s*(?:\\d+|bold|bolder|lighter)\\b";
 const FONT_FAMILY =
   "font-family:(?!\\s*['\"]?(?:var\\(|inherit|initial|unset|monospace|sans-serif|serif|system-ui|ui-monospace|Space Grotesk|Spectral|JetBrains Mono))\\s*[^;{}\\n]+";
 
+// A transition/animation declaration, captured whole so the duration can be
+// judged in the context of its own value rather than line-wide.
+const DURATION_DECL =
+  "(?:transition|animation)(?:-duration|-delay)?:[^;{}\\n]*";
+// A bare CSS time literal (120ms, 0.8s) not embedded in an identifier — the
+// lookarounds keep a keyframe name like `slide-in-2s` from reading as a time.
+const RAW_TIME = /(?<![\w-])\d*\.?\d+m?s(?![\w-])/;
+// `var(--x, 200ms)` uses the token; the literal is a fallback that only applies
+// when the token is undefined, and is therefore not a hardcoded duration.
+const stripVars = (decl) => decl.replace(/var\([^()]*\)/g, " ");
+
 // Deprecated tokens — removed from the system; flag any lingering references and
 // point at the live replacement. Replacements are grounded in ai/DECISION-ENGINE.md
 // ("Tokens That Were Deleted" / "Tokens That Were Renamed"). The whole color.state.*
@@ -175,6 +186,38 @@ export const RULES = [
     find: (text) => matchAll(text, "--component-[a-z][a-z-]*"),
   },
   {
+    id: "no-hardcoded-duration",
+    hardRule: 10,
+    message:
+      "No hardcoded transition/animation durations. Use var(--motion-duration-*) or a var(--motion-transition-*) shorthand, so prefers-reduced-motion can zero it",
+    // Sound, deliberately incomplete. Three things are NOT flagged, each for a
+    // reason, and the incompleteness is the point — a checker that cries wolf
+    // gets ignored, which costs more than the rule enforces (#174):
+    //
+    //   1. `infinite` animations. The token override cannot reach them (a
+    //      zeroed duration would stop a spinner rather than damp it) and a
+    //      spinner's 800ms is deliberately off-scale, so hard-10 requires them
+    //      to carry their own reduce guard instead. Enforced by validate, not here.
+    //   2. `var(--token, 120ms)` fallbacks — the token is what applies.
+    //   3. Any file that contains a reduce guard at all (see skipFile).
+    //
+    // What remains is the case that is unambiguously unprotected: a literal
+    // duration in a file with no reduced-motion handling anywhere in it.
+    find: (text) =>
+      matchAll(text, DURATION_DECL)
+        .filter((decl) => !/\binfinite\b/.test(decl))
+        .filter((decl) => RAW_TIME.test(stripVars(decl)))
+        .map((decl) => decl.trim()),
+    // Whether a hardcoded duration is protected is a cascade question, not a
+    // lexical one: the guard that covers a declaration usually lives in a
+    // separate @media block, sometimes selecting the element by class from far
+    // away. Rather than guess at coverage, stay silent on any file that does
+    // reduced-motion work at all. Measured before shipping: this reports the
+    // one genuine defect across 27 components and nothing at all across the
+    // consumer site, where every hit sat under an explicit guard.
+    skipFile: (text) => /prefers-reduced-motion/.test(text),
+  },
+  {
     id: "deprecated-token",
     hardRule: null,
     message:
@@ -189,6 +232,24 @@ export const RULES = [
       ).map((d) => d.token),
   },
 ];
+
+/**
+ * The other half of hard-10, kept here so both halves of the rule live in one
+ * file even though only one of them is a lint rule.
+ *
+ * An infinite animation cannot be stopped by zeroing --motion-duration-*: a 0s
+ * spinner does not damp, it vanishes. So the rule requires the source to carry
+ * its own `@media (prefers-reduced-motion: reduce)` guard instead.
+ *
+ * Sound only where styles are self-contained — each rr-* component ships its
+ * own shadow-DOM styles, so its guard must be in its own source. That does not
+ * hold for a consumer stylesheet, where the guard may sit anywhere, which is
+ * why validate uses this and drift-lint does not.
+ */
+export function missingReduceGuard(text) {
+  const src = stripComments(text);
+  return /\binfinite\b/.test(src) && !/prefers-reduced-motion/.test(src);
+}
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -211,6 +272,7 @@ export function lintSnippet(text) {
   const violations = [];
   const src = stripComments(text);
   for (const rule of RULES) {
+    if (rule.skipFile?.(src)) continue;
     const matches = [...new Set(rule.find(src))];
     if (matches.length > 0) {
       violations.push({ id: rule.id, rule: rule.message, matches });
@@ -225,9 +287,13 @@ export function lintSnippet(text) {
  */
 export function lintLines(text) {
   const violations = [];
-  const lines = stripComments(text).split("\n");
+  const src = stripComments(text);
+  // Evaluated once against the whole file — a rule that opts out on file-level
+  // context must not re-decide per line, where that context is invisible.
+  const active = RULES.filter((rule) => !rule.skipFile?.(src));
+  const lines = src.split("\n");
   lines.forEach((line, i) => {
-    for (const rule of RULES) {
+    for (const rule of active) {
       if (allowlisted(rule, line)) continue;
       const matches = rule.find(line);
       if (matches.length > 0) {

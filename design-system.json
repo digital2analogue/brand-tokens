@@ -1614,7 +1614,11 @@
                     "--spacing-element"
                   ],
                   "font": "--font-body-large",
-                  "radius": "--radius-sm"
+                  "radius": "--radius-sm",
+                  "motion": [
+                    "--motion-duration-instant",
+                    "--motion-easing-default"
+                  ]
                 },
                 "states": [
                   {
@@ -1783,6 +1787,8 @@
         "--font-body-large",
         "--font-label-medium",
         "--font-label-small",
+        "--motion-duration-instant",
+        "--motion-easing-default",
         "--radius-sm",
         "--spacing-element",
         "--spacing-tight"
