@@ -621,7 +621,7 @@
         }
       ],
       "anatomy": {
-        "description": "The host is a bare wrapper; every token lives on the inner <button> (the exported part) and its two children. Compound conditions (variant=secondary AND :hover) have no grammar in v1 — those hover rules are in button.ts but not transcribed here.",
+        "description": "The host is a bare wrapper; every token lives on the inner <button> (the exported part) and its two children. The per-variant hover rules are compound states (variant=secondary AND :hover), transcribed as such since anatomy v2 (#178).",
         "parts": [
           {
             "name": "root",
@@ -1053,7 +1053,7 @@
         }
       ],
       "anatomy": {
-        "description": "A visual box beside a label, with the real <input> transparently overlaying the box for hit-testing. The 16px box, its 2px optical nudge, and the focus-ring outline are not tokens — the outline has no key in anatomy v1 (#178).",
+        "description": "A visual box beside a label, with the real <input> transparently overlaying the box for hit-testing. The box's own 16px dimensions are geometry, not spacing, and are deliberately not transcribed; its cap-height offset is spacing.align and the focus ring is a focus binding, both since #203 and #178 respectively.",
         "parts": [
           {
             "name": "root",

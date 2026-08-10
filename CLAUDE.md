@@ -51,6 +51,9 @@ scripts/
   check-golden.mjs            Golden gate: built brand CSS must match tests/golden/css fixtures byte-for-byte
                               (`npm run check:golden`; after an intentional token change: `npm run golden:update`).
                               CI also builds twice and byte-compares — non-determinism fails the run.
+                              Gotcha: `build/css/` is gitignored, so it SURVIVES a branch checkout — build on one
+                              branch, switch, and the gate reports drift from the branch you left. `npm run build`
+                              after switching; the gate is right and you are looking at stale CSS.
   drift_audit.py              Figma-variable-vs-token drift auditor (separate concern from code linting).
 design-system.json   Generated artifact — merged component metadata + Custom Elements Manifest, read by the MCP server.
 .github/workflows/

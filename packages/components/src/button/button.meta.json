@@ -116,7 +116,7 @@
     }
   ],
   "anatomy": {
-    "description": "The host is a bare wrapper; every token lives on the inner <button> (the exported part) and its two children. Compound conditions (variant=secondary AND :hover) have no grammar in v1 — those hover rules are in button.ts but not transcribed here.",
+    "description": "The host is a bare wrapper; every token lives on the inner <button> (the exported part) and its two children. The per-variant hover rules are compound states (variant=secondary AND :hover), transcribed as such since anatomy v2 (#178).",
     "parts": [
       {
         "name": "root",
