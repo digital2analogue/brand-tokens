@@ -39,7 +39,10 @@ scripts/
   rules.mjs                   Single source of truth for the lint rules (no hex / no primitive / no hardcoded size / no hardcoded
                               motion duration / deprecated). Imported by validate, the MCP, and drift-lint. Also holds
                               missingReduceGuard — hard-10's other half, a validate gate rather than a portable rule.
-  validate.mjs                Build gate: meta.json schema + lint rules + token-reference resolution.
+  validate.mjs                Build gate. Twelve checks grouped under the five questions they answer:
+                              is the spec well-formed / does the code follow the rules / do the names point
+                              at things that exist / does the spec match the code / can people read it.
+                              Adding a check means putting it under the question it answers.
   drift-scan.mjs              Reusable consumer-repo scan (scanConsumer): walk + ignore handling + shared rules. Shared by drift-lint and the MCP lint_consumer tool.
   drift-lint.mjs              Thin CLI over drift-scan: scans a consumer repo using the shared rules. `npm run drift -- <dir>`.
   component-parity.mjs        Code↔Figma parity differ (`npm run parity`): diffs meta.json prop bindings against

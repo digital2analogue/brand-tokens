@@ -3,23 +3,39 @@
  *
  * Usage: node scripts/validate.mjs   (npm run validate)
  *
- * Checks:
- *   1. Every *.meta.json validates against schemas/meta.schema.json
- *   2. Component source files obey the lint rules (scripts/rules.mjs)
- *   3. Every token reference {a.b.c} resolves to a token that exists
- *      — this is what makes "a rename is a breaking change" actually true.
- *      §1c applies the same rule to anatomy's per-part token bindings.
- *   4. Every string value a *.figma.ts Code Connect enum can emit exists
- *      in a literal union of the paired component source — so Code Connect
- *      can never emit a prop value the component doesn't implement.
- *      §4b holds prop bindings and *.figma.ts to each other; §4c holds a
- *      meta's enum valueMap to the component's own union (#191); §4d holds
- *      the whole contract to the styles the component ships (#187).
- *   5. Every intended fg/bg pairing keeps its contrast threshold.
+ * Twelve checks, grouped under the five questions they answer. If you are
+ * adding a check, put it under the question it answers — that is the whole
+ * organising principle, and it is the only thing keeping this file legible.
  *
- * §4c and §4d are the two directions of one idea: nothing in the contract may
- * claim something the code does not do, and nothing the code does may go
- * unclaimed. Both are mechanical — they never infer what a component *meant*.
+ *   Is the spec well-formed?
+ *     §1 every *.meta.json validates against schemas/meta.schema.json;
+ *     §1b slot `accepts` references resolve; §1c anatomy state conditions do.
+ *
+ *   Does the code follow the rules?
+ *     §2 component sources obey the lint rules (scripts/rules.mjs);
+ *     §2b infinite animations carry their own reduced-motion guard (hard-10).
+ *
+ *   Do the names point at things that exist?
+ *     §3 every token reference {a.b.c} resolves — this is what makes "a rename
+ *     is a breaking change" actually true. §3b applies it to anatomy's per-part
+ *     bindings, §4e to the rule ids a meta cites. A dangling name fails the
+ *     build rather than shipping a reference to something deleted.
+ *
+ *   Does the spec match the code it describes?
+ *     §4 nothing a *.figma.ts can emit is absent from the component's union;
+ *     §4b prop bindings and *.figma.ts agree; §4c a meta's enum valueMap
+ *     matches the component's own union (#191); §4d the whole contract matches
+ *     the styles the component ships (#187). §4c and §4d are two directions of
+ *     one idea: nothing in the contract may claim something the code does not
+ *     do, and nothing the code does may go unclaimed. Both are mechanical —
+ *     they never infer what a component *meant*.
+ *
+ *   Can people actually read it?
+ *     §5 every intended fg/bg pairing keeps its contrast threshold.
+ *
+ * The section numbers are append-scars, not a hierarchy — each was added when
+ * it was needed, and eight other files cite them by number. The groups carry
+ * the meaning; the numbers are just stable labels.
  *
  * Consumer-side enforcement lives in scripts/drift-lint.mjs (the CI Action).
  */
@@ -48,6 +64,18 @@ const ROOT = resolve(import.meta.dirname, "..");
 const SCHEMA_PATH = resolve(ROOT, "schemas/meta.schema.json");
 
 let exitCode = 0;
+
+// Twelve checks, five questions. The section numbers below (1, 1b, 4d …) are
+// append-scars — each was added when it was needed and other files cite them by
+// number, so renumbering would break ~18 cross-references to make labels
+// prettier. The groups are the fix: every check answers exactly one of these,
+// and a new check belongs under whichever question it answers.
+function group(question) {
+  console.log(
+    `\n━━ ${question} ${"━".repeat(Math.max(0, 60 - question.length))}\n`,
+  );
+}
+
 function fail(msg) {
   console.error(`  ✗ ${msg}`);
   exitCode = 1;
@@ -55,6 +83,7 @@ function fail(msg) {
 
 // ── 1. Schema validation ────────────────────────────────────────────────────
 
+group("Is the spec well-formed?");
 console.log("Validating *.meta.json files...\n");
 
 const schema = JSON.parse(readFileSync(SCHEMA_PATH, "utf8"));
@@ -121,6 +150,7 @@ for (const { component, part, when, prop } of unresolvedAnatomyStates(metas)) {
 
 // ── 2. Token lint on component sources ──────────────────────────────────────
 
+group("Does the code follow the rules?");
 console.log("Linting component sources for token violations...\n");
 
 const lintGlobs = [
@@ -196,6 +226,7 @@ console.log(
 // across brand override layers. A dangling reference = a rename that wasn't
 // propagated; it fails the build here instead of silently shipping.
 
+group("Do the names point at things that exist?");
 console.log("Resolving token references...\n");
 
 // Token walking + layering lives in scripts/tokens.mjs (shared with the MCP
@@ -247,6 +278,34 @@ if (anatomyMetas.length) {
     );
 }
 
+// ── 4e. Rule references resolve (#189) ─────────────────────────────────────
+// A meta's `rules` are ids into ai/rules.md, not prose. Before that they were
+// copied sentences: three metas restated "never use hex" in three different
+// wordings across 27 files, and nothing held any of them to the source. Same
+// dangling-reference fencing as §1b (slot accepts) and §3b (anatomy tokens) —
+// an id that does not resolve fails the build rather than shipping a reference
+// to a rule that no longer exists.
+
+console.log("Resolving rule references...\n");
+
+const allRules = loadRules();
+let ruleRefs = 0;
+for (const { data } of metaEntries) {
+  for (const id of data.rules ?? []) {
+    ruleRefs++;
+    if (!getRule(allRules, id)) {
+      fail(
+        `${data.name}: rules references "${id}" — no such rule in ai/rules.md`,
+      );
+    }
+  }
+}
+console.log(
+  exitCode === 0
+    ? `  ✓ all ${ruleRefs} rule references resolve (${allRules.length} rules defined)\n`
+    : "",
+);
+
 // ── 4. Code Connect ↔ component parity ──────────────────────────────────────
 // Every string a figma.enum() mapping can emit must appear in a literal union
 // of the paired component source. Guards against the drift class found in the
@@ -254,6 +313,7 @@ if (anatomyMetas.length) {
 // button.ts had no ghost variant — Code Connect generated code that didn't
 // exist and nothing failed.
 
+group("Does the spec match the code it describes?");
 console.log("Checking Code Connect enum parity...\n");
 
 // A figma.ts is checked against every component source in its directory, not
@@ -416,39 +476,12 @@ console.log(
     : "",
 );
 
-// ── 4e. Rule references resolve (#189) ─────────────────────────────────────
-// A meta's `rules` are ids into ai/rules.md, not prose. Before that they were
-// copied sentences: three metas restated "never use hex" in three different
-// wordings across 27 files, and nothing held any of them to the source. Same
-// dangling-reference fencing as §1b (slot accepts) and §3b (anatomy tokens) —
-// an id that does not resolve fails the build rather than shipping a reference
-// to a rule that no longer exists.
-
-console.log("Resolving rule references...\n");
-
-const allRules = loadRules();
-let ruleRefs = 0;
-for (const { data } of metaEntries) {
-  for (const id of data.rules ?? []) {
-    ruleRefs++;
-    if (!getRule(allRules, id)) {
-      fail(
-        `${data.name}: rules references "${id}" — no such rule in ai/rules.md`,
-      );
-    }
-  }
-}
-console.log(
-  exitCode === 0
-    ? `  ✓ all ${ruleRefs} rule references resolve (${allRules.length} rules defined)\n`
-    : "",
-);
-
 // ── §5 Intended-pairing contrast (tokens/pairings.json, #87) ────────────────
 // Every mapped pair — plus the convention-derived set, plus the pairs the
 // components declare in their anatomy (#156) — must hold its threshold, AA
 // 4.5:1 for text and 3:1 for non-text, in the base theme and every brand.
 
+group("Can people actually read it?");
 console.log("Checking intended-pairing contrast (base + every brand)...\n");
 {
   const pairingsPath = resolve(ROOT, "tokens/pairings.json");
