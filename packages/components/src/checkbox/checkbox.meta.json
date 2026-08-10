@@ -59,7 +59,7 @@
     }
   ],
   "anatomy": {
-    "description": "A visual box beside a label, with the real <input> transparently overlaying the box for hit-testing. The 16px box, its 2px optical nudge, and the focus-ring outline are not tokens — the outline has no key in anatomy v1 (#178).",
+    "description": "A visual box beside a label, with the real <input> transparently overlaying the box for hit-testing. The box's own 16px dimensions are geometry, not spacing, and are deliberately not transcribed; its cap-height offset is spacing.align and the focus ring is a focus binding, both since #203 and #178 respectively.",
     "parts": [
       {
         "name": "root",
