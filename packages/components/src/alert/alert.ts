@@ -67,7 +67,7 @@ export class RrAlert extends LitElement {
 
     .heading {
       font: var(--font-label-strong-medium);
-      margin: 0 0 2px;
+      margin: 0 0 var(--spacing-align);
     }
 
     .content {
@@ -90,7 +90,7 @@ export class RrAlert extends LitElement {
       border: none;
       cursor: pointer;
       color: currentColor;
-      padding: 2px;
+      padding: var(--spacing-align);
       border-radius: var(--radius-sm);
       opacity: 0.7;
       transition: opacity var(--motion-duration-instant) var(--motion-easing-default);

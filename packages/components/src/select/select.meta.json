@@ -72,7 +72,7 @@
     }
   ],
   "anatomy": {
-    "description": "Same four-sibling shape as rr-input, plus the custom arrow that replaces the native appearance. The label/helper/error margins and the arrow's inset are hardcoded px, not spacing tokens — deliberately not transcribed.",
+    "description": "Same four-sibling shape as rr-input, plus the custom arrow that replaces the native appearance. The arrow's inset and the select's matching right padding are geometry sized to the arrow itself, not spacing-scale values — deliberately not transcribed.",
     "parts": [
       {
         "name": "root",
@@ -86,7 +86,8 @@
             "description": "Field label above the select.",
             "tokens": {
               "foreground": "--color-foreground-alt",
-              "font": "--font-label-medium"
+              "font": "--font-label-medium",
+              "spacing": "--spacing-micro"
             },
             "states": [
               {
@@ -102,7 +103,8 @@
                 "element": ".required",
                 "description": "The asterisk appended to a required field's label (aria-hidden).",
                 "tokens": {
-                  "foreground": "--color-foreground-danger"
+                  "foreground": "--color-foreground-danger",
+                  "spacing": "--spacing-align"
                 }
               }
             ]
@@ -192,7 +194,8 @@
             "description": "Helper text below the field. Replaced by the error part while invalid.",
             "tokens": {
               "foreground": "--color-foreground-muted",
-              "font": "--font-label-small"
+              "font": "--font-label-small",
+              "spacing": "--spacing-micro"
             }
           },
           {
@@ -202,7 +205,8 @@
             "description": "Error message below the field (role=alert).",
             "tokens": {
               "foreground": "--color-foreground-danger",
-              "font": "--font-label-small"
+              "font": "--font-label-small",
+              "spacing": "--spacing-micro"
             }
           }
         ]

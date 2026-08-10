@@ -35,12 +35,12 @@ export class RrTextarea extends LitElement {
       display: block;
       font: var(--font-label-medium);
       color: var(--color-foreground-alt);
-      margin-bottom: 4px;
+      margin-bottom: var(--spacing-micro);
     }
 
     .required {
       color: var(--color-foreground-danger);
-      margin-left: 2px;
+      margin-left: var(--spacing-align);
     }
 
     textarea {
@@ -96,13 +96,13 @@ export class RrTextarea extends LitElement {
     .helper {
       font: var(--font-label-small);
       color: var(--color-foreground-muted);
-      margin-top: 4px;
+      margin-top: var(--spacing-micro);
     }
 
     .error {
       font: var(--font-label-small);
       color: var(--color-foreground-danger);
-      margin-top: 4px;
+      margin-top: var(--spacing-micro);
     }
   `;
 
