@@ -429,13 +429,35 @@ describe("meta.schema.json: anatomy", () => {
     package: "@digital2analogue2/parsimony-components",
     props: [],
     slots: [],
-    tokensUsed: ["--color-background-default"],
+    // No tokensUsed: it is DERIVED from the anatomy (#188), and the schema
+    // rejects a meta that declares both.
     examples: [{ title: "Default", html: "<rr-fixture></rr-fixture>" }],
     accessibility: { ariaPattern: "https://example.com/pattern", wcag: [] },
     anatomy,
   });
 
   const ok = (anatomy) => validate(withAnatomy(anatomy));
+
+  it("rejects a meta that declares both anatomy and tokensUsed (#188)", () => {
+    // tokensUsed is derived from the tree; authoring it too is the redundancy
+    // this contract exists to remove, so the schema refuses it outright.
+    expect(
+      validate({
+        ...withAnatomy({ parts: [{ name: "root" }] }),
+        tokensUsed: ["--color-background-default"],
+      }),
+    ).toBe(false);
+  });
+
+  it("still requires tokensUsed from a meta with no anatomy (#188)", () => {
+    const { anatomy, ...noAnatomy } = withAnatomy({
+      parts: [{ name: "root" }],
+    });
+    expect(validate(noAnatomy)).toBe(false);
+    expect(
+      validate({ ...noAnatomy, tokensUsed: ["--color-background-default"] }),
+    ).toBe(true);
+  });
 
   it("accepts a nested part tree with states", () => {
     expect(

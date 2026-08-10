@@ -64,15 +64,6 @@
       "description": "The legend / label element."
     }
   ],
-  "tokensUsed": [
-    "--font-label-medium",
-    "--color-foreground-alt",
-    "--spacing-tight",
-    "--color-foreground-disabled",
-    "--spacing-element",
-    "--font-label-small",
-    "--color-foreground-danger"
-  ],
   "anatomy": {
     "description": "A fieldset wrapping the projected rr-radio children. The group carries the legend and the error; each option's own colours belong to rr-radio. The error margin is hardcoded px, not a spacing token.",
     "parts": [

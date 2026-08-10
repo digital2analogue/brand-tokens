@@ -11,6 +11,40 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-08-07 — tokensUsed is derived from anatomy, not authored beside it (#188)
+
+**What:** `build-design-system-json.mjs` now computes `tokensUsed` from the anatomy tree
+for any component that declares one, and `schemas/meta.schema.json` **forbids** authoring it
+there (conditional `if/then/else`: required when there is no anatomy, prohibited when there
+is). The field is gone from all nine anatomy metas. Consumers see no change — the derived
+list is injected into `design-system.json`.
+
+**Why:** it stated the same decision twice. The anatomy tree and the flat list both named
+the component's tokens, and until #187 the flat list was checked against nothing at all —
+its only reader was the doc generator, so it could name a token the component had stopped
+using indefinitely. Same single-sourcing as prop descriptions, which come from the JSDoc
+rather than the meta.
+
+**Why only now:** this was blocked by #178, not by the promotion batches — a point I had
+wrong when I filed the issue. You cannot derive a list from anatomy while 29 of its entries
+exist *only* in the list. Anatomy v2 took that count to zero, which is what made the
+derivation total rather than partial. Had this shipped earlier it would have needed a
+dual-path fallback for the un-expressible tokens, written specifically to be deleted.
+
+**Evidence it is a pure deletion:** the derived list reproduces **all 27** previously
+hand-authored lists exactly — no additions, no losses. Sorted output, so a reordered
+anatomy tree cannot churn the artifact and break the CI staleness check.
+
+**Alternative considered:** keeping `tokensUsed` authored and adding a gate that the two
+agree. Rejected — that is guarding a redundancy instead of removing it, which is the thing
+this whole line of work exists to stop doing.
+
+**Status:** shipped. Components without an anatomy still author the field; the schema's
+conditional handles both populations, so the promotion batches can convert them one at a
+time with no flag day.
+
+---
+
 ## 2026-08-06 — Anatomy v2: the focus indicator is bound by role, not by CSS (#178 items 1–2)
 
 **What:** `anatomy` gained four binding keys (`radius`, `shadow`, `motion`, `focus`) and a

@@ -102,25 +102,6 @@
       "description": "The error message container."
     }
   ],
-  "tokensUsed": [
-    "--color-background-default",
-    "--color-background-alt",
-    "--color-foreground-default",
-    "--color-foreground-muted",
-    "--color-foreground-alt",
-    "--color-foreground-danger",
-    "--color-foreground-disabled",
-    "--color-border-default",
-    "--color-border-hover",
-    "--color-border-focus",
-    "--color-border-disabled",
-    "--radius-sm",
-    "--spacing-element",
-    "--spacing-tight",
-    "--font-label-medium",
-    "--font-body-large",
-    "--font-label-small"
-  ],
   "anatomy": {
     "description": "Four siblings under a layout-only host. The label/helper/error margins in input.ts are hardcoded px, not spacing tokens — they are deliberately not transcribed as bindings.",
     "parts": [

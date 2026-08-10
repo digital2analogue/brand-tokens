@@ -5,7 +5,15 @@
   "description": "Schema for *.meta.json files that describe each web component in the design system. Extends the Custom Elements Manifest with usage intent, token references, accessibility contracts, and Figma mappings.",
   "type": "object",
   "required": ["metaVersion", "name", "status", "summary", "package",
-               "props", "slots", "tokensUsed", "examples", "accessibility"],
+               "props", "slots", "examples", "accessibility"],
+  "allOf": [
+    {
+      "$comment": "tokensUsed is DERIVED from anatomy (#188). A component that declares an anatomy must NOT author it — the anatomy tree is the single source, and a hand-written copy is the drift this whole contract exists to end. build:meta injects the derived list into design-system.json, so consumers see no difference. Components without an anatomy still author it, until their promotion batch lands.",
+      "if": { "required": ["anatomy"] },
+      "then": { "not": { "required": ["tokensUsed"] } },
+      "else": { "required": ["tokensUsed"] }
+    }
+  ],
   "properties": {
     "metaVersion": {
       "type": "string",

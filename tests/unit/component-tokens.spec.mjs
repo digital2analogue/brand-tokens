@@ -191,3 +191,91 @@ describe("findTokenDrift", () => {
     expect(out.ahead).toEqual(["--spacing-element"]);
   });
 });
+
+// ── #188: tokensUsed is derived, not authored ──────────────────────────────
+// build-design-system-json.mjs injects `[...contractTokens(meta)].sort()` for
+// any meta with an anatomy, and the schema forbids authoring it there. These
+// pin the contract that makes that safe.
+
+describe("contractTokens as the derivation source (#188)", () => {
+  it("derives the full list from anatomy alone, with no tokensUsed present", () => {
+    const meta = {
+      anatomy: {
+        parts: [
+          {
+            name: "root",
+            tokens: {
+              background: "--color-background-alt",
+              radius: "--radius-sm",
+              motion: ["--motion-duration-instant", "--motion-easing-default"],
+            },
+            states: [
+              {
+                when: ":focus-visible",
+                tokens: { focus: "--color-border-focus" },
+              },
+            ],
+          },
+        ],
+      },
+    };
+    expect([...contractTokens(meta)].sort()).toEqual([
+      "--color-background-alt",
+      "--color-border-focus",
+      "--motion-duration-instant",
+      "--motion-easing-default",
+      "--radius-sm",
+    ]);
+  });
+
+  it("includes the v2 keys — the reason derivation became possible", () => {
+    // Before anatomy v2, radius/shadow/motion/focus had no key, so 29 tokens
+    // lived only in the flat list and nothing could be derived from the tree.
+    const meta = {
+      anatomy: {
+        parts: [
+          {
+            name: "root",
+            tokens: {
+              radius: "--radius-full",
+              shadow: "--shadow-raised",
+              focus: "--color-border-focus",
+              motion: "--motion-duration-instant",
+            },
+          },
+        ],
+      },
+    };
+    expect([...contractTokens(meta)].sort()).toEqual([
+      "--color-border-focus",
+      "--motion-duration-instant",
+      "--radius-full",
+      "--shadow-raised",
+    ]);
+  });
+
+  it("is deterministic once sorted, whatever order the tree is authored in", () => {
+    const parts = (order) => ({
+      anatomy: {
+        parts: order.map((t, i) => ({
+          name: `p${i}`,
+          tokens: { background: t },
+        })),
+      },
+    });
+    const a = [...contractTokens(parts(["--color-a", "--color-b"]))].sort();
+    const b = [...contractTokens(parts(["--color-b", "--color-a"]))].sort();
+    expect(a).toEqual(b);
+  });
+
+  it("yields nothing for an anatomy that binds only CSS keywords", () => {
+    // A component whose only colours are `transparent` legitimately uses no
+    // tokens — the derived list must be empty, not absent or throwing.
+    const meta = {
+      anatomy: {
+        parts: [{ name: "root", tokens: { background: "transparent" } }],
+      },
+    };
+    expect([...contractTokens(meta)]).toEqual([]);
+  });
+});

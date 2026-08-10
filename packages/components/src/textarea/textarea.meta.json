@@ -85,27 +85,6 @@
       "description": "The error message container."
     }
   ],
-  "tokensUsed": [
-    "--font-label-medium",
-    "--color-foreground-alt",
-    "--color-foreground-danger",
-    "--font-body-large",
-    "--color-foreground-default",
-    "--color-background-default",
-    "--color-border-default",
-    "--radius-sm",
-    "--spacing-tight",
-    "--spacing-element",
-    "--motion-duration-instant",
-    "--motion-easing-default",
-    "--color-foreground-muted",
-    "--color-border-hover",
-    "--color-border-focus",
-    "--color-background-alt",
-    "--color-border-disabled",
-    "--color-foreground-disabled",
-    "--font-label-small"
-  ],
   "anatomy": {
     "description": "The same four-sibling shape as rr-input, on a <textarea>. The label/helper/error margins are hardcoded px, not spacing tokens — deliberately not transcribed.",
     "parts": [
