@@ -4,15 +4,15 @@ _Date: 2026-08-10 · Technician: Claude (Claude Code cloud session) · Mode 3: r
 
 ## TL;DR
 
-**82/100 across all ten stations — the first pass to score S7 and S8**, which the fourth pass deferred to "the next full pass (October)." We are running early, which is fine: this is the pass that finally puts a number on the two legs nobody had measured.
+**83/100 across all ten stations — the first pass to score S7 and S8**, which the fourth pass deferred to "the next full pass (October)." We are running early, which is fine: this is the pass that finally puts a number on the two legs nobody had measured.
 
-On the eight stations that were scored before, the total moved **75 → 70**. Read that carefully: **the system did not get worse — the inspection got deeper.** Every point lost came from evidence nobody had gathered before, all of it on the *design* side of the house. The code side gained ground: the #114 tier deletion finished, reduced motion went from documented to lint-enforced, and a real accessibility defect was found and fixed.
+On the eight stations that were scored before, the total moved **75 → 71**. Read that carefully: **the system did not get worse — the inspection got deeper.** Every point lost came from evidence nobody had gathered before, all of it on the *design* side of the house. The code side gained ground: the #114 tier deletion finished, reduced motion went from documented to lint-enforced, and a real accessibility defect was found and fixed.
 
 Three findings carry this report, and two of them are new to this pass.
 
 | # | Station | Light | Score | Δ vs 4th pass |
 |---|---------|-------|------:|:---:|
-|  1 | Coverage & gaps                 | 🟢 | 8/10  | −1 |
+|  1 | Coverage & gaps                 | 🟢 | 9/10  | — |
 |  2 | Best practices                  | 🟢 | 9/10  | — |
 |  3 | Accessibility                   | 🟢 | 10/10 | — |
 |  4 | Shared language                 | 🟢 | 9/10  | — |
@@ -22,7 +22,7 @@ Three findings carry this report, and two of them are new to this pass.
 |  8 | Feedback & adoption             | 🟡 | 5/10  | *first score* |
 |  9 | Machine-readable docs & context | 🟢 | 10/10 | — |
 | 10 | Agent access                    | 🟢 | 8/10  | **−2** |
-|    | **Total**                       |    | **82/100** | |
+|    | **Total**                       |    | **83/100** | |
 
 > _Arithmetic note:_ the fourth pass's table sums to 75, not the 76 printed in its total row. Using 75 as the comparable baseline.
 
@@ -60,19 +60,21 @@ What keeps it out of red is real and worth naming: `drift-lint` runs weekly agai
 
 ## Station records
 
-### Station 1 — Coverage & gaps: GREEN (8/10, −1)
+### Station 1 — Coverage & gaps: GREEN (9/10, unchanged) — **CORRECTED 2026-08-11**
 
 - `[verified]` **Code side is strong and grew:** 22 component directories / **27 `*.meta.json`** (was 21), 24 story files, generated MDX for all 27 shipped in the npm tarball. Token tiers are now genuinely two-tier — `tokens/{primitives,semantic,brands}`, component tier gone (#114).
-- `[verified]` **Design side lags badly.** The Figma file is a *foundations* library: its cover advertises "158 variables across 6 collections, 19 text styles, 4 effect styles." Component sets exist for Icon, Badge, Button, Input — **4 of 27**. S1's first warning light is "design components with no code counterpart (or vice versa)"; this is the vice versa, at scale.
-- Prior passes scored this 9 on code coverage alone. The −1 records the design-side gap that was never inspected, not a regression.
-- **Not inspected:** whether the missing 23 are demand-gated by design (the fourth pass recorded tooltip/popover/accordion as deliberate). Worth an owner ruling.
+> **Correction (2026-08-11).** The original text of this station claimed *"Component sets exist for Icon, Badge, Button, Input — 4 of 27"* and deducted a point for it. **That was wrong, and it was not `[verified]` despite carrying the tag.** It was inferred from the parity dump (3 bound components) and the cover page's stale "What's in v1" blurb, which lists only variables and styles. Nobody opened the pages. Correcting the score 8 → 9 and the finding below.
+
+- `[verified]` **The design library is essentially complete.** The file has **32 pages, including 22 `Components / *` pages**, each holding a real component set with a real variant matrix — Button 72 variants, Avatar 20, Badge 9, Alert 8, Tab 8. Loading every page and counting `COMPONENT_SET`/`COMPONENT` nodes gives **25 of the 27 code components present in Figma**.
+- `[verified]` **Exactly two components have no Figma counterpart: `rr-radio` and `rr-table-row`.** Figma has `RadioGroup` but no standalone `Radio`, and `Table` + `Table Cell` but no `Table Row`. Nothing exists in Figma that is absent from code — the drift is one-directional and two items wide.
+- `[verified]` Foundations are deeper than the cover admits too: **218 variables across 6 collections** (Primitives 63, Color 62, Typography 33, Spacing 30, Radius 12, Motion 18), 19 text styles, 3 effect styles. The cover claims 158 variables — stale by 60.
 
 ### Station 2 — Best practices: GREEN (9/10, unchanged)
 
 - `[verified]` **The fourth pass's withheld point was earned:** #114 finished. `tokens/` has exactly `primitives/`, `semantic/`, `brands/`. The `no-component-token` lint fences the tier out permanently.
 - `[verified]` New this month: `spacing.align` names the 2px optical rung that had no semantic name, retiring 18 literal-px sites across seven components (#203). The remaining literals are documented per-component in each anatomy — 1px hairlines, the `.sr-only` recipe, and geometry sized to an adjacent element.
 - `[verified]` `check-golden` byte-compares built CSS against fixtures; CI builds twice and fails on non-determinism.
-- Withheld point moves rather than clears: **design-side internals were sampled only shallowly** (I read the cover and four component sets; I did not audit auto-layout hygiene or layer naming). Scoring 10 would be claiming coverage I don't have.
+- Withheld point moves rather than clears: **design-side internals were sampled only shallowly** — the component *inventory* is now fully enumerated (see S1), but I did not audit auto-layout hygiene, layer naming, or detached instances inside those 22 sets. Scoring 10 would be claiming coverage I don't have.
 
 ### Station 3 — Accessibility: GREEN (10/10, holds)
 
@@ -100,7 +102,7 @@ What keeps it out of red is real and worth naming: `drift-lint` runs weekly agai
 - `[verified]` **The parity dump is thin and ageing.** `figma/components.dump.json` covers **3 components** (badge/button/input), `exported: 2026-07-26` — 15 days old at inspection. `npm run parity` reports "code and Figma agree" for exactly those three, which is true and much narrower than it sounds.
 - `[verified]` The weekly re-export Routine documented in `docs/contracts.md` carries a known caveat — a Routine created inside a session carries no MCP connector grants and "exits quietly" if mis-created. Given the dump's age, this is worth verifying actually fired.
 - `[verified]` Token→consumer flow is healthy in the other direction: `publish-freshness` weekly, `sync-tokens` in the consumer, and a same-day 0.7.0 publish→install→verify cycle completed during this session.
-- The −2 is the honest cost of finally inspecting the design side. The *mechanisms* (parity differ, Routine, drift-lint) are well-built; their **coverage** is 3 of 27 and their freshness is unverified.
+- The −2 stands, but for a narrower reason than first written. The *mechanisms* (parity differ, Routine, drift-lint) are well-built; their **coverage is 3 of 27 and their freshness is unverified**. What is NOT true — and the first draft implied it — is that the design library is thin. It holds 25 of 27 components (see the S1 correction). The gap is that the parity differ only watches three of them.
 
 ### Station 7 — Governance & version control: YELLOW (7/10, first score)
 
@@ -169,6 +171,6 @@ The fourth pass set **quarterly (next: October)** with daily gates carrying stat
 
 ## Scope & honesty notes
 
-- **Not inspected:** Figma design-side internals beyond the cover and four component sets — no audit of auto-layout usage, layer naming, or detached instances. Two of three named consumers (decisioning-table, river-intro) were not scanned; only portfolio-vercel is reachable in this session.
+- **Not inspected:** Figma design-side *internals* — no audit of auto-layout usage, layer naming, or detached instances. (The component *inventory* was fully enumerated on 2026-08-11; the original pass had not opened the pages, which produced the S1 error corrected above.) Two of three named consumers (decisioning-table, river-intro) were not scanned; only portfolio-vercel is reachable in this session.
 - **Frame:** solo maintainer, scored against small-team professional standards at the owner's standing request.
 - **Deviations respected** (not counted as faults): Geist for decision-engine; links underlined at rest; `.rise` animation transients in the portfolio; OTKit demo palettes being deliberately off-system.

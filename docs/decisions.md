@@ -88,9 +88,17 @@ Connect" describes an intention, not a capability. Those claims are corrected in
 - For agents, the MCP already delivers strictly more than Code Connect would —
   `get_component` returns the full contract (props, anatomy, tokens, rules,
   a11y), where Code Connect returns a snippet inside Figma's own UI.
-- **The bottleneck is the library, not the bridge.** Figma holds component sets
-  for 4 of 27 components. Paying to bridge four while twenty-three have no design
-  counterpart is the wrong order of operations.
+- ~~**The bottleneck is the library, not the bridge.** Figma holds component sets
+  for 4 of 27 components.~~ **RETRACTED 2026-08-11 — this was false.** Enumerating
+  every page shows the Figma library holds **25 of 27** components with real
+  variant matrices (Button 72 variants, Avatar 20, Badge 9); only `rr-radio` and
+  `rr-table-row` are missing. The "build the library first" argument does not
+  exist. **This was the strongest reason not to upgrade, and it is gone** — a
+  near-complete design library with no code bridge is a materially better case
+  for Code Connect than the one this entry originally assessed. The remaining
+  reasons (parity does not use it, the MCP gives agents more, 74 days without it)
+  still stand, but the decision is now finely balanced rather than clear-cut, and
+  should be revisited deliberately rather than left to default.
 - The files cost nothing to keep: they are validated by `validate` §4/§4b and
   become useful the day the plan changes.
 
