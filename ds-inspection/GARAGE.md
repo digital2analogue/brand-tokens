@@ -1,5 +1,5 @@
 # GARAGE.md — Parsimony
-_Checked in: 2026-07-15 · Re-confirm at next inspection_
+_Checked in: 2026-07-15 · **Re-confirmed 2026-08-10** (fifth pass, first full 10-station)_
 
 ## Vehicle
 - System: Parsimony, River Romney's cross-site design system — single source of truth for color, typography, spacing across riverromney.com/.design/.art/.blog + sub-branded product surfaces
@@ -8,8 +8,8 @@ _Checked in: 2026-07-15 · Re-confirm at next inspection_
 - Reason for service: routine service — first inspection, baseline read
 
 ## Assets
-- Design library: Figma "Brand-Tokens-Design-System" (file `4aOEBHcnAv2Kbn0g1arL78`), Code Connect wired from 18 `*.figma.ts` files
-- Code library: Lit web components (`rr-*`), 20 component dirs / 21 `*.meta.json` in `packages/components/`; tokens via Style Dictionary (`tokens/{primitives,semantic,components,brands}` → `build/css/<brand>.css`); published package `@digital2analogue2/parsimony@0.3.1` (tokens CSS; components/mcp packages not yet published)
+- Design library: Figma **"River Romney — Parsimony Design System"** (file `4aOEBHcnAv2Kbn0g1arL78`, renamed per #74; cover reads "Base Dark · v1"). 22 `*.figma.ts` Code Connect files; **only 3 carry prop bindings** (badge/button/input). **Plan constraint discovered 2026-08-10: the account is Figma `pro` tier, and Code Connect requires a Dev/Full seat on Organization/Enterprise — the mapping cannot be published to Figma from this account.**
+- Code library: Lit web components (`rr-*`), 22 component dirs / **27 `*.meta.json`**; tokens via Style Dictionary (**`tokens/{primitives,semantic,brands}` — the component tier was deleted, #114**) → `build/css/<brand>.css`; published **`@digital2analogue2/parsimony@0.7.0`** and **`@digital2analogue2/parsimony-components@0.1.0`** (mcp package still unpublished)
 - Docs: `docs/index.html` (generated token reference, file:// viewable), `ai/DESIGN.md` + `ai/rules.md` + `ai/DECISION-ENGINE.md` (agent-facing), `docs/decisions.md` (single decision log), `AGENTS.md` (consumer guide)
 - Process: GitHub issues (single shared board), branch protection on main (`verify` check), weekly Actions (drift-lint, publish-freshness, stale-prs), Dependabot + automerge
 - AI surface: MCP server (`packages/mcp/`, logic in `scripts/{rules,tokens,reasoning,assembly,contrast,drift-scan}.mjs`), `design-system.json` (meta.json + CEM merge), per-component `*.meta.json`, CLAUDE.md/AGENTS.md rules files, Code Connect
@@ -23,7 +23,7 @@ _Checked in: 2026-07-15 · Re-confirm at next inspection_
 | Process | live | GitHub MCP reachable (issues/PRs); Actions configs in repo |
 
 ## Known symptoms
-- None volunteered — routine service. From repo context: component token tier is mid-migration (#114); accent-family contrast pairings deliberately out of `validate_brand` v1 scope; CLAUDE.md understates meta.json coverage (says 3 productionized; all 21 have meta.json)
+- None volunteered — routine service. **Resolved since:** #114 landed (tier deleted); accent-family pairings now in `tokens/pairings.json` and gated. **Still open:** CLAUDE.md's "three fully productionized" line remains ambiguous now that all 27 carry meta.json (it happens to match the 3 Figma-bound components, but not by intent).
 
 ## Probable greens
 - Token pipeline & consumer drift tooling (sync-tokens, drift-lint, publish-freshness)
@@ -37,5 +37,5 @@ _Checked in: 2026-07-15 · Re-confirm at next inspection_
 - OTKit demo palettes in portfolio are deliberately off-system (demo-local, scoped)
 
 ## Scope & frame
-- Stations this pass: 1–6, 9, 10 (7 & 8 skipped at owner's request) · Scoring frame: solo held to small-team standards
-- Out of scope: governance/version-control (S7), feedback/adoption (S8)
+- Stations this pass (2026-08-10): **all 10 — S7 and S8 scored for the first time**, per the fourth pass's note that they enter the scored set at the next full pass · Scoring frame: solo held to small-team standards
+- Out of scope: nothing. Design-side *internals* (auto-layout hygiene, layer naming) sampled only shallowly — noted at S2.
