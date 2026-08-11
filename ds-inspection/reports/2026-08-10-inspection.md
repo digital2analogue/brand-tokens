@@ -74,7 +74,7 @@ What keeps it out of red is real and worth naming: `drift-lint` runs weekly agai
 - `[verified]` **The fourth pass's withheld point was earned:** #114 finished. `tokens/` has exactly `primitives/`, `semantic/`, `brands/`. The `no-component-token` lint fences the tier out permanently.
 - `[verified]` New this month: `spacing.align` names the 2px optical rung that had no semantic name, retiring 18 literal-px sites across seven components (#203). The remaining literals are documented per-component in each anatomy — 1px hairlines, the `.sr-only` recipe, and geometry sized to an adjacent element.
 - `[verified]` `check-golden` byte-compares built CSS against fixtures; CI builds twice and fails on non-determinism.
-- Withheld point moves rather than clears: **design-side internals were sampled only shallowly** (I read the cover and four component sets; I did not audit auto-layout hygiene or layer naming). Scoring 10 would be claiming coverage I don't have.
+- Withheld point moves rather than clears: **design-side internals were sampled only shallowly** — the component *inventory* is now fully enumerated (see S1), but I did not audit auto-layout hygiene, layer naming, or detached instances inside those 22 sets. Scoring 10 would be claiming coverage I don't have.
 
 ### Station 3 — Accessibility: GREEN (10/10, holds)
 

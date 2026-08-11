@@ -1,6 +1,6 @@
 # Work Order — Parsimony, 2026-08-10
 
-_From the fifth-pass inspection (82/100, all ten stations). Reds first, then yellows. Every item names its station, its evidence, and a first move._
+_From the fifth-pass inspection (83/100 after the 2026-08-11 S1 correction, all ten stations). Reds first, then yellows. Every item names its station, its evidence, and a first move._
 
 There are **no reds**. Every item below is a yellow — schedule, don't panic.
 
@@ -78,7 +78,7 @@ That single table separates **coverage** (what they *could* use) from **adoption
 
 1. **DE `foreground.success` on `background.alt` — 4.38:1.** Darken DE's success green one step (repaints decisioning-table status text) or accept the documented exclusion.
 2. **Consumer PAIRINGS generation** — the second half of #87's acceptance.
-3. **Are the 23 unbuilt Figma components demand-gated or a backlog?** (S1) — changes whether that station's −1 is a gap or a deliberate deviation.
+3. ~~Are the 23 unbuilt Figma components demand-gated or a backlog?~~ **Resolved 2026-08-11 — the premise was false.** 25 of 27 exist; only `rr-radio` and `rr-table-row` are missing, and item 4b builds them. No owner ruling needed.
 
 ---
 
