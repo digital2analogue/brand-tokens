@@ -59,6 +59,54 @@ dispatched.
 
 ---
 
+## 2026-08-10 — Code Connect was never blocked by a Figma bug; it is a plan entitlement (supersedes D-29, closes OD-5)
+
+**What.** D-29 (2026-05-28) recorded the `figma connect publish` 403 as *"a Figma
+platform issue — their new scoped token UI does not expose the Code Connect Write
+scope"*, status *"Not our problem to fix. File a Figma support ticket."* OD-5 has
+read "Waiting on Figma support" for 74 days. **That diagnosis was wrong.**
+
+**Evidence.** The Figma MCP's `list_file_components_for_code_connect` against the
+library returns, verbatim: *"You need a Dev or Full seat on an Organization or
+Enterprise plan to use Code Connect."* `whoami` reports the account as **`pro`
+tier**. The Write scope was never exposed because the plan does not entitle it —
+a 403 is exactly what that looks like from the CLI. There is no bug, no ticket
+that can resolve, and nothing to monitor.
+
+**Consequence, stated plainly: Code Connect has never worked, once, in the life
+of this system.** Every claim that the components are "wired to Figma via Code
+Connect" describes an intention, not a capability. Those claims are corrected in
+`CLAUDE.md`, `CONTRIBUTING.md`, and the PRD in the same change.
+
+**Decision: do not upgrade the plan yet, and keep the 22 `*.figma.ts` files.**
+
+- The system reached 82/100 across ten inspection stations without it, so its
+  absence has a 74-day track record of costing nothing measurable.
+- The design↔code link that actually works does not use it: `npm run parity`
+  reads node IDs from `meta.json` and diffs a dump exported through the Figma
+  MCP. Code Connect is not in that path.
+- For agents, the MCP already delivers strictly more than Code Connect would —
+  `get_component` returns the full contract (props, anatomy, tokens, rules,
+  a11y), where Code Connect returns a snippet inside Figma's own UI.
+- **The bottleneck is the library, not the bridge.** Figma holds component sets
+  for 4 of 27 components. Paying to bridge four while twenty-three have no design
+  counterpart is the wrong order of operations.
+- The files cost nothing to keep: they are validated by `validate` §4/§4b and
+  become useful the day the plan changes.
+
+**Revisit when** any of these becomes true: someone other than the maintainer
+builds from the Figma library; Dev Mode becomes a daily working surface; or the
+library grows to cover the component set.
+
+**Alternative considered.** Delete the `*.figma.ts` files as dead weight.
+Rejected — §4/§4b give them present-tense value as a parity target, and
+re-authoring 22 files later costs more than keeping them.
+
+**Status.** Recorded. OD-5 closed as misdiagnosed. D-29 stands as history and is
+superseded by this entry.
+
+---
+
 ## 2026-08-10 — hard-10 becomes enforced, in two pieces, and deliberately stays incomplete (#177)
 
 **What.** `rr-input` shipped `transition: border-color 120ms ease` — the only
@@ -1846,5 +1894,5 @@ See `ai/DECISION-ENGINE.md` for the full deleted-token registry. Key deletions:
 | OD-2 | When does the DE Figma file (v2) get built? | Deferred — no timeline |
 | OD-3 | Step 7 (format benchmark — JSON vs CSS performance) | Deferred — low priority |
 | OD-4 | Should `rr-*` components be published to npm? | Deferred — no external consumer yet |
-| OD-5 | Code Connect publish 403 — Figma platform bug | Waiting on Figma support |
+| OD-5 | Code Connect publish 403 | **Closed 2026-08-10 — misdiagnosed. Not a bug: the `pro` plan does not entitle Code Connect. See the 2026-08-10 entry.** |
 | OD-6 | DE font-size-2xs debt — hardcoded 10px/9px on `.dt-avatar` | In decisioning-table CSS; needs `var(--primitive-font-size-2xs)` |
