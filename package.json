@@ -21,6 +21,7 @@
     "build:meta": "npm run build:cem && node scripts/build-design-system-json.mjs && node scripts/build-considerations.mjs",
     "build:considerations": "node scripts/build-considerations.mjs",
     "drift": "node scripts/drift-lint.mjs",
+    "adoption": "node scripts/adoption-scan.mjs",
     "parity": "node scripts/component-parity.mjs",
     "eval:governance": "node scripts/governance-eval.mjs",
     "check:publish-fresh": "node scripts/check-publish-fresh.mjs",
