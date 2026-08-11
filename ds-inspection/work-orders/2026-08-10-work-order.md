@@ -46,6 +46,12 @@ That single table separates **coverage** (what they *could* use) from **adoption
 
 **First move:** close both with a comment naming the evidence, exactly as #191 was closed today. Ten minutes, and it stops the board lying about the system's own health.
 
+### 4b. Build the two missing Figma components — CORRECTED SCOPE (S1)
+
+**Evidence (2026-08-11, corrected):** the design library holds **25 of 27** components, not 4 of 27 as this work order's first draft implied. Enumerating all 32 pages shows 22 `Components / *` pages with real component sets. **Exactly two code components have no Figma counterpart: `rr-radio` and `rr-table-row`.**
+
+**First move:** build those two, taking the library to 27/27. This is an afternoon, not a project — and it makes the design↔code inventory exactly symmetrical for the first time.
+
 ### 5. Refresh the parity dump and verify its Routine actually fires (S6)
 
 **Evidence:** `figma/components.dump.json` — 3 components, `exported: 2026-07-26` (15 days). `docs/contracts.md` records the known caveat that a Routine created inside a session carries no MCP connector grants and "exits quietly."
