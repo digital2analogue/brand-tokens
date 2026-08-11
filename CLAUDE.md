@@ -46,6 +46,14 @@ scripts/
                               Adding a check means putting it under the question it answers.
   drift-scan.mjs              Reusable consumer-repo scan (scanConsumer): walk + ignore handling + shared rules. Shared by drift-lint and the MCP lint_consumer tool.
   drift-lint.mjs              Thin CLI over drift-scan: scans a consumer repo using the shared rules. `npm run drift -- <dir>`.
+  adoption-scan.mjs           Consumer ADOPTION scan (#106): which rr-* components and which semantic
+                              tokens a consumer actually uses, plus declared/installed/source versions.
+                              `npm run adoption -- <dir>`. Shares drift-scan's walker and file filters.
+                              drift-lint answers "is the consumer breaking the rules"; this answers "is
+                              the consumer using the system" — coverage vs adoption. A measurement, never
+                              a gate: it prints the file behind every component it counts, because markup
+                              inside a string (a case study quoting `<rr-badge>`) is indistinguishable
+                              from real usage to any lexical rule.
   component-parity.mjs        Code↔Figma parity differ (`npm run parity`): diffs meta.json prop bindings against
                               figma/components.dump.json, classifies drift ahead/behind/mismatched. See docs/contracts.md.
   check-publish-fresh.mjs     Diffs source-built tokens vs the published npm package; flags a needed republish. `npm run check:publish-fresh`.

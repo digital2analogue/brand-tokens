@@ -11,6 +11,51 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-08-11 — An adoption scan, and why it prints its evidence (#106)
+
+**What.** `scripts/adoption-scan.mjs` + `npm run adoption -- <dir>`. Reports, per
+consumer: which `rr-*` components appear as markup, which semantic tokens are
+referenced, and declared/installed/source package versions.
+
+**Why.** The fifth-pass inspection scored Station 8 (Feedback & adoption) **5/10**
+— the weakest leg and the only station with no mechanism at all. `drift-lint`
+already answered *"is the consumer breaking the rules"*; nothing answered *"is the
+consumer using the system"*, so coverage and adoption were indistinguishable.
+Station 8's own advice was to start embarrassingly simple, so this reuses
+`drift-scan`'s walker and file filters rather than adding infrastructure — and
+those exclusions are load-bearing: built token CSS contains every token, so
+counting it would report 100% adoption for every consumer forever.
+
+**The first real run changed the design.** The naive version matched a bare name
+and reported portfolio-vercel as using `rr-badge`. It does not — the string sits
+in an image alt-text describing an agent session. Tightening to markup
+(`<rr-badge`) did **not** fix it: the same alt-text contains
+`<rr-badge variant="success">Active</rr-badge>` as an example of what the agent
+emits. **Real markup, not real usage, and no lexical rule separates them.**
+
+**Decision: print the evidence rather than pretend precision.** The CLI names the
+file behind every component it counts. This is a *measurement*, not a gate — it
+never fails a build, so an ambiguous hit costs a glance rather than a red
+pipeline. That is deliberately the opposite call from #174 and #202, where the
+same ambiguity appeared in *gates* and the answer was to go quiet rather than cry
+wolf. The difference is consequence: a noisy gate gets ignored, a noisy report
+gets read.
+
+**What it found.** portfolio-vercel: **57 of 120 semantic tokens (48%)** and
+effectively **zero of 27 components** — a Next.js site that adopts the token layer
+and none of the Lit components. That is a *fit* signal, not a distribution one,
+and it is exactly the coverage-vs-adoption distinction Station 8 asks for and
+nothing could previously express.
+
+**Alternative considered.** Wire it into CI as a weekly Action like `drift-lint`.
+Deferred — a number nobody has looked at yet does not need a schedule. Run it by
+hand until it earns one.
+
+**Status.** Shipped. Station 8 should be re-scored only once this has produced a
+report someone acted on; a mechanism nobody reads is worth the same 5.
+
+---
+
 ## 2026-08-10 — The 2px rung gets a semantic name instead of an exemption (#63, #177)
 
 **What.** Added `spacing.align` → `{primitive.space.3xs}` (2px) and converted 18

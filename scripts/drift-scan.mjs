@@ -41,7 +41,7 @@ const isTokenSource = (name) => name.endsWith(".tokens.json");
 // (portfolio-vercel's checkUsageRules.spec.ts, parsimony#174). Same rule, same
 // exclusion, both sides.
 const isTest = (name) => /\.(test|spec)\.[a-z]+$/.test(name);
-const isScannable = (name) =>
+export const isScannable = (name) =>
   SCAN_EXT.has(extname(name)) &&
   !SKIP_FILES.has(name) &&
   !isTokenSource(name) &&
@@ -70,7 +70,7 @@ function resolveIgnores(target, ignore) {
   return patterns.map(globToRegExp);
 }
 
-function* walk(dir) {
+export function* walk(dir) {
   for (const name of readdirSync(dir)) {
     const full = join(dir, name);
     const st = statSync(full);
