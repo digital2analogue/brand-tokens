@@ -56,6 +56,14 @@ scripts/
                               from real usage to any lexical rule.
   component-parity.mjs        Code↔Figma parity differ (`npm run parity`): diffs meta.json prop bindings against
                               figma/components.dump.json, classifies drift ahead/behind/mismatched. See docs/contracts.md.
+  token-diff.mjs              One definition of "what changed" between two sets of built brand CSS (#88):
+                              parseTokens + diffTokenMaps + the changelog renderer. Shared by
+                              check-publish-fresh and token-changelog so the gate and the changelog
+                              cannot disagree.
+  token-changelog.mjs         Semantic diff between two published releases (#88):
+                              `npm run changelog -- <from> [to]`. Prints markdown; never edits
+                              CHANGELOG.md itself, so entries land through a reviewed diff. Omit <to>
+                              to diff the last published version against the current source build.
   check-publish-fresh.mjs     Diffs source-built tokens vs the published npm package; flags a needed republish. `npm run check:publish-fresh`.
   check-golden.mjs            Golden gate: built brand CSS must match tests/golden/css fixtures byte-for-byte
                               (`npm run check:golden`; after an intentional token change: `npm run golden:update`).
