@@ -114,7 +114,7 @@ What keeps it out of red is real and worth naming: `drift-lint` runs weekly agai
 
 ### Station 8 — Feedback & adoption: YELLOW (5/10, first score)
 
-- `[verified]` **No adoption measurement exists.** No scan of which of the 27 components or ~150 tokens any consumer actually uses. `grep -rl adoption scripts/ .github/workflows/` returns nothing. #106 open since July, untouched.
+- `[verified]` **No adoption measurement exists.** No scan of which of the 27 components or 120 semantic tokens any consumer actually uses. `grep -rl adoption scripts/ .github/workflows/` returns nothing. #106 open since July, untouched. *(Corrected 2026-08-11: the original said "~150 tokens" — an estimate written as a fact inside a `[verified]` finding. The real count is 120, measured by the scan that closed this item in #210.)*
 - `[verified]` **Detachment signal exists and works** — `drift-lint.yml` runs weekly against `digital2analogue/portfolio-vercel`, opening/closing one tracked issue. It found real drift (#174) and, once its false-positive bug was fixed, now reports clean.
 - `[verified]` Coverage vs adoption is currently indistinguishable. Three consumers are named across docs (decisioning-table ×20, portfolio-vercel ×8, river-intro ×2) but only **one** is scanned by anything.
 - `[verified]` Product context *does* reach the system — this session's #202 detector was designed against measured consumer output, and #174 came from consumer drift. The loop is real and undocumented; it lives in the maintainer's head.

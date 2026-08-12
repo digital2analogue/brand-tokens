@@ -4,65 +4,85 @@ _From the fifth-pass inspection (83/100 after the 2026-08-11 S1 correction, all 
 
 There are **no reds**. Every item below is a yellow — schedule, don't panic.
 
+> **Close-out, 2026-08-11.** Six of seven items are done. Each keeps its original
+> evidence and gains an outcome — including the two where the evidence turned out
+> to be wrong, since a work order that quietly rewrites its own premises is worth
+> less than one that shows them. The single item left is a procurement decision.
+
+| # | Item | Station | Status |
+|---|---|---|:--|
+| 1 | Code Connect question | S10 | **open — owner decision** |
+| 2 | Design library cover roadmap | S6 | ✅ done |
+| 3 | Adoption scan | S8 | ✅ #210 |
+| 4 | Close the two shipped-but-open issues | S7 | ✅ done |
+| 4b | Missing Figma components | S1 | ✅ #209 — one built, one correctly declined |
+| 5 | Parity dump + Routine | S6 | ✅ #211 — the suspicion was wrong |
+| 6 | Changelog | S7 | ✅ #212 |
+
 ---
 
-## 🟡 Schedule — highest leverage first
+## 🟡 Still open
 
-### 1. Decide the Code Connect question (S10)
+### 1. Decide the Code Connect question (S10) — **OPEN**
 
 **Evidence:** `list_file_components_for_code_connect` → *"You need a Dev or Full seat on an Organization or Enterprise plan."* `whoami` → tier `pro`. 22 `*.figma.ts` files exist and cannot be published.
 
 **This is a procurement decision, not an engineering one.** Three honest options:
 
 - **Upgrade** the Figma plan to Organization — the files are already written, so the bridge lights up immediately.
-- **Keep the files as a parity artifact only** and say so plainly in `CLAUDE.md`/`AGENTS.md` — they still feed `npm run parity`, which is real value. Stop describing Code Connect as a live agent surface anywhere (including the portfolio case study, which currently states "Figma Code Connect 22/27").
+- **Keep the files as a parity artifact only** and say so plainly. They still feed `npm run parity`, which is real value.
 - **Retire them** if neither the bridge nor the parity check earns its keep.
 
-**First move:** pick one and record it in `docs/decisions.md`. Whatever you choose, the case-study claim and `AGENTS.md` need to match it.
+**Partly actioned 2026-08-11.** The *documentation* half is done: `CLAUDE.md`, `CONTRIBUTING.md`, the PRD and the portfolio case study no longer describe Code Connect as live (#207, portfolio #68), and `D-29`/`OD-5` are corrected — the publish 403 was never a Figma bug, it was a plan entitlement, and nothing was ever going to resolve that support ticket.
 
-### 2. Fix the design library's cover roadmap (S6)
+**The decision itself is still yours, and the case shifted.** The 2026-08-10 entry argued *"the bottleneck is the library, not the bridge — Figma holds 4 of 27 components."* **That premise was false and is retracted** (#208): the library holds 25 of 27, now 26 of 26 real components. It was the strongest argument against upgrading. What remains — `parity` never touches Code Connect, the MCP gives agents strictly more, and 74 days passed without it costing anything measurable — still holds, but the decision is now finely balanced rather than clear-cut.
 
-**Evidence:** Figma node `32:11` advertises "Component-level tokens — surfaced as Figma component properties" and cites `tokens/components/*.tokens.json` — a directory deleted in #114, now fenced out by the `no-component-token` lint.
+**First move:** pick one and record it in `docs/decisions.md`.
 
-**First move:** edit the two cover text nodes (`32:12` / `32:13`) to describe the real v2. Fifteen minutes in the Figma UI. The system's most public artifact currently argues against its own architecture.
+---
 
-### 3. Build the adoption scan (S8, #106) — the weakest leg
+## ✅ Done
 
-**Evidence:** no usage measurement anywhere; `grep -rl adoption scripts/ .github/workflows/` is empty; #106 open since July with nothing done. Station 8 scored **5/10**, lowest on the board.
+### 2. Fix the design library's cover roadmap (S6) — **DONE 2026-08-11**
 
-**First move — deliberately embarrassing, per the station's own advice** ("a dependency-version scan across consumer repos this week beats an analytics platform next year"):
+**Was:** node `32:11` advertised *"Component-level tokens — surfaced as Figma component properties"* citing `tokens/components/*.tokens.json` — a directory deleted in #114 and now fenced out by the `no-component-token` lint.
 
-`scripts/adoption-scan.mjs`, reusing `drift-scan.mjs`'s existing walker, answering one question per consumer:
+**Done:** the roadmap now reads Light mode · Code Connect (plan-blocked) · parity coverage. Two further inaccuracies were found and fixed while in there: the cover claimed **158 variables** (real: **218**) and **4 effect styles** including a `shadow/none` that does not exist (real: **3**), and it omitted the 22 component sets entirely.
 
-- which of the 27 `rr-*` components appear at all
-- which of the ~150 semantic tokens are referenced
-- installed package version vs latest published
+### 3. Build the adoption scan (S8, #106) — **DONE — #210**
 
-That single table separates **coverage** (what they *could* use) from **adoption** (what they *do*), which is currently indistinguishable. Start with portfolio-vercel — it's the one consumer already wired into `drift-lint`.
+**Was:** no usage measurement anywhere; Station 8 scored **5/10**, lowest on the board.
 
-### 4. Close the two issues that describe shipped work (S7)
+**Done:** `scripts/adoption-scan.mjs`, `npm run adoption -- <dir>`, reusing `drift-scan`'s walker and file filters. Reports which of the **27** `rr-*` components appear as markup, which of the **120** semantic tokens are referenced (the first draft of this item said "~150" — wrong), and declared/installed/source versions.
 
-**Evidence:** **#42** — `@storybook/addon-a11y` is in `.storybook/main.ts` with 57 `toHaveNoViolations` assertions. **#77** — 80 visual baselines running in CI via a manifest-driven spec.
+**What it found on portfolio-vercel:** 57 of 120 tokens (48%), effectively zero components. A token-layer consumer, not a component one — a *fit* signal rather than a distribution one, and exactly the coverage-vs-adoption split nothing could previously express.
 
-**First move:** close both with a comment naming the evidence, exactly as #191 was closed today. Ten minutes, and it stops the board lying about the system's own health.
+**What building it taught:** the naive version reported `rr-badge` as used; it is not, the string is in an image alt-text. Tightening to markup did not fix it either — the same alt-text contains `<rr-badge variant="success">Active</rr-badge>` as an example of agent output. So the scan prints the file behind every count and states the limit. A measurement, not a gate.
 
-### 4b. Build the two missing Figma components — CORRECTED SCOPE (S1)
+### 4. Close the two issues that describe shipped work (S7) — **DONE 2026-08-11**
 
-**Evidence (2026-08-11, corrected):** the design library holds **25 of 27** components, not 4 of 27 as this work order's first draft implied. Enumerating all 32 pages shows 22 `Components / *` pages with real component sets. **Exactly two code components have no Figma counterpart: `rr-radio` and `rr-table-row`.**
+**#42** (a11y addon — wired in `.storybook/main.ts`, 57 `toHaveNoViolations` assertions) and **#77** (visual regression — 80 manifest-driven baselines in CI). Both closed with a comment naming the evidence.
 
-**First move:** build those two, taking the library to 27/27. This is an afternoon, not a project — and it makes the design↔code inventory exactly symmetrical for the first time.
+### 4b. Build the missing Figma components (S1) — **DONE — #209**
 
-### 5. Refresh the parity dump and verify its Routine actually fires (S6)
+**Evidence, twice corrected.** The first draft of this item said 4 of 27 existed. **Wrong** — 25 of 27 did (#208). Then the remaining two were examined properly:
 
-**Evidence:** `figma/components.dump.json` — 3 components, `exported: 2026-07-26` (15 days). `docs/contracts.md` records the known caveat that a Routine created inside a session carries no MCP connector grants and "exits quietly."
+- **`rr-radio` — built.** Node `214:12` on `Components / RadioGroup`, three variants mirroring `radio.ts`, every visual property variable-bound. Building it also surfaced that `spacing/align` did not exist in Figma at all (added to code that morning in #203) — created there too — and that `rr-radio`'s contract pointed at the **RadioGroup** node, which both radio metas claimed. Repointed.
+- **`rr-table-row` — deliberately NOT built.** It is purely structural: `display: table-row`, and `selected` only sets `aria-selected`. Its zebra/hover/selected visuals are painted by the parent `rr-table` stylesheet, as its own meta summary states, and Figma's `Table` already contains `Header Row`, `Row`, `Row (zebra)` and `Row (selected)` with its rail. **A standalone set would assert ownership the code deliberately refuses.**
 
-**First move:** re-export the three bound components now (this session has live Figma MCP access), then check whether the Monday 10:30 UTC Routine has opened or updated its tracked issue since 2026-07-26. If it hasn't, re-create it from claude.ai as the caveat instructs.
+**So the inventory is complete at 26 of 26 real components** — not 27/27, because one of the 27 correctly has no standalone Figma counterpart.
 
-### 6. Ship a changelog (S7, #88)
+### 5. Refresh the parity dump and verify its Routine actually fires (S6) — **DONE — #211**
 
-**Evidence:** no `CHANGELOG.md` at root or in either published package. A consumer going 0.6.1 → 0.7.0 has nothing to read; today they'd have had to diff two tarballs to learn `spacing.align` was added — which is literally what this session did.
+**Was suspected:** the dump was 15 days old and the weekly Routine might never have fired, given the "created inside a session carries no MCP connector grants… exits quietly" caveat in `docs/contracts.md`.
 
-**First move:** the smallest useful version is a token semantic-diff generated at publish time (added / removed / changed value), appended to `packages/tokens/CHANGELOG.md`. #88 already scopes this.
+**Both suspicions were wrong, and that is the finding.** The Routine is enabled, ran **2026-08-10T10:35Z**, and carries the Figma connector because it was created via `http_api` rather than from inside a session — so the caveat does not apply to it. Its two siblings fired the same morning. No parity-drift issue has ever been opened, consistent with clean runs rather than silent ones. The dump's age was **by design**: the Routine is explicitly forbidden from committing refreshes.
+
+Re-exported all three bound sets: `rr-badge` 9/9, `rr-input` 5/5, `rr-button` 72/72 — identical in both directions. Only the `exported` date moved.
+
+### 6. Ship a changelog (S7, #88) — **DONE — #212**
+
+`npm run changelog -- <from> [to]`, with the comparison extracted into `scripts/token-diff.mjs` and shared with `check-publish-fresh` so the gate and the changelog cannot disagree. `packages/tokens/CHANGELOG.md` is seeded with real generated output for 0.6.1 → 0.7.0 — the `spacing.align` entry that was missing when the portfolio installed it that morning.
 
 ---
 
@@ -78,12 +98,12 @@ That single table separates **coverage** (what they *could* use) from **adoption
 
 1. **DE `foreground.success` on `background.alt` — 4.38:1.** Darken DE's success green one step (repaints decisioning-table status text) or accept the documented exclusion.
 2. **Consumer PAIRINGS generation** — the second half of #87's acceptance.
-3. ~~Are the 23 unbuilt Figma components demand-gated or a backlog?~~ **Resolved 2026-08-11 — the premise was false.** 25 of 27 exist; only `rr-radio` and `rr-table-row` are missing, and item 4b builds them. No owner ruling needed.
+3. ~~Are the 23 unbuilt Figma components demand-gated or a backlog?~~ **Resolved 2026-08-11 — the premise was false.** See item 4b; no owner ruling needed.
 
 ---
 
 ## Cadence
 
 - Next full 10-station pass: **2026-11** (quarterly from this one).
-- **Do not re-score S8 before building #106** — inspecting it again without a mechanism will just reproduce the 5.
+- **Do not re-score S8 on the strength of #210 alone.** The mechanism now exists, but the station asks whether real usage *informs the backlog*. A report nobody has acted on is worth the same 5 — the number moves when a finding changes a decision, not when a script exists.
 - Put the date in a calendar, not a decision log. Four passes in 48 hours followed by 25 days of silence is the pattern Station 8 warns about.
