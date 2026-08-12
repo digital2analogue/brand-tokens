@@ -25,6 +25,7 @@
     "parity": "node scripts/component-parity.mjs",
     "eval:governance": "node scripts/governance-eval.mjs",
     "check:publish-fresh": "node scripts/check-publish-fresh.mjs",
+    "changelog": "node scripts/token-changelog.mjs",
     "check:golden": "node scripts/check-golden.mjs",
     "golden:update": "npm run build && node scripts/check-golden.mjs --update",
     "test": "npm test --workspaces --if-present",
