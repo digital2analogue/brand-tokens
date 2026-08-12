@@ -1,7 +1,7 @@
 {
   "$comment": "Snapshot of the Figma component sets the parity differ (scripts/component-parity.mjs, #152) diffs against meta.json prop bindings. Exported from the Parsimony Design System file via the Figma MCP (get_metadata per component-set node); refresh by re-exporting — never hand-edit variant names. Components appear here once their meta.json declares prop bindings.",
   "fileKey": "4aOEBHcnAv2Kbn0g1arL78",
-  "exported": "2026-07-26",
+  "exported": "2026-08-11",
   "components": [
     {
       "name": "rr-badge",
