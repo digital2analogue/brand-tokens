@@ -111,12 +111,18 @@ const FIXTURES = {
     violating: [
       "color: var(--color-state-hover);",
       "color: var(--color-foreground-accent);",
+      // Still DEFINED in the decision-engine brand as a same-value alias of
+      // foreground.alt, so it resolves and renders. Deprecation is the only
+      // thing that surfaces it — without this entry the migration is invisible.
+      "color: var(--color-foreground-secondary);",
     ],
     clean: [
       // Boundary fence: these live tokens are prefix-extensions of deprecated
       // names and must NOT flag (the 2026-07-16 substring-match regression).
       "background: var(--color-background-accent-green);",
       "color: var(--color-foreground-accent-amber);",
+      // The replacement itself must stay clean.
+      "color: var(--color-foreground-alt);",
     ],
   },
 };
