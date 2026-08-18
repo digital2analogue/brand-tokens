@@ -102,10 +102,7 @@
       "fg": "color.foreground.success",
       "bg": "color.background.alt",
       "kind": "text",
-      "context": "success text on elevated surface (toast/menu/card)",
-      "excludeBrands": [
-        "decision-engine"
-      ]
+      "context": "success text on elevated surface (toast/menu/card)"
     },
     {
       "fg": "color.foreground.warning",
@@ -159,5 +156,5 @@
       "context": "active/pressed control border on canvas"
     }
   ],
-  "$excludeBrands-note": "excludeBrands scopes a pair to brands that actually render it. decision-engine is excluded from the four accent-tint pairs (it pairs tint fills with its own DE-local accent foregrounds, e.g. foreground.accent-purple \u2014 the base fg-accent-X convention does not apply), from border.action-on-canvas (the base ghost-button outline DE never renders, per the documented drift notes), and from success-on-alt (borderline 4.38:1 under DE \u2014 flagged for an owner decision rather than silently codified; see work order)."
+  "$excludeBrands-note": "excludeBrands scopes a pair to brands that actually render it. decision-engine is excluded from the four accent-tint pairs (it pairs tint fills with its own DE-local accent foregrounds, e.g. foreground.accent-purple \u2014 the base fg-accent-X convention does not apply), from border.action-on-canvas (the base ghost-button outline DE never renders, per the documented drift notes). It is NOT a place to park a failing pair: success-on-alt was excluded here from 2026-08-10 to 2026-08-12 because DE measured 4.38:1, and the exclusion was removed by fixing the colour (green.positive darkened one step to #166534, now 6.23:1) rather than by keeping the pair quiet."
 }
