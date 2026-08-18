@@ -702,6 +702,108 @@ describe("validate_brand (via contrast.mjs)", () => {
     const base = allIntendedPairings(tokenStore, null, { pairings: synthetic });
     expect(base.some((p) => p.context === "scoped-out pair")).toBe(true);
   });
+
+  // ── Brand-aware convention derivation (#216) ─────────────────────────────
+  // The convention lists were base-shaped: BASE_SURFACES was {default, alt} and
+  // the token universe was store.base alone. Any surface or text role that
+  // exists only in a sub-brand was therefore never paired, and DE renders most
+  // of its content on background.elevated. Synthetic brands throughout — a test
+  // pinned to the live DE token set inverts the day someone adds a role.
+
+  it("pairs a surface that exists only in a brand", async () => {
+    const { intendedPairings } = await import("../../../scripts/contrast.mjs");
+    const tok = (value) => ({
+      value,
+      type: "color",
+      description: "synthetic",
+      file: "synthetic",
+    });
+    const store = {
+      base: new Map([
+        ["color.foreground.default", tok("#000000")],
+        ["color.background.default", tok("#ffffff")],
+      ]),
+      brands: new Map([
+        ["synth", new Map([["color.background.elevated", tok("#f0f0f0")]])],
+      ]),
+    };
+    const key = (p) => `${p.fg}|${p.bg}`;
+    const withoutBrand = intendedPairings(store).map(key);
+    const withBrand = intendedPairings(store, "synth").map(key);
+    const target = "color.foreground.default|color.background.elevated";
+    expect(withoutBrand).not.toContain(target);
+    expect(withBrand).toContain(target);
+  });
+
+  it("pairs a text role that exists only in a brand", async () => {
+    const { intendedPairings } = await import("../../../scripts/contrast.mjs");
+    const tok = (value) => ({
+      value,
+      type: "color",
+      description: "synthetic",
+      file: "synthetic",
+    });
+    const store = {
+      base: new Map([["color.background.default", tok("#ffffff")]]),
+      brands: new Map([
+        ["synth", new Map([["color.foreground.secondary", tok("#333333")]])],
+      ]),
+    };
+    expect(
+      intendedPairings(store, "synth").some(
+        (p) => p.fg === "color.foreground.secondary",
+      ),
+    ).toBe(true);
+  });
+
+  it("never emits a pair twice when a brand overrides a base role", async () => {
+    const { intendedPairings } = await import("../../../scripts/contrast.mjs");
+    const tok = (value) => ({
+      value,
+      type: "color",
+      description: "synthetic",
+      file: "synthetic",
+    });
+    // The role exists in BOTH maps — walking the union must dedupe it.
+    const store = {
+      base: new Map([
+        ["color.foreground.default", tok("#000000")],
+        ["color.background.default", tok("#ffffff")],
+      ]),
+      brands: new Map([
+        ["synth", new Map([["color.foreground.default", tok("#111111")]])],
+      ]),
+    };
+    const pairs = intendedPairings(store, "synth");
+    expect(pairs).toHaveLength(1);
+  });
+
+  it("exclusions drop a convention pair for the named brand only", async () => {
+    const { allIntendedPairings } =
+      await import("../../../scripts/contrast.mjs");
+    // excludeBrands cannot express this: a convention-derived pair has no map
+    // entry to hang the flag on, which is why exclusions is a separate list.
+    const exclusions = [
+      {
+        fg: "color.foreground.muted",
+        bg: "color.background.alt",
+        brands: ["decision-engine"],
+        ratio: 1.23,
+        confirmedBy: "synthetic fixture",
+        reason: "synthetic fixture — asserts the filter, not any real pairing",
+      },
+    ];
+    const key = (p) => `${p.fg}|${p.bg}`;
+    const target = "color.foreground.muted|color.background.alt";
+    const de = allIntendedPairings(tokenStore, "decision-engine", {
+      exclusions,
+    }).map(key);
+    const other = allIntendedPairings(tokenStore, "dot-art", {
+      exclusions,
+    }).map(key);
+    expect(de).not.toContain(target);
+    expect(other).toContain(target);
+  });
 });
 
 describe("lint_consumer (via drift-scan.mjs)", () => {

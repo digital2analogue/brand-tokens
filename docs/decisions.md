@@ -11,6 +11,60 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-08-18 — The intended-pairing set was base-shaped; the contrast gate now follows the brand (#216)
+
+**What.** `intendedPairings` takes a `brand` and derives from base ∪ that brand's
+overrides. The two hardcoded lists become `SURFACE_ROLES`
+(`default/alt/elevated/hover`) and `TEXT_ROLES`
+(`default/alt/muted/action/secondary/tertiary`). A new `exclusions` array in
+`tokens/pairings.json` scopes a convention pair out of a brand that never renders
+it, schema-required to carry the measured `ratio`, a `confirmedBy`, and a `reason`.
+
+**Why.** Found by measuring, not by reading. Closing #87's last acceptance box —
+"a consumer generates its pairings from the map" — meant checking what the map
+actually covers. It covered **2** of decisioning-table's 23 token pairs. Digging
+into the other 21: `BASE_SURFACES` was `{default, alt}`, and **decision-engine
+renders most of its content on `background.elevated`** — its consumer's contrast
+script nicknames that token `WHITE`. So `validate_brand('decision-engine')` was
+checking **zero** pairs on the brand's primary surface and reporting green. It was
+telling the truth about what it checked; what it checked was the wrong shape.
+`foreground.secondary`, a DE-only text role, was invisible for the same reason.
+
+**The cost was concrete.** The DE success-green bug (4.38:1, fixed 2026-08-12) was
+caught *because* it happened to land on `background.alt`, which was in the list. The
+identical bug on `background.elevated` would have shipped. Coverage: base and the
+dot-* brands stay at 13 convention pairs; decision-engine goes **13 → 31**,
+including two `on-<role>` fills (`on-action-alt`, `on-inverted`) that were never
+reachable before.
+
+**One pair failed, and it is EXCLUDED rather than fixed — deliberately, and against
+my recommendation.** `foreground.muted` on `background.hover` measures **4.26:1**.
+I argued for darkening the token, on the grounds that "we never render this" is what
+hid the success-green bug. **The owner ruled the other way and gave the reason:
+muted text is never placed on a hover row** — that surface takes `foreground.default`
+(14.07:1) or `foreground.on-inverted`. That is a claim about the product, which the
+owner is positioned to make and a token file is not. So the exclusion carries the
+claim, its source, and the measured ratio, and says what to do if it ever changes.
+
+**Why `exclusions` is a separate list from `excludeBrands`.** `excludeBrands` hangs
+off a map entry. A convention-derived pair has no map entry, so there is nothing to
+hang it on. Both are applied *after* the merge, for the reason already documented on
+`allIntendedPairings`: a skip during construction only works if no other source
+contributes the same pair.
+
+**Verified in both directions.** Removing the exclusion fails `validate` with
+`decision-engine: color.foreground.muted on color.background.hover — 4.26:1`;
+restoring it passes. Four synthetic-fixture tests cover brand-only surfaces,
+brand-only text roles, the override-dedupe path, and per-brand exclusion scoping.
+
+**Still open.** The merged set is computed but not *exported*, so consumers still
+cannot generate the convention half — the original #216 ask. portfolio-vercel's
+base-hierarchy block stays hand-written and carries a comment saying why.
+
+**Status:** shipped. #216 stays open for the export half.
+
+---
+
 ## 2026-08-18 — DE's `foreground.secondary` folds into `foreground.alt`, finishing D-09
 
 **What.** `color.foreground.alt` in decision-engine re-points from `gray.700`

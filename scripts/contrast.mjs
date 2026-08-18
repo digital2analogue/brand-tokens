@@ -150,17 +150,52 @@ export function checkContrast(
   };
 }
 
-// Base text roles that sit on the page surfaces (background default/alt).
-const BASE_TEXT = ["default", "alt", "muted", "action"];
-const BASE_SURFACES = ["color.background.default", "color.background.alt"];
+// Resting content surfaces — the backgrounds prose and labels actually sit on.
+// NOT a list of every background token: fills (action, danger, success…) are
+// covered by the on-<role> convention below, and background.inverted is a dark
+// surface whose text is foreground.on-inverted, likewise on-<role>.
+//
+// `elevated` and `hover` exist only in decision-engine, and their absence here
+// was a real hole (#216). DE renders most of its content on background.elevated
+// — its consumer's contrast script literally nicknames that token WHITE — so a
+// base-shaped list of {default, alt} meant validate_brand('decision-engine')
+// checked ZERO pairs on the surface the brand mostly uses. A pair that fails
+// there would have passed the gate in silence, which is exactly how the DE
+// success-green bug (#215) survived on background.alt until that surface
+// happened to be in scope.
+const SURFACE_ROLES = ["default", "alt", "elevated", "hover"];
+
+// Text roles meant for those surfaces. `secondary` and `tertiary` are DE-only;
+// listing them here costs nothing for brands that lack them (see `has` below)
+// and closes the second half of the same hole — DE had a text role the base
+// list had never heard of.
+//
+// Deliberately absent: `disabled` and `inactive` (WCAG exempts inactive
+// controls), `inverse`/`on-*` (they belong to fills and dark surfaces, handled
+// by the on-<role> convention), and the accent family (its fg/bg names are not
+// cleanly parallel — see the note on intendedPairings).
+const TEXT_ROLES = [
+  "default",
+  "alt",
+  "muted",
+  "action",
+  "secondary",
+  "tertiary",
+];
 
 /**
  * The foreground/background token pairs the system *intends* to be used together,
- * derived by naming convention from the base color tokens. v1 covers only the
- * pairings where a failure is unambiguously a bug:
+ * derived by naming convention. Covers only the pairings where a failure is
+ * unambiguously a bug:
  *   - foreground.on-<role>  →  background.<role>   ("text ON the <role> fill")
- *   - foreground.{default,alt,muted,action}  →  background.{default,alt}  (text on surfaces)
+ *   - TEXT_ROLES  →  SURFACE_ROLES                 (text on resting surfaces)
  * foreground.disabled is exempt (WCAG exempts disabled controls).
+ *
+ * BRAND-AWARE (#216). The token universe is base ∪ the brand's own overrides, so
+ * a role that exists only in a sub-brand is still paired. Before this, both the
+ * iteration and the existence check read `store.base` alone, which meant every
+ * DE-only surface and text role was invisible to the gate — see SURFACE_ROLES.
+ * Passing no brand reproduces the base-only behaviour exactly.
  *
  * Deliberately NOT covered: the accent family (foreground.accent-* /
  * accent-on-* over background.accent-* / accent-*-bold). The accent taxonomy has
@@ -170,20 +205,30 @@ const BASE_SURFACES = ["color.background.default", "color.background.alt"];
  * explicit pairing map — see the contrast-tooling decision entry. Same "no
  * opinion outside the known rules" stance as check_assembly.
  */
-export function intendedPairings(store) {
-  const has = (p) => store.base.has(p);
+export function intendedPairings(store, brand = null) {
+  const brandTokens = brand ? store.brands.get(brand) : null;
+  const has = (p) => store.base.has(p) || Boolean(brandTokens?.has(p));
   const pairs = [];
+  const seen = new Set();
   const add = (fg, bg) => {
-    if (has(fg) && has(bg)) pairs.push({ fg, bg });
+    const k = `${fg}|${bg}`;
+    if (has(fg) && has(bg) && !seen.has(k)) {
+      seen.add(k);
+      pairs.push({ fg, bg });
+    }
   };
 
-  for (const path of store.base.keys()) {
+  // A brand override and its base definition are the same role, so walk the
+  // union of names — otherwise a DE-only role is never reached, and a role the
+  // brand overrides would be visited twice (hence `seen`).
+  const names = new Set([...store.base.keys(), ...(brandTokens?.keys() ?? [])]);
+  for (const path of names) {
     if (!path.startsWith("color.foreground.")) continue;
     const seg = path.slice("color.foreground.".length);
     if (seg.startsWith("on-")) {
       add(path, `color.background.${seg.slice(3)}`);
-    } else if (BASE_TEXT.includes(seg)) {
-      for (const bg of BASE_SURFACES) add(path, bg);
+    } else if (TEXT_ROLES.includes(seg)) {
+      for (const role of SURFACE_ROLES) add(path, `color.background.${role}`);
     }
     // accent-* and disabled: out of convention scope — the explicit pairing
     // map (tokens/pairings.json) carries them. See loadPairingMap().
@@ -210,6 +255,33 @@ export function loadPairingMap(root = resolve(import.meta.dirname, "..")) {
 }
 
 /**
+ * Pairs a brand is scoped out of *whatever named them* (#216). Each entry:
+ *   { fg, bg, brands: [...], reason }
+ *
+ * This is the escape hatch for a pair the convention derives but the brand does
+ * not render. It exists because widening SURFACE_ROLES/TEXT_ROLES necessarily
+ * generates some combinations nobody draws — `excludeBrands` on a map entry
+ * cannot reach those, since convention pairs have no map entry to hang it on.
+ *
+ * It is NOT a place to park a failing pair. Every entry must say who confirmed
+ * the pair is unrendered and carry the measured ratio, so a later reader can
+ * tell "we never draw this" from "this was red and we looked away" — and knows
+ * exactly what they would be inheriting if they ever did draw it.
+ */
+export function loadPairingExclusions(
+  root = resolve(import.meta.dirname, ".."),
+) {
+  try {
+    const { exclusions } = JSON.parse(
+      readFileSync(resolve(root, "tokens/pairings.json"), "utf8"),
+    );
+    return Array.isArray(exclusions) ? exclusions : [];
+  } catch {
+    return [];
+  }
+}
+
+/**
  * Union of three sources, deduped by fg|bg in increasing authority:
  *   1. convention-derived pairs (intendedPairings)
  *   2. pairs the components *declare* in their anatomy (#156 stage 2)
@@ -222,19 +294,26 @@ export function loadPairingMap(root = resolve(import.meta.dirname, "..")) {
  * from (rr-badge's accent variants). Scoping a pair out of a brand has to mean
  * the brand isn't checked on it, whoever named it.
  *
- * @param {object} opts.metas     component metas, for the anatomy source
- * @param {Array}  opts.pairings  override the explicit map (tests inject synthetic pairs)
+ * The same is true of `exclusions` (#216), applied last for the same reason —
+ * and it has to be a separate list rather than an `excludeBrands` on a map
+ * entry, because the pairs it scopes out are convention-derived and have no map
+ * entry to hang a flag on.
+ *
+ * @param {object} opts.metas       component metas, for the anatomy source
+ * @param {Array}  opts.pairings    override the explicit map (tests inject synthetic pairs)
+ * @param {Array}  opts.exclusions  override the exclusion list (tests likewise)
  */
 export function allIntendedPairings(
   store,
   brand = null,
-  { metas = [], pairings = null } = {},
+  { metas = [], pairings = null, exclusions = null } = {},
 ) {
   const map = pairings ?? loadPairingMap();
+  const excluded = exclusions ?? loadPairingExclusions();
   const merged = new Map();
   const key = (p) => `${p.fg}|${p.bg}`;
 
-  for (const p of intendedPairings(store)) {
+  for (const p of intendedPairings(store, brand)) {
     merged.set(key(p), { ...p, kind: "text" });
   }
   for (const p of anatomyPairings(metas, store)) {
@@ -257,6 +336,9 @@ export function allIntendedPairings(
   if (brand) {
     for (const p of map) {
       if (p.excludeBrands?.includes(brand)) merged.delete(key(p));
+    }
+    for (const e of excluded) {
+      if (e.brands?.includes(brand)) merged.delete(key(e));
     }
   }
   return [...merged.values()];
