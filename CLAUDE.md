@@ -223,9 +223,21 @@ mcp package (still scoped `@riverromney`) is not published yet.
     declared anatomy instead of two named colours;
     `validate_brand(brand)` — checks every *intended* fg/bg pairing keeps AA once a
     sub-brand's overrides apply. Intended pairs come from three sources: naming convention
-    (`on-<role>`↔`background.<role>`, base text↔base surfaces), the pairs components declare
-    in their `anatomy`, and the explicit map (`tokens/pairings.json`) — whose `excludeBrands`
-    scopes a pair out of brands that never render it, no matter which source named it.
+    (`on-<role>`↔`background.<role>`, `TEXT_ROLES`↔`SURFACE_ROLES`), the pairs components
+    declare in their `anatomy`, and the explicit map (`tokens/pairings.json`) — whose
+    `excludeBrands` scopes a pair out of brands that never render it, no matter which
+    source named it.
+    **The convention half is BRAND-AWARE (#216):** its token universe is base ∪ the brand's
+    own overrides, and `SURFACE_ROLES` covers `default/alt/elevated/hover` while `TEXT_ROLES`
+    covers `default/alt/muted/action/secondary/tertiary`. Roles absent from a brand are
+    skipped, so base and the dot-* brands are unaffected (13 pairs); decision-engine goes
+    **13 → 31**. Before this both lists were base-shaped, so `validate_brand('decision-engine')`
+    checked **zero** pairs on `background.elevated` — the surface DE renders most content on.
+    A pair the convention generates but a brand genuinely never draws goes in
+    `tokens/pairings.json`'s **`exclusions`** array, not `excludeBrands` (a convention pair
+    has no map entry to flag). The schema requires each exclusion to carry `ratio`,
+    `confirmedBy` and a `reason` describing the UI — so "we never draw this" stays
+    distinguishable from "this was red and we looked away."
   - Consumer linting (from `scripts/drift-scan.mjs`, shared with the `drift-lint` CLI +
     weekly Action): `lint_consumer({ path, ignore? })` — scans a consumer repo (or single
     file) with the same `RULES` as `check_usage`, but at file/repo level. Honours a
