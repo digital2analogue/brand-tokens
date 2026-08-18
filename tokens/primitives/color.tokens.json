@@ -64,9 +64,9 @@
           "$description": "Dark green chip fill. Named slot — sits between green.900 and green.950 in luminance but cannot be numbered without creating a non-standard step. Used for subtle dark-theme chip/tag fills, callout panel backgrounds, and hairline borders. Referenced by: color.background.accent-green, color.background.success-alt, color.border.muted."
         },
         "positive": {
-          "$value": "#15803D",
+          "$value": "#166534",
           "$type": "color",
-          "$description": "DE light-mode success green. Passes AA on white as text (5.0:1) and supports white text as fill (5.0:1). DE only — not used in the base dark theme. Referenced by: color.background.success, color.foreground.success (DE overrides)."
+          "$description": "DE light-mode success green. Passes AA as text on every DE surface — white 7.13:1, canvas 6.69:1, background.alt 6.23:1 — and supports white text as fill (7.13:1). Darkened one ramp step from #15803D on 2026-08-12: the old value cleared white and canvas but measured 4.38:1 on background.alt, so success text failed AA on exactly the surface a success message most often appears on (toast, menu, card). DE only — not used in the base dark theme. Referenced by: color.background.success, color.foreground.success, color.foreground.accent-green (DE overrides)."
         },
         "approve": {
           "$value": "#00875A",

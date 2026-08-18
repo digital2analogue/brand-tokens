@@ -11,6 +11,78 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-08-12 — DE success green darkened one step; the exclusion it was hiding behind is gone
+
+**What.** `primitive.color.green.positive` `#15803D` → **`#166534`** (one step down
+the ramp, Tailwind green-700 → green-800). The `excludeBrands: ["decision-engine"]`
+on the `foreground.success` ↔ `background.alt` pairing in `tokens/pairings.json` is
+**removed**, so the contrast gate now checks that pair under DE like every other brand.
+
+**Why.** The fourth- and fifth-pass inspections both flagged DE's success text at
+**4.38:1** on `background.alt` — under the 4.5:1 AA floor. The old value cleared
+white (5.02:1) and the canvas (4.71:1) but not the elevated surface, which is
+exactly where a success message usually lives: a toast, a menu, a card. Passing on
+the page and failing on the toast is the worst version of this bug, because the
+place you check by eye is the place it passes.
+
+**The alternative — and why it lost.** The documented option was to accept the
+exclusion and move on. That is what `excludeBrands` is *for* when a brand genuinely
+never renders a pair, and DE is legitimately excluded from five other pairs on those
+grounds. But DE **does** render success text on elevated surfaces, so the exclusion
+was not scoping an unrendered pair — it was silencing a real failure. Kept as-is,
+`tokens/pairings.json` would have taught the next reader that a hard rule is
+negotiable if you write the exception down. The note in that file now says so
+explicitly.
+
+**Blast radius, measured not assumed.** `green.positive` has three DE referents and
+all three improve: `foreground.success` (4.38 → **6.23:1** on alt, 5.02 → **7.13:1**
+on white), `background.success` (white on fill, 5.02 → **7.13:1**), and
+`foreground.accent-green` (4.76 → **6.77:1** on the green.50 tint). `green.approve`
+(#00875A) is a separate slot and is untouched, so DE's Approve outcome colour does
+not move. Nothing in the base dark theme references this primitive.
+
+**Verified by removing the fix.** Reverting the value to `#15803D` and re-running
+`npm run validate` fails with `decision-engine: color.foreground.success on
+color.background.alt — 4.38:1 (needs 4.5:1, text)`. The gate is now the thing
+holding this, not a note in a work order.
+
+**Status:** shipped. Closes the first of the two carried-over owner decisions.
+
+---
+
+## 2026-08-12 — Code Connect stays unpublished; recorded as a known gap, not a plan
+
+**What.** The 22 authored `*.figma.ts` Code Connect files stay in the repo,
+unpublished. **The Figma plan is not being upgraded right now** — owner decision.
+They remain a parity artifact: `npm run parity` reads node IDs from `meta.json` and
+a Figma MCP dump, and never touches Code Connect.
+
+**Why.** Publishing requires a Dev or Full seat on a Figma Organization or Enterprise
+plan; the account is `pro` tier, so `figma connect publish` 403s. That is a
+procurement cost, not an engineering problem, and nothing today is blocked on it:
+the MCP gives agents strictly more than Code Connect would, `parity` already covers
+design↔code drift, and 74 days passed without the absence costing anything
+measurable.
+
+**What this entry deliberately is not.** It is not a claim that Code Connect is
+worthless, and it supersedes nothing about the 2026-08-10 argument *except* its
+evidence. That entry reasoned "the bottleneck is the library, not the bridge — Figma
+holds 4 of 27 components", and **that premise was false and was retracted** (#208):
+the library holds 26 of 26 real components. The case against upgrading is now
+finely balanced rather than clear-cut, and this is a *deferral on cost*, not a
+finding that the bridge has no value.
+
+**Alternative considered.** Retiring the files outright. Rejected: they cost nothing
+to keep, `validate` §4/§4b already checks them for enum parity and binding
+consistency, and re-authoring 22 files later would be far more expensive than
+leaving them in place.
+
+**Status:** open gap, accepted. Revisit if the plan tier changes or if a real task
+turns out to need the bridge. Every doc that once described Code Connect as live was
+corrected in #207 / portfolio #68.
+
+---
+
 ## 2026-08-11 — An adoption scan, and why it prints its evidence (#106)
 
 **What.** `scripts/adoption-scan.mjs` + `npm run adoption -- <dir>`. Reports, per

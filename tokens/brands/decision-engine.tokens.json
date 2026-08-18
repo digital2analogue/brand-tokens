@@ -224,7 +224,7 @@
       "success": {
         "$value": "{primitive.color.green.positive}",
         "$type": "color",
-        "$description": "Success fill — #15803D. White text on this: 5.0:1 AA. Replaces base phosphor green with a proper light-mode success green."
+        "$description": "Success fill — #166534. White text on this: 7.13:1 AAA. Replaces base phosphor green with a proper light-mode success green."
       },
       "success-alt": {
         "$value": "{primitive.color.green.100}",
@@ -316,7 +316,7 @@
       "accent-green": {
         "$value": "{primitive.color.green.positive}",
         "$type": "color",
-        "$description": "Green accent text/icons for the DE light theme — same value as foreground.success. Pairs with background.accent-green (green.50 tint): 4.76:1 AA. Contrast vs white: 5.02:1 AA. Was green.600 (#8B9683 sage gray), which read as muted gray and failed AA on the tint (2.94:1) — parsimony#176."
+        "$description": "Green accent text/icons for the DE light theme — same value as foreground.success. Pairs with background.accent-green (green.50 tint): 6.77:1 AAA. Contrast vs white: 7.13:1 AAA. Was green.600 (#8B9683 sage gray), which read as muted gray and failed AA on the tint (2.94:1) — parsimony#176."
       },
       "accent-blue": {
         "$value": "{primitive.color.blue.700}",
@@ -381,7 +381,7 @@
       "success": {
         "$value": "{primitive.color.green.positive}",
         "$type": "color",
-        "$description": "Success text and icons. Dark green (#15803D) for sufficient contrast on white. Contrast vs white: 5.02:1 (WCAG AA)."
+        "$description": "Success text and icons. Dark green (#166534) — clears AA on every DE surface, not just the canvas: white 7.13:1, background.default 6.69:1, background.alt 6.23:1, background.success-alt 6.49:1. Darkened one step from #15803D on 2026-08-12, which passed white but measured 4.38:1 on background.alt."
       },
       "on-success": {
         "$value": "{primitive.color.neutral.white}",
