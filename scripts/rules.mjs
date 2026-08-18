@@ -74,6 +74,15 @@ export const DEPRECATED_TOKENS = [
     token: "--color-foreground-primary",
     replacement: "--color-foreground-default",
   },
+  {
+    // D-09 (2026-04-26) renamed foreground.secondary -> foreground.alt. The base
+    // followed; decision-engine did not, so DE carried both names for one role
+    // until 2026-08-18. Still DEFINED in the DE brand as a same-value alias so a
+    // live consumer does not lose its text colour mid-migration — this entry is
+    // what makes the migration visible in drift reports rather than silent.
+    token: "--color-foreground-secondary",
+    replacement: "--color-foreground-alt",
+  },
   { token: "--color-feedback-error", replacement: "--color-foreground-danger" },
   {
     token: "--color-feedback-danger-foreground",

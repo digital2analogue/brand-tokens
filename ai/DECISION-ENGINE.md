@@ -77,6 +77,8 @@ The following tokens existed at one point and were removed. Do not re-add them w
 | `primitive.color.red.500` ↔ `primitive.color.red.600` | Numbers swapped | `red.600` (#D03027) was lighter than `red.500` (#C8002E), breaking numeric convention. Numbers swapped so higher numbers are darker. After swap: `red.500`=#D03027 (Deny/destructive), `red.600`=#C8002E (error/crimson). `red.700`/`red.800` hover/active chain now correctly descends from `red.500`. Semantic CSS vars unaffected — resolved hex values are identical. 2026-04-28. |
 | `primitive.color.gray.600` | `primitive.color.gray.navy` | `gray.600` (#3A4663) was perceptually darker than `gray.700` (#4A4A5A) due to its navy chromatic shift — an unavoidable inversion that cannot be fixed by renumbering. Renamed to a named slot. `foreground.secondary` in DE updated to reference `gray.navy`. Semantic CSS vars unaffected. 2026-04-28. |
 
+| `foreground.secondary` | `foreground.alt` | Completes **D-09** (2026-04-26), which renamed `foreground.primary`/`secondary` → `default`/`alt` system-wide. The base followed; this brand did not, so DE carried **two tokens for one role** — `alt` on `gray.700` (#4A4A5A) and `secondary` on `gray.navy` (#3A4663), both described as "secondary text". `foreground.alt` now carries **gray.navy**: that value was chosen deliberately for its perceptual darkness (see the `gray.600` → `gray.navy` row above) and it is what 16 of the 20 consumer references were already rendering. **`foreground.secondary` remains DEFINED as a same-value alias** so decisioning-table does not lose its text colour at the next package bump; it is registered in `DEPRECATED_TOKENS`, so `drift-lint` and `check_usage` flag it. Remove once no consumer references it. 2026-08-18. |
+
 When updating consumer repos, search for the old CSS variable name (e.g. `--color-state-hover`) and replace with the new one.
 
 ---
@@ -87,8 +89,8 @@ From highest to lowest contrast on the arctic canvas (`#F5F8FC`):
 
 ```
 foreground-default   #1A1A2E   16.0:1  AAA  — body copy, table values, primary labels
-foreground-secondary #3A4663    8.8:1  AAA  — supporting labels, metadata, helper text
-foreground-alt       #4A4A5A    8.2:1  AAA  — timestamps, icon chrome
+foreground-alt       #3A4663    8.8:1  AAA  — supporting labels, metadata, timestamps, icon chrome
+                                              (foreground-secondary is a DEPRECATED alias of this — same value)
 foreground-tertiary  #4E5F79    6.1:1   AA  — descriptor text, dropdown item descriptions
 foreground-danger    #C8002E    5.6:1   AA  — errors, destructive labels, deny states
 foreground-action    #2456E4    5.6:1   AA  — links, active nav, text CTAs

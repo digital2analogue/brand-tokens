@@ -11,6 +11,44 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-08-18 — DE's `foreground.secondary` folds into `foreground.alt`, finishing D-09
+
+**What.** `color.foreground.alt` in decision-engine re-points from `gray.700`
+(#4A4A5A) to `gray.navy` (#3A4663). `color.foreground.secondary` stays defined as a
+**same-value alias**, marked deprecated, and is registered in `DEPRECATED_TOKENS`
+pointing at `foreground.alt`.
+
+**Why.** **D-09 (2026-04-26)** renamed `foreground.primary`/`secondary` →
+`default`/`alt` across the system. The base followed. This brand did not — and
+because DE also defines its own `alt`, it ended up carrying **two tokens for one
+role**, both described as "secondary text", with *different values*. That is worse
+than either a stale name or a duplicate value on its own: a consumer picking between
+them was picking a colour, not an alias, with nothing in either description saying so.
+
+**Which value survived, and why that direction.** `gray.navy`. It was chosen
+deliberately for its perceptual darkness (the 2026-04-28 `gray.600` → `gray.navy`
+rename entry explains the inversion that forced a named slot), and it is what **16 of
+the 20** references in decisioning-table were already rendering. Re-pointing `alt` to
+it repaints 4 references instead of 16 and keeps the tint the palette was designed
+around. Contrast improves on every DE surface: white 8.90 → 9.39:1, canvas 8.15 →
+8.82:1, `background.elevated` 7.87 → 8.51:1.
+
+**Alternative considered.** Deleting `foreground.secondary` outright, which is what
+every other entry in `DEPRECATED_TOKENS` did. Rejected **for now**: decisioning-table
+is live, has 16 references, and this session cannot push to it. A deleted custom
+property does not degrade — it resolves to nothing and the text loses its colour. An
+alias plus a lint entry makes the migration visible in that repo's weekly drift report
+without breaking it in the meantime.
+
+**Consequence to watch.** `gray.700` is now referenced by no semantic token. It stays
+in the palette (primitives are a palette, not a usage list) and its description says
+so, but it is a candidate for removal if nothing claims it.
+
+**Status:** shipped. `foreground.secondary` is removable once decisioning-table's 16
+references migrate.
+
+---
+
 ## 2026-08-12 — DE success green darkened one step; the exclusion it was hiding behind is gone
 
 **What.** `primitive.color.green.positive` `#15803D` → **`#166534`** (one step down

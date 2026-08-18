@@ -289,9 +289,9 @@
         "$description": "Primary text on white — headings, body copy, labels, table cell values. Near-black with a cool cast. Contrast vs white: 16.1:1 (WCAG AAA)."
       },
       "alt": {
-        "$value": "{primitive.color.gray.700}",
+        "$value": "{primitive.color.gray.navy}",
         "$type": "color",
-        "$description": "Secondary text on white — metadata, timestamps, supporting labels, icon chrome. Contrast vs white: 8.9:1 (WCAG AAA)."
+        "$description": "Secondary text on white — metadata, timestamps, supporting labels, icon chrome. Navy-tinted mid-tone; contrast vs white 9.39:1 (WCAG AAA), 8.51:1 on background.elevated. Re-pointed from gray.700 (#4A4A5A) to gray.navy (#3A4663) on 2026-08-18, absorbing the deprecated foreground.secondary — DE carried two tokens for one role and this is the value that was chosen deliberately (see the 2026-04-28 gray.navy entry in ai/DECISION-ENGINE.md)."
       },
       "muted": {
         "$value": "{primitive.color.gray.500}",
@@ -341,7 +341,7 @@
       "secondary": {
         "$value": "{primitive.color.gray.navy}",
         "$type": "color",
-        "$description": "Secondary text — supporting labels, metadata, helper text. Navy-tinted; sits between foreground.muted and foreground.default in visual hierarchy. Contrast vs white: 9.39:1 (WCAG AAA)."
+        "$description": "DEPRECATED — use foreground.alt, which now carries this exact value. D-09 (2026-04-26) renamed foreground.secondary to foreground.alt across the system; the base followed, this brand did not, and DE ended up with two tokens for one role. Kept as a same-value alias so decisioning-table (16 references) does not lose its text colour at the next package bump; drift-lint flags it via the deprecated-token rule. Remove once no consumer references it."
       },
       "tertiary": {
         "$value": "{primitive.color.gray.600}",

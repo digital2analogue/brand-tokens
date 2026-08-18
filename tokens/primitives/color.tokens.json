@@ -201,11 +201,11 @@
         },
         "navy": {
           "$value": "#3A4663",
-          "$description": "Secondary text — navy-tinted mid-tone. Used as foreground.secondary in decision-engine. Named slot rather than a numeric step — this navy blue-gray is perceptually darker than gray.700 (#4A4A5A) due to its chromatic shift, making numeric sequencing impossible without inversion. Contrast vs white: 9.39:1 (WCAG AAA)."
+          "$description": "Secondary text — navy-tinted mid-tone. Used as foreground.alt in decision-engine (and by its deprecated foreground.secondary alias). Named slot rather than a numeric step — this navy blue-gray is perceptually darker than gray.700 (#4A4A5A) due to its chromatic shift, making numeric sequencing impossible without inversion. Contrast vs white: 9.39:1 (WCAG AAA)."
         },
         "700": {
           "$value": "#4A4A5A",
-          "$description": "Secondary text on white. Used as foreground.alt in decision-engine. Contrast vs white: 8.9:1 (WCAG AAA)."
+          "$description": "Secondary text on white. Contrast vs white: 8.9:1 (WCAG AAA). UNREFERENCED since 2026-08-18: decision-engine's foreground.alt was re-pointed to gray.navy when the duplicate foreground.secondary was folded into it. Kept as a palette step, not currently bound to any semantic role."
         },
         "900": {
           "$value": "#1A1A2E",
@@ -223,7 +223,7 @@
         "600": {
           "$value": "#4E5F79",
           "$type": "color",
-          "$description": "Tertiary text on white — sits between foreground.muted (gray.500, 5.17:1) and foreground.alt (gray.700, 8.9:1). Cool blue-gray consistent with the DE palette character. Contrast vs white: ~6.2:1 (WCAG AA). Use for helper/descriptor text that should read as supplemental without the passive 'disabled' feel of muted."
+          "$description": "Tertiary text on white — sits between foreground.muted (gray.500, 5.17:1) and foreground.alt (gray.navy, 9.39:1). Cool blue-gray consistent with the DE palette character. Contrast vs white: ~6.2:1 (WCAG AA). Use for helper/descriptor text that should read as supplemental without the passive 'disabled' feel of muted."
         }
       },
       "arctic": {
