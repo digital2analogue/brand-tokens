@@ -385,6 +385,13 @@ def values_match(dtcg_token: dict, figma_var: dict) -> tuple[bool, str]:
 
     # Color comparison
     if token_type == "color" and isinstance(dtcg_val, str) and dtcg_val.startswith("#"):
+        # Direct (non-alias) COLOR values arrive as an uppercase hex string —
+        # this is the export format documented for the Figma side (matches
+        # get_variable_defs / export_figma_vars.py), not a raw {r,g,b} object.
+        if isinstance(figma_val, str) and figma_val.startswith("#"):
+            if dtcg_val.upper() == figma_val.upper():
+                return True, "match"
+            return False, f"JSON={dtcg_val.upper()}, Figma={figma_val.upper()}"
         if isinstance(figma_val, dict) and "r" in figma_val:
             if colors_match(dtcg_val, figma_val):
                 return True, "match"
