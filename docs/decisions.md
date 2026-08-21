@@ -11,6 +11,37 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-08-20 — The feedback tints keep their `-alt` names; OTKit's rename is not ours to follow (#218)
+
+**What:** closed #218 without doing the work. `background.danger-alt`, `success-alt`,
+`warning-alt` and `info-alt` keep their names. The accent tints
+(`background.accent-green` / `-blue` / `-violet` / `-amber`) are likewise left alone —
+they carry no `-alt` suffix, so there was never anything to deprecate.
+
+**Why:** the driver was a naming decision in a *different* design system. OTKit's
+Foundation changelog V.1.10.1 deprecated its `-alt` accent/feedback backgrounds in favour
+of `-highlight`, and #218 proposed matching it. But Parsimony's tokens are not deprecated,
+are not ambiguous, and nothing here is confused by them. OTKit is also only half-migrated
+— its own changelog table still binds `danger-alt` and `warning-alt` alongside the newer
+`info-highlight` — so matching it means chasing a target that is still moving.
+
+The cost was the other half: four semantic tokens, brand overrides, `rr-badge`'s styles +
+`tokensUsed` + `anatomy`, `pairings.json`, four `DEPRECATED_TOKENS` mappings, three
+regeneration passes, `golden:update`, a package bump and publish, then a consumer
+migration in `portfolio-vercel`. Large surface, no reader-visible improvement.
+
+**Alternative considered:** do the rename anyway for cross-system parity, on the theory
+that working across both systems is easier when the names agree. Rejected — parity with a
+system that has not finished its own migration is not parity, and `-alt` vs `-highlight`
+is not the thing that makes moving between them hard.
+
+**Status:** closed as not planned. The scope analysis in #218 is accurate and stands as
+the plan if OTKit completes its migration and the divergence starts costing real
+confusion. `background.alt` / `border.alt` / `foreground.alt` were never in scope — those
+are resting-surface tokens, a different concept entirely.
+
+---
+
 ## 2026-08-18 — The intended-pairing set was base-shaped; the contrast gate now follows the brand (#216)
 
 **What.** `intendedPairings` takes a `brand` and derives from base ∪ that brand's
