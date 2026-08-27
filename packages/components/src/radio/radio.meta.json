@@ -5,47 +5,168 @@
   "summary": "Individual radio button. Must be used inside rr-radio-group, which manages name, value, and selection.",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
-    { "name": "value", "type": "string", "default": "" },
-    { "name": "checked", "type": "boolean", "default": "false" },
-    { "name": "disabled", "type": "boolean", "default": "false" }
+    {
+      "name": "value",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "checked",
+      "type": "boolean",
+      "default": "false"
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false"
+    }
   ],
   "slots": [
-    { "name": "default", "description": "Label text." }
+    {
+      "name": "default",
+      "description": "Label text."
+    }
   ],
   "events": [
-    { "name": "rr-radio-change", "detail": "{ value: string }" }
+    {
+      "name": "rr-radio-change",
+      "detail": "{ value: string }"
+    }
   ],
   "cssParts": [
-    { "name": "circle", "description": "The visual radio circle element." },
-    { "name": "label", "description": "The label text element." }
+    {
+      "name": "circle",
+      "description": "The visual radio circle element."
+    },
+    {
+      "name": "label",
+      "description": "The label text element."
+    }
   ],
-  "tokensUsed": [
-    "--component-radio-border-default",
-    "--component-radio-background-unchecked",
-    "--component-radio-border-hover",
-    "--component-radio-border-checked",
-    "--component-radio-background-disabled",
-    "--component-radio-border-disabled",
-    "--component-radio-background-checked",
-    "--component-radio-foreground-disabled",
-    "--component-radio-border-focus",
-    "--component-radio-foreground-label",
-    "--font-label-medium",
-    "--spacing-tight",
-    "--motion-duration-instant",
-    "--motion-easing-default",
-    "--motion-easing-enter"
-  ],
+  "anatomy": {
+    "description": "A visual circle beside a label, with the real <input> transparently overlaying the circle. The 16px circle, the 8px dot, and the focus-ring outline are not tokens.",
+    "parts": [
+      {
+        "name": "root",
+        "element": ":host",
+        "description": "Inline-flex row holding the circle and its label.",
+        "tokens": {
+          "spacing": "--spacing-tight"
+        },
+        "parts": [
+          {
+            "name": "circle",
+            "element": ".circle",
+            "cssPart": "circle",
+            "description": "The visual radio circle. The native input sits transparently on top of it. The cap-height offset is carried by its positioning wrapper, not the circle itself.",
+            "tokens": {
+              "background": "--color-background-default",
+              "border": "--color-border-default",
+              "motion": [
+                "--motion-duration-instant",
+                "--motion-easing-default"
+              ],
+              "spacing": "--spacing-align"
+            },
+            "states": [
+              {
+                "when": "checked",
+                "tokens": {
+                  "border": "--color-background-action"
+                }
+              },
+              {
+                "when": "disabled",
+                "tokens": {
+                  "background": "--color-background-disabled",
+                  "border": "--color-border-disabled"
+                }
+              },
+              {
+                "when": [
+                  "!disabled",
+                  "!checked",
+                  ":hover"
+                ],
+                "description": "Hover only while unchecked and enabled.",
+                "tokens": {
+                  "border": "--color-border-hover"
+                }
+              },
+              {
+                "when": ":focus-visible",
+                "description": "Keyboard focus ring on the circle, driven by the hidden input's focus state.",
+                "tokens": {
+                  "focus": "--color-border-focus"
+                }
+              }
+            ],
+            "parts": [
+              {
+                "name": "dot",
+                "element": ".dot",
+                "description": "The inner dot, scaled from 0 to 1 when checked.",
+                "tokens": {
+                  "background": "--color-background-action",
+                  "motion": [
+                    "--motion-duration-instant",
+                    "--motion-easing-enter"
+                  ]
+                },
+                "states": [
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "background": "--color-foreground-disabled"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "label",
+            "element": "label",
+            "cssPart": "label",
+            "description": "The text label beside the circle.",
+            "tokens": {
+              "foreground": "--color-foreground-alt",
+              "font": "--font-label-medium"
+            },
+            "states": [
+              {
+                "when": "disabled",
+                "tokens": {
+                  "foreground": "--color-foreground-disabled"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "rules": [
-    "Never use hex values — always var(--color-*) or var(--component-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
     "Always use rr-radio inside an rr-radio-group — selection, name, and form value are managed by the group"
   ],
   "examples": [
-    { "title": "Default", "html": "<rr-radio value=\"sm\">Small</rr-radio>" },
-    { "title": "Checked", "html": "<rr-radio value=\"md\" checked>Medium</rr-radio>" },
-    { "title": "Disabled", "html": "<rr-radio value=\"lg\" disabled>Large</rr-radio>" }
+    {
+      "title": "Default",
+      "html": "<rr-radio value=\"sm\">Small</rr-radio>"
+    },
+    {
+      "title": "Checked",
+      "html": "<rr-radio value=\"md\" checked>Medium</rr-radio>"
+    },
+    {
+      "title": "Disabled",
+      "html": "<rr-radio value=\"lg\" disabled>Large</rr-radio>"
+    }
   ],
   "accessibility": {
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/radio/",
@@ -62,5 +183,9 @@
     ],
     "rules": []
   },
-  "figma": { "componentKey": "", "nodeId": "121:77", "codeConnectFile": "radio.figma.ts" }
+  "figma": {
+    "componentKey": "",
+    "nodeId": "214:12",
+    "codeConnectFile": "radio.figma.ts"
+  }
 }

@@ -1,42 +1,30 @@
 {
-  "$description": "The explicit intended-pairing map (#87): foreground/background token pairs the system means to be used together, beyond what contrast.mjs derives by naming convention (on-<role> \u2194 background.<role>, base text \u2194 base surfaces). This file is the single source the validate gate, validate_brand, and consumer contrast manifests read. kind=text enforces WCAG AA 4.5:1; kind=non-text enforces SC 1.4.11's 3:1 floor (interactive edges, focus indicators). Every pair is checked against BASE and EVERY BRAND on every push \u2014 do not add a pair without running npm run validate.",
+  "$description": "The explicit intended-pairing map (#87): foreground/background token pairs the system means to be used together, beyond what contrast.mjs derives by naming convention (on-<role> ↔ background.<role>, base text ↔ base surfaces). This file is the single source the validate gate, validate_brand, and consumer contrast manifests read. kind=text enforces WCAG AA 4.5:1; kind=non-text enforces SC 1.4.11's 3:1 floor (interactive edges, focus indicators). Every pair is checked against BASE and EVERY BRAND on every push — do not add a pair without running npm run validate.",
   "$excluded": "The near-black accent-on-{green,blue,violet,amber} tokens are deliberately NOT mapped onto the accent tint fills: on the dark base theme their documented pairing intent is the saturated/bold contexts (decision-engine overrides them to white), and tint-fill chips use the accent foregrounds instead. Mapping them would codify a pair the base theme never renders.",
   "pairs": [
     {
       "fg": "color.foreground.accent-green",
       "bg": "color.background.accent-green",
       "kind": "text",
-      "context": "green chip/tag text on green tint fill",
-      "excludeBrands": [
-        "decision-engine"
-      ]
+      "context": "green chip/tag text on green tint fill"
     },
     {
       "fg": "color.foreground.accent-blue",
       "bg": "color.background.accent-blue",
       "kind": "text",
-      "context": "blue chip/tag text on blue tint fill",
-      "excludeBrands": [
-        "decision-engine"
-      ]
+      "context": "blue chip/tag text on blue tint fill"
     },
     {
       "fg": "color.foreground.accent-violet",
       "bg": "color.background.accent-violet",
       "kind": "text",
-      "context": "violet chip/tag text on violet tint fill",
-      "excludeBrands": [
-        "decision-engine"
-      ]
+      "context": "violet chip/tag text on violet tint fill"
     },
     {
       "fg": "color.foreground.accent-amber",
       "bg": "color.background.accent-amber",
       "kind": "text",
-      "context": "amber chip/tag text on amber tint fill",
-      "excludeBrands": [
-        "decision-engine"
-      ]
+      "context": "amber chip/tag text on amber tint fill"
     },
     {
       "fg": "color.foreground.accent-on-indigo",
@@ -114,10 +102,7 @@
       "fg": "color.foreground.success",
       "bg": "color.background.alt",
       "kind": "text",
-      "context": "success text on elevated surface (toast/menu/card)",
-      "excludeBrands": [
-        "decision-engine"
-      ]
+      "context": "success text on elevated surface (toast/menu/card)"
     },
     {
       "fg": "color.foreground.warning",
@@ -148,9 +133,7 @@
       "bg": "color.background.default",
       "kind": "non-text",
       "context": "outlined interactive control edge on canvas",
-      "excludeBrands": [
-        "decision-engine"
-      ]
+      "excludeBrands": ["decision-engine"]
     },
     {
       "fg": "color.border.focus",
@@ -171,5 +154,15 @@
       "context": "active/pressed control border on canvas"
     }
   ],
-  "$excludeBrands-note": "excludeBrands scopes a pair to brands that actually render it. decision-engine is excluded from the four accent-tint pairs (it pairs tint fills with its own DE-local accent foregrounds, e.g. foreground.accent-purple \u2014 the base fg-accent-X convention does not apply), from border.action-on-canvas (the base ghost-button outline DE never renders, per the documented drift notes), and from success-on-alt (borderline 4.38:1 under DE \u2014 flagged for an owner decision rather than silently codified; see work order)."
+  "$excludeBrands-note": "excludeBrands scopes a pair to brands that actually render it. decision-engine is excluded from the four accent-tint pairs (it pairs tint fills with its own DE-local accent foregrounds, e.g. foreground.accent-purple — the base fg-accent-X convention does not apply), from border.action-on-canvas (the base ghost-button outline DE never renders, per the documented drift notes). It is NOT a place to park a failing pair: success-on-alt was excluded here from 2026-08-10 to 2026-08-12 because DE measured 4.38:1, and the exclusion was removed by fixing the colour (green.positive darkened one step to #166534, now 6.23:1) rather than by keeping the pair quiet.",
+  "exclusions": [
+    {
+      "fg": "color.foreground.muted",
+      "bg": "color.background.hover",
+      "brands": ["decision-engine"],
+      "ratio": 4.26,
+      "confirmedBy": "Owner, 2026-08-18 — asked directly when widening SURFACE_ROLES surfaced it.",
+      "reason": "Muted text is never placed on a hover row. background.hover is the ghost-button and row-hover fill; the text that lands on it is foreground.default (14.07:1) or foreground.on-inverted, never the muted rung. Widening the surface list to include background.hover generated this combination mechanically — nothing in the product draws it. If that ever changes, the pair needs 4.5:1 and currently has 4.26:1, so darken foreground.muted or lighten background.hover before shipping it."
+    }
+  ]
 }

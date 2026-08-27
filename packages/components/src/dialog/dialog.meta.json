@@ -5,16 +5,37 @@
   "summary": "Modal dialog built on the native <dialog> element with focus trap and Escape-to-close.",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
-    { "name": "heading", "type": "string", "default": "" },
-    { "name": "open", "type": "boolean", "default": "false" },
-    { "name": "close-on-backdrop", "type": "boolean", "default": "true" }
+    {
+      "name": "heading",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "open",
+      "type": "boolean",
+      "default": "false"
+    },
+    {
+      "name": "close-on-backdrop",
+      "type": "boolean",
+      "default": "true"
+    }
   ],
   "slots": [
-    { "name": "default", "description": "Dialog body content." },
-    { "name": "footer", "description": "Action buttons, displayed in a right-aligned footer row. Footer is hidden when empty." }
+    {
+      "name": "default",
+      "description": "Dialog body content."
+    },
+    {
+      "name": "footer",
+      "description": "Action buttons, displayed in a right-aligned footer row. Footer is hidden when empty."
+    }
   ],
   "events": [
-    { "name": "rr-dialog-close", "detail": "Fired whenever the dialog closes — via Escape, the close button, backdrop click, or programmatic close(). Bubbles and is composed." }
+    {
+      "name": "rr-dialog-close",
+      "detail": "Fired whenever the dialog closes — via Escape, the close button, backdrop click, or programmatic close(). Bubbles and is composed."
+    }
   ],
   "cssParts": [],
   "tokensUsed": [
@@ -34,18 +55,30 @@
     "--color-border-focus",
     "--font-body-large",
     "--color-foreground-alt",
-    "--spacing-inline"
+    "--spacing-inline",
+    "--letter-spacing-title"
   ],
   "rules": [
-    "Never use hex values — always var(--color-*) or var(--component-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
     "Open and close the dialog via the open property or the show()/close() methods — both keep state and the rr-dialog-close event in sync"
   ],
   "examples": [
-    { "title": "Confirmation dialog with footer actions", "html": "<rr-dialog heading=\"Confirm action\" open>\n  Are you sure you want to delete this item?\n  <rr-button slot=\"footer\" variant=\"danger\">Delete</rr-button>\n  <rr-button slot=\"footer\" variant=\"secondary\">Cancel</rr-button>\n</rr-dialog>" },
-    { "title": "Body-only dialog", "html": "<rr-dialog heading=\"Details\">\n  <p>Dialog body content goes here.</p>\n</rr-dialog>" },
-    { "title": "Non-dismissible backdrop", "html": "<rr-dialog heading=\"Processing\" close-on-backdrop=\"false\" open>\n  Please wait while we finish.\n</rr-dialog>" }
+    {
+      "title": "Confirmation dialog with footer actions",
+      "html": "<rr-dialog heading=\"Confirm action\" open>\n  Are you sure you want to delete this item?\n  <rr-button slot=\"footer\" variant=\"danger\">Delete</rr-button>\n  <rr-button slot=\"footer\" variant=\"secondary\">Cancel</rr-button>\n</rr-dialog>"
+    },
+    {
+      "title": "Body-only dialog",
+      "html": "<rr-dialog heading=\"Details\">\n  <p>Dialog body content goes here.</p>\n</rr-dialog>"
+    },
+    {
+      "title": "Non-dismissible backdrop",
+      "html": "<rr-dialog heading=\"Processing\" close-on-backdrop=\"false\" open>\n  Please wait while we finish.\n</rr-dialog>"
+    }
   ],
   "accessibility": {
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/",
@@ -68,5 +101,9 @@
       "The close button always carries aria-label=\"Close dialog\""
     ]
   },
-  "figma": { "componentKey": "", "nodeId": "124:31", "codeConnectFile": "dialog.figma.ts" }
+  "figma": {
+    "componentKey": "",
+    "nodeId": "124:31",
+    "codeConnectFile": "dialog.figma.ts"
+  }
 }

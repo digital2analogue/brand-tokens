@@ -5,7 +5,15 @@
   "description": "Schema for *.meta.json files that describe each web component in the design system. Extends the Custom Elements Manifest with usage intent, token references, accessibility contracts, and Figma mappings.",
   "type": "object",
   "required": ["metaVersion", "name", "status", "summary", "package",
-               "props", "slots", "tokensUsed", "examples", "accessibility"],
+               "props", "slots", "examples", "accessibility"],
+  "allOf": [
+    {
+      "$comment": "tokensUsed is DERIVED from anatomy (#188). A component that declares an anatomy must NOT author it — the anatomy tree is the single source, and a hand-written copy is the drift this whole contract exists to end. build:meta injects the derived list into design-system.json, so consumers see no difference. Components without an anatomy still author it, until their promotion batch lands.",
+      "if": { "required": ["anatomy"] },
+      "then": { "not": { "required": ["tokensUsed"] } },
+      "else": { "required": ["tokensUsed"] }
+    }
+  ],
   "properties": {
     "metaVersion": {
       "type": "string",
@@ -38,14 +46,15 @@
           "name": { "type": "string" },
           "type": { "type": "string" },
           "default": {},
-          "description": { "type": "string" }
+          "description": { "type": "string" },
+          "bindings": { "$ref": "#/$defs/bindings" }
         },
         "additionalProperties": false
       }
     },
     "slots": {
       "type": "array",
-      "items": { "$ref": "#/$defs/named" }
+      "items": { "$ref": "#/$defs/slot" }
     },
     "events": {
       "type": "array",
@@ -59,15 +68,34 @@
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^--(color|font|spacing|radius|motion|shadow|icon|component)-",
+        "pattern": "^--(color|font|spacing|radius|motion|shadow|icon|letter-spacing)-",
         "not": { "pattern": "^--primitive-" }
       },
-      "description": "CSS custom properties this component references. Must be semantic or component-level tokens — never primitives."
+      "description": "CSS custom properties this component references. Must be semantic tokens — never primitives (the component tier was removed in #114). The prefix list must cover every semantic scale: `letter-spacing` was missing until #187, so rr-dialog, rr-tag and rr-table-cell could not declare the tracking tokens their styles used."
+    },
+    "anatomy": {
+      "type": "object",
+      "required": ["parts"],
+      "description": "Structured part tree with per-part token bindings (#156 stage 2). Transcribed from the component's actual styles — never inferred. Opt-in per component; metas without it are exempt from the anatomy gate.",
+      "properties": {
+        "description": { "type": "string" },
+        "parts": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/anatomyPart" }
+        }
+      },
+      "additionalProperties": false
     },
     "rules": {
       "type": "array",
+      "items": { "type": "string", "pattern": "^(hard|soft)-[0-9]+$" },
+      "description": "System rules from ai/rules.md that apply to this component, BY ID (#189) — e.g. \"hard-1\". Never the rule's prose: three metas restated \"never use hex\" in three different wordings across 27 files, which is the drift this contract exists to end. validate fails on an id that does not resolve, and build:meta expands each to its full text (plus its verify mode) in design-system.json, so consumers read no differently. Component-specific guidance goes in `guidance`, not here."
+    },
+    "guidance": {
+      "type": "array",
       "items": { "type": "string" },
-      "description": "Usage rules and constraints from ai/rules.md that apply to this component."
+      "description": "Usage guidance specific to THIS component — the ~35 genuinely per-component notes that are not restatements of a system rule (e.g. \"Icon-only buttons must have aria-label\"). Prose by design; it carries judgement a rule id cannot. Split out of `rules` in #189 so that field can be pure references."
     },
     "examples": {
       "type": "array",
@@ -121,6 +149,16 @@
         "codeConnectFile": {
           "type": "string",
           "description": "Path to the .figma.ts Code Connect file, relative to the component directory."
+        },
+        "ignoredOptions": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          },
+          "description": "Figma variant options that are design-reference only and deliberately emit no code (e.g. State: default/hover/active/focus — CSS-only states). Keyed by Figma property name. The parity differ treats these as covered; anything else unbound is drift."
         }
       },
       "additionalProperties": false
@@ -134,6 +172,183 @@
       "properties": {
         "name": { "type": "string" },
         "description": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "bindings": {
+      "type": "object",
+      "required": ["code", "figma"],
+      "description": "Dual code↔design binding for one prop (#152). Machine-checkable source for the Code Connect mapping and the Figma parity differ; validate fails when it disagrees with the component's *.figma.ts.",
+      "properties": {
+        "code": {
+          "type": "object",
+          "required": ["prop"],
+          "properties": {
+            "prop": {
+              "type": "string",
+              "description": "The code-side property name. Must equal the prop this binding is attached to."
+            }
+          },
+          "additionalProperties": false
+        },
+        "figma": {
+          "type": "object",
+          "required": ["kind", "property"],
+          "properties": {
+            "kind": {
+              "enum": ["VARIANT", "BOOLEAN", "TEXT", "INSTANCE_SWAP"],
+              "description": "Figma component-property kind this prop binds to."
+            },
+            "property": {
+              "type": "string",
+              "description": "The Figma property name, e.g. \"Variant\" or \"State\"."
+            },
+            "valueMap": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": {
+                "anyOf": [{ "type": "string" }, { "type": "boolean" }]
+              },
+              "description": "Figma option → code value. A boolean value means the option derives a boolean prop (e.g. State=disabled → disabled: true). Omit for 1:1 TEXT/BOOLEAN bindings."
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "anatomyColor": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^--color-[a-z0-9-]+$",
+          "not": { "pattern": "^--(primitive|component)-" }
+        },
+        {
+          "enum": ["transparent", "currentColor"],
+          "description": "The only permitted non-token values. Per #114 `transparent` is a CSS keyword, not a colour literal — it needs no token. Contrast derivation ignores both."
+        }
+      ]
+    },
+    "anatomyTokens": {
+      "type": "object",
+      "minProperties": 1,
+      "description": "Semantic token bindings for one part. Colour keys admit only --color-* (which structurally excludes primitives and the deleted component tier, #114). v2 adds radius/shadow/motion/focus (#178 items 1-2), which took 29 tokens that were declared in tokensUsed but attached to no part down to zero.",
+      "properties": {
+        "background": { "$ref": "#/$defs/anatomyColor" },
+        "foreground": { "$ref": "#/$defs/anatomyColor" },
+        "border": { "$ref": "#/$defs/anatomyColor" },
+        "spacing": {
+          "anyOf": [
+            { "type": "string", "pattern": "^--spacing-[a-z0-9-]+$" },
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "pattern": "^--spacing-[a-z0-9-]+$" },
+              "description": "The spacing tokens this part binds, in authored order (gap, then padding block/inline). Deduped — a token used twice is listed once."
+            }
+          ]
+        },
+        "font": { "type": "string", "pattern": "^--font-[a-z0-9-]+$" },
+        "radius": { "type": "string", "pattern": "^--radius-[a-z0-9-]+$" },
+        "shadow": {
+          "type": "string",
+          "pattern": "^--shadow-[a-z0-9-]+$",
+          "description": "Genuine elevation. NOT the focus ring — a focus indicator drawn with box-shadow binds `focus`, so that the fact survives the mechanism."
+        },
+        "motion": {
+          "anyOf": [
+            { "type": "string", "pattern": "^--motion-[a-z0-9-]+$" },
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "pattern": "^--motion-[a-z0-9-]+$" },
+              "description": "A transition binds a duration AND an easing, so the array form is the common case — same shape as spacing."
+            }
+          ]
+        },
+        "focus": {
+          "$ref": "#/$defs/anatomyColor",
+          "description": "The part's focus indicator, bound BY ROLE rather than by the CSS that draws it. The library draws focus rings three ways — `outline` (checkbox, dialog, link, radio, tab, toast, toggle), `box-shadow` (button, input, menu-item, select, textarea) and `border-color` (input, select, textarea) — for no design reason. Keying on the mechanism would need three keys and still could not answer 'does this component's focus indicator meet SC 1.4.11 (3:1)', which is the fact the contract exists to state. This is the one deliberate abstraction over the CSS in anatomy; every other key transcribes literally."
+        }
+      },
+      "additionalProperties": false
+    },
+    "anatomyCondition": {
+      "type": "string",
+      "pattern": "^!?(:[a-z-]+|[a-z][a-zA-Z0-9-]*(=[a-zA-Z0-9-]+)?)$",
+      "description": "One condition term: \"variant=success\" (prop=value), \"disabled\" (boolean prop / attribute), \":hover\" (CSS pseudo-class), or any of those negated with a leading \"!\". validate resolves the prop=value and bare-prop forms against props[] — negation does not exempt a term from that check; pseudo-classes are not checked. Negation exists because real selectors guard on absence: checkbox's hover rule is `:host(:not([disabled]):not([checked]):not([indeterminate])) .box-wrap:hover .box`, which without it is inexpressible and leaves --color-border-hover attached to no part."
+    },
+    "anatomyState": {
+      "type": "object",
+      "required": ["when", "tokens"],
+      "description": "A variant/state overlay on a part's resting bindings. Only the keys that actually change are listed.",
+      "properties": {
+        "when": {
+          "anyOf": [
+            { "$ref": "#/$defs/anatomyCondition" },
+            {
+              "type": "array",
+              "minItems": 2,
+              "items": { "$ref": "#/$defs/anatomyCondition" },
+              "description": "Compound condition — every term must hold (AND). Transcribed from a selector that stacks them, e.g. `:host([variant='secondary']) button:hover` → [\"variant=secondary\", \":hover\"]. Each term is validated separately by the same parser, so a typo in any one of them fails the build. A single-term array is pointless — use the string form."
+            }
+          ],
+          "description": "The condition this overlay fires on, transcribed from the selector. One term or several ANDed. See $defs/anatomyCondition for the term grammar."
+        },
+        "description": { "type": "string" },
+        "tokens": { "$ref": "#/$defs/anatomyTokens" }
+      },
+      "additionalProperties": false
+    },
+    "anatomyPart": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Part identifier, unique among its siblings. \"root\" conventionally names the :host."
+        },
+        "description": { "type": "string" },
+        "element": {
+          "type": "string",
+          "description": "The element or selector this part transcribes, e.g. \":host\", \"button\", \".label\"."
+        },
+        "cssPart": {
+          "type": "string",
+          "description": "The exported CSS part name, when this part is addressable via ::part(). Must match a cssParts[] entry."
+        },
+        "tokens": { "$ref": "#/$defs/anatomyTokens" },
+        "states": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/anatomyState" }
+        },
+        "parts": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/anatomyPart" },
+          "description": "Child parts — the tree."
+        }
+      },
+      "additionalProperties": false
+    },
+    "slot": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "accepts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^([a-z][a-z0-9]*(-[a-z0-9]+)*|\\*|#text)$"
+          },
+          "description": "Element tags this slot accepts (e.g. rr-menu-item, svg). Omit when the slot is genuinely unconstrained — only encode constraints the component actually assumes. '*' is an explicit anything; '#text' means plain text content."
+        }
       },
       "additionalProperties": false
     },

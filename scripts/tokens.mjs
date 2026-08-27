@@ -87,7 +87,7 @@ export async function loadTokens() {
   const baseRefs = [];
   await scan("tokens/primitives/**/*.tokens.json", base, baseRefs);
   await scan("tokens/semantic/**/*.tokens.json", base, baseRefs);
-  await scan("tokens/components/**/*.tokens.json", base, baseRefs);
+  // The component tier was removed in #114 — two tiers only: primitives → semantic.
 
   const brands = new Map();
   const brandRefs = new Map();
@@ -118,6 +118,15 @@ export function toCssVar(path) {
     .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
     .replace(/\./g, "-")
     .toLowerCase()}`;
+}
+
+/** The inverse index: CSS custom property name → dotted token path. Built from the
+ *  base layer, which carries every path a brand can override. Shared by every
+ *  caller that starts from a `--token-name` (contrast inputs, anatomy bindings). */
+export function cssVarToPathMap(store) {
+  const m = new Map();
+  for (const path of store.base.keys()) m.set(toCssVar(path), path);
+  return m;
 }
 
 /** Look a token up in the brand layer first, then the base layer. */

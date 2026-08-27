@@ -5,59 +5,239 @@
   "summary": "Form-associated select dropdown with label, helper text, and error state. Options supplied via the options property.",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
-    { "name": "name", "type": "string", "default": "" },
-    { "name": "value", "type": "string", "default": "" },
-    { "name": "label", "type": "string", "default": "" },
-    { "name": "helperText", "type": "string", "default": "" },
-    { "name": "errorText", "type": "string", "default": "" },
-    { "name": "required", "type": "boolean", "default": "false" },
-    { "name": "disabled", "type": "boolean", "default": "false" },
-    { "name": "options", "type": "SelectOption[]", "default": "[]" }
+    {
+      "name": "name",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "helperText",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "errorText",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "default": "false"
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false"
+    },
+    {
+      "name": "options",
+      "type": "SelectOption[]",
+      "default": "[]"
+    }
   ],
   "slots": [],
   "events": [
-    { "name": "change", "detail": "none" }
+    {
+      "name": "change",
+      "detail": "none"
+    }
   ],
   "cssParts": [
-    { "name": "label", "description": "The label element." },
-    { "name": "select", "description": "The inner select element." },
-    { "name": "helper", "description": "The helper text container." },
-    { "name": "error", "description": "The error message container." }
+    {
+      "name": "label",
+      "description": "The label element."
+    },
+    {
+      "name": "select",
+      "description": "The inner select element."
+    },
+    {
+      "name": "helper",
+      "description": "The helper text container."
+    },
+    {
+      "name": "error",
+      "description": "The error message container."
+    }
   ],
-  "tokensUsed": [
-    "--font-label-medium",
-    "--component-input-foreground-label",
-    "--component-input-foreground-label-required",
-    "--font-body-large",
-    "--component-input-foreground-value",
-    "--component-input-background-default",
-    "--component-input-border-default",
-    "--component-input-radius",
-    "--component-input-padding-y",
-    "--component-input-padding-x",
-    "--motion-duration-instant",
-    "--motion-easing-default",
-    "--component-input-border-hover",
-    "--component-input-border-focus",
-    "--component-input-background-disabled",
-    "--component-input-border-disabled",
-    "--component-input-foreground-disabled",
-    "--component-input-border-error",
-    "--font-label-small",
-    "--component-input-foreground-helper",
-    "--component-input-foreground-error"
-  ],
+  "anatomy": {
+    "description": "Same four-sibling shape as rr-input, plus the custom arrow that replaces the native appearance. The arrow's inset and the select's matching right padding are geometry sized to the arrow itself, not spacing-scale values — deliberately not transcribed.",
+    "parts": [
+      {
+        "name": "root",
+        "element": ":host",
+        "description": "Host wrapper. Layout only (display: block) — carries no tokens.",
+        "parts": [
+          {
+            "name": "label",
+            "element": "label",
+            "cssPart": "label",
+            "description": "Field label above the select.",
+            "tokens": {
+              "foreground": "--color-foreground-alt",
+              "font": "--font-label-medium",
+              "spacing": "--spacing-micro"
+            },
+            "states": [
+              {
+                "when": "disabled",
+                "tokens": {
+                  "foreground": "--color-foreground-disabled"
+                }
+              }
+            ],
+            "parts": [
+              {
+                "name": "required-marker",
+                "element": ".required",
+                "description": "The asterisk appended to a required field's label (aria-hidden).",
+                "tokens": {
+                  "foreground": "--color-foreground-danger",
+                  "spacing": "--spacing-align"
+                }
+              }
+            ]
+          },
+          {
+            "name": "select",
+            "element": "select",
+            "cssPart": "select",
+            "description": "The native <select>: field surface, text colour, and outline.",
+            "tokens": {
+              "background": "--color-background-default",
+              "foreground": "--color-foreground-default",
+              "border": "--color-border-default",
+              "spacing": [
+                "--spacing-tight",
+                "--spacing-element"
+              ],
+              "font": "--font-body-large",
+              "radius": "--radius-sm",
+              "motion": [
+                "--motion-duration-instant",
+                "--motion-easing-default"
+              ]
+            },
+            "states": [
+              {
+                "when": ":hover",
+                "tokens": {
+                  "border": "--color-border-hover"
+                }
+              },
+              {
+                "when": ":focus",
+                "tokens": {
+                  "focus": "--color-border-focus"
+                }
+              },
+              {
+                "when": "data-invalid",
+                "description": "Set internally while error-text is non-empty.",
+                "tokens": {
+                  "border": "--color-foreground-danger"
+                }
+              },
+              {
+                "when": "disabled",
+                "tokens": {
+                  "background": "--color-background-alt",
+                  "foreground": "--color-foreground-disabled",
+                  "border": "--color-border-disabled"
+                }
+              },
+              {
+                "when": [
+                  "data-invalid",
+                  ":focus"
+                ],
+                "description": "Focus ring while invalid — the ring turns danger red.",
+                "tokens": {
+                  "focus": "--color-foreground-danger"
+                }
+              }
+            ],
+            "parts": [
+              {
+                "name": "arrow",
+                "element": ".arrow",
+                "description": "The chevron overlaying the select, replacing the native appearance.",
+                "tokens": {
+                  "foreground": "--color-foreground-alt"
+                },
+                "states": [
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "foreground": "--color-foreground-disabled"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "helper",
+            "element": ".helper",
+            "cssPart": "helper",
+            "description": "Helper text below the field. Replaced by the error part while invalid.",
+            "tokens": {
+              "foreground": "--color-foreground-muted",
+              "font": "--font-label-small",
+              "spacing": "--spacing-micro"
+            }
+          },
+          {
+            "name": "error",
+            "element": ".error",
+            "cssPart": "error",
+            "description": "Error message below the field (role=alert).",
+            "tokens": {
+              "foreground": "--color-foreground-danger",
+              "font": "--font-label-small",
+              "spacing": "--spacing-micro"
+            }
+          }
+        ]
+      }
+    ]
+  },
   "rules": [
-    "Never use hex values — always var(--color-*) or var(--component-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
-    "Reuses the shared --component-input-* token set (covers text input, textarea, and select)"
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
+    "Reuses the input’s semantic token recipe (shared across text input, textarea, and select)"
   ],
   "examples": [
-    { "title": "Default", "html": "<rr-select label=\"Pick one\" name=\"choice\"></rr-select>" },
-    { "title": "With helper text", "html": "<rr-select label=\"Pick one\" name=\"choice\" helper-text=\"Choose wisely\"></rr-select>" },
-    { "title": "Required with error", "html": "<rr-select label=\"Pick one\" name=\"choice\" required error-text=\"Please select an option\"></rr-select>" },
-    { "title": "Disabled", "html": "<rr-select label=\"Pick one\" name=\"choice\" disabled></rr-select>" }
+    {
+      "title": "Default",
+      "html": "<rr-select label=\"Pick one\" name=\"choice\"></rr-select>"
+    },
+    {
+      "title": "With helper text",
+      "html": "<rr-select label=\"Pick one\" name=\"choice\" helper-text=\"Choose wisely\"></rr-select>"
+    },
+    {
+      "title": "Required with error",
+      "html": "<rr-select label=\"Pick one\" name=\"choice\" required error-text=\"Please select an option\"></rr-select>"
+    },
+    {
+      "title": "Disabled",
+      "html": "<rr-select label=\"Pick one\" name=\"choice\" disabled></rr-select>"
+    }
   ],
   "accessibility": {
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/listbox/",
@@ -78,5 +258,9 @@
       "Built on a native select element; label, error, and helper are wired via for/aria-describedby/aria-errormessage"
     ]
   },
-  "figma": { "componentKey": "", "nodeId": "117:28", "codeConnectFile": "select.figma.ts" }
+  "figma": {
+    "componentKey": "",
+    "nodeId": "117:28",
+    "codeConnectFile": "select.figma.ts"
+  }
 }

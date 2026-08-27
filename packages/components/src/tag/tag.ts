@@ -11,16 +11,10 @@ export type TagVariant = 'default' | 'subtle';
  * label for skills, categories, and metadata. Content is rendered UPPERCASE with
  * all-caps letter-spacing, so authors pass normal-case text.
  *
- * Uses component-level design tokens for all visual properties. Brand theming
+ * Uses semantic design tokens for all visual properties. Brand theming
  * cascades automatically via CSS custom properties on `:root`.
  *
  * @slot - Tag label text
- * @cssprop --component-tag-{variant}-background
- * @cssprop --component-tag-{variant}-foreground
- * @cssprop --component-tag-{variant}-border
- * @cssprop --component-tag-radius
- * @cssprop --component-tag-padding-x
- * @cssprop --component-tag-padding-y
  */
 @customElement('rr-tag')
 export class RrTag extends LitElement {
@@ -32,17 +26,17 @@ export class RrTag extends LitElement {
       text-transform: uppercase;
       letter-spacing: var(--letter-spacing-all-caps);
       font: var(--font-label-small);
-      border-radius: var(--component-tag-radius);
-      padding: var(--component-tag-padding-y) var(--component-tag-padding-x);
-      border: 1px solid var(--component-tag-default-border);
-      background: var(--component-tag-default-background);
-      color: var(--component-tag-default-foreground);
+      border-radius: var(--radius-sm);
+      padding: var(--spacing-micro) var(--spacing-tight);
+      border: 1px solid var(--color-foreground-muted);
+      background: transparent;
+      color: var(--color-foreground-alt);
     }
 
     :host([variant='subtle']) {
-      background: var(--component-tag-subtle-background);
-      color: var(--component-tag-subtle-foreground);
-      border-color: var(--component-tag-subtle-border);
+      background: transparent;
+      color: var(--color-foreground-muted);
+      border-color: var(--color-border-elevated);
     }
   `;
 

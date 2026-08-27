@@ -31,10 +31,10 @@ export class RrAvatar extends LitElement {
       justify-content: center;
       border-radius: 50%;
       overflow: hidden;
-      background: var(--component-avatar-background-default);
-      color: var(--component-avatar-foreground-default);
-      width: var(--component-avatar-size-md);
-      height: var(--component-avatar-size-md);
+      background: var(--color-background-alt);
+      color: var(--color-foreground-alt);
+      width: var(--spacing-group);
+      height: var(--spacing-group);
       font: var(--font-label-strong-small);
       flex-shrink: 0;
       user-select: none;
@@ -43,42 +43,42 @@ export class RrAvatar extends LitElement {
 
     /* Sizes */
     :host([size='sm']) .avatar {
-      width: var(--component-avatar-size-sm);
-      height: var(--component-avatar-size-sm);
+      width: var(--spacing-component);
+      height: var(--spacing-component);
       font: var(--font-label-strong-xsmall);
     }
 
     :host([size='lg']) .avatar {
-      width: var(--component-avatar-size-lg);
-      height: var(--component-avatar-size-lg);
+      width: 40px;
+      height: 40px;
       font: var(--font-label-strong-medium);
     }
 
     :host([size='xl']) .avatar {
-      width: var(--component-avatar-size-xl);
-      height: var(--component-avatar-size-xl);
+      width: var(--spacing-layout);
+      height: var(--spacing-layout);
       font: var(--font-label-strong-medium);
     }
 
     /* Color variants */
     :host([color='indigo']) .avatar {
-      background: var(--component-avatar-background-indigo);
-      color: var(--component-avatar-foreground-indigo);
+      background: var(--color-background-accent-indigo-bold);
+      color: var(--color-foreground-accent-on-indigo);
     }
 
     :host([color='sky']) .avatar {
-      background: var(--component-avatar-background-sky);
-      color: var(--component-avatar-foreground-sky);
+      background: var(--color-background-accent-sky-bold);
+      color: var(--color-foreground-accent-on-sky);
     }
 
     :host([color='green']) .avatar {
-      background: var(--component-avatar-background-green);
-      color: var(--component-avatar-foreground-green);
+      background: var(--color-background-accent-green-bold);
+      color: var(--color-foreground-accent-on-green-bold);
     }
 
     :host([color='amber']) .avatar {
-      background: var(--component-avatar-background-amber);
-      color: var(--component-avatar-foreground-amber);
+      background: var(--color-background-accent-amber-bold);
+      color: var(--color-foreground-accent-on-amber-bold);
     }
 
     img {

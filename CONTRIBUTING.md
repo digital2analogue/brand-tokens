@@ -43,8 +43,9 @@ scale only. The full set lives in `ai/rules.md`.
 ### Components (`packages/components/`)
 
 Each `rr-*` component ships its `.ts`, tests, stories, `*.meta.json`
-(schema-validated), and a Code Connect `*.figma.ts`. After changing any of
-those:
+(schema-validated), and a Code Connect `*.figma.ts` (authored and validated, but
+not publishable on the current Figma plan — see the 2026-08-10 decision entry).
+After changing any of those:
 
 ```bash
 npm run build:meta        # regenerate CEM + design-system.json

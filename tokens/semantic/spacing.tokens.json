@@ -1,6 +1,11 @@
 {
   "spacing": {
     "$description": "Semantic spacing tokens for the River Romney design system. Maps intent-named roles to primitive space values. Use these in UI code rather than raw primitives — they communicate purpose, not just size. Scale runs from micro-spacing within a component to full-bleed section breaks.",
+    "align": {
+      "$value": "{primitive.space.3xs}",
+      "$type": "dimension",
+      "$description": "Optical alignment. Not a gap between two things \u2014 a correction to where one thing sits against the text beside it: a checkbox nudged to the cap-height of its label, a required asterisk set off from the word it marks, an icon lifted onto the baseline of a line of copy. At 2px it is below the threshold where the eye reads separation, which is the point; if a gap is meant to be seen, use spacing.micro. Resolves to: 2px."
+    },
     "micro": {
       "$value": "{primitive.space.2xs}",
       "$type": "dimension",

@@ -14,7 +14,7 @@ export type SelectOption = {
  * Uses `ElementInternals` for native form participation and `delegatesFocus`
  * so the host forwards focus to the inner `<select>`.
  *
- * Reuses `--component-input-*` tokens — the input token set covers
+ * Reuses the input’s semantic token recipe — it covers
  * text input, textarea, and select (see tokens/components/input.tokens.json).
  *
  * @fires change - When the selected value changes
@@ -40,13 +40,13 @@ export class RrSelect extends LitElement {
     label {
       display: block;
       font: var(--font-label-medium);
-      color: var(--component-input-foreground-label);
-      margin-bottom: 4px;
+      color: var(--color-foreground-alt);
+      margin-bottom: var(--spacing-micro);
     }
 
     .required {
-      color: var(--component-input-foreground-label-required);
-      margin-left: 2px;
+      color: var(--color-foreground-danger);
+      margin-left: var(--spacing-align);
     }
 
     .wrapper {
@@ -58,11 +58,11 @@ export class RrSelect extends LitElement {
       width: 100%;
       box-sizing: border-box;
       font: var(--font-body-large);
-      color: var(--component-input-foreground-value);
-      background: var(--component-input-background-default);
-      border: 1px solid var(--component-input-border-default);
-      border-radius: var(--component-input-radius);
-      padding: var(--component-input-padding-y) var(--component-input-padding-x);
+      color: var(--color-foreground-default);
+      background: var(--color-background-default);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-sm);
+      padding: var(--spacing-tight) var(--spacing-element);
       padding-right: 36px;
       outline: none;
       appearance: none;
@@ -72,12 +72,12 @@ export class RrSelect extends LitElement {
     }
 
     select:hover {
-      border-color: var(--component-input-border-hover);
+      border-color: var(--color-border-hover);
     }
 
     select:focus {
-      border-color: var(--component-input-border-focus);
-      box-shadow: 0 0 0 1px var(--component-input-border-focus);
+      border-color: var(--color-border-focus);
+      box-shadow: 0 0 0 1px var(--color-border-focus);
     }
 
     .arrow {
@@ -86,44 +86,44 @@ export class RrSelect extends LitElement {
       top: 50%;
       transform: translateY(-50%);
       pointer-events: none;
-      color: var(--component-input-foreground-label);
+      color: var(--color-foreground-alt);
       display: flex;
       align-items: center;
     }
 
     :host([disabled]) select {
-      background: var(--component-input-background-disabled);
-      border-color: var(--component-input-border-disabled);
-      color: var(--component-input-foreground-disabled);
+      background: var(--color-background-alt);
+      border-color: var(--color-border-disabled);
+      color: var(--color-foreground-disabled);
       cursor: not-allowed;
     }
 
     :host([disabled]) label {
-      color: var(--component-input-foreground-disabled);
+      color: var(--color-foreground-disabled);
     }
 
     :host([disabled]) .arrow {
-      color: var(--component-input-foreground-disabled);
+      color: var(--color-foreground-disabled);
     }
 
     :host([data-invalid]) select {
-      border-color: var(--component-input-border-error);
+      border-color: var(--color-foreground-danger);
     }
 
     :host([data-invalid]) select:focus {
-      box-shadow: 0 0 0 1px var(--component-input-border-error);
+      box-shadow: 0 0 0 1px var(--color-foreground-danger);
     }
 
     .helper {
       font: var(--font-label-small);
-      color: var(--component-input-foreground-helper);
-      margin-top: 4px;
+      color: var(--color-foreground-muted);
+      margin-top: var(--spacing-micro);
     }
 
     .error {
       font: var(--font-label-small);
-      color: var(--component-input-foreground-error);
-      margin-top: 4px;
+      color: var(--color-foreground-danger);
+      margin-top: var(--spacing-micro);
     }
   `;
 

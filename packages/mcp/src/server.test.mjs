@@ -355,8 +355,8 @@ describe("deprecation guidance", () => {
 });
 
 describe("find_rule / get_rule (via reasoning.mjs)", () => {
-  it("parses the 10 hard + 6 soft rules from ai/rules.md", () => {
-    expect(rules.filter((r) => r.type === "hard")).toHaveLength(10);
+  it("parses the 12 hard + 6 soft rules from ai/rules.md", () => {
+    expect(rules.filter((r) => r.type === "hard")).toHaveLength(12);
     expect(rules.filter((r) => r.type === "soft")).toHaveLength(6);
   });
 
@@ -671,19 +671,138 @@ describe("validate_brand (via contrast.mjs)", () => {
     expect(all.length).toBeGreaterThan(intendedPairings(tokenStore).length);
   });
 
-  it("excludeBrands scopes map pairs per brand (DE never renders the base accent-tint pairs)", async () => {
+  it("excludeBrands scopes map pairs per brand (synthetic map — never pin the live one)", async () => {
     const { allIntendedPairings } =
       await import("../../../scripts/contrast.mjs");
-    const de = allIntendedPairings(tokenStore, "decision-engine");
+    // Synthetic map: one pair scoped out of DE, one unscoped. Injected so the
+    // test can't invert when the live map changes (the 2026-07-28 #176 fix
+    // un-excluded the real accent pairs and flipped the previous version of
+    // this test — live-data corollary, CLAUDE.md workflow rule 3).
+    const synthetic = [
+      {
+        fg: "color.foreground.default",
+        bg: "color.background.default",
+        kind: "text",
+        context: "scoped-out pair",
+        excludeBrands: ["decision-engine"],
+      },
+      {
+        fg: "color.foreground.default",
+        bg: "color.background.alt",
+        kind: "text",
+        context: "unscoped pair",
+      },
+    ];
+    const de = allIntendedPairings(tokenStore, "decision-engine", {
+      pairings: synthetic,
+    });
+    expect(de.some((p) => p.context === "scoped-out pair")).toBe(false);
+    expect(de.some((p) => p.context === "unscoped pair")).toBe(true);
+    // On base, the exclusion doesn't apply — both pairs survive.
+    const base = allIntendedPairings(tokenStore, null, { pairings: synthetic });
+    expect(base.some((p) => p.context === "scoped-out pair")).toBe(true);
+  });
+
+  // ── Brand-aware convention derivation (#216) ─────────────────────────────
+  // The convention lists were base-shaped: BASE_SURFACES was {default, alt} and
+  // the token universe was store.base alone. Any surface or text role that
+  // exists only in a sub-brand was therefore never paired, and DE renders most
+  // of its content on background.elevated. Synthetic brands throughout — a test
+  // pinned to the live DE token set inverts the day someone adds a role.
+
+  it("pairs a surface that exists only in a brand", async () => {
+    const { intendedPairings } = await import("../../../scripts/contrast.mjs");
+    const tok = (value) => ({
+      value,
+      type: "color",
+      description: "synthetic",
+      file: "synthetic",
+    });
+    const store = {
+      base: new Map([
+        ["color.foreground.default", tok("#000000")],
+        ["color.background.default", tok("#ffffff")],
+      ]),
+      brands: new Map([
+        ["synth", new Map([["color.background.elevated", tok("#f0f0f0")]])],
+      ]),
+    };
+    const key = (p) => `${p.fg}|${p.bg}`;
+    const withoutBrand = intendedPairings(store).map(key);
+    const withBrand = intendedPairings(store, "synth").map(key);
+    const target = "color.foreground.default|color.background.elevated";
+    expect(withoutBrand).not.toContain(target);
+    expect(withBrand).toContain(target);
+  });
+
+  it("pairs a text role that exists only in a brand", async () => {
+    const { intendedPairings } = await import("../../../scripts/contrast.mjs");
+    const tok = (value) => ({
+      value,
+      type: "color",
+      description: "synthetic",
+      file: "synthetic",
+    });
+    const store = {
+      base: new Map([["color.background.default", tok("#ffffff")]]),
+      brands: new Map([
+        ["synth", new Map([["color.foreground.secondary", tok("#333333")]])],
+      ]),
+    };
     expect(
-      de.some(
-        (p) =>
-          p.fg === "color.foreground.accent-green" &&
-          p.bg === "color.background.accent-green",
+      intendedPairings(store, "synth").some(
+        (p) => p.fg === "color.foreground.secondary",
       ),
-    ).toBe(false);
-    // ...while non-excluded map pairs still apply to DE.
-    expect(de.some((p) => p.kind === "non-text")).toBe(true);
+    ).toBe(true);
+  });
+
+  it("never emits a pair twice when a brand overrides a base role", async () => {
+    const { intendedPairings } = await import("../../../scripts/contrast.mjs");
+    const tok = (value) => ({
+      value,
+      type: "color",
+      description: "synthetic",
+      file: "synthetic",
+    });
+    // The role exists in BOTH maps — walking the union must dedupe it.
+    const store = {
+      base: new Map([
+        ["color.foreground.default", tok("#000000")],
+        ["color.background.default", tok("#ffffff")],
+      ]),
+      brands: new Map([
+        ["synth", new Map([["color.foreground.default", tok("#111111")]])],
+      ]),
+    };
+    const pairs = intendedPairings(store, "synth");
+    expect(pairs).toHaveLength(1);
+  });
+
+  it("exclusions drop a convention pair for the named brand only", async () => {
+    const { allIntendedPairings } =
+      await import("../../../scripts/contrast.mjs");
+    // excludeBrands cannot express this: a convention-derived pair has no map
+    // entry to hang the flag on, which is why exclusions is a separate list.
+    const exclusions = [
+      {
+        fg: "color.foreground.muted",
+        bg: "color.background.alt",
+        brands: ["decision-engine"],
+        ratio: 1.23,
+        confirmedBy: "synthetic fixture",
+        reason: "synthetic fixture — asserts the filter, not any real pairing",
+      },
+    ];
+    const key = (p) => `${p.fg}|${p.bg}`;
+    const target = "color.foreground.muted|color.background.alt";
+    const de = allIntendedPairings(tokenStore, "decision-engine", {
+      exclusions,
+    }).map(key);
+    const other = allIntendedPairings(tokenStore, "dot-art", {
+      exclusions,
+    }).map(key);
+    expect(de).not.toContain(target);
+    expect(other).toContain(target);
   });
 });
 

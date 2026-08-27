@@ -40,6 +40,45 @@
           }
         }
       }
+    },
+    "exclusions": {
+      "type": "array",
+      "description": "Pairs a brand is scoped out of whatever named them (#216) — the escape hatch for a CONVENTION-derived pair the brand does not render, which excludeBrands cannot reach because there is no map entry to flag. Not a place to park a failing pair: every entry must name who confirmed the pair is unrendered and carry the measured ratio.",
+      "items": {
+        "type": "object",
+        "required": ["fg", "bg", "brands", "ratio", "confirmedBy", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "fg": {
+            "type": "string",
+            "pattern": "^color\\.(foreground|border)\\.[a-z0-9-]+$"
+          },
+          "bg": {
+            "type": "string",
+            "pattern": "^color\\.background\\.[a-z0-9-]+$"
+          },
+          "brands": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" },
+            "description": "Brands this pair is excluded from."
+          },
+          "ratio": {
+            "type": "number",
+            "description": "The measured contrast ratio at the time of exclusion — what a future reader would inherit if they ever did render this pair."
+          },
+          "confirmedBy": {
+            "type": "string",
+            "minLength": 3,
+            "description": "Who confirmed the pair is not rendered, and when. An exclusion is a claim about the product, not about the tokens, so it needs a source."
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 20,
+            "description": "Why this pair is never drawn. Must describe the UI, not the ratio."
+          }
+        }
+      }
     }
   },
   "patternProperties": { "^\\$": {} },

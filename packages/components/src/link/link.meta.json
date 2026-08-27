@@ -5,14 +5,37 @@
   "summary": "Anchor enforcing the design system link style — underlined by default, underline removed on hover.",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
-    { "name": "href", "type": "string", "default": "" },
-    { "name": "target", "type": "'_self' | '_blank' | '_parent' | '_top'", "default": "_self" },
-    { "name": "rel", "type": "string", "default": "" },
-    { "name": "variant", "type": "'default' | 'muted' | 'subtle'", "default": "default" },
-    { "name": "aria-label", "type": "string | null", "default": "null" }
+    {
+      "name": "href",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "target",
+      "type": "'_self' | '_blank' | '_parent' | '_top'",
+      "default": "_self"
+    },
+    {
+      "name": "rel",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "variant",
+      "type": "'default' | 'muted' | 'subtle'",
+      "default": "default"
+    },
+    {
+      "name": "aria-label",
+      "type": "string | null",
+      "default": "null"
+    }
   ],
   "slots": [
-    { "name": "default", "description": "Link label content." }
+    {
+      "name": "default",
+      "description": "Link label content."
+    }
   ],
   "events": [],
   "cssParts": [],
@@ -25,16 +48,30 @@
     "--color-foreground-muted"
   ],
   "rules": [
-    "Never use hex values — always var(--color-*) or var(--component-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
     "Links are underlined by default and lose the underline on hover — do not override this inverted convention"
   ],
   "examples": [
-    { "title": "Default link", "html": "<rr-link href=\"/home\">Home</rr-link>" },
-    { "title": "External link (rel added automatically)", "html": "<rr-link href=\"https://example.com\" target=\"_blank\">Visit site</rr-link>" },
-    { "title": "Muted variant", "html": "<rr-link href=\"/info\" variant=\"muted\">Learn more</rr-link>" },
-    { "title": "Subtle variant", "html": "<rr-link href=\"/legal\" variant=\"subtle\">Terms</rr-link>" }
+    {
+      "title": "Default link",
+      "html": "<rr-link href=\"/home\">Home</rr-link>"
+    },
+    {
+      "title": "External link (rel added automatically)",
+      "html": "<rr-link href=\"https://example.com\" target=\"_blank\">Visit site</rr-link>"
+    },
+    {
+      "title": "Muted variant",
+      "html": "<rr-link href=\"/info\" variant=\"muted\">Learn more</rr-link>"
+    },
+    {
+      "title": "Subtle variant",
+      "html": "<rr-link href=\"/legal\" variant=\"subtle\">Terms</rr-link>"
+    }
   ],
   "accessibility": {
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/link/",
@@ -56,5 +93,9 @@
       "Provide aria-label when the visible link text is not descriptive on its own"
     ]
   },
-  "figma": { "componentKey": "", "nodeId": "115:26", "codeConnectFile": "link.figma.ts" }
+  "figma": {
+    "componentKey": "",
+    "nodeId": "115:26",
+    "codeConnectFile": "link.figma.ts"
+  }
 }

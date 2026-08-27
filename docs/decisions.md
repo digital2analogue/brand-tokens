@@ -11,6 +11,748 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-08-18 — The intended-pairing set was base-shaped; the contrast gate now follows the brand (#216)
+
+**What.** `intendedPairings` takes a `brand` and derives from base ∪ that brand's
+overrides. The two hardcoded lists become `SURFACE_ROLES`
+(`default/alt/elevated/hover`) and `TEXT_ROLES`
+(`default/alt/muted/action/secondary/tertiary`). A new `exclusions` array in
+`tokens/pairings.json` scopes a convention pair out of a brand that never renders
+it, schema-required to carry the measured `ratio`, a `confirmedBy`, and a `reason`.
+
+**Why.** Found by measuring, not by reading. Closing #87's last acceptance box —
+"a consumer generates its pairings from the map" — meant checking what the map
+actually covers. It covered **2** of decisioning-table's 23 token pairs. Digging
+into the other 21: `BASE_SURFACES` was `{default, alt}`, and **decision-engine
+renders most of its content on `background.elevated`** — its consumer's contrast
+script nicknames that token `WHITE`. So `validate_brand('decision-engine')` was
+checking **zero** pairs on the brand's primary surface and reporting green. It was
+telling the truth about what it checked; what it checked was the wrong shape.
+`foreground.secondary`, a DE-only text role, was invisible for the same reason.
+
+**The cost was concrete.** The DE success-green bug (4.38:1, fixed 2026-08-12) was
+caught *because* it happened to land on `background.alt`, which was in the list. The
+identical bug on `background.elevated` would have shipped. Coverage: base and the
+dot-* brands stay at 13 convention pairs; decision-engine goes **13 → 31**,
+including two `on-<role>` fills (`on-action-alt`, `on-inverted`) that were never
+reachable before.
+
+**One pair failed, and it is EXCLUDED rather than fixed — deliberately, and against
+my recommendation.** `foreground.muted` on `background.hover` measures **4.26:1**.
+I argued for darkening the token, on the grounds that "we never render this" is what
+hid the success-green bug. **The owner ruled the other way and gave the reason:
+muted text is never placed on a hover row** — that surface takes `foreground.default`
+(14.07:1) or `foreground.on-inverted`. That is a claim about the product, which the
+owner is positioned to make and a token file is not. So the exclusion carries the
+claim, its source, and the measured ratio, and says what to do if it ever changes.
+
+**Why `exclusions` is a separate list from `excludeBrands`.** `excludeBrands` hangs
+off a map entry. A convention-derived pair has no map entry, so there is nothing to
+hang it on. Both are applied *after* the merge, for the reason already documented on
+`allIntendedPairings`: a skip during construction only works if no other source
+contributes the same pair.
+
+**Verified in both directions.** Removing the exclusion fails `validate` with
+`decision-engine: color.foreground.muted on color.background.hover — 4.26:1`;
+restoring it passes. Four synthetic-fixture tests cover brand-only surfaces,
+brand-only text roles, the override-dedupe path, and per-brand exclusion scoping.
+
+**Still open.** The merged set is computed but not *exported*, so consumers still
+cannot generate the convention half — the original #216 ask. portfolio-vercel's
+base-hierarchy block stays hand-written and carries a comment saying why.
+
+**Status:** shipped. #216 stays open for the export half.
+
+---
+
+## 2026-08-18 — DE's `foreground.secondary` folds into `foreground.alt`, finishing D-09
+
+**What.** `color.foreground.alt` in decision-engine re-points from `gray.700`
+(#4A4A5A) to `gray.navy` (#3A4663). `color.foreground.secondary` stays defined as a
+**same-value alias**, marked deprecated, and is registered in `DEPRECATED_TOKENS`
+pointing at `foreground.alt`.
+
+**Why.** **D-09 (2026-04-26)** renamed `foreground.primary`/`secondary` →
+`default`/`alt` across the system. The base followed. This brand did not — and
+because DE also defines its own `alt`, it ended up carrying **two tokens for one
+role**, both described as "secondary text", with *different values*. That is worse
+than either a stale name or a duplicate value on its own: a consumer picking between
+them was picking a colour, not an alias, with nothing in either description saying so.
+
+**Which value survived, and why that direction.** `gray.navy`. It was chosen
+deliberately for its perceptual darkness (the 2026-04-28 `gray.600` → `gray.navy`
+rename entry explains the inversion that forced a named slot), and it is what **16 of
+the 20** references in decisioning-table were already rendering. Re-pointing `alt` to
+it repaints 4 references instead of 16 and keeps the tint the palette was designed
+around. Contrast improves on every DE surface: white 8.90 → 9.39:1, canvas 8.15 →
+8.82:1, `background.elevated` 7.87 → 8.51:1.
+
+**Alternative considered.** Deleting `foreground.secondary` outright, which is what
+every other entry in `DEPRECATED_TOKENS` did. Rejected **for now**: decisioning-table
+is live, has 16 references, and this session cannot push to it. A deleted custom
+property does not degrade — it resolves to nothing and the text loses its colour. An
+alias plus a lint entry makes the migration visible in that repo's weekly drift report
+without breaking it in the meantime.
+
+**Consequence to watch.** `gray.700` is now referenced by no semantic token. It stays
+in the palette (primitives are a palette, not a usage list) and its description says
+so, but it is a candidate for removal if nothing claims it.
+
+**Status:** shipped. `foreground.secondary` is removable once decisioning-table's 16
+references migrate.
+
+---
+
+## 2026-08-12 — DE success green darkened one step; the exclusion it was hiding behind is gone
+
+**What.** `primitive.color.green.positive` `#15803D` → **`#166534`** (one step down
+the ramp, Tailwind green-700 → green-800). The `excludeBrands: ["decision-engine"]`
+on the `foreground.success` ↔ `background.alt` pairing in `tokens/pairings.json` is
+**removed**, so the contrast gate now checks that pair under DE like every other brand.
+
+**Why.** The fourth- and fifth-pass inspections both flagged DE's success text at
+**4.38:1** on `background.alt` — under the 4.5:1 AA floor. The old value cleared
+white (5.02:1) and the canvas (4.71:1) but not the elevated surface, which is
+exactly where a success message usually lives: a toast, a menu, a card. Passing on
+the page and failing on the toast is the worst version of this bug, because the
+place you check by eye is the place it passes.
+
+**The alternative — and why it lost.** The documented option was to accept the
+exclusion and move on. That is what `excludeBrands` is *for* when a brand genuinely
+never renders a pair, and DE is legitimately excluded from five other pairs on those
+grounds. But DE **does** render success text on elevated surfaces, so the exclusion
+was not scoping an unrendered pair — it was silencing a real failure. Kept as-is,
+`tokens/pairings.json` would have taught the next reader that a hard rule is
+negotiable if you write the exception down. The note in that file now says so
+explicitly.
+
+**Blast radius, measured not assumed.** `green.positive` has three DE referents and
+all three improve: `foreground.success` (4.38 → **6.23:1** on alt, 5.02 → **7.13:1**
+on white), `background.success` (white on fill, 5.02 → **7.13:1**), and
+`foreground.accent-green` (4.76 → **6.77:1** on the green.50 tint). `green.approve`
+(#00875A) is a separate slot and is untouched, so DE's Approve outcome colour does
+not move. Nothing in the base dark theme references this primitive.
+
+**Verified by removing the fix.** Reverting the value to `#15803D` and re-running
+`npm run validate` fails with `decision-engine: color.foreground.success on
+color.background.alt — 4.38:1 (needs 4.5:1, text)`. The gate is now the thing
+holding this, not a note in a work order.
+
+**Status:** shipped. Closes the first of the two carried-over owner decisions.
+
+---
+
+## 2026-08-12 — Code Connect stays unpublished; recorded as a known gap, not a plan
+
+**What.** The 22 authored `*.figma.ts` Code Connect files stay in the repo,
+unpublished. **The Figma plan is not being upgraded right now** — owner decision.
+They remain a parity artifact: `npm run parity` reads node IDs from `meta.json` and
+a Figma MCP dump, and never touches Code Connect.
+
+**Why.** Publishing requires a Dev or Full seat on a Figma Organization or Enterprise
+plan; the account is `pro` tier, so `figma connect publish` 403s. That is a
+procurement cost, not an engineering problem, and nothing today is blocked on it:
+the MCP gives agents strictly more than Code Connect would, `parity` already covers
+design↔code drift, and 74 days passed without the absence costing anything
+measurable.
+
+**What this entry deliberately is not.** It is not a claim that Code Connect is
+worthless, and it supersedes nothing about the 2026-08-10 argument *except* its
+evidence. That entry reasoned "the bottleneck is the library, not the bridge — Figma
+holds 4 of 27 components", and **that premise was false and was retracted** (#208):
+the library holds 26 of 26 real components. The case against upgrading is now
+finely balanced rather than clear-cut, and this is a *deferral on cost*, not a
+finding that the bridge has no value.
+
+**Alternative considered.** Retiring the files outright. Rejected: they cost nothing
+to keep, `validate` §4/§4b already checks them for enum parity and binding
+consistency, and re-authoring 22 files later would be far more expensive than
+leaving them in place.
+
+**Status:** open gap, accepted. Revisit if the plan tier changes or if a real task
+turns out to need the bridge. Every doc that once described Code Connect as live was
+corrected in #207 / portfolio #68.
+
+---
+
+## 2026-08-11 — An adoption scan, and why it prints its evidence (#106)
+
+**What.** `scripts/adoption-scan.mjs` + `npm run adoption -- <dir>`. Reports, per
+consumer: which `rr-*` components appear as markup, which semantic tokens are
+referenced, and declared/installed/source package versions.
+
+**Why.** The fifth-pass inspection scored Station 8 (Feedback & adoption) **5/10**
+— the weakest leg and the only station with no mechanism at all. `drift-lint`
+already answered *"is the consumer breaking the rules"*; nothing answered *"is the
+consumer using the system"*, so coverage and adoption were indistinguishable.
+Station 8's own advice was to start embarrassingly simple, so this reuses
+`drift-scan`'s walker and file filters rather than adding infrastructure — and
+those exclusions are load-bearing: built token CSS contains every token, so
+counting it would report 100% adoption for every consumer forever.
+
+**The first real run changed the design.** The naive version matched a bare name
+and reported portfolio-vercel as using `rr-badge`. It does not — the string sits
+in an image alt-text describing an agent session. Tightening to markup
+(`<rr-badge`) did **not** fix it: the same alt-text contains
+`<rr-badge variant="success">Active</rr-badge>` as an example of what the agent
+emits. **Real markup, not real usage, and no lexical rule separates them.**
+
+**Decision: print the evidence rather than pretend precision.** The CLI names the
+file behind every component it counts. This is a *measurement*, not a gate — it
+never fails a build, so an ambiguous hit costs a glance rather than a red
+pipeline. That is deliberately the opposite call from #174 and #202, where the
+same ambiguity appeared in *gates* and the answer was to go quiet rather than cry
+wolf. The difference is consequence: a noisy gate gets ignored, a noisy report
+gets read.
+
+**What it found.** portfolio-vercel: **57 of 120 semantic tokens (48%)** and
+effectively **zero of 27 components** — a Next.js site that adopts the token layer
+and none of the Lit components. That is a *fit* signal, not a distribution one,
+and it is exactly the coverage-vs-adoption distinction Station 8 asks for and
+nothing could previously express.
+
+**Alternative considered.** Wire it into CI as a weekly Action like `drift-lint`.
+Deferred — a number nobody has looked at yet does not need a schedule. Run it by
+hand until it earns one.
+
+**Status.** Shipped. Station 8 should be re-scored only once this has produced a
+report someone acted on; a mechanism nobody reads is worth the same 5.
+
+---
+
+## 2026-08-10 — The 2px rung gets a semantic name instead of an exemption (#63, #177)
+
+**What.** Added `spacing.align` → `{primitive.space.3xs}` (2px) and converted 18
+literal-px sites across seven components: ten `4px` values that were
+`spacing.micro` written out longhand, and eight `2px` values that are now
+`spacing.align`. No exemption to hard-7 was granted.
+
+**Why.** #63 was framed as "do we allow 1–2px optical nudges to break the
+spacing rule." Auditing the actual values showed the premise was wrong.
+`primitive.space.3xs` is 2px and **was referenced by nothing** — the semantic
+scale started at `micro` (4px), so the system had a 2px rung with no semantic
+name. Since hard-9 forbids reaching a primitive from UI code, every component
+needing 2px had no legal path and wrote a literal. That is not components being
+sloppy; it is the rule and the token set disagreeing, with the components caught
+between them. Naming the rung dissolves the conflict rather than carving an
+exception into the rule.
+
+Corroboration that the role was already understood: the hand-authored row in
+`docs/index.html` had described `space.3xs` as *"Hairline — optical adjustments
+and icon nudges. Not real spacing"* long before this. The token names an intent
+the system already had; it just wasn't reachable.
+
+**Alternative considered.** A blanket "≤3px is exempt from hard-7" rule.
+Rejected as the worst option available: unfalsifiable, it licenses 3px anywhere
+forever, and it would still miss the point — the genuinely arbitrary values in
+the library are `padding-right: 36px` and `right: 10px` in rr-select, which sail
+past a ≤3px threshold while being far less defensible than the 2px it would
+excuse.
+
+**What is deliberately still literal.** Three classes, none of them spacing-scale
+candidates: 1px optical hairlines in rr-alert; the standard `.sr-only`
+visually-hidden recipe in rr-spinner (`width:1px; height:1px; margin:-1px`),
+which is boilerplate accessibility and would be a false positive for any hard-7
+detector; and geometry sized to an adjacent element (rr-select's arrow inset and
+matching right padding, rr-toggle's knob inset). Each component's anatomy
+description now says which of these it carries and why, rather than the contract
+claiming a blanket omission.
+
+**Status.** Shipped. hard-7 stays `manual` — after this pass, what remains is
+genuine judgement, which is what `manual` is supposed to mean. A detector would
+need an allowlist for the sr-only idiom before it could be honest.
+
+**Publishing.** `@digital2analogue2/parsimony` bumped 0.6.1 → 0.7.0 (additive:
+one new semantic token). The publish workflow is on-demand and has not been
+dispatched.
+
+---
+
+## 2026-08-10 — Code Connect was never blocked by a Figma bug; it is a plan entitlement (supersedes D-29, closes OD-5)
+
+**What.** D-29 (2026-05-28) recorded the `figma connect publish` 403 as *"a Figma
+platform issue — their new scoped token UI does not expose the Code Connect Write
+scope"*, status *"Not our problem to fix. File a Figma support ticket."* OD-5 has
+read "Waiting on Figma support" for 74 days. **That diagnosis was wrong.**
+
+**Evidence.** The Figma MCP's `list_file_components_for_code_connect` against the
+library returns, verbatim: *"You need a Dev or Full seat on an Organization or
+Enterprise plan to use Code Connect."* `whoami` reports the account as **`pro`
+tier**. The Write scope was never exposed because the plan does not entitle it —
+a 403 is exactly what that looks like from the CLI. There is no bug, no ticket
+that can resolve, and nothing to monitor.
+
+**Consequence, stated plainly: Code Connect has never worked, once, in the life
+of this system.** Every claim that the components are "wired to Figma via Code
+Connect" describes an intention, not a capability. Those claims are corrected in
+`CLAUDE.md`, `CONTRIBUTING.md`, and the PRD in the same change.
+
+**Decision: do not upgrade the plan yet, and keep the 22 `*.figma.ts` files.**
+
+- The system reached 82/100 across ten inspection stations without it, so its
+  absence has a 74-day track record of costing nothing measurable.
+- The design↔code link that actually works does not use it: `npm run parity`
+  reads node IDs from `meta.json` and diffs a dump exported through the Figma
+  MCP. Code Connect is not in that path.
+- For agents, the MCP already delivers strictly more than Code Connect would —
+  `get_component` returns the full contract (props, anatomy, tokens, rules,
+  a11y), where Code Connect returns a snippet inside Figma's own UI.
+- ~~**The bottleneck is the library, not the bridge.** Figma holds component sets
+  for 4 of 27 components.~~ **RETRACTED 2026-08-11 — this was false.** Enumerating
+  every page shows the Figma library holds **25 of 27** components with real
+  variant matrices (Button 72 variants, Avatar 20, Badge 9); only `rr-radio` and
+  `rr-table-row` are missing. The "build the library first" argument does not
+  exist. **This was the strongest reason not to upgrade, and it is gone** — a
+  near-complete design library with no code bridge is a materially better case
+  for Code Connect than the one this entry originally assessed. The remaining
+  reasons (parity does not use it, the MCP gives agents more, 74 days without it)
+  still stand, but the decision is now finely balanced rather than clear-cut, and
+  should be revisited deliberately rather than left to default.
+- The files cost nothing to keep: they are validated by `validate` §4/§4b and
+  become useful the day the plan changes.
+
+**Revisit when** any of these becomes true: someone other than the maintainer
+builds from the Figma library; Dev Mode becomes a daily working surface; or the
+library grows to cover the component set.
+
+**Alternative considered.** Delete the `*.figma.ts` files as dead weight.
+Rejected — §4/§4b give them present-tense value as a parity target, and
+re-authoring 22 files later costs more than keeping them.
+
+**Status.** Recorded. OD-5 closed as misdiagnosed. D-29 stands as history and is
+superseded by this entry.
+
+---
+
+## 2026-08-10 — hard-10 becomes enforced, in two pieces, and deliberately stays incomplete (#177)
+
+**What.** `rr-input` shipped `transition: border-color 120ms ease` — the only
+finite transition in 27 components that bypassed the motion tokens, so it kept
+animating for users with `prefers-reduced-motion` set. Fixed to
+`var(--motion-duration-instant) var(--motion-easing-default)`. hard-10 moves
+`manual` → `lint`, enforced by two new checks:
+
+- `no-hardcoded-duration` in `scripts/rules.mjs` — a literal time in a
+  transition/animation declaration. Portable; gates `validate`, `drift-lint`
+  and `check_usage`.
+- `missingReduceGuard`, used as a `validate` gate — an infinite animation with
+  no reduce guard in its own source. Not given to `drift-lint` (see below).
+
+**Why now.** #189 shipped three days earlier and made visible that 12 of 18
+rules had nothing checking them. The first `manual` rule examined had already
+produced a live accessibility defect. That is the argument for converting the
+detectable ones, made by the codebase rather than in the abstract.
+
+**Why the rule is deliberately incomplete.** Three things are not flagged:
+`infinite` animations (the token override cannot reach them — a 0s spinner
+stops rather than damps — so hard-10 requires a hand-written guard instead),
+`var(--token, 120ms)` fallbacks (the token is what applies), and **any file that
+contains a reduced-motion guard at all**. That last opt-out is the load-bearing
+one: whether a literal duration is protected depends on a guard that usually
+lives in a separate `@media` block selecting the element from far away — a
+cascade question, not a lexical one.
+
+Measured before shipping rather than assumed: the rule reports the one genuine
+defect across 27 components and **nothing** across portfolio-vercel, where all
+22 candidate hits were either `var()` fallbacks or sat under an explicit guard.
+Without the opt-out it would have filed 19 false positives into the consumer's
+weekly drift issue — a rerun of #174, where a checker that cried wolf for a
+week cost more than the rule it enforced.
+
+**Alternative considered.** Ship the naive detector and accept the noise, on
+the theory that hardcoded durations are technically violations regardless.
+Rejected: a report nobody trusts enforces nothing, and the consumer's
+`.rise` durations are explicitly guarded, so the reports would have been
+wrong on the merits as well as unwelcome.
+
+**Known gap, stated rather than papered over.** A hardcoded duration in a file
+that guards *something else* is not caught. The rule is sound, not complete —
+it never reports a violation that isn't one, and it misses some that are.
+
+**Status.** Shipped. The spacing half of #177 (4px margins in input/select/
+textarea, and the 1–2px optical nudges) is untouched and still blocked on the
+exemption decision in #63.
+
+---
+
+## 2026-08-07 — Rules are referenced by id, and declare how they are verified (#189)
+
+**What:** `ai/rules.md` annotates every rule with a **verification mode** —
+`lint` | `gate` | `schema` | `manual` — parsed into a `verify` field by
+`scripts/reasoning.mjs` and returned by `get_rule` / `find_rule`. A meta's `rules[]` now
+holds **ids** (`hard-1`) rather than prose; `validate` §4e fails on an id that does not
+resolve, and `build:meta` expands each to `{ id, verify, rule }` so consumers read no
+differently. Component-specific prose moved to a new `guidance[]`.
+
+**Why the ids:** three system rules were restated **80 times across 27 metas**, and "never
+use hex" appeared in **three different wordings**. Nothing held any copy to the source.
+That is the same de-normalization the rest of this work has been removing, at component
+scale.
+
+**Why the modes — the more important half.** Before this, every rule looked equally
+enforced to an agent, while `CLAUDE.md` admitted *in prose* that several are statically
+undetectable. Now it is data: **12 of the 18 rules are `manual`**, 5 are `lint`, 1 is a
+`gate`. An agent reading `hard-5` (accent green is never resting text) can see that its own
+judgement is the only thing checking it, rather than assuming a gate has it covered.
+
+**`lint` is a promise, not a label.** `tests/unit/rules-fixtures.spec.mjs` fails in **both
+directions**: a rule claiming `lint` with no detector in `scripts/rules.mjs` behind it, and
+a rule a detector targets that claims to be unenforced. Both arrows were verified by
+deliberately breaking them. This is the repo's "no capability claim without an eval" rule
+turned on the rules themselves.
+
+**Known weakness, recorded rather than hidden:** ids are **positional** — `hard-5` is the
+fifth hard rule. Inserting a rule mid-list would silently repoint every meta that cites a
+later one, and the resolve-check would not catch it because the shifted id still resolves.
+`ai/rules.md` now says append-only in its header. A stronger fix (explicit ids in the file)
+is available if that constraint ever gets violated.
+
+**Alternative considered:** keeping prose in `rules[]` and adding a checker that each
+string matches a rule in `ai/rules.md`. Rejected for the same reason as #188 — it guards a
+redundancy instead of removing it.
+
+**Status:** shipped. Three downstream renderers needed updating for the new shape and all
+three were caught before merge: the component MDX generator (which rendered
+`[object Object]` on first run), the story-ui briefing, and the MCP's expansion path.
+
+---
+
+## 2026-08-07 — tokensUsed is derived from anatomy, not authored beside it (#188)
+
+**What:** `build-design-system-json.mjs` now computes `tokensUsed` from the anatomy tree
+for any component that declares one, and `schemas/meta.schema.json` **forbids** authoring it
+there (conditional `if/then/else`: required when there is no anatomy, prohibited when there
+is). The field is gone from all nine anatomy metas. Consumers see no change — the derived
+list is injected into `design-system.json`.
+
+**Why:** it stated the same decision twice. The anatomy tree and the flat list both named
+the component's tokens, and until #187 the flat list was checked against nothing at all —
+its only reader was the doc generator, so it could name a token the component had stopped
+using indefinitely. Same single-sourcing as prop descriptions, which come from the JSDoc
+rather than the meta.
+
+**Why only now:** this was blocked by #178, not by the promotion batches — a point I had
+wrong when I filed the issue. You cannot derive a list from anatomy while 29 of its entries
+exist *only* in the list. Anatomy v2 took that count to zero, which is what made the
+derivation total rather than partial. Had this shipped earlier it would have needed a
+dual-path fallback for the un-expressible tokens, written specifically to be deleted.
+
+**Evidence it is a pure deletion:** the derived list reproduces **all 27** previously
+hand-authored lists exactly — no additions, no losses. Sorted output, so a reordered
+anatomy tree cannot churn the artifact and break the CI staleness check.
+
+**Alternative considered:** keeping `tokensUsed` authored and adding a gate that the two
+agree. Rejected — that is guarding a redundancy instead of removing it, which is the thing
+this whole line of work exists to stop doing.
+
+**Status:** shipped. Components without an anatomy still author the field; the schema's
+conditional handles both populations, so the promotion batches can convert them one at a
+time with no flag day.
+
+---
+
+## 2026-08-06 — Anatomy v2: the focus indicator is bound by role, not by CSS (#178 items 1–2)
+
+**What:** `anatomy` gained four binding keys (`radius`, `shadow`, `motion`, `focus`) and a
+richer condition grammar — `when` now takes an array of ANDed terms, and terms may be
+negated (`!disabled`). All nine promoted components were backfilled. **29 tokens that were
+declared in `tokensUsed` but attached to no part are now zero.**
+
+**Why now, rather than after the promotion batches:** those 29 orphans decompose exactly
+into the gaps v1 deferred — 11 motion, 5 radius, 4 focus rings, 4 needing compound
+conditions. Promoting the remaining 18 components at v1 depth would have multiplied the
+count and forced revisiting all 27 later. It also corrects a claim made a few days earlier:
+#188 (derive `tokensUsed` from anatomy) is blocked by **this**, not by the batches — you
+cannot derive a list from anatomy while 29 of its entries exist only in the list.
+
+**The `focus` decision.** The library draws focus rings three ways — `outline` (checkbox,
+dialog, link, radio, tab, toast, toggle), `box-shadow` (button, input, menu-item, select,
+textarea), `border-color` (input, select, textarea) — for no design reason anyone recorded.
+#178 anticipated only `shadow`. Binding the *mechanism* would need three keys and still
+leave "does this component's focus indicator meet SC 1.4.11 (3:1)?" unanswerable, which is
+the question #29 exists to audit. So `focus` states the role and the CSS stays an
+implementation detail. **This is the one place anatomy abstracts over the code rather than
+transcribing it**, and it is called out in the schema so the exception stays visible.
+Consequence: where a focus ring is drawn as `border-color` and the token equals the focus
+token (input, select, textarea), the `:focus` state now binds `focus` instead of `border` —
+the same fact, named once.
+
+**A bug the compound conditions surfaced immediately.** State overlays composed against the
+part's *resting* set. That is wrong for a refinement: `variant=secondary + :hover` cascades
+over `variant=secondary`, so composing it on resting paired rr-button's hover background
+with its resting foreground — 1.23:1, a combination that never renders — and failed the
+build on a defect that does not exist. `effectiveTokens()` now models the cascade: apply
+every state whose terms are a subset, in authored order, then the state itself. Confident
+wrong answers are the failure mode anatomy exists to avoid.
+
+**Alternative considered:** mechanism keys (`shadow` + `outline`) for strict transcription.
+Rejected — three focus languages stay three things, and no single query can audit focus
+contrast. The right long-term fix is for the components to converge on one mechanism; the
+contract naming the role makes that divergence visible instead of encoding it.
+
+**Status:** shipped, contrast-neutral by construction. The `focus` key creates **no** new
+pairs — anatomy still derives text pairs only, and the intended-pairing count is unchanged
+(40 with anatomy, 38 without, before and after). Checking a focus ring against what
+surrounds it needs the ambient-surface model, which stays deferred as #178 item 3: it is
+the first piece of anatomy that would describe *context* rather than the component, and a
+wrong default there silently produces confident wrong answers of exactly the kind this
+change had to fix.
+
+---
+
+## 2026-08-04 — A value in a comment is not a violation (#174)
+
+**What:** `lintLines` and `lintSnippet` now strip comment bodies before running the
+rules (blanked in place, so reported line numbers stay true), the hex pattern gained a
+`(?<!\w)` guard, and `drift-scan.mjs` skips `*.test.*` / `*.spec.*` files the way
+`validate.mjs` §2 already skipped them in this repo.
+
+**Why:** the weekly drift report against portfolio-vercel (#174) was **100% false
+positives, and had been for a week**. `parsimony#114` in a comment read as the hex colour
+`#114`; a JSDoc explaining *why* a colour fails contrast ("OTKit's accent-yellow #FDAF08
+is 1.86:1") read as someone hardcoding it; and the consumer's own detector tests were
+reported for containing the deliberately-bad snippets that are the entire point of a
+detector's tests. Every rule here exists to stop a hardcoded value reaching rendered UI,
+and a comment never does. A checker that cries wolf gets ignored, which costs more than
+the rule enforces — the Curtis line about a rotted contract being worse than none,
+applied to a detector.
+
+Three of the four flagged files came clean from the upstream fix alone. The fourth,
+`lib/checkUsageRules.ts`, holds the lint playground's sample-violation snippets as
+template literals — genuinely shipped strings, correctly flagged, and correctly exempted
+by a `.driftignore` entry in the consumer.
+
+**Alternative considered:** `.driftignore` for all four. Rejected — it would have hidden
+a real detector bug behind per-consumer configuration, and every other consumer would hit
+the same false positives and write the same ignores.
+
+**Status:** shipped. Deliberately *not* stripped: string literals — a hex in one may well
+ship, which is exactly the `checkUsageRules.ts` case. `lintSnippet` (the MCP's
+`check_usage`) got the same preprocessing in the same change: two tools disagreeing about
+the same text is worse than either being wrong alone.
+
+---
+
+## 2026-08-03 — The contract is proved against the code, not asserted (#187, #191)
+
+**What:** two new `validate` sections close the gap between what a `*.meta.json` claims
+and what its component actually does. **§4d** (`scripts/component-tokens.mjs`) compares
+every token the styles `var()`-reference against `tokensUsed` ∪ the anatomy tree, both
+directions, and additionally rejects a `var(--x)` that names no token at all. It runs on
+all 27 metas — `tokensUsed` is schema-required, so there is nothing to opt into. **§4c**
+(`findValueMapMismatches` in `scripts/code-connect.mjs`) holds a prop's enum `valueMap` to
+that prop's own literal union in both directions, and requires the meta's declared `type`
+to *be* that union rather than a bare `string`.
+
+**Why:** `tokensUsed` was checked against nothing — its only reader was the doc generator —
+and `anatomy` is transcribed from real styles by hand, so both could rot the moment a
+`static styles` block changed while per-part contrast, `check_contrast` and `validate_brand`
+kept trusting them. On the prop side, an enum's options existed in three places (the source
+union, the meta `type`, the `valueMap`) with only one pair ever compared. Prompted by Nathan
+Curtis, *Component Contracts and Schemas* (2026-07-28), principles 1 and 4.
+
+**What it caught immediately**, none of it hypothetical:
+- `rr-button` — a `stable` component with full bindings — declared `"type": "string"` for
+  both `variant` and `size` while `button.ts` declared four- and three-member unions. Its
+  published contract accepted any string at all.
+- `rr-dialog`, `rr-tag` and `rr-table-cell` used `--letter-spacing-title` /
+  `--letter-spacing-all-caps` in their styles and declared neither.
+- The reason they couldn't: `meta.schema.json`'s `tokensUsed` pattern allowed
+  `color|font|spacing|radius|motion|shadow|icon` and **omitted `letter-spacing`**. The
+  contract had no grammar for a whole semantic scale, so three components were structurally
+  unable to declare tokens they were using. Fixed here.
+
+**Alternative considered:** extracting anatomy from the styles automatically instead of
+checking the hand-transcription. Rejected for now — the transcription carries intent a
+parser can't recover (which part is "root", which overlay is a variant vs a pseudo-class),
+and a checked hand-transcription gets the durability without the guesswork. Also considered
+deferring until after #179–#183; rejected precisely backwards — promoting anatomy across 24
+more components first would multiply an unverified artifact by eight.
+
+**Status:** shipped, all 27 contracts green. Deliberately mechanical: neither gate infers
+what a component *meant*. Primitives are excluded from §4d and left to the no-primitive lint
+rule, since telling an author to add one to `tokensUsed` would contradict the schema. Local
+custom properties (`--rr-table-cell-padding-x`) are collected per *directory*, because
+`rr-table` declares knobs `rr-table-cell` consumes. Boolean derivations
+(`State=disabled → disabled: true`) stay exempt from §4c — they map to booleans, not unions.
+
+---
+
+## 2026-08-03 — ai/DESIGN.md's token tables are generated, not transcribed (#186)
+
+**What:** every token table in `ai/DESIGN.md` is now emitted from `tokens/**/*.tokens.json`
+by `scripts/generate-design-md.mjs` (`npm run docs:design`, folded into `build:all`), fenced
+in `GEN:` marker regions in the same idiom `generate-component-docs.mjs` and
+`generate-docs.mjs` already use. Authored prose — Visual Identity, Responsive Scaling, Hard
+Guardrails, Interaction Patterns, every heading — sits outside the markers and survives
+regeneration. CI runs `--check` and fails on a stale file. The Usage column takes leading
+whole sentences of each `$description` up to a 160-character budget (minimum two, because
+descriptions open with a short role label and put the guidance in the sentence after it);
+the full text stays authoritative via the MCP's `get_token`. The Contrast column is computed
+with the same merged pairing set `validate` §5 uses, reports the **worst** intended pairing,
+and names the background — `foreground.default` is 12.26:1 on the canvas but 9.94:1 on
+`background.alt`, and the lower number is the one that has to hold.
+
+**Why:** the file hand-transcribed every hex, resolved value and contrast ratio that the
+token JSON already carries — a second copy of a decision the tokens already make, which
+`scripts/tokens.mjs` had flagged as a drift risk in a comment since it was written. It had
+drifted: `--shadow-none` was documented as `none` (really `0 0 0 0 rgba(0,0,0,0)`), every
+`--shadow-*` row dropped the spread value, the easing rows omitted the spaces Style
+Dictionary emits, and `primitive.font.weight.medium`'s `$description` claimed it was "not
+currently mapped to any semantic token" while all four `label-strong` tokens referenced it
+(fixed here; the primitive scale tables now derive their "Referenced by" column from the
+reference graph, so that particular prose can't go stale again). This matters more than an
+ordinary doc because `CLAUDE.md` `@`-imports it into every agent session — a wrong value
+propagates into generated code before any other gate sees it. Prompted by Nathan Curtis,
+*Component Contracts and Schemas* (2026-07-28), principle 2, normalized over redundant.
+
+**Alternative considered:** keep hand-syncing (what #30 asked for — 15 tokens, filed
+2026-06-23, still open six weeks later; they were eventually added by hand, which is the
+point). Also considered emitting each `$description` whole: 27KB of prose would more than
+double a file loaded into every session, for text already reachable through `get_token`.
+
+**Status:** shipped. Coverage is enforced, not assumed — `--check` also fails when a
+semantic token exists that no region emits, so a whole new scale can't be silently
+undocumented. Primitives stay deliberately partial (font size, font weight, spacing only);
+UI code may never reference one. Follow-up worth its own issue: many `$description` fields
+embed a hand-typed hex and contrast ratio, so the generated Usage column now restates values
+its own columns compute — the remaining copy of this problem lives in the token source.
+
+---
+
+## 2026-07-28 — DE accent foregrounds fixed brand-side (#176): same names, DE values
+
+**What:** The rr-badge accent-variant WCAG failures under decision-engine (2.94:1 green,
+1.68:1 violet, 1.39:1 amber — found by anatomy, #175) are fixed as **brand value overrides
+on the existing token names**, not a component change: `foreground.accent-green` →
+`green.positive` (#15803D, 4.76:1 on the green.50 tint; also corrects a value/intent drift —
+the old `green.600` is the sage *gray* #8B9683 while the description promised "vivid green"),
+`foreground.accent-violet` → `purple.600` (5.20:1; maps the base violet slot onto DE's
+existing purple family), `foreground.accent-amber` → `amber.700` (6.84:1; same value as DE's
+`foreground.warning`). All three reuse values DE already employs — no new primitives.
+`accent-blue` untouched (5.00:1, already passing). The four `excludeBrands:
+["decision-engine"]` entries on the accent-tint pairs in `tokens/pairings.json` are deleted,
+so `validate` §5 / `validate_brand` now hold these pairs against every brand permanently.
+**Why:** the badge (and any future consumer of these tokens) is fixed in one place, and the
+brand override mechanism is doing exactly what it exists for; the alternatives — pointing the
+badge at `accent-on-*` (changes the base theme's look) or scoping the variants out of DE
+(punts) — each cost more than they fix. **Negative control:** re-breaking amber makes
+`validate` fail naming the exact pair. **Fallout:** the MCP test that pinned the live
+exclusion inverted, per the live-data corollary (CLAUDE.md workflow rule 3); rewritten
+against a synthetic injected pairing map. **Status:** shipped; ships to consumers as 0.6.1.
+
+## 2026-07-28 — Anatomy lands (#156 stage 2): the contract knows which tokens sit together
+
+**What:** `*.meta.json` gains a structured `anatomy` section — a named part tree, each part
+binding semantic tokens for `background`/`foreground`/`border`/`spacing`/`font`, with
+`states` overlays (`variant=success`, `disabled`, `:hover`). Populated for `rr-badge`,
+`rr-button`, `rr-input` by transcription from their `static styles`. `validate` gains §1c
+(a state's `when` must name a declared prop) and §3b (every binding must resolve — the §3
+rule applied to the other place tokens are named by string). Declared pairs become a third
+source of intended fg/bg pairings behind `validate`'s §5 and `validate_brand`, and
+`check_contrast` takes `{component, part, state?}` to resolve a pair from the contract.
+**Why:** a flat `tokensUsed` array knows a component *touches* two tokens but not that they
+are one part's fill and its text — so contrast could only ever be checked against naming
+convention, and stage 3's generators would have no structure to generate from.
+**Scope boundaries, all deliberate:** five binding keys (radius/shadow/motion deferred);
+text pairs only — a part's border is compared against nothing, because a badge's border
+equals its own fill and the ambient surface isn't knowable from the contract; both sides
+must be declared on the *same* part, never inherited from an ancestor; `disabled` states are
+contrast-exempt; compound conditions (`variant=secondary` AND `:hover`) have no grammar, so
+those rules exist in the components but are not transcribed. Each boundary is a case where
+the alternative was to invent a fact the code doesn't state.
+**Fallout fix:** `excludeBrands` in `tokens/pairings.json` was honoured by skipping the
+*add*, which only excludes a pair while no other source names it. Anatomy names exactly the
+four accent-tint pairs decision-engine is excluded from, so it is now applied as a filter
+over the merged set. **Alternative considered:** let those pairs fail the gate and fix the
+rendering in the same PR — rejected as two concerns in one change; the defect is filed
+instead (see below). **Status:** live; 3 of 24 metas carry anatomy, remaining 21 promoted in
+batched follow-ups.
+
+**Found by this stage:** `rr-badge`'s accent variants render **2.94:1 (green), 1.68:1
+(violet), 1.39:1 (amber)** under decision-engine — the component hardcodes
+`--color-foreground-accent-*`, which DE re-tints without re-tinting the pairing. Real and
+previously invisible: the pairing map excluded DE from those pairs, so nothing checked the
+component's own combination. Filed separately; needs an owner call between DE-local accent
+foreground overrides and a component change.
+
+## 2026-07-27 — Component tier deleted (#114): the two-tier model is live
+
+**What:** Executed #114. All 144 component tokens (139 at the original audit plus the
+ghost-button family added 2026-07-15/16) are deleted with `tokens/components/`; the 12
+consuming components now reference the semantic roles their component tokens aliased —
+pure 1:1 substitution, byte-identical resolved values, so visual baselines are unchanged
+by construction. The 7 non-alias values resolved as: `component.avatar.size-lg` (40px) →
+an inline intrinsic dimension in `avatar.ts` (component-intrinsic sizing is not brand
+material; no semantic size token invented for one consumer); the six transparent fills
+(button secondary/ghost, tag default/subtle) → the CSS `transparent` keyword (a keyword,
+not a color literal — no token needed). Regression fence: a new `no-component-token`
+detector in `scripts/rules.mjs` (propagates to validate, `check_usage`, and drift-lint,
+with #151 fixtures) plus `meta.schema.json` no longer admitting `--component-*` in
+`tokensUsed` — the tier cannot silently return. **Why:** the tier's re-pointable hook was
+never exercised — zero brand divergence across all 144 tokens (see #114's audit); it was
+pure carrying cost, and stage-2 anatomy (#156) needs bindings to point at exactly one
+semantic layer. **Alternative considered:** keeping the tier dormant as a future hook —
+rejected; #114 records that reintroduction-for-specific-tokens remains possible without
+carrying 144 unused pass-throughs. **Status:** live in-repo; package 0.6.0 publish +
+consumer bumps follow as #114's stage 3.
+
+## 2026-07-27 — Governance eval run (#153): governed 95% clean vs ungoverned 70% clean
+
+**What:** Ran the #153 governed-vs-ungoverned A/B: the 20-prompt set in
+`evals/governance/prompts.json` × 2 arms × 1 isolated fresh subagent per prompt per arm
+(40 runs total, no agent reused across prompts or arms), exactly per
+`evals/governance/README.md`. Governed arm received, verbatim, `packages/tokens/context/system.md`
+plus the relevant `packages/tokens/context/components/<tag>.md` pack(s) for each prompt,
+then the prompt text — no MCP, no other repo access. Ungoverned arm received only the
+prompt text prefixed "Use the design system." — no repo access at all. Both arms: same
+model (Claude Sonnet 5), same date. Outputs saved verbatim to `evals/governance/out/<arm>/<id>.html`
+(gitignored) and scored mechanically with `npm run eval:governance` (shared `rules.mjs`
+detectors + fabricated-token + fabricated-prop checks — no hand grading).
+**Result:** governed **19/20 clean (95%)**, mean **0.1** violations/run (2 rule
+violations, 0 fabricated tokens, 0 fabricated props). Ungoverned **14/20 clean (70%)**,
+mean **0.55** violations/run (11 rule violations, 0 fabricated tokens, 0 fabricated
+props). Because the governed arm's only input was the compiled context packs (no MCP,
+no other files read), this run also satisfies #155's "governed arm runs off packs
+alone" acceptance box. The one dirty governed run (`toast-success`) tripped two rule
+classes: `no-hex` (agent redeclared the token custom properties locally with literal
+hex values instead of assuming the brand CSS already defines them) and
+`no-hardcoded-font-size` (a scalar `font-size` override duplicated a value already
+carried by a `font` shorthand token) — both are context-delivery gaps in the packs, not
+`rules.mjs` detector bugs; filed as #166 and #167.
+**Alternative considered:** none — first measurement of a previously-asserted-but-unmeasured
+claim, not a design choice.
+**Status:** live; harness is re-runnable (`evals/governance/README.md`) as the MCP/packs
+grow (e.g. after #89 patterns, #152 bindings).
+
+## 2026-07-26 — Contract-authoritative model committed: the contract owns the definition, surfaces are generated from it
+
+**What:** Parsimony adopts the component-contract architecture demonstrated by the
+ds-contracts-poc reference implementation as its end state: a machine-readable contract
+(evolved from `*.meta.json`) becomes the single authoritative definition of each
+component — props with dual code↔Figma bindings, per-part anatomy with token bindings,
+semantics, slot constraints — and both surfaces (Figma library, Lit code) become
+generated renderings of it, mechanically provable against it. Surfaces never sync
+side-to-side; every change promotes through the contract as a reviewable diff. Staged in
+**#156**: (1) prove-parity — #151 eval harness, #152 bindings + code↔Figma differ,
+#154 slot constraints, #153 governance eval, #155 context packs; (2) structured anatomy
+in `meta.schema.json`; (3) generation — Figma library first (the most manual,
+most drift-prone surface), Lit code second. Scope boundary kept from the reference
+model: generation owns API, anatomy, tokens, and semantics — complex behavior (focus
+trapping, typeahead, drag) stays hand-written. Current census: 24 components carry
+`meta.json`; 3 (`rr-badge`, `rr-button`, `rr-input`) are at full contract depth — the
+other 21 get promoted as stages 1–2 roll through them. **Why:** today's `meta.json` is
+descriptive — it documents hand-written components and can silently lie when either
+surface moves (live evidence: `button.figma.ts` maps a Figma `ghost` variant the code
+calls `danger`, #46). A prescriptive contract cannot drift from what it generates, and
+the differ names any residual divergence instead of letting it accumulate.
+**Alternative considered:** stay descriptive and adopt only the parity checks (stages
+1–2 without 3) — most of the drift-elimination value at lower cost. Rejected by
+maintainer call (2026-07-26): contract-authoritative is the better architecture, and
+the migration only gets more expensive as the component count grows. **Status:**
+direction committed, no code yet; work tracked in #156 (+ #151–#155). Sequencing note:
+#114 (two-tier token collapse) lands first so anatomy bindings are semantic-only.
+
 ## 2026-07-16 — Component-token tier frozen: new components ship semantic-only
 
 **What:** The three staple components added 2026-07-15/16 (toast, menu, table) initially
@@ -1369,5 +2111,5 @@ See `ai/DECISION-ENGINE.md` for the full deleted-token registry. Key deletions:
 | OD-2 | When does the DE Figma file (v2) get built? | Deferred — no timeline |
 | OD-3 | Step 7 (format benchmark — JSON vs CSS performance) | Deferred — low priority |
 | OD-4 | Should `rr-*` components be published to npm? | Deferred — no external consumer yet |
-| OD-5 | Code Connect publish 403 — Figma platform bug | Waiting on Figma support |
+| OD-5 | Code Connect publish 403 | **Closed 2026-08-10 — misdiagnosed. Not a bug: the `pro` plan does not entitle Code Connect. See the 2026-08-10 entry.** |
 | OD-6 | DE font-size-2xs debt — hardcoded 10px/9px on `.dt-avatar` | In decisioning-table CSS; needs `var(--primitive-font-size-2xs)` |

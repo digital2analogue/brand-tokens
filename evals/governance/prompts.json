@@ -1,0 +1,25 @@
+{
+  "$comment": "The #153 governance-eval prompt set. 20 realistic UI-generation tasks run identically in both arms (governed = with Parsimony context packs; ungoverned = without). `components` lists the rr-* tags the task implies so the governed arm knows which context packs to load — it is NOT shown to the ungoverned arm. Do not tune prompts toward either arm.",
+  "prompts": [
+    { "id": "settings-card", "title": "Settings card with danger action", "prompt": "Build a settings card for a user profile: a heading, two short descriptive lines, and a destructive 'Delete account' button at the bottom right.", "components": ["rr-card", "rr-button"] },
+    { "id": "form-row-error", "title": "Form row with validation error", "prompt": "Create a form row with a labelled email input in an error state showing the message 'Enter a valid email address'.", "components": ["rr-input"] },
+    { "id": "status-badges", "title": "Status badge row", "prompt": "Render a row of four status badges: Active (success), Pending (warning), Failed (danger), and Info.", "components": ["rr-badge"] },
+    { "id": "primary-cta", "title": "Hero CTA pair", "prompt": "Create a hero call-to-action area with a large primary 'Get started' button and a secondary 'Learn more' button beside it.", "components": ["rr-button"] },
+    { "id": "nav-tabs", "title": "Tabbed navigation", "prompt": "Build a tab bar with three tabs — Overview, Activity, Settings — with Overview selected.", "components": ["rr-tab", "rr-tab-list"] },
+    { "id": "data-table", "title": "Selectable data table", "prompt": "Create a small data table of three users (name, role, status) with a header row, zebra striping, and the second row selected.", "components": ["rr-table", "rr-table-row", "rr-table-cell"] },
+    { "id": "confirm-dialog", "title": "Destructive confirmation dialog", "prompt": "Build a confirmation dialog titled 'Delete project?' with explanatory body text and a footer containing Cancel and a destructive Delete button.", "components": ["rr-dialog", "rr-button"] },
+    { "id": "toast-success", "title": "Success toast with action", "prompt": "Create a success toast that says 'Changes saved' with an Undo action.", "components": ["rr-toast", "rr-button"] },
+    { "id": "menu-actions", "title": "Row actions menu", "prompt": "Build an overflow actions menu (trigger button plus a menu) with items: Rename, Duplicate, and a destructive Delete.", "components": ["rr-menu", "rr-menu-item", "rr-button"] },
+    { "id": "checkbox-group", "title": "Notification preferences", "prompt": "Create a 'Notifications' preference group with three labelled checkboxes: Email (checked), SMS, Push.", "components": ["rr-checkbox"] },
+    { "id": "radio-plan", "title": "Plan picker radios", "prompt": "Build a radio group for choosing a plan — Free, Pro (selected), Enterprise — each with a one-line description under the label.", "components": ["rr-radio-group", "rr-radio"] },
+    { "id": "avatar-stack", "title": "Assignee avatar stack", "prompt": "Render an overlapping stack of three user avatars with initials, followed by a '+4' overflow indicator.", "components": ["rr-avatar"] },
+    { "id": "empty-state", "title": "Empty state panel", "prompt": "Create an empty state for a projects list: a muted illustration placeholder, a title 'No projects yet', supporting text, and a primary 'Create project' button.", "components": ["rr-card", "rr-button"] },
+    { "id": "alert-banner", "title": "Warning alert with icon", "prompt": "Build a dismissible warning alert: 'Your trial ends in 3 days' with a short supporting sentence and an 'Upgrade' action.", "components": ["rr-alert", "rr-button"] },
+    { "id": "loading-list", "title": "Skeleton loading list", "prompt": "Create a loading placeholder for a three-row list using skeleton bars of varying widths plus a circular avatar skeleton per row.", "components": ["rr-skeleton"] },
+    { "id": "progress-upload", "title": "Upload progress", "prompt": "Build an upload status block: filename, a progress bar at 62%, and a percentage label.", "components": ["rr-progress"] },
+    { "id": "tag-filters", "title": "Filter tag row", "prompt": "Render a row of filter tags — Design, Engineering (selected/emphasized), Research — plus a subtle 'Clear all' text link.", "components": ["rr-tag", "rr-link"] },
+    { "id": "toggle-settings", "title": "Feature toggles", "prompt": "Create two labelled setting rows with toggles: 'Dark mode' (on) and 'Compact density' (off), each with helper text under the label.", "components": ["rr-toggle"] },
+    { "id": "code-snippet", "title": "Terminal snippet card", "prompt": "Build a card showing a shell command in monospace with a small 'Copy' button in the corner.", "components": ["rr-card", "rr-button"] },
+    { "id": "pricing-panel", "title": "Pricing panel", "prompt": "Create a pricing panel for the Pro plan: plan name, a large price with '/month', a four-item feature list with subtle separators, and a full-width primary 'Choose Pro' button.", "components": ["rr-card", "rr-button"] }
+  ]
+}

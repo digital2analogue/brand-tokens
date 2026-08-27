@@ -1,11 +1,12 @@
 {
   "name": "@digital2analogue2/parsimony",
-  "version": "0.5.0",
+  "version": "0.7.0",
   "description": "Built CSS custom properties for the River Romney design system \u2014 base dark theme plus the decision-engine, dot-art, and dot-blog brand themes.",
   "license": "UNLICENSED",
   "type": "module",
   "files": [
     "css",
+    "context",
     "tokens.json",
     "rules.json",
     "pairings.json",
@@ -20,7 +21,8 @@
     "./package.json": "./package.json",
     "./tokens.json": "./tokens.json",
     "./rules.json": "./rules.json",
-    "./pairings.json": "./pairings.json"
+    "./pairings.json": "./pairings.json",
+    "./context/*": "./context/*"
   },
   "sideEffects": [
     "*.css"

@@ -9,7 +9,7 @@
  * import these functions directly rather than starting the MCP transport.
  *
  * Two query/lookup pairs, mirroring tokens.mjs (findTokens search + direct lookup):
- *   - rules     ← ai/rules.md       (the 9 hard + 6 soft rules)
+ *   - rules     ← ai/rules.md       (the hard + soft rules)
  *   - decisions ← docs/decisions.md (dated entries + the archived ADR D-NN section)
  *
  * find_* answers a topic query with a ranked array; get_* answers an exact id
@@ -18,24 +18,27 @@
  * find_token vs get_token.
  */
 
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 
-const ROOT = resolve(import.meta.dirname, '..');
+const ROOT = resolve(import.meta.dirname, "..");
 
 // ── Shared text helpers ───────────────────────────────────────────────────────
 
 /** Collapse whitespace and drop a trailing `---` horizontal rule left by the split. */
 function clean(s) {
-  return s.replace(/\s+/g, ' ').replace(/\s*-{3,}\s*$/, '').trim();
+  return s
+    .replace(/\s+/g, " ")
+    .replace(/\s*-{3,}\s*$/, "")
+    .trim();
 }
 
 /** A stable, url-ish slug from a heading title (used to id same-day dated entries). */
 function slugify(title) {
   return title
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
     .slice(0, 60);
 }
 
@@ -49,11 +52,16 @@ function extractFields(block) {
   const markers = [];
   let m;
   while ((m = re.exec(block))) {
-    markers.push({ label: m[1].trim(), contentStart: re.lastIndex, markerStart: m.index });
+    markers.push({
+      label: m[1].trim(),
+      contentStart: re.lastIndex,
+      markerStart: m.index,
+    });
   }
   const fields = {};
   for (let i = 0; i < markers.length; i++) {
-    const end = i + 1 < markers.length ? markers[i + 1].markerStart : block.length;
+    const end =
+      i + 1 < markers.length ? markers[i + 1].markerStart : block.length;
     fields[markers[i].label] = clean(block.slice(markers[i].contentStart, end));
   }
   return fields;
@@ -64,39 +72,65 @@ function extractFields(block) {
 /**
  * Parse the Hard Rules and Soft Rules numbered lists out of ai/rules.md.
  * Pure — takes the markdown text so tests can pass fixtures.
- * Returns Rule[] of { id, type, number, rule, rationale } where:
+ * Returns Rule[] of { id, type, number, verify, rule, rationale } where:
  *   - id        : `${type}-${number}`, e.g. "hard-5"
  *   - type      : "hard" | "soft"
+ *   - verify    : how the rule is actually enforced — "lint" | "gate" | "schema"
+ *                 | "manual" (#189). Parsed from a leading `**[mode]**` marker and
+ *                 stripped from `rule`, so callers get the directive clean.
  *   - rule      : the full rule text
  *   - rationale : the clause after the first " — " separator, or null
+ *
+ * `verify` exists because "this is a rule" and "something checks this rule" are
+ * different claims. Before it, every rule looked equally enforced to an agent,
+ * while CLAUDE.md admitted in prose that several are statically undetectable.
+ * A `manual` rule is an honest gap the reader has to cover themselves; a `lint`
+ * rule is a promise, and tests/unit/rules-fixtures.spec.mjs fails if one is made
+ * without a detector in scripts/rules.mjs behind it.
  * Scope is the hard + soft lists only (Typography Hierarchy / Per-Site Variations
  * are usage prose, served by the token tools, not rule queries).
  */
 export function parseRules(markdown) {
   const rules = [];
   let type = null; // "hard" | "soft" | null (outside the two lists)
-  for (const line of markdown.split('\n')) {
+  for (const line of markdown.split("\n")) {
     const heading = line.match(/^##\s+(.*)$/);
     if (heading) {
       const h = heading[1].toLowerCase();
-      type = h.startsWith('hard rules') ? 'hard' : h.startsWith('soft rules') ? 'soft' : null;
+      type = h.startsWith("hard rules")
+        ? "hard"
+        : h.startsWith("soft rules")
+          ? "soft"
+          : null;
       continue;
     }
     if (!type) continue;
     const item = line.match(/^(\d+)\.\s+(.+?)\s*$/);
     if (!item) continue;
     const number = Number(item[1]);
-    const text = item[2].trim();
+    let text = item[2].trim();
+    // Leading `**[lint]**` marker → the verify mode, removed from the directive.
+    const marked = text.match(/^\*\*\[(lint|gate|schema|manual)\]\*\*\s+(.*)$/);
+    const verify = marked ? marked[1] : null;
+    if (marked) text = marked[2].trim();
     const parts = text.split(/\s*—\s*/); // em-dash separates directive from its inline reason
-    const rationale = parts.length > 1 ? parts.slice(1).join(' — ').trim() : null;
-    rules.push({ id: `${type}-${number}`, type, number, rule: text, rationale });
+    const rationale =
+      parts.length > 1 ? parts.slice(1).join(" — ").trim() : null;
+    rules.push({
+      id: `${type}-${number}`,
+      type,
+      number,
+      verify,
+      rule: text,
+      rationale,
+    });
   }
   return rules;
 }
 
 /** Read + parse ai/rules.md from the repo root. */
 export function loadRules() {
-  return parseRules(readFileSync(resolve(ROOT, 'ai', 'rules.md'), 'utf8'));
+  return parseRules(readFileSync(resolve(ROOT, "ai", "rules.md"), "utf8"));
 }
 
 /**
@@ -129,10 +163,10 @@ const DATE_RE = /^(\d{4}-\d{2}(?:-\d{2})?)\b/; // several entries are YYYY-MM on
 /** Map a raw `**Label:** → content` field bag onto the normalized decision shape. */
 function normalizeFields(f) {
   return {
-    decision: f['Decided'] ?? f['Decision'] ?? null,
-    why: f['Why'] ?? null,
-    rejected: f['Alternative considered'] ?? f['Rejected'] ?? null,
-    status: f['Status'] ?? null,
+    decision: f["Decided"] ?? f["Decision"] ?? null,
+    why: f["Why"] ?? null,
+    rejected: f["Alternative considered"] ?? f["Rejected"] ?? null,
+    status: f["Status"] ?? null,
   };
 }
 
@@ -146,40 +180,43 @@ function normalizeFields(f) {
 export function parseDecisions(markdown) {
   const split = markdown.split(/\n#\s+Archived ADR Log/);
   const datedPart = split[0];
-  const archivedPart = split[1] ?? '';
+  const archivedPart = split[1] ?? "";
   const decisions = [];
 
   // Dated entries: split on `## ` headings, keep those whose title starts with a date.
   for (const chunk of datedPart.split(/(?:^|\n)##\s+/).slice(1)) {
-    const nl = chunk.indexOf('\n');
+    const nl = chunk.indexOf("\n");
     const headingText = (nl === -1 ? chunk : chunk.slice(0, nl)).trim();
     const dateMatch = headingText.match(DATE_RE);
     if (!dateMatch) continue;
     const date = dateMatch[1];
-    const title = headingText.replace(DATE_RE, '').replace(/^\s*—\s*/, '').trim();
-    const body = nl === -1 ? '' : chunk.slice(nl + 1);
+    const title = headingText
+      .replace(DATE_RE, "")
+      .replace(/^\s*—\s*/, "")
+      .trim();
+    const body = nl === -1 ? "" : chunk.slice(nl + 1);
     decisions.push({
       id: `${date}-${slugify(title)}`,
       date,
       title,
-      source: 'dated',
+      source: "dated",
       ...normalizeFields(extractFields(body)),
     });
   }
 
   // Archived ADR entries: split on `### ` headings, keep those titled `D-NN · …`.
   for (const chunk of archivedPart.split(/(?:^|\n)###\s+/).slice(1)) {
-    const nl = chunk.indexOf('\n');
+    const nl = chunk.indexOf("\n");
     const headingText = (nl === -1 ? chunk : chunk.slice(0, nl)).trim();
     const adr = headingText.match(/^(D-\d+)\s*·\s*(.+)$/);
     if (!adr) continue;
-    const body = nl === -1 ? '' : chunk.slice(nl + 1);
+    const body = nl === -1 ? "" : chunk.slice(nl + 1);
     const fields = extractFields(body);
     decisions.push({
       id: adr[1],
-      date: fields['Date'] ?? null,
+      date: fields["Date"] ?? null,
       title: adr[2].trim(),
-      source: 'archived-adr',
+      source: "archived-adr",
       ...normalizeFields(fields),
     });
   }
@@ -189,7 +226,9 @@ export function parseDecisions(markdown) {
 
 /** Read + parse docs/decisions.md from the repo root. */
 export function loadDecisions() {
-  return parseDecisions(readFileSync(resolve(ROOT, 'docs', 'decisions.md'), 'utf8'));
+  return parseDecisions(
+    readFileSync(resolve(ROOT, "docs", "decisions.md"), "utf8"),
+  );
 }
 
 /**
@@ -204,12 +243,18 @@ export function findDecisions(decisions, topic, { limit = 10 } = {}) {
   const hits = [];
   for (const d of decisions) {
     const titleHay = `${d.id} ${d.title}`.toLowerCase();
-    const fullHay = `${titleHay} ${d.decision ?? ''} ${d.why ?? ''} ${d.rejected ?? ''} ${d.status ?? ''}`.toLowerCase();
+    const fullHay =
+      `${titleHay} ${d.decision ?? ""} ${d.why ?? ""} ${d.rejected ?? ""} ${d.status ?? ""}`.toLowerCase();
     if (!terms.every((t) => fullHay.includes(t))) continue;
-    hits.push({ ...d, match: terms.every((t) => titleHay.includes(t)) ? 'title' : 'body' });
+    hits.push({
+      ...d,
+      match: terms.every((t) => titleHay.includes(t)) ? "title" : "body",
+    });
   }
-  hits.sort((a, b) => (a.match === b.match ? 0 : a.match === 'title' ? -1 : 1));
-  return hits.slice(0, limit).map((d, i) => ({ ...d, rank: i + 1, matchedOn: terms }));
+  hits.sort((a, b) => (a.match === b.match ? 0 : a.match === "title" ? -1 : 1));
+  return hits
+    .slice(0, limit)
+    .map((d, i) => ({ ...d, rank: i + 1, matchedOn: terms }));
 }
 
 /** Exact-id lookup, e.g. getDecision(decisions, "D-06"). Case-insensitive. Null if absent. */

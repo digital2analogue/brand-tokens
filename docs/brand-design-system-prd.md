@@ -36,7 +36,7 @@ As the number of sites grows and AI-assisted development becomes the primary wor
 - ~~**Component library**~~ → **Delivered (v2).** 18 framework-agnostic Lit web
   components (`rr-*`), wired to Figma via Code Connect; three carry a full
   machine-readable contract.
-- **Figma integration**: Partially delivered — Code Connect maps every component.
+- **Figma integration**: Partially delivered — Code Connect files exist for every component but **cannot be published on the current Figma plan** (Org/Enterprise required; 2026-08-10 entry). The working design↔code link is the `npm run parity` differ, which covers 3 of 27 components.
   Full Tokens Studio variable sync is still a follow-on project.
 - ~~**Custom MCP server**~~ → **Delivered (v2).** An MCP server
   (`list_components`, `get_component`, `check_usage`) is the headline interface.

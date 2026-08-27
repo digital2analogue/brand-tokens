@@ -2,13 +2,33 @@
   "metaVersion": "1.0.0",
   "status": "stable",
   "name": "rr-badge",
-  "summary": "Status badge and accent chip. 9 variants map to component tokens; brand theming cascades via CSS custom properties.",
+  "summary": "Status badge and accent chip. 9 variants styled by semantic tokens; brand theming cascades via CSS custom properties.",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
     {
       "name": "variant",
       "type": "'default' | 'success' | 'warning' | 'danger' | 'info' | 'accent-green' | 'accent-blue' | 'accent-violet' | 'accent-amber'",
-      "default": "default"
+      "default": "default",
+      "bindings": {
+        "code": {
+          "prop": "variant"
+        },
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Variant",
+          "valueMap": {
+            "default": "default",
+            "success": "success",
+            "warning": "warning",
+            "danger": "danger",
+            "info": "info",
+            "accent-green": "accent-green",
+            "accent-blue": "accent-blue",
+            "accent-violet": "accent-violet",
+            "accent-amber": "accent-amber"
+          }
+        }
+      }
     }
   ],
   "slots": [
@@ -19,45 +39,101 @@
   ],
   "events": [],
   "cssParts": [],
-  "tokensUsed": [
-    "--component-badge-default-background",
-    "--component-badge-default-foreground",
-    "--component-badge-default-border",
-    "--component-badge-success-background",
-    "--component-badge-success-foreground",
-    "--component-badge-success-border",
-    "--component-badge-warning-background",
-    "--component-badge-warning-foreground",
-    "--component-badge-warning-border",
-    "--component-badge-danger-background",
-    "--component-badge-danger-foreground",
-    "--component-badge-danger-border",
-    "--component-badge-info-background",
-    "--component-badge-info-foreground",
-    "--component-badge-info-border",
-    "--component-badge-accent-green-background",
-    "--component-badge-accent-green-foreground",
-    "--component-badge-accent-green-border",
-    "--component-badge-accent-blue-background",
-    "--component-badge-accent-blue-foreground",
-    "--component-badge-accent-blue-border",
-    "--component-badge-accent-violet-background",
-    "--component-badge-accent-violet-foreground",
-    "--component-badge-accent-violet-border",
-    "--component-badge-accent-amber-background",
-    "--component-badge-accent-amber-foreground",
-    "--component-badge-accent-amber-border",
-    "--component-badge-radius",
-    "--component-badge-padding-x",
-    "--component-badge-padding-y",
-    "--font-label-small"
-  ],
+  "anatomy": {
+    "description": "A single part. Every variant restyles the same host — badge's whole palette lives in its state overlays.",
+    "parts": [
+      {
+        "name": "root",
+        "element": ":host",
+        "description": "The badge itself: pill-shaped inline-flex container holding the label slot.",
+        "tokens": {
+          "background": "--color-background-alt",
+          "foreground": "--color-foreground-alt",
+          "border": "--color-border-alt",
+          "spacing": [
+            "--spacing-micro",
+            "--spacing-inline"
+          ],
+          "font": "--font-label-small",
+          "radius": "--radius-full"
+        },
+        "states": [
+          {
+            "when": "variant=success",
+            "tokens": {
+              "background": "--color-background-success-alt",
+              "foreground": "--color-foreground-success",
+              "border": "--color-background-success-alt"
+            }
+          },
+          {
+            "when": "variant=warning",
+            "tokens": {
+              "background": "--color-background-warning-alt",
+              "foreground": "--color-foreground-warning",
+              "border": "--color-background-warning-alt"
+            }
+          },
+          {
+            "when": "variant=danger",
+            "tokens": {
+              "background": "--color-background-danger-alt",
+              "foreground": "--color-foreground-danger",
+              "border": "--color-background-danger-alt"
+            }
+          },
+          {
+            "when": "variant=info",
+            "tokens": {
+              "background": "--color-background-info-alt",
+              "foreground": "--color-foreground-info",
+              "border": "--color-background-info-alt"
+            }
+          },
+          {
+            "when": "variant=accent-green",
+            "tokens": {
+              "background": "--color-background-accent-green",
+              "foreground": "--color-foreground-accent-green",
+              "border": "--color-background-accent-green"
+            }
+          },
+          {
+            "when": "variant=accent-blue",
+            "tokens": {
+              "background": "--color-background-accent-blue",
+              "foreground": "--color-foreground-accent-blue",
+              "border": "--color-background-accent-blue"
+            }
+          },
+          {
+            "when": "variant=accent-violet",
+            "tokens": {
+              "background": "--color-background-accent-violet",
+              "foreground": "--color-foreground-accent-violet",
+              "border": "--color-background-accent-violet"
+            }
+          },
+          {
+            "when": "variant=accent-amber",
+            "tokens": {
+              "background": "--color-background-accent-amber",
+              "foreground": "--color-foreground-accent-amber",
+              "border": "--color-background-accent-amber"
+            }
+          }
+        ]
+      }
+    ]
+  },
   "rules": [
-    "Never use hex values. Always use var(--color-*) or var(--component-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
-    "Variants use a subtle style: a tinted background with accent-colored text, not a solid fill. component-badge-{variant}-foreground is the accent color itself (e.g. foreground-success), not foreground-on-{variant}.",
-    "To make a variant solid instead (bright fill + dark text), repoint its component tokens to background-{variant} and foreground-on-{variant}; consumer code does not change."
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
+    "Variants use a subtle style: a tinted background with accent-colored text, not a solid fill. The variant foreground is the accent color itself (e.g. foreground-accent-green), not foreground-on-{variant}.",
+    "To make a variant solid instead (bright fill + dark text), point the variant's styles in badge.ts at background-{variant} and foreground-on-{variant}."
   ],
   "examples": [
     {

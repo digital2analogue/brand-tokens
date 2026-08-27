@@ -5,53 +5,189 @@
   "summary": "Form-associated checkbox with checked, indeterminate, and disabled states. Backed by ElementInternals.",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
-    { "name": "checked", "type": "boolean", "default": "false" },
-    { "name": "indeterminate", "type": "boolean", "default": "false" },
-    { "name": "disabled", "type": "boolean", "default": "false" },
-    { "name": "value", "type": "string", "default": "on" },
-    { "name": "name", "type": "string", "default": "" },
-    { "name": "label", "type": "string", "default": "" }
+    {
+      "name": "checked",
+      "type": "boolean",
+      "default": "false"
+    },
+    {
+      "name": "indeterminate",
+      "type": "boolean",
+      "default": "false"
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false"
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": "on"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": ""
+    }
   ],
   "slots": [
-    { "name": "default", "description": "Label text (alternative to the label property)." }
+    {
+      "name": "default",
+      "description": "Label text (alternative to the label property)."
+    }
   ],
   "events": [
-    { "name": "change", "detail": "Fired when the checked state changes." }
+    {
+      "name": "change",
+      "detail": "Fired when the checked state changes."
+    }
   ],
   "cssParts": [
-    { "name": "box", "description": "The visual checkbox square." },
-    { "name": "label", "description": "The label text element." }
+    {
+      "name": "box",
+      "description": "The visual checkbox square."
+    },
+    {
+      "name": "label",
+      "description": "The label text element."
+    }
   ],
-  "tokensUsed": [
-    "--spacing-tight",
-    "--component-checkbox-border-default",
-    "--component-checkbox-radius",
-    "--component-checkbox-background-unchecked",
-    "--motion-duration-instant",
-    "--motion-easing-default",
-    "--component-checkbox-border-hover",
-    "--component-checkbox-background-checked",
-    "--component-checkbox-border-checked",
-    "--component-checkbox-background-disabled",
-    "--component-checkbox-border-disabled",
-    "--component-checkbox-border-focus",
-    "--component-checkbox-foreground-checkmark",
-    "--font-label-medium",
-    "--component-checkbox-foreground-label",
-    "--component-checkbox-foreground-disabled"
-  ],
+  "anatomy": {
+    "description": "A visual box beside a label, with the real <input> transparently overlaying the box for hit-testing. The box's own 16px dimensions are geometry, not spacing, and are deliberately not transcribed; its cap-height offset is spacing.align and the focus ring is a focus binding, both since #203 and #178 respectively.",
+    "parts": [
+      {
+        "name": "root",
+        "element": ":host",
+        "description": "Inline-flex row holding the box and its label.",
+        "tokens": {
+          "spacing": "--spacing-tight"
+        },
+        "parts": [
+          {
+            "name": "box",
+            "element": ".box",
+            "cssPart": "box",
+            "description": "The visual checkbox square. The native input sits transparently on top of it. The cap-height offset is carried by its positioning wrapper, not the box itself.",
+            "tokens": {
+              "background": "--color-background-default",
+              "border": "--color-border-default",
+              "radius": "--radius-sm",
+              "motion": [
+                "--motion-duration-instant",
+                "--motion-easing-default"
+              ],
+              "spacing": "--spacing-align"
+            },
+            "states": [
+              {
+                "when": "checked",
+                "tokens": {
+                  "background": "--color-background-action",
+                  "border": "--color-background-action"
+                }
+              },
+              {
+                "when": "indeterminate",
+                "tokens": {
+                  "background": "--color-background-action",
+                  "border": "--color-background-action"
+                }
+              },
+              {
+                "when": "disabled",
+                "tokens": {
+                  "background": "--color-background-disabled",
+                  "border": "--color-border-disabled"
+                }
+              },
+              {
+                "when": [
+                  "!disabled",
+                  "!checked",
+                  "!indeterminate",
+                  ":hover"
+                ],
+                "description": "Hover only while resting — a checked or disabled box does not react.",
+                "tokens": {
+                  "border": "--color-border-hover"
+                }
+              },
+              {
+                "when": ":focus-visible",
+                "description": "Keyboard focus ring on the box, driven by the hidden input's focus state.",
+                "tokens": {
+                  "focus": "--color-border-focus"
+                }
+              }
+            ],
+            "parts": [
+              {
+                "name": "indicator",
+                "element": ".check, .dash",
+                "description": "The tick and the indeterminate dash. Only one renders at a time.",
+                "tokens": {
+                  "foreground": "--color-foreground-on-action"
+                }
+              }
+            ]
+          },
+          {
+            "name": "label",
+            "element": "label",
+            "cssPart": "label",
+            "description": "The text label beside the box.",
+            "tokens": {
+              "foreground": "--color-foreground-alt",
+              "font": "--font-label-medium"
+            },
+            "states": [
+              {
+                "when": "disabled",
+                "tokens": {
+                  "foreground": "--color-foreground-disabled"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "rules": [
-    "Never use hex values — always var(--color-*) or var(--component-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
     "Always provide a label (via the label prop or slotted content) so the control is named"
   ],
   "examples": [
-    { "title": "Unchecked", "html": "<rr-checkbox name=\"notify\" label=\"Send me notifications\"></rr-checkbox>" },
-    { "title": "Checked", "html": "<rr-checkbox name=\"agree\" label=\"I agree to the terms\" checked></rr-checkbox>" },
-    { "title": "Indeterminate", "html": "<rr-checkbox label=\"Select all\" indeterminate></rr-checkbox>" },
-    { "title": "Disabled", "html": "<rr-checkbox label=\"Unavailable option\" disabled></rr-checkbox>" },
-    { "title": "Slotted label", "html": "<rr-checkbox name=\"subscribe\">Subscribe</rr-checkbox>" }
+    {
+      "title": "Unchecked",
+      "html": "<rr-checkbox name=\"notify\" label=\"Send me notifications\"></rr-checkbox>"
+    },
+    {
+      "title": "Checked",
+      "html": "<rr-checkbox name=\"agree\" label=\"I agree to the terms\" checked></rr-checkbox>"
+    },
+    {
+      "title": "Indeterminate",
+      "html": "<rr-checkbox label=\"Select all\" indeterminate></rr-checkbox>"
+    },
+    {
+      "title": "Disabled",
+      "html": "<rr-checkbox label=\"Unavailable option\" disabled></rr-checkbox>"
+    },
+    {
+      "title": "Slotted label",
+      "html": "<rr-checkbox name=\"subscribe\">Subscribe</rr-checkbox>"
+    }
   ],
   "accessibility": {
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/",
@@ -72,5 +208,9 @@
       "aria-checked is set to \"mixed\" while indeterminate, otherwise \"true\"/\"false\""
     ]
   },
-  "figma": { "componentKey": "", "nodeId": "117:43", "codeConnectFile": "checkbox.figma.ts" }
+  "figma": {
+    "componentKey": "",
+    "nodeId": "117:43",
+    "codeConnectFile": "checkbox.figma.ts"
+  }
 }

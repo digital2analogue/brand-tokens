@@ -31,7 +31,7 @@
         },
         "medium": {
           "$value": 500,
-          "$description": "Medium weight. Not currently mapped to any semantic token. Reserved for future component-level emphasis tokens (e.g., active nav label, form field label)."
+          "$description": "Medium weight. The emphasis step for UI text — referenced by every font.label-strong.* token (active nav, button text, selected tabs, active badges) and by font.mono-label-strong-small."
         },
         "semibold": {
           "$value": 600,

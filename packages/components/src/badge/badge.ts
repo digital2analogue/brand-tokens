@@ -15,16 +15,10 @@ export type BadgeVariant =
 /**
  * A status badge / chip component.
  *
- * Uses component-level design tokens for all visual properties.
+ * Uses semantic design tokens for all visual properties.
  * Brand theming cascades automatically via CSS custom properties on `:root`.
  *
  * @slot - Badge label text
- * @cssprop --component-badge-{variant}-background
- * @cssprop --component-badge-{variant}-foreground
- * @cssprop --component-badge-{variant}-border
- * @cssprop --component-badge-radius
- * @cssprop --component-badge-padding-x
- * @cssprop --component-badge-padding-y
  */
 @customElement('rr-badge')
 export class RrBadge extends LitElement {
@@ -33,60 +27,60 @@ export class RrBadge extends LitElement {
       display: inline-flex;
       align-items: center;
       white-space: nowrap;
-      border-radius: var(--component-badge-radius);
-      padding: var(--component-badge-padding-y) var(--component-badge-padding-x);
+      border-radius: var(--radius-full);
+      padding: var(--spacing-micro) var(--spacing-inline);
       font: var(--font-label-small);
-      border: 1px solid var(--component-badge-default-border);
-      background: var(--component-badge-default-background);
-      color: var(--component-badge-default-foreground);
+      border: 1px solid var(--color-border-alt);
+      background: var(--color-background-alt);
+      color: var(--color-foreground-alt);
     }
 
     :host([variant='success']) {
-      background: var(--component-badge-success-background);
-      color: var(--component-badge-success-foreground);
-      border-color: var(--component-badge-success-border);
+      background: var(--color-background-success-alt);
+      color: var(--color-foreground-success);
+      border-color: var(--color-background-success-alt);
     }
 
     :host([variant='warning']) {
-      background: var(--component-badge-warning-background);
-      color: var(--component-badge-warning-foreground);
-      border-color: var(--component-badge-warning-border);
+      background: var(--color-background-warning-alt);
+      color: var(--color-foreground-warning);
+      border-color: var(--color-background-warning-alt);
     }
 
     :host([variant='danger']) {
-      background: var(--component-badge-danger-background);
-      color: var(--component-badge-danger-foreground);
-      border-color: var(--component-badge-danger-border);
+      background: var(--color-background-danger-alt);
+      color: var(--color-foreground-danger);
+      border-color: var(--color-background-danger-alt);
     }
 
     :host([variant='info']) {
-      background: var(--component-badge-info-background);
-      color: var(--component-badge-info-foreground);
-      border-color: var(--component-badge-info-border);
+      background: var(--color-background-info-alt);
+      color: var(--color-foreground-info);
+      border-color: var(--color-background-info-alt);
     }
 
     :host([variant='accent-green']) {
-      background: var(--component-badge-accent-green-background);
-      color: var(--component-badge-accent-green-foreground);
-      border-color: var(--component-badge-accent-green-border);
+      background: var(--color-background-accent-green);
+      color: var(--color-foreground-accent-green);
+      border-color: var(--color-background-accent-green);
     }
 
     :host([variant='accent-blue']) {
-      background: var(--component-badge-accent-blue-background);
-      color: var(--component-badge-accent-blue-foreground);
-      border-color: var(--component-badge-accent-blue-border);
+      background: var(--color-background-accent-blue);
+      color: var(--color-foreground-accent-blue);
+      border-color: var(--color-background-accent-blue);
     }
 
     :host([variant='accent-violet']) {
-      background: var(--component-badge-accent-violet-background);
-      color: var(--component-badge-accent-violet-foreground);
-      border-color: var(--component-badge-accent-violet-border);
+      background: var(--color-background-accent-violet);
+      color: var(--color-foreground-accent-violet);
+      border-color: var(--color-background-accent-violet);
     }
 
     :host([variant='accent-amber']) {
-      background: var(--component-badge-accent-amber-background);
-      color: var(--component-badge-accent-amber-foreground);
-      border-color: var(--component-badge-accent-amber-border);
+      background: var(--color-background-accent-amber);
+      color: var(--color-foreground-accent-amber);
+      border-color: var(--color-background-accent-amber);
     }
   `;
 

@@ -5,15 +5,33 @@
   "summary": "A single tab button used inside rr-tab-list; its selection state is managed by the parent.",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
-    { "name": "value", "type": "string", "default": "" },
-    { "name": "selected", "type": "boolean", "default": false },
-    { "name": "disabled", "type": "boolean", "default": false }
+    {
+      "name": "value",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "selected",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": false
+    }
   ],
   "slots": [
-    { "name": "default", "description": "Tab label text (and optional icon)." }
+    {
+      "name": "default",
+      "description": "Tab label text (and optional icon)."
+    }
   ],
   "events": [
-    { "name": "rr-tab-select", "detail": "Bubbles (composed) to rr-tab-list when the tab is clicked; detail.value is this tab's value. Not fired when disabled or already selected." }
+    {
+      "name": "rr-tab-select",
+      "detail": "Bubbles (composed) to rr-tab-list when the tab is clicked; detail.value is this tab's value. Not fired when disabled or already selected."
+    }
   ],
   "cssParts": [],
   "tokensUsed": [
@@ -32,14 +50,22 @@
     "--color-foreground-disabled"
   ],
   "rules": [
-    "Never use hex values — always var(--color-*) or var(--component-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
     "Do not set selected directly — control the active tab via rr-tab-list[value]."
   ],
   "examples": [
-    { "title": "Tab", "html": "<rr-tab value=\"overview\">Overview</rr-tab>" },
-    { "title": "Disabled tab", "html": "<rr-tab value=\"settings\" disabled>Settings</rr-tab>" }
+    {
+      "title": "Tab",
+      "html": "<rr-tab value=\"overview\">Overview</rr-tab>"
+    },
+    {
+      "title": "Disabled tab",
+      "html": "<rr-tab value=\"settings\" disabled>Settings</rr-tab>"
+    }
   ],
   "accessibility": {
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
@@ -59,5 +85,9 @@
       "Host uses delegatesFocus so focus forwards to the inner button."
     ]
   },
-  "figma": { "componentKey": "", "nodeId": "125:7", "codeConnectFile": "tabs.figma.ts" }
+  "figma": {
+    "componentKey": "",
+    "nodeId": "125:7",
+    "codeConnectFile": "tabs.figma.ts"
+  }
 }

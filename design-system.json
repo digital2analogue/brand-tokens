@@ -62,32 +62,43 @@
         }
       ],
       "tokensUsed": [
-        "--spacing-tight",
-        "--component-alert-padding-y",
-        "--component-alert-padding-x",
-        "--component-alert-radius",
-        "--component-alert-success-border",
-        "--component-alert-success-background",
-        "--component-alert-success-foreground",
-        "--component-alert-warning-border",
-        "--component-alert-warning-background",
-        "--component-alert-warning-foreground",
-        "--component-alert-danger-border",
-        "--component-alert-danger-background",
-        "--component-alert-danger-foreground",
-        "--component-alert-info-border",
-        "--component-alert-info-background",
-        "--component-alert-info-foreground",
-        "--font-label-strong-medium",
+        "--color-background-danger-alt",
+        "--color-background-info-alt",
+        "--color-background-success-alt",
+        "--color-background-warning-alt",
+        "--color-foreground-danger",
+        "--color-foreground-info",
+        "--color-foreground-success",
+        "--color-foreground-warning",
         "--font-body-medium",
-        "--radius-sm",
+        "--font-label-strong-medium",
         "--motion-duration-instant",
-        "--motion-easing-default"
+        "--motion-easing-default",
+        "--radius-default",
+        "--radius-sm",
+        "--spacing-align",
+        "--spacing-element",
+        "--spacing-inline",
+        "--spacing-tight"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Use alert for form-level or system feedback; for field-level validation use rr-input error-text instead"
       ],
       "examples": [
@@ -189,28 +200,41 @@
         }
       ],
       "tokensUsed": [
-        "--component-avatar-background-default",
-        "--component-avatar-foreground-default",
-        "--component-avatar-size-md",
+        "--color-background-alt",
+        "--color-foreground-alt",
+        "--spacing-group",
         "--font-label-strong-small",
-        "--component-avatar-size-sm",
+        "--spacing-component",
         "--font-label-strong-xsmall",
-        "--component-avatar-size-lg",
         "--font-label-strong-medium",
-        "--component-avatar-size-xl",
-        "--component-avatar-background-indigo",
-        "--component-avatar-foreground-indigo",
-        "--component-avatar-background-sky",
-        "--component-avatar-foreground-sky",
-        "--component-avatar-background-green",
-        "--component-avatar-foreground-green",
-        "--component-avatar-background-amber",
-        "--component-avatar-foreground-amber"
+        "--spacing-layout",
+        "--color-background-accent-indigo-bold",
+        "--color-foreground-accent-on-indigo",
+        "--color-background-accent-sky-bold",
+        "--color-foreground-accent-on-sky",
+        "--color-background-accent-green-bold",
+        "--color-foreground-accent-on-green-bold",
+        "--color-background-accent-amber-bold",
+        "--color-foreground-accent-on-amber-bold"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Always provide name (or alt when using src) so the avatar has an accessible label"
       ],
       "examples": [
@@ -252,13 +276,33 @@
       "metaVersion": "1.0.0",
       "status": "stable",
       "name": "rr-badge",
-      "summary": "Status badge and accent chip. 9 variants map to component tokens; brand theming cascades via CSS custom properties.",
+      "summary": "Status badge and accent chip. 9 variants styled by semantic tokens; brand theming cascades via CSS custom properties.",
       "package": "@digital2analogue2/parsimony-components",
       "props": [
         {
           "name": "variant",
           "type": "'default' | 'success' | 'warning' | 'danger' | 'info' | 'accent-green' | 'accent-blue' | 'accent-violet' | 'accent-amber'",
           "default": "default",
+          "bindings": {
+            "code": {
+              "prop": "variant"
+            },
+            "figma": {
+              "kind": "VARIANT",
+              "property": "Variant",
+              "valueMap": {
+                "default": "default",
+                "success": "success",
+                "warning": "warning",
+                "danger": "danger",
+                "info": "info",
+                "accent-green": "accent-green",
+                "accent-blue": "accent-blue",
+                "accent-violet": "accent-violet",
+                "accent-amber": "accent-amber"
+              }
+            }
+          },
           "description": "Visual variant. Status variants (success, warning, danger, info) convey\nsemantic meaning. Accent variants are decorative emphasis tags."
         }
       ],
@@ -270,45 +314,113 @@
       ],
       "events": [],
       "cssParts": [],
-      "tokensUsed": [
-        "--component-badge-default-background",
-        "--component-badge-default-foreground",
-        "--component-badge-default-border",
-        "--component-badge-success-background",
-        "--component-badge-success-foreground",
-        "--component-badge-success-border",
-        "--component-badge-warning-background",
-        "--component-badge-warning-foreground",
-        "--component-badge-warning-border",
-        "--component-badge-danger-background",
-        "--component-badge-danger-foreground",
-        "--component-badge-danger-border",
-        "--component-badge-info-background",
-        "--component-badge-info-foreground",
-        "--component-badge-info-border",
-        "--component-badge-accent-green-background",
-        "--component-badge-accent-green-foreground",
-        "--component-badge-accent-green-border",
-        "--component-badge-accent-blue-background",
-        "--component-badge-accent-blue-foreground",
-        "--component-badge-accent-blue-border",
-        "--component-badge-accent-violet-background",
-        "--component-badge-accent-violet-foreground",
-        "--component-badge-accent-violet-border",
-        "--component-badge-accent-amber-background",
-        "--component-badge-accent-amber-foreground",
-        "--component-badge-accent-amber-border",
-        "--component-badge-radius",
-        "--component-badge-padding-x",
-        "--component-badge-padding-y",
-        "--font-label-small"
-      ],
+      "anatomy": {
+        "description": "A single part. Every variant restyles the same host — badge's whole palette lives in its state overlays.",
+        "parts": [
+          {
+            "name": "root",
+            "element": ":host",
+            "description": "The badge itself: pill-shaped inline-flex container holding the label slot.",
+            "tokens": {
+              "background": "--color-background-alt",
+              "foreground": "--color-foreground-alt",
+              "border": "--color-border-alt",
+              "spacing": [
+                "--spacing-micro",
+                "--spacing-inline"
+              ],
+              "font": "--font-label-small",
+              "radius": "--radius-full"
+            },
+            "states": [
+              {
+                "when": "variant=success",
+                "tokens": {
+                  "background": "--color-background-success-alt",
+                  "foreground": "--color-foreground-success",
+                  "border": "--color-background-success-alt"
+                }
+              },
+              {
+                "when": "variant=warning",
+                "tokens": {
+                  "background": "--color-background-warning-alt",
+                  "foreground": "--color-foreground-warning",
+                  "border": "--color-background-warning-alt"
+                }
+              },
+              {
+                "when": "variant=danger",
+                "tokens": {
+                  "background": "--color-background-danger-alt",
+                  "foreground": "--color-foreground-danger",
+                  "border": "--color-background-danger-alt"
+                }
+              },
+              {
+                "when": "variant=info",
+                "tokens": {
+                  "background": "--color-background-info-alt",
+                  "foreground": "--color-foreground-info",
+                  "border": "--color-background-info-alt"
+                }
+              },
+              {
+                "when": "variant=accent-green",
+                "tokens": {
+                  "background": "--color-background-accent-green",
+                  "foreground": "--color-foreground-accent-green",
+                  "border": "--color-background-accent-green"
+                }
+              },
+              {
+                "when": "variant=accent-blue",
+                "tokens": {
+                  "background": "--color-background-accent-blue",
+                  "foreground": "--color-foreground-accent-blue",
+                  "border": "--color-background-accent-blue"
+                }
+              },
+              {
+                "when": "variant=accent-violet",
+                "tokens": {
+                  "background": "--color-background-accent-violet",
+                  "foreground": "--color-foreground-accent-violet",
+                  "border": "--color-background-accent-violet"
+                }
+              },
+              {
+                "when": "variant=accent-amber",
+                "tokens": {
+                  "background": "--color-background-accent-amber",
+                  "foreground": "--color-foreground-accent-amber",
+                  "border": "--color-background-accent-amber"
+                }
+              }
+            ]
+          }
+        ]
+      },
       "rules": [
-        "Never use hex values. Always use var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
-        "Variants use a subtle style: a tinted background with accent-colored text, not a solid fill. component-badge-{variant}-foreground is the accent color itself (e.g. foreground-success), not foreground-on-{variant}.",
-        "To make a variant solid instead (bright fill + dark text), repoint its component tokens to background-{variant} and foreground-on-{variant}; consumer code does not change."
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
+        "Variants use a subtle style: a tinted background with accent-colored text, not a solid fill. The variant foreground is the accent color itself (e.g. foreground-accent-green), not foreground-on-{variant}.",
+        "To make a variant solid instead (bright fill + dark text), point the variant's styles in badge.ts at background-{variant} and foreground-on-{variant}."
       ],
       "examples": [
         {
@@ -358,7 +470,32 @@
         "componentKey": "",
         "nodeId": "96:21",
         "codeConnectFile": "badge.figma.ts"
-      }
+      },
+      "tokensUsed": [
+        "--color-background-accent-amber",
+        "--color-background-accent-blue",
+        "--color-background-accent-green",
+        "--color-background-accent-violet",
+        "--color-background-alt",
+        "--color-background-danger-alt",
+        "--color-background-info-alt",
+        "--color-background-success-alt",
+        "--color-background-warning-alt",
+        "--color-border-alt",
+        "--color-foreground-accent-amber",
+        "--color-foreground-accent-blue",
+        "--color-foreground-accent-green",
+        "--color-foreground-accent-violet",
+        "--color-foreground-alt",
+        "--color-foreground-danger",
+        "--color-foreground-info",
+        "--color-foreground-success",
+        "--color-foreground-warning",
+        "--font-label-small",
+        "--radius-full",
+        "--spacing-inline",
+        "--spacing-micro"
+      ]
     },
     {
       "metaVersion": "1.0.0",
@@ -369,26 +506,79 @@
       "props": [
         {
           "name": "variant",
-          "type": "string",
+          "type": "'primary' | 'secondary' | 'danger' | 'ghost'",
           "default": "primary",
+          "bindings": {
+            "code": {
+              "prop": "variant"
+            },
+            "figma": {
+              "kind": "VARIANT",
+              "property": "Variant",
+              "valueMap": {
+                "primary": "primary",
+                "secondary": "secondary",
+                "ghost": "ghost",
+                "danger": "danger"
+              }
+            }
+          },
           "description": "Visual variant: primary (filled CTA), secondary (outlined), danger (destructive), ghost (text-only, quiet)."
         },
         {
           "name": "size",
-          "type": "string",
+          "type": "'sm' | 'md' | 'lg'",
           "default": "md",
+          "bindings": {
+            "code": {
+              "prop": "size"
+            },
+            "figma": {
+              "kind": "VARIANT",
+              "property": "Size",
+              "valueMap": {
+                "sm": "sm",
+                "md": "md",
+                "lg": "lg"
+              }
+            }
+          },
           "description": "Size: sm, md, lg. Controls padding and font size."
         },
         {
           "name": "disabled",
           "type": "boolean",
           "default": false,
+          "bindings": {
+            "code": {
+              "prop": "disabled"
+            },
+            "figma": {
+              "kind": "VARIANT",
+              "property": "State",
+              "valueMap": {
+                "disabled": true
+              }
+            }
+          },
           "description": "Disables the button. Prevents click and removes from tab order."
         },
         {
           "name": "loading",
           "type": "boolean",
           "default": false,
+          "bindings": {
+            "code": {
+              "prop": "loading"
+            },
+            "figma": {
+              "kind": "VARIANT",
+              "property": "State",
+              "valueMap": {
+                "loading": true
+              }
+            }
+          },
           "description": "Shows a spinner and sets aria-busy. Click suppressed while loading."
         },
         {
@@ -430,48 +620,179 @@
           "description": "The inner <button> element."
         }
       ],
-      "tokensUsed": [
-        "--component-button-primary-background-default",
-        "--component-button-primary-background-hover",
-        "--component-button-primary-background-active",
-        "--component-button-primary-foreground-default",
-        "--component-button-primary-border-default",
-        "--component-button-primary-border-hover",
-        "--component-button-primary-border-active",
-        "--component-button-secondary-background-default",
-        "--component-button-secondary-background-hover",
-        "--component-button-secondary-foreground-default",
-        "--component-button-secondary-border-default",
-        "--component-button-secondary-border-hover",
-        "--component-button-ghost-background-default",
-        "--component-button-ghost-background-hover",
-        "--component-button-ghost-foreground-default",
-        "--component-button-ghost-border-default",
-        "--component-button-ghost-border-hover",
-        "--component-button-danger-background-default",
-        "--component-button-danger-background-hover",
-        "--component-button-danger-foreground-default",
-        "--component-button-danger-border-default",
-        "--component-button-danger-border-hover",
-        "--color-background-disabled",
-        "--color-foreground-disabled",
-        "--color-border-disabled",
-        "--color-border-focus",
-        "--font-label-strong-small",
-        "--font-label-strong-medium",
-        "--font-label-strong-large",
-        "--spacing-micro",
-        "--spacing-tight",
-        "--spacing-inline",
-        "--spacing-element",
-        "--radius-default",
-        "--motion-duration-instant",
-        "--motion-easing-default"
-      ],
+      "anatomy": {
+        "description": "The host is a bare wrapper; every token lives on the inner <button> (the exported part) and its two children. The per-variant hover rules are compound states (variant=secondary AND :hover), transcribed as such since anatomy v2 (#178).",
+        "parts": [
+          {
+            "name": "root",
+            "element": ":host",
+            "description": "Host wrapper. Layout only (display: inline-block) — carries no tokens.",
+            "parts": [
+              {
+                "name": "button",
+                "element": "button",
+                "cssPart": "button",
+                "description": "The native <button>: fill, label colour, outline, padding, and the label font.",
+                "tokens": {
+                  "background": "--color-background-action",
+                  "foreground": "--color-foreground-on-action",
+                  "border": "--color-background-action",
+                  "spacing": [
+                    "--spacing-tight",
+                    "--spacing-element"
+                  ],
+                  "font": "--font-label-strong-medium",
+                  "radius": "--radius-default",
+                  "motion": [
+                    "--motion-duration-instant",
+                    "--motion-easing-default"
+                  ]
+                },
+                "states": [
+                  {
+                    "when": ":hover",
+                    "tokens": {
+                      "background": "--color-background-action-hover",
+                      "border": "--color-background-action-hover"
+                    }
+                  },
+                  {
+                    "when": ":active",
+                    "tokens": {
+                      "background": "--color-background-action-active",
+                      "border": "--color-background-action-active"
+                    }
+                  },
+                  {
+                    "when": "size=sm",
+                    "tokens": {
+                      "spacing": [
+                        "--spacing-micro",
+                        "--spacing-tight"
+                      ],
+                      "font": "--font-label-strong-small"
+                    }
+                  },
+                  {
+                    "when": "size=lg",
+                    "tokens": {
+                      "spacing": [
+                        "--spacing-inline",
+                        "--spacing-element"
+                      ],
+                      "font": "--font-label-strong-large"
+                    }
+                  },
+                  {
+                    "when": "variant=secondary",
+                    "description": "Outlined: no fill, action-coloured label and edge.",
+                    "tokens": {
+                      "background": "transparent",
+                      "foreground": "--color-foreground-action",
+                      "border": "--color-border-action"
+                    }
+                  },
+                  {
+                    "when": "variant=danger",
+                    "tokens": {
+                      "background": "--color-background-default",
+                      "foreground": "--color-foreground-danger",
+                      "border": "--color-foreground-danger"
+                    }
+                  },
+                  {
+                    "when": "variant=ghost",
+                    "description": "Text-only: no fill, no edge.",
+                    "tokens": {
+                      "background": "transparent",
+                      "foreground": "--color-foreground-action",
+                      "border": "transparent"
+                    }
+                  },
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "background": "--color-background-disabled",
+                      "foreground": "--color-foreground-disabled",
+                      "border": "--color-border-disabled"
+                    }
+                  },
+                  {
+                    "when": ":focus-visible",
+                    "description": "Keyboard focus ring, drawn as a 2px box-shadow.",
+                    "tokens": {
+                      "focus": "--color-border-focus"
+                    }
+                  },
+                  {
+                    "when": [
+                      "variant=secondary",
+                      ":hover"
+                    ],
+                    "tokens": {
+                      "background": "--color-background-alt"
+                    }
+                  },
+                  {
+                    "when": [
+                      "variant=ghost",
+                      ":hover"
+                    ],
+                    "tokens": {
+                      "background": "--color-background-alt"
+                    }
+                  },
+                  {
+                    "when": [
+                      "variant=danger",
+                      ":hover"
+                    ],
+                    "tokens": {
+                      "background": "--color-background-danger-alt"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "label",
+                    "element": ".label",
+                    "description": "Inline-flex row holding the prefix, default, and suffix slots.",
+                    "tokens": {
+                      "spacing": "--spacing-tight"
+                    }
+                  },
+                  {
+                    "name": "spinner",
+                    "element": ".spinner",
+                    "description": "Loading ring, drawn from the button's own text colour so it tracks every variant.",
+                    "tokens": {
+                      "border": "currentColor"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
       "rules": [
-        "Never use hex values. Always use var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Primary button: one per page maximum",
         "Icon-only buttons must have aria-label"
       ],
@@ -534,8 +855,42 @@
       "figma": {
         "componentKey": "",
         "nodeId": "98:56",
-        "codeConnectFile": "button.figma.ts"
-      }
+        "codeConnectFile": "button.figma.ts",
+        "ignoredOptions": {
+          "State": [
+            "default",
+            "hover",
+            "active",
+            "focus"
+          ]
+        }
+      },
+      "tokensUsed": [
+        "--color-background-action",
+        "--color-background-action-active",
+        "--color-background-action-hover",
+        "--color-background-alt",
+        "--color-background-danger-alt",
+        "--color-background-default",
+        "--color-background-disabled",
+        "--color-border-action",
+        "--color-border-disabled",
+        "--color-border-focus",
+        "--color-foreground-action",
+        "--color-foreground-danger",
+        "--color-foreground-disabled",
+        "--color-foreground-on-action",
+        "--font-label-strong-large",
+        "--font-label-strong-medium",
+        "--font-label-strong-small",
+        "--motion-duration-instant",
+        "--motion-easing-default",
+        "--radius-default",
+        "--spacing-element",
+        "--spacing-inline",
+        "--spacing-micro",
+        "--spacing-tight"
+      ]
     },
     {
       "metaVersion": "1.0.0",
@@ -580,9 +935,23 @@
         "--font-label-small"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Use background.alt for surface separation rather than a shadow token"
       ],
       "examples": [
@@ -683,28 +1052,125 @@
           "description": "The label text element."
         }
       ],
-      "tokensUsed": [
-        "--spacing-tight",
-        "--component-checkbox-border-default",
-        "--component-checkbox-radius",
-        "--component-checkbox-background-unchecked",
-        "--motion-duration-instant",
-        "--motion-easing-default",
-        "--component-checkbox-border-hover",
-        "--component-checkbox-background-checked",
-        "--component-checkbox-border-checked",
-        "--component-checkbox-background-disabled",
-        "--component-checkbox-border-disabled",
-        "--component-checkbox-border-focus",
-        "--component-checkbox-foreground-checkmark",
-        "--font-label-medium",
-        "--component-checkbox-foreground-label",
-        "--component-checkbox-foreground-disabled"
-      ],
+      "anatomy": {
+        "description": "A visual box beside a label, with the real <input> transparently overlaying the box for hit-testing. The box's own 16px dimensions are geometry, not spacing, and are deliberately not transcribed; its cap-height offset is spacing.align and the focus ring is a focus binding, both since #203 and #178 respectively.",
+        "parts": [
+          {
+            "name": "root",
+            "element": ":host",
+            "description": "Inline-flex row holding the box and its label.",
+            "tokens": {
+              "spacing": "--spacing-tight"
+            },
+            "parts": [
+              {
+                "name": "box",
+                "element": ".box",
+                "cssPart": "box",
+                "description": "The visual checkbox square. The native input sits transparently on top of it. The cap-height offset is carried by its positioning wrapper, not the box itself.",
+                "tokens": {
+                  "background": "--color-background-default",
+                  "border": "--color-border-default",
+                  "radius": "--radius-sm",
+                  "motion": [
+                    "--motion-duration-instant",
+                    "--motion-easing-default"
+                  ],
+                  "spacing": "--spacing-align"
+                },
+                "states": [
+                  {
+                    "when": "checked",
+                    "tokens": {
+                      "background": "--color-background-action",
+                      "border": "--color-background-action"
+                    }
+                  },
+                  {
+                    "when": "indeterminate",
+                    "tokens": {
+                      "background": "--color-background-action",
+                      "border": "--color-background-action"
+                    }
+                  },
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "background": "--color-background-disabled",
+                      "border": "--color-border-disabled"
+                    }
+                  },
+                  {
+                    "when": [
+                      "!disabled",
+                      "!checked",
+                      "!indeterminate",
+                      ":hover"
+                    ],
+                    "description": "Hover only while resting — a checked or disabled box does not react.",
+                    "tokens": {
+                      "border": "--color-border-hover"
+                    }
+                  },
+                  {
+                    "when": ":focus-visible",
+                    "description": "Keyboard focus ring on the box, driven by the hidden input's focus state.",
+                    "tokens": {
+                      "focus": "--color-border-focus"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "indicator",
+                    "element": ".check, .dash",
+                    "description": "The tick and the indeterminate dash. Only one renders at a time.",
+                    "tokens": {
+                      "foreground": "--color-foreground-on-action"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "label",
+                "element": "label",
+                "cssPart": "label",
+                "description": "The text label beside the box.",
+                "tokens": {
+                  "foreground": "--color-foreground-alt",
+                  "font": "--font-label-medium"
+                },
+                "states": [
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "foreground": "--color-foreground-disabled"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Always provide a label (via the label prop or slotted content) so the control is named"
       ],
       "examples": [
@@ -752,7 +1218,25 @@
         "componentKey": "",
         "nodeId": "117:43",
         "codeConnectFile": "checkbox.figma.ts"
-      }
+      },
+      "tokensUsed": [
+        "--color-background-action",
+        "--color-background-default",
+        "--color-background-disabled",
+        "--color-border-default",
+        "--color-border-disabled",
+        "--color-border-focus",
+        "--color-border-hover",
+        "--color-foreground-alt",
+        "--color-foreground-disabled",
+        "--color-foreground-on-action",
+        "--font-label-medium",
+        "--motion-duration-instant",
+        "--motion-easing-default",
+        "--radius-sm",
+        "--spacing-align",
+        "--spacing-tight"
+      ]
     },
     {
       "metaVersion": "1.0.0",
@@ -814,12 +1298,27 @@
         "--color-border-focus",
         "--font-body-large",
         "--color-foreground-alt",
-        "--spacing-inline"
+        "--spacing-inline",
+        "--letter-spacing-title"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Open and close the dialog via the open property or the show()/close() methods — both keep state and the rr-dialog-close event in sync"
       ],
       "examples": [
@@ -886,7 +1385,10 @@
       "slots": [
         {
           "name": "default",
-          "description": "The SVG icon element to render."
+          "description": "The SVG icon element to render.",
+          "accepts": [
+            "svg"
+          ]
         }
       ],
       "events": [],
@@ -898,9 +1400,23 @@
         "--icon-size-xl"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Icon color is inherited from the parent — set color on the surrounding element, not the icon"
       ],
       "examples": [
@@ -996,6 +1512,18 @@
           "name": "disabled",
           "type": "boolean",
           "default": false,
+          "bindings": {
+            "code": {
+              "prop": "disabled"
+            },
+            "figma": {
+              "kind": "VARIANT",
+              "property": "State",
+              "valueMap": {
+                "disabled": true
+              }
+            }
+          },
           "description": "Disables the input."
         },
         {
@@ -1039,35 +1567,156 @@
           "description": "The error message container."
         }
       ],
-      "tokensUsed": [
-        "--component-input-background-default",
-        "--component-input-background-hover",
-        "--component-input-background-focus",
-        "--component-input-background-disabled",
-        "--component-input-background-error",
-        "--component-input-foreground-value",
-        "--component-input-foreground-placeholder",
-        "--component-input-foreground-label",
-        "--component-input-foreground-label-required",
-        "--component-input-foreground-helper",
-        "--component-input-foreground-error",
-        "--component-input-foreground-disabled",
-        "--component-input-border-default",
-        "--component-input-border-hover",
-        "--component-input-border-focus",
-        "--component-input-border-error",
-        "--component-input-border-disabled",
-        "--component-input-radius",
-        "--component-input-padding-x",
-        "--component-input-padding-y",
-        "--font-label-medium",
-        "--font-body-large",
-        "--font-label-small"
-      ],
+      "anatomy": {
+        "description": "Four siblings under a layout-only host.",
+        "parts": [
+          {
+            "name": "root",
+            "element": ":host",
+            "description": "Host wrapper. Layout only (display: block) — carries no tokens.",
+            "parts": [
+              {
+                "name": "label",
+                "element": "label",
+                "cssPart": "label",
+                "description": "Field label above the input.",
+                "tokens": {
+                  "foreground": "--color-foreground-alt",
+                  "font": "--font-label-medium",
+                  "spacing": "--spacing-micro"
+                },
+                "states": [
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "foreground": "--color-foreground-disabled"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "required-marker",
+                    "element": ".required",
+                    "description": "The asterisk appended to a required field's label (aria-hidden).",
+                    "tokens": {
+                      "foreground": "--color-foreground-danger",
+                      "spacing": "--spacing-align"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "input",
+                "element": "input",
+                "cssPart": "input",
+                "description": "The native <input>: field surface, text colour, and outline.",
+                "tokens": {
+                  "background": "--color-background-default",
+                  "foreground": "--color-foreground-default",
+                  "border": "--color-border-default",
+                  "spacing": [
+                    "--spacing-tight",
+                    "--spacing-element"
+                  ],
+                  "font": "--font-body-large",
+                  "radius": "--radius-sm",
+                  "motion": [
+                    "--motion-duration-instant",
+                    "--motion-easing-default"
+                  ]
+                },
+                "states": [
+                  {
+                    "when": ":hover",
+                    "tokens": {
+                      "border": "--color-border-hover"
+                    }
+                  },
+                  {
+                    "when": ":focus",
+                    "tokens": {
+                      "focus": "--color-border-focus"
+                    }
+                  },
+                  {
+                    "when": "data-invalid",
+                    "description": "Set internally while error-text is non-empty.",
+                    "tokens": {
+                      "border": "--color-foreground-danger"
+                    }
+                  },
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "background": "--color-background-alt",
+                      "foreground": "--color-foreground-disabled",
+                      "border": "--color-border-disabled"
+                    }
+                  },
+                  {
+                    "when": [
+                      "data-invalid",
+                      ":focus"
+                    ],
+                    "description": "Focus ring while invalid — the ring turns danger red.",
+                    "tokens": {
+                      "focus": "--color-foreground-danger"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "placeholder",
+                    "element": "::placeholder",
+                    "description": "Placeholder text inside the field.",
+                    "tokens": {
+                      "foreground": "--color-foreground-muted"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "helper",
+                "element": ".helper",
+                "cssPart": "helper",
+                "description": "Helper text below the field. Replaced by the error part while invalid.",
+                "tokens": {
+                  "foreground": "--color-foreground-muted",
+                  "font": "--font-label-small",
+                  "spacing": "--spacing-micro"
+                }
+              },
+              {
+                "name": "error",
+                "element": ".error",
+                "cssPart": "error",
+                "description": "Error message below the field (role=alert).",
+                "tokens": {
+                  "foreground": "--color-foreground-danger",
+                  "font": "--font-label-small",
+                  "spacing": "--spacing-micro"
+                }
+              }
+            ]
+          }
+        ]
+      },
       "rules": [
-        "Never use hex values. Always use var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)"
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
       ],
       "examples": [
         {
@@ -1120,8 +1769,39 @@
       "figma": {
         "componentKey": "",
         "nodeId": "103:27",
-        "codeConnectFile": "input.figma.ts"
-      }
+        "codeConnectFile": "input.figma.ts",
+        "ignoredOptions": {
+          "State": [
+            "default",
+            "hover",
+            "focus",
+            "error"
+          ]
+        }
+      },
+      "tokensUsed": [
+        "--color-background-alt",
+        "--color-background-default",
+        "--color-border-default",
+        "--color-border-disabled",
+        "--color-border-focus",
+        "--color-border-hover",
+        "--color-foreground-alt",
+        "--color-foreground-danger",
+        "--color-foreground-default",
+        "--color-foreground-disabled",
+        "--color-foreground-muted",
+        "--font-body-large",
+        "--font-label-medium",
+        "--font-label-small",
+        "--motion-duration-instant",
+        "--motion-easing-default",
+        "--radius-sm",
+        "--spacing-align",
+        "--spacing-element",
+        "--spacing-micro",
+        "--spacing-tight"
+      ]
     },
     {
       "metaVersion": "1.0.0",
@@ -1178,9 +1858,23 @@
         "--color-foreground-muted"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Links are underlined by default and lose the underline on hover — do not override this inverted convention"
       ],
       "examples": [
@@ -1260,7 +1954,10 @@
         },
         {
           "name": "(default)",
-          "description": "Place <rr-menu-item> elements here."
+          "description": "Place <rr-menu-item> elements here.",
+          "accepts": [
+            "rr-menu-item"
+          ]
         }
       ],
       "events": [
@@ -1287,9 +1984,23 @@
         "--spacing-micro"
       ],
       "rules": [
-        "Never use hex values. Always use var(--color-*) semantic tokens",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Always set label — it names the menu popup for assistive tech",
         "The popup positions with CSS below the trigger (no portal) — keep the menu outside overflow:hidden ancestors"
       ],
@@ -1391,9 +2102,23 @@
         "--motion-easing-default"
       ],
       "rules": [
-        "Never use hex values. Always use var(--color-*) semantic tokens",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Reserve danger for genuinely destructive actions — one per menu is the norm",
         "Do not rely on color alone for the danger signal — the label must say what is destroyed"
       ],
@@ -1478,9 +2203,23 @@
         "--motion-easing-move"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Always provide a label (or an external visible label) so the progressbar has an accessible name"
       ],
       "examples": [
@@ -1565,27 +2304,127 @@
           "description": "The label text element."
         }
       ],
-      "tokensUsed": [
-        "--component-radio-border-default",
-        "--component-radio-background-unchecked",
-        "--component-radio-border-hover",
-        "--component-radio-border-checked",
-        "--component-radio-background-disabled",
-        "--component-radio-border-disabled",
-        "--component-radio-background-checked",
-        "--component-radio-foreground-disabled",
-        "--component-radio-border-focus",
-        "--component-radio-foreground-label",
-        "--font-label-medium",
-        "--spacing-tight",
-        "--motion-duration-instant",
-        "--motion-easing-default",
-        "--motion-easing-enter"
-      ],
+      "anatomy": {
+        "description": "A visual circle beside a label, with the real <input> transparently overlaying the circle. The 16px circle, the 8px dot, and the focus-ring outline are not tokens.",
+        "parts": [
+          {
+            "name": "root",
+            "element": ":host",
+            "description": "Inline-flex row holding the circle and its label.",
+            "tokens": {
+              "spacing": "--spacing-tight"
+            },
+            "parts": [
+              {
+                "name": "circle",
+                "element": ".circle",
+                "cssPart": "circle",
+                "description": "The visual radio circle. The native input sits transparently on top of it. The cap-height offset is carried by its positioning wrapper, not the circle itself.",
+                "tokens": {
+                  "background": "--color-background-default",
+                  "border": "--color-border-default",
+                  "motion": [
+                    "--motion-duration-instant",
+                    "--motion-easing-default"
+                  ],
+                  "spacing": "--spacing-align"
+                },
+                "states": [
+                  {
+                    "when": "checked",
+                    "tokens": {
+                      "border": "--color-background-action"
+                    }
+                  },
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "background": "--color-background-disabled",
+                      "border": "--color-border-disabled"
+                    }
+                  },
+                  {
+                    "when": [
+                      "!disabled",
+                      "!checked",
+                      ":hover"
+                    ],
+                    "description": "Hover only while unchecked and enabled.",
+                    "tokens": {
+                      "border": "--color-border-hover"
+                    }
+                  },
+                  {
+                    "when": ":focus-visible",
+                    "description": "Keyboard focus ring on the circle, driven by the hidden input's focus state.",
+                    "tokens": {
+                      "focus": "--color-border-focus"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "dot",
+                    "element": ".dot",
+                    "description": "The inner dot, scaled from 0 to 1 when checked.",
+                    "tokens": {
+                      "background": "--color-background-action",
+                      "motion": [
+                        "--motion-duration-instant",
+                        "--motion-easing-enter"
+                      ]
+                    },
+                    "states": [
+                      {
+                        "when": "disabled",
+                        "tokens": {
+                          "background": "--color-foreground-disabled"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "label",
+                "element": "label",
+                "cssPart": "label",
+                "description": "The text label beside the circle.",
+                "tokens": {
+                  "foreground": "--color-foreground-alt",
+                  "font": "--font-label-medium"
+                },
+                "states": [
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "foreground": "--color-foreground-disabled"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Always use rr-radio inside an rr-radio-group — selection, name, and form value are managed by the group"
       ],
       "examples": [
@@ -1619,9 +2458,26 @@
       },
       "figma": {
         "componentKey": "",
-        "nodeId": "121:77",
+        "nodeId": "214:12",
         "codeConnectFile": "radio.figma.ts"
-      }
+      },
+      "tokensUsed": [
+        "--color-background-action",
+        "--color-background-default",
+        "--color-background-disabled",
+        "--color-border-default",
+        "--color-border-disabled",
+        "--color-border-focus",
+        "--color-border-hover",
+        "--color-foreground-alt",
+        "--color-foreground-disabled",
+        "--font-label-medium",
+        "--motion-duration-instant",
+        "--motion-easing-default",
+        "--motion-easing-enter",
+        "--spacing-align",
+        "--spacing-tight"
+      ]
     },
     {
       "metaVersion": "1.0.0",
@@ -1676,7 +2532,10 @@
       "slots": [
         {
           "name": "default",
-          "description": "rr-radio child elements."
+          "description": "rr-radio child elements.",
+          "accepts": [
+            "rr-radio"
+          ]
         }
       ],
       "events": [
@@ -1695,20 +2554,91 @@
           "description": "The legend / label element."
         }
       ],
-      "tokensUsed": [
-        "--font-label-medium",
-        "--component-radio-foreground-label",
-        "--spacing-tight",
-        "--component-radio-foreground-disabled",
-        "--spacing-element",
-        "--font-label-small",
-        "--component-input-foreground-error",
-        "--component-input-foreground-label-required"
-      ],
+      "anatomy": {
+        "description": "A fieldset wrapping the projected rr-radio children. The group carries the legend and the error; each option's own colours belong to rr-radio.",
+        "parts": [
+          {
+            "name": "root",
+            "element": ":host",
+            "description": "Host wrapper. Layout only (display: block) — carries no tokens.",
+            "parts": [
+              {
+                "name": "fieldset",
+                "element": "fieldset",
+                "cssPart": "fieldset",
+                "description": "Semantic grouping element. Borderless and unpadded — carries no tokens."
+              },
+              {
+                "name": "legend",
+                "element": "legend",
+                "cssPart": "legend",
+                "description": "The group label.",
+                "tokens": {
+                  "foreground": "--color-foreground-alt",
+                  "font": "--font-label-medium",
+                  "spacing": [
+                    "--spacing-align",
+                    "--spacing-tight"
+                  ]
+                },
+                "states": [
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "foreground": "--color-foreground-disabled"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "options",
+                "element": ".options",
+                "description": "The slot container for the rr-radio children.",
+                "tokens": {
+                  "spacing": "--spacing-tight"
+                },
+                "states": [
+                  {
+                    "when": "orientation=horizontal",
+                    "description": "Row layout opens the gap one step.",
+                    "tokens": {
+                      "spacing": "--spacing-element"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "error",
+                "element": ".error",
+                "description": "Group-level error message (role=alert).",
+                "tokens": {
+                  "foreground": "--color-foreground-danger",
+                  "font": "--font-label-small",
+                  "spacing": "--spacing-micro"
+                }
+              }
+            ]
+          }
+        ]
+      },
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Place rr-radio elements in the default slot; the group manages their checked state and form value"
       ],
       "examples": [
@@ -1749,7 +2679,18 @@
         "componentKey": "",
         "nodeId": "121:77",
         "codeConnectFile": "radio.figma.ts"
-      }
+      },
+      "tokensUsed": [
+        "--color-foreground-alt",
+        "--color-foreground-danger",
+        "--color-foreground-disabled",
+        "--font-label-medium",
+        "--font-label-small",
+        "--spacing-align",
+        "--spacing-element",
+        "--spacing-micro",
+        "--spacing-tight"
+      ]
     },
     {
       "metaVersion": "1.0.0",
@@ -1832,34 +2773,167 @@
           "description": "The error message container."
         }
       ],
-      "tokensUsed": [
-        "--font-label-medium",
-        "--component-input-foreground-label",
-        "--component-input-foreground-label-required",
-        "--font-body-large",
-        "--component-input-foreground-value",
-        "--component-input-background-default",
-        "--component-input-border-default",
-        "--component-input-radius",
-        "--component-input-padding-y",
-        "--component-input-padding-x",
-        "--motion-duration-instant",
-        "--motion-easing-default",
-        "--component-input-border-hover",
-        "--component-input-border-focus",
-        "--component-input-background-disabled",
-        "--component-input-border-disabled",
-        "--component-input-foreground-disabled",
-        "--component-input-border-error",
-        "--font-label-small",
-        "--component-input-foreground-helper",
-        "--component-input-foreground-error"
-      ],
+      "anatomy": {
+        "description": "Same four-sibling shape as rr-input, plus the custom arrow that replaces the native appearance. The arrow's inset and the select's matching right padding are geometry sized to the arrow itself, not spacing-scale values — deliberately not transcribed.",
+        "parts": [
+          {
+            "name": "root",
+            "element": ":host",
+            "description": "Host wrapper. Layout only (display: block) — carries no tokens.",
+            "parts": [
+              {
+                "name": "label",
+                "element": "label",
+                "cssPart": "label",
+                "description": "Field label above the select.",
+                "tokens": {
+                  "foreground": "--color-foreground-alt",
+                  "font": "--font-label-medium",
+                  "spacing": "--spacing-micro"
+                },
+                "states": [
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "foreground": "--color-foreground-disabled"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "required-marker",
+                    "element": ".required",
+                    "description": "The asterisk appended to a required field's label (aria-hidden).",
+                    "tokens": {
+                      "foreground": "--color-foreground-danger",
+                      "spacing": "--spacing-align"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "select",
+                "element": "select",
+                "cssPart": "select",
+                "description": "The native <select>: field surface, text colour, and outline.",
+                "tokens": {
+                  "background": "--color-background-default",
+                  "foreground": "--color-foreground-default",
+                  "border": "--color-border-default",
+                  "spacing": [
+                    "--spacing-tight",
+                    "--spacing-element"
+                  ],
+                  "font": "--font-body-large",
+                  "radius": "--radius-sm",
+                  "motion": [
+                    "--motion-duration-instant",
+                    "--motion-easing-default"
+                  ]
+                },
+                "states": [
+                  {
+                    "when": ":hover",
+                    "tokens": {
+                      "border": "--color-border-hover"
+                    }
+                  },
+                  {
+                    "when": ":focus",
+                    "tokens": {
+                      "focus": "--color-border-focus"
+                    }
+                  },
+                  {
+                    "when": "data-invalid",
+                    "description": "Set internally while error-text is non-empty.",
+                    "tokens": {
+                      "border": "--color-foreground-danger"
+                    }
+                  },
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "background": "--color-background-alt",
+                      "foreground": "--color-foreground-disabled",
+                      "border": "--color-border-disabled"
+                    }
+                  },
+                  {
+                    "when": [
+                      "data-invalid",
+                      ":focus"
+                    ],
+                    "description": "Focus ring while invalid — the ring turns danger red.",
+                    "tokens": {
+                      "focus": "--color-foreground-danger"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "arrow",
+                    "element": ".arrow",
+                    "description": "The chevron overlaying the select, replacing the native appearance.",
+                    "tokens": {
+                      "foreground": "--color-foreground-alt"
+                    },
+                    "states": [
+                      {
+                        "when": "disabled",
+                        "tokens": {
+                          "foreground": "--color-foreground-disabled"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "helper",
+                "element": ".helper",
+                "cssPart": "helper",
+                "description": "Helper text below the field. Replaced by the error part while invalid.",
+                "tokens": {
+                  "foreground": "--color-foreground-muted",
+                  "font": "--font-label-small",
+                  "spacing": "--spacing-micro"
+                }
+              },
+              {
+                "name": "error",
+                "element": ".error",
+                "cssPart": "error",
+                "description": "Error message below the field (role=alert).",
+                "tokens": {
+                  "foreground": "--color-foreground-danger",
+                  "font": "--font-label-small",
+                  "spacing": "--spacing-micro"
+                }
+              }
+            ]
+          }
+        ]
+      },
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
-        "Reuses the shared --component-input-* token set (covers text input, textarea, and select)"
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
+        "Reuses the input’s semantic token recipe (shared across text input, textarea, and select)"
       ],
       "examples": [
         {
@@ -1902,7 +2976,30 @@
         "componentKey": "",
         "nodeId": "117:28",
         "codeConnectFile": "select.figma.ts"
-      }
+      },
+      "tokensUsed": [
+        "--color-background-alt",
+        "--color-background-default",
+        "--color-border-default",
+        "--color-border-disabled",
+        "--color-border-focus",
+        "--color-border-hover",
+        "--color-foreground-alt",
+        "--color-foreground-danger",
+        "--color-foreground-default",
+        "--color-foreground-disabled",
+        "--color-foreground-muted",
+        "--font-body-large",
+        "--font-label-medium",
+        "--font-label-small",
+        "--motion-duration-instant",
+        "--motion-easing-default",
+        "--radius-sm",
+        "--spacing-align",
+        "--spacing-element",
+        "--spacing-micro",
+        "--spacing-tight"
+      ]
     },
     {
       "metaVersion": "1.0.0",
@@ -1941,9 +3038,23 @@
         "--radius-default"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Decorative placeholder only — the inner element is role=presentation and aria-hidden, so it is excluded from the accessibility tree"
       ],
       "examples": [
@@ -2006,9 +3117,21 @@
         "--color-border-elevated"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)"
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
       ],
       "examples": [
         {
@@ -2100,9 +3223,23 @@
         "--color-foreground-disabled"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Do not set selected directly — control the active tab via rr-tab-list[value]."
       ],
       "examples": [
@@ -2162,7 +3299,10 @@
       "slots": [
         {
           "name": "default",
-          "description": "Place rr-tab elements here."
+          "description": "Place rr-tab elements here.",
+          "accepts": [
+            "rr-tab"
+          ]
         }
       ],
       "events": [
@@ -2176,9 +3316,23 @@
         "--color-border-alt"
       ],
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Tab panels are managed by the consuming app — listen for the change event and show/hide content accordingly."
       ],
       "examples": [
@@ -2253,11 +3407,17 @@
       "slots": [
         {
           "name": "header",
-          "description": "A single rr-table-row of header cells (rr-table-cell header)."
+          "description": "A single rr-table-row of header cells (rr-table-cell header).",
+          "accepts": [
+            "rr-table-row"
+          ]
         },
         {
           "name": "(default)",
-          "description": "Body rr-table-row elements."
+          "description": "Body rr-table-row elements.",
+          "accepts": [
+            "rr-table-row"
+          ]
         }
       ],
       "events": [],
@@ -2277,9 +3437,23 @@
         "--radius-none"
       ],
       "rules": [
-        "Never use hex values. Always use var(--color-*) semantic tokens",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Always set label — it names the table for assistive tech",
         "Set interactive only when rows actually respond to clicks — the hover tint is an interactivity signal, never decoration"
       ],
@@ -2349,12 +3523,27 @@
         "--font-label-strong-small",
         "--font-mono-label-small",
         "--spacing-inline",
-        "--spacing-element"
+        "--spacing-element",
+        "--letter-spacing-all-caps"
       ],
       "rules": [
-        "Never use hex values. Always use var(--color-*) semantic tokens",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Use numeric for amounts, counts, and IDs so digit columns align — not for text that happens to contain digits"
       ],
       "examples": [
@@ -2411,7 +3600,10 @@
       "slots": [
         {
           "name": "(default)",
-          "description": "rr-table-cell elements."
+          "description": "rr-table-cell elements.",
+          "accepts": [
+            "rr-table-cell"
+          ]
         }
       ],
       "events": [],
@@ -2421,8 +3613,18 @@
         "--motion-easing-default"
       ],
       "rules": [
-        "Never use hex values. Always use var(--color-*) semantic tokens",
-        "Never reference --primitive-* tokens in component code",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Drive selected from your selection model — it is the only state the row owns"
       ],
       "examples": [
@@ -2480,21 +3682,33 @@
       "events": [],
       "cssParts": [],
       "tokensUsed": [
-        "--component-tag-default-background",
-        "--component-tag-default-foreground",
-        "--component-tag-default-border",
-        "--component-tag-subtle-background",
-        "--component-tag-subtle-foreground",
-        "--component-tag-subtle-border",
-        "--component-tag-radius",
-        "--component-tag-padding-x",
-        "--component-tag-padding-y",
-        "--font-label-small"
+        "--color-foreground-alt",
+        "--color-foreground-muted",
+        "--color-border-elevated",
+        "--radius-sm",
+        "--spacing-tight",
+        "--spacing-micro",
+        "--font-label-small",
+        "--letter-spacing-all-caps"
       ],
       "rules": [
-        "Never use hex values. Always use var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "The tag is the deliberate inverse of the badge: outlined (transparent fill, square radius.sm) vs the badge's filled pill. Use badge for status, tag for skills/categories/metadata.",
         "Do not point a tag border at --color-border-default: it equals background.alt and disappears on the page canvas. The default variant uses foreground.muted and the subtle variant uses border.elevated so both stay visible standalone.",
         "Content is transformed to uppercase with --letter-spacing-all-caps in CSS; authors pass normal-case text and must not pre-uppercase it.",
@@ -2625,34 +3839,158 @@
           "description": "The error message container."
         }
       ],
-      "tokensUsed": [
-        "--font-label-medium",
-        "--component-input-foreground-label",
-        "--component-input-foreground-label-required",
-        "--font-body-large",
-        "--component-input-foreground-value",
-        "--component-input-background-default",
-        "--component-input-border-default",
-        "--component-input-radius",
-        "--component-input-padding-y",
-        "--component-input-padding-x",
-        "--motion-duration-instant",
-        "--motion-easing-default",
-        "--component-input-foreground-placeholder",
-        "--component-input-border-hover",
-        "--component-input-border-focus",
-        "--component-input-background-disabled",
-        "--component-input-border-disabled",
-        "--component-input-foreground-disabled",
-        "--component-input-border-error",
-        "--font-label-small",
-        "--component-input-foreground-helper",
-        "--component-input-foreground-error"
-      ],
+      "anatomy": {
+        "description": "The same four-sibling shape as rr-input, on a <textarea>.",
+        "parts": [
+          {
+            "name": "root",
+            "element": ":host",
+            "description": "Host wrapper. Layout only (display: block) — carries no tokens.",
+            "parts": [
+              {
+                "name": "label",
+                "element": "label",
+                "cssPart": "label",
+                "description": "Field label above the textarea.",
+                "tokens": {
+                  "foreground": "--color-foreground-alt",
+                  "font": "--font-label-medium",
+                  "spacing": "--spacing-micro"
+                },
+                "states": [
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "foreground": "--color-foreground-disabled"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "required-marker",
+                    "element": ".required",
+                    "description": "The asterisk appended to a required field's label (aria-hidden).",
+                    "tokens": {
+                      "foreground": "--color-foreground-danger",
+                      "spacing": "--spacing-align"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "textarea",
+                "element": "textarea",
+                "cssPart": "textarea",
+                "description": "The native <textarea>: field surface, text colour, and outline.",
+                "tokens": {
+                  "background": "--color-background-default",
+                  "foreground": "--color-foreground-default",
+                  "border": "--color-border-default",
+                  "spacing": [
+                    "--spacing-tight",
+                    "--spacing-element"
+                  ],
+                  "font": "--font-body-large",
+                  "radius": "--radius-sm",
+                  "motion": [
+                    "--motion-duration-instant",
+                    "--motion-easing-default"
+                  ]
+                },
+                "states": [
+                  {
+                    "when": ":hover",
+                    "tokens": {
+                      "border": "--color-border-hover"
+                    }
+                  },
+                  {
+                    "when": ":focus",
+                    "tokens": {
+                      "focus": "--color-border-focus"
+                    }
+                  },
+                  {
+                    "when": "data-invalid",
+                    "description": "Set internally while error-text is non-empty.",
+                    "tokens": {
+                      "border": "--color-foreground-danger"
+                    }
+                  },
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "background": "--color-background-alt",
+                      "foreground": "--color-foreground-disabled",
+                      "border": "--color-border-disabled"
+                    }
+                  },
+                  {
+                    "when": [
+                      "data-invalid",
+                      ":focus"
+                    ],
+                    "description": "Focus ring while invalid — the ring turns danger red.",
+                    "tokens": {
+                      "focus": "--color-foreground-danger"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "placeholder",
+                    "element": "::placeholder",
+                    "description": "Placeholder text inside the field.",
+                    "tokens": {
+                      "foreground": "--color-foreground-muted"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "helper",
+                "element": ".helper",
+                "cssPart": "helper",
+                "description": "Helper text below the field. Replaced by the error part while invalid.",
+                "tokens": {
+                  "foreground": "--color-foreground-muted",
+                  "font": "--font-label-small",
+                  "spacing": "--spacing-micro"
+                }
+              },
+              {
+                "name": "error",
+                "element": ".error",
+                "cssPart": "error",
+                "description": "Error message below the field (role=alert).",
+                "tokens": {
+                  "foreground": "--color-foreground-danger",
+                  "font": "--font-label-small",
+                  "spacing": "--spacing-micro"
+                }
+              }
+            ]
+          }
+        ]
+      },
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Setting error-text marks the field invalid via ElementInternals.setValidity and replaces the helper text."
       ],
       "examples": [
@@ -2702,7 +4040,30 @@
         "componentKey": "",
         "nodeId": "119:24",
         "codeConnectFile": "textarea.figma.ts"
-      }
+      },
+      "tokensUsed": [
+        "--color-background-alt",
+        "--color-background-default",
+        "--color-border-default",
+        "--color-border-disabled",
+        "--color-border-focus",
+        "--color-border-hover",
+        "--color-foreground-alt",
+        "--color-foreground-danger",
+        "--color-foreground-default",
+        "--color-foreground-disabled",
+        "--color-foreground-muted",
+        "--font-body-large",
+        "--font-label-medium",
+        "--font-label-small",
+        "--motion-duration-instant",
+        "--motion-easing-default",
+        "--radius-sm",
+        "--spacing-align",
+        "--spacing-element",
+        "--spacing-micro",
+        "--spacing-tight"
+      ]
     },
     {
       "metaVersion": "1.0.0",
@@ -2794,9 +4155,23 @@
         "--motion-easing-default"
       ],
       "rules": [
-        "Never use hex values. Always use var(--color-*) semantic tokens",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)",
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
         "Placement is the consumer's job — render toasts inside a fixed-position region; the component owns the surface, not the position",
         "Do not rely on the accent color alone to convey the variant — pair with a heading"
       ],
@@ -2905,30 +4280,123 @@
           "description": "The label text element."
         }
       ],
-      "tokensUsed": [
-        "--spacing-tight",
-        "--radius-full",
-        "--component-toggle-track-border-off",
-        "--component-toggle-track-background-off",
-        "--component-toggle-track-background-on",
-        "--component-toggle-track-border-on",
-        "--component-toggle-track-background-disabled",
-        "--component-toggle-track-border-disabled",
-        "--motion-duration-instant",
-        "--motion-easing-default",
-        "--component-toggle-knob-background-off",
-        "--motion-easing-move",
-        "--component-toggle-knob-background-on",
-        "--component-toggle-knob-background-disabled",
-        "--color-border-focus",
-        "--font-label-medium",
-        "--component-toggle-foreground-label",
-        "--component-toggle-foreground-disabled"
-      ],
+      "anatomy": {
+        "description": "A track with a sliding knob beside a label, with the real <input> transparently overlaying the track. The 36x20 track, the 12px knob, its travel distance, and the focus-ring outline are not tokens.",
+        "parts": [
+          {
+            "name": "root",
+            "element": ":host",
+            "description": "Inline-flex row holding the track and its label.",
+            "tokens": {
+              "spacing": "--spacing-tight"
+            },
+            "parts": [
+              {
+                "name": "track",
+                "element": ".track",
+                "cssPart": "track",
+                "description": "The pill-shaped track. The native input sits transparently on top of it.",
+                "tokens": {
+                  "background": "--color-background-alt",
+                  "border": "--color-border-default",
+                  "radius": "--radius-full",
+                  "motion": [
+                    "--motion-duration-instant",
+                    "--motion-easing-default"
+                  ]
+                },
+                "states": [
+                  {
+                    "when": "checked",
+                    "tokens": {
+                      "background": "--color-background-action",
+                      "border": "--color-background-action"
+                    }
+                  },
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "background": "--color-background-disabled",
+                      "border": "--color-border-disabled"
+                    }
+                  },
+                  {
+                    "when": ":focus-visible",
+                    "description": "Keyboard focus ring on the track, driven by the hidden input's focus state.",
+                    "tokens": {
+                      "focus": "--color-border-focus"
+                    }
+                  }
+                ],
+                "parts": [
+                  {
+                    "name": "knob",
+                    "element": ".knob",
+                    "cssPart": "knob",
+                    "description": "The circle that slides across the track.",
+                    "tokens": {
+                      "background": "--color-foreground-muted",
+                      "motion": [
+                        "--motion-duration-instant",
+                        "--motion-easing-move",
+                        "--motion-easing-default"
+                      ]
+                    },
+                    "states": [
+                      {
+                        "when": "checked",
+                        "tokens": {
+                          "background": "--color-foreground-on-action"
+                        }
+                      },
+                      {
+                        "when": "disabled",
+                        "tokens": {
+                          "background": "--color-foreground-disabled"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "label",
+                "element": "label",
+                "cssPart": "label",
+                "description": "The text label beside the track.",
+                "tokens": {
+                  "foreground": "--color-foreground-alt",
+                  "font": "--font-label-medium"
+                },
+                "states": [
+                  {
+                    "when": "disabled",
+                    "tokens": {
+                      "foreground": "--color-foreground-disabled"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
       "rules": [
-        "Never use hex values — always var(--color-*) or var(--component-*)",
-        "Never reference --primitive-* tokens in component code",
-        "All text/background pairings must pass WCAG AA (4.5:1)"
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
       ],
       "examples": [
         {
@@ -2967,7 +4435,25 @@
         "componentKey": "",
         "nodeId": "117:56",
         "codeConnectFile": "toggle.figma.ts"
-      }
+      },
+      "tokensUsed": [
+        "--color-background-action",
+        "--color-background-alt",
+        "--color-background-disabled",
+        "--color-border-default",
+        "--color-border-disabled",
+        "--color-border-focus",
+        "--color-foreground-alt",
+        "--color-foreground-disabled",
+        "--color-foreground-muted",
+        "--color-foreground-on-action",
+        "--font-label-medium",
+        "--motion-duration-instant",
+        "--motion-easing-default",
+        "--motion-easing-move",
+        "--radius-full",
+        "--spacing-tight"
+      ]
     }
   ],
   "customElements": {
@@ -3317,28 +4803,8 @@
         "declarations": [
           {
             "kind": "class",
-            "description": "A status badge / chip component.\n\nUses component-level design tokens for all visual properties.\nBrand theming cascades automatically via CSS custom properties on `:root`.",
+            "description": "A status badge / chip component.\n\nUses semantic design tokens for all visual properties.\nBrand theming cascades automatically via CSS custom properties on `:root`.",
             "name": "RrBadge",
-            "cssProperties": [
-              {
-                "name": "--component-badge-{variant}-background"
-              },
-              {
-                "name": "--component-badge-{variant}-foreground"
-              },
-              {
-                "name": "--component-badge-{variant}-border"
-              },
-              {
-                "name": "--component-badge-radius"
-              },
-              {
-                "name": "--component-badge-padding-x"
-              },
-              {
-                "name": "--component-badge-padding-y"
-              }
-            ],
             "slots": [
               {
                 "description": "Badge label text",
@@ -5768,7 +7234,7 @@
         "declarations": [
           {
             "kind": "class",
-            "description": "A form-associated select dropdown with label, helper text, and error state.\n\nPass options via the `options` property (array of `{ value, label, disabled? }`).\nUses `ElementInternals` for native form participation and `delegatesFocus`\nso the host forwards focus to the inner `<select>`.\n\nReuses `--component-input-*` tokens — the input token set covers\ntext input, textarea, and select (see tokens/components/input.tokens.json).",
+            "description": "A form-associated select dropdown with label, helper text, and error state.\n\nPass options via the `options` property (array of `{ value, label, disabled? }`).\nUses `ElementInternals` for native form participation and `delegatesFocus`\nso the host forwards focus to the inner `<select>`.\n\nReuses the input’s semantic token recipe — it covers\ntext input, textarea, and select (see tokens/components/input.tokens.json).",
             "name": "RrSelect",
             "cssParts": [
               {
@@ -6791,28 +8257,8 @@
         "declarations": [
           {
             "kind": "class",
-            "description": "An outlined, uppercase tag / chip component.\n\nThe deliberate inverse of `<rr-badge>`: where the badge is a filled pill for\nstatus, the tag is a square-cornered (radius.sm), transparent-filled, bordered\nlabel for skills, categories, and metadata. Content is rendered UPPERCASE with\nall-caps letter-spacing, so authors pass normal-case text.\n\nUses component-level design tokens for all visual properties. Brand theming\ncascades automatically via CSS custom properties on `:root`.",
+            "description": "An outlined, uppercase tag / chip component.\n\nThe deliberate inverse of `<rr-badge>`: where the badge is a filled pill for\nstatus, the tag is a square-cornered (radius.sm), transparent-filled, bordered\nlabel for skills, categories, and metadata. Content is rendered UPPERCASE with\nall-caps letter-spacing, so authors pass normal-case text.\n\nUses semantic design tokens for all visual properties. Brand theming\ncascades automatically via CSS custom properties on `:root`.",
             "name": "RrTag",
-            "cssProperties": [
-              {
-                "name": "--component-tag-{variant}-background"
-              },
-              {
-                "name": "--component-tag-{variant}-foreground"
-              },
-              {
-                "name": "--component-tag-{variant}-border"
-              },
-              {
-                "name": "--component-tag-radius"
-              },
-              {
-                "name": "--component-tag-padding-x"
-              },
-              {
-                "name": "--component-tag-padding-y"
-              }
-            ],
             "slots": [
               {
                 "description": "Tag label text",

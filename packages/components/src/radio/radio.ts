@@ -32,7 +32,7 @@ export class RrRadio extends LitElement {
       flex-shrink: 0;
       width: 16px;
       height: 16px;
-      margin-top: 2px;
+      margin-top: var(--spacing-align);
     }
 
     input {
@@ -49,9 +49,9 @@ export class RrRadio extends LitElement {
     .circle {
       position: absolute;
       inset: 0;
-      border: 1px solid var(--component-radio-border-default);
+      border: 1px solid var(--color-border-default);
       border-radius: 50%;
-      background: var(--component-radio-background-unchecked);
+      background: var(--color-background-default);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -61,16 +61,16 @@ export class RrRadio extends LitElement {
     }
 
     :host(:not([disabled]):not([checked])) .circle-wrap:hover .circle {
-      border-color: var(--component-radio-border-hover);
+      border-color: var(--color-border-hover);
     }
 
     :host([checked]) .circle {
-      border-color: var(--component-radio-border-checked);
+      border-color: var(--color-background-action);
     }
 
     :host([disabled]) .circle {
-      background: var(--component-radio-background-disabled);
-      border-color: var(--component-radio-border-disabled);
+      background: var(--color-background-disabled);
+      border-color: var(--color-border-disabled);
     }
 
     /* Inner dot */
@@ -78,7 +78,7 @@ export class RrRadio extends LitElement {
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: var(--component-radio-background-checked);
+      background: var(--color-background-action);
       transform: scale(0);
       transition: transform var(--motion-duration-instant) var(--motion-easing-enter);
     }
@@ -88,24 +88,24 @@ export class RrRadio extends LitElement {
     }
 
     :host([disabled]) .dot {
-      background: var(--component-radio-foreground-disabled);
+      background: var(--color-foreground-disabled);
     }
 
     /* Focus ring */
     input:focus-visible ~ .circle {
-      outline: 2px solid var(--component-radio-border-focus);
+      outline: 2px solid var(--color-border-focus);
       outline-offset: 2px;
     }
 
     label {
       font: var(--font-label-medium);
-      color: var(--component-radio-foreground-label);
+      color: var(--color-foreground-alt);
       cursor: inherit;
       line-height: 1.4;
     }
 
     :host([disabled]) label {
-      color: var(--component-radio-foreground-disabled);
+      color: var(--color-foreground-disabled);
     }
   `;
 

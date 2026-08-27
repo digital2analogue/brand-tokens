@@ -5,50 +5,92 @@
   "summary": "Circular identity surface showing initials or an image, with size and accent-color variants.",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
-    { "name": "size", "type": "'sm' | 'md' | 'lg' | 'xl'", "default": "md" },
-    { "name": "color", "type": "'default' | 'indigo' | 'sky' | 'green' | 'amber'", "default": "default" },
-    { "name": "name", "type": "string", "default": "" },
-    { "name": "src", "type": "string", "default": "" },
-    { "name": "alt", "type": "string", "default": "" }
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg' | 'xl'",
+      "default": "md"
+    },
+    {
+      "name": "color",
+      "type": "'default' | 'indigo' | 'sky' | 'green' | 'amber'",
+      "default": "default"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "src",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "alt",
+      "type": "string",
+      "default": ""
+    }
   ],
   "slots": [
-    { "name": "default", "description": "Optional custom content to replace initials (e.g. an icon)." }
+    {
+      "name": "default",
+      "description": "Optional custom content to replace initials (e.g. an icon)."
+    }
   ],
   "events": [],
   "cssParts": [
-    { "name": "avatar", "description": "The root circle element." },
-    { "name": "img", "description": "The img element (only when src is set)." },
-    { "name": "initials", "description": "The initials text element." }
+    {
+      "name": "avatar",
+      "description": "The root circle element."
+    },
+    {
+      "name": "img",
+      "description": "The img element (only when src is set)."
+    },
+    {
+      "name": "initials",
+      "description": "The initials text element."
+    }
   ],
   "tokensUsed": [
-    "--component-avatar-background-default",
-    "--component-avatar-foreground-default",
-    "--component-avatar-size-md",
+    "--color-background-alt",
+    "--color-foreground-alt",
+    "--spacing-group",
     "--font-label-strong-small",
-    "--component-avatar-size-sm",
+    "--spacing-component",
     "--font-label-strong-xsmall",
-    "--component-avatar-size-lg",
     "--font-label-strong-medium",
-    "--component-avatar-size-xl",
-    "--component-avatar-background-indigo",
-    "--component-avatar-foreground-indigo",
-    "--component-avatar-background-sky",
-    "--component-avatar-foreground-sky",
-    "--component-avatar-background-green",
-    "--component-avatar-foreground-green",
-    "--component-avatar-background-amber",
-    "--component-avatar-foreground-amber"
+    "--spacing-layout",
+    "--color-background-accent-indigo-bold",
+    "--color-foreground-accent-on-indigo",
+    "--color-background-accent-sky-bold",
+    "--color-foreground-accent-on-sky",
+    "--color-background-accent-green-bold",
+    "--color-foreground-accent-on-green-bold",
+    "--color-background-accent-amber-bold",
+    "--color-foreground-accent-on-amber-bold"
   ],
   "rules": [
-    "Never use hex values — always var(--color-*) or var(--component-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
     "Always provide name (or alt when using src) so the avatar has an accessible label"
   ],
   "examples": [
-    { "title": "Initials", "html": "<rr-avatar name=\"River Romney\"></rr-avatar>" },
-    { "title": "Image", "html": "<rr-avatar name=\"River Romney\" src=\"/avatar.jpg\" alt=\"River Romney\"></rr-avatar>" },
-    { "title": "Large, colored", "html": "<rr-avatar name=\"River Romney\" size=\"lg\" color=\"indigo\"></rr-avatar>" }
+    {
+      "title": "Initials",
+      "html": "<rr-avatar name=\"River Romney\"></rr-avatar>"
+    },
+    {
+      "title": "Image",
+      "html": "<rr-avatar name=\"River Romney\" src=\"/avatar.jpg\" alt=\"River Romney\"></rr-avatar>"
+    },
+    {
+      "title": "Large, colored",
+      "html": "<rr-avatar name=\"River Romney\" size=\"lg\" color=\"indigo\"></rr-avatar>"
+    }
   ],
   "accessibility": {
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/",
@@ -65,5 +107,9 @@
       "Image avatars derive alt from the alt prop, falling back to name"
     ]
   },
-  "figma": { "componentKey": "", "nodeId": "119:65", "codeConnectFile": "avatar.figma.ts" }
+  "figma": {
+    "componentKey": "",
+    "nodeId": "119:65",
+    "codeConnectFile": "avatar.figma.ts"
+  }
 }

@@ -14,7 +14,10 @@
   "slots": [
     {
       "name": "(default)",
-      "description": "rr-table-cell elements."
+      "description": "rr-table-cell elements.",
+      "accepts": [
+        "rr-table-cell"
+      ]
     }
   ],
   "events": [],
@@ -24,9 +27,11 @@
     "--motion-easing-default"
   ],
   "rules": [
-    "Never use hex values. Always use var(--color-*) semantic tokens",
-    "Never reference --primitive-* tokens in component code",
-    "Drive selected from your selection model \u2014 it is the only state the row owns"
+    "hard-1",
+    "hard-9"
+  ],
+  "guidance": [
+    "Drive selected from your selection model — it is the only state the row owns"
   ],
   "examples": [
     {
@@ -43,14 +48,14 @@
     "role": "row",
     "focusable": false,
     "keyboard": [
-      "None of its own \u2014 interactive cell content keeps its native keyboard behavior"
+      "None of its own — interactive cell content keeps its native keyboard behavior"
     ],
     "wcag": [
       "1.3.1 Info and Relationships",
       "4.1.2 Name, Role, Value"
     ],
     "rules": [
-      "role=row lives on the host so the flattened tree reads table \u2192 rowgroup \u2192 row \u2192 cell",
+      "role=row lives on the host so the flattened tree reads table → rowgroup → row → cell",
       "selected reflects to aria-selected=true and clears when deselected"
     ]
   },

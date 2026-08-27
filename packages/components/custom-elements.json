@@ -345,28 +345,8 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "A status badge / chip component.\n\nUses component-level design tokens for all visual properties.\nBrand theming cascades automatically via CSS custom properties on `:root`.",
+          "description": "A status badge / chip component.\n\nUses semantic design tokens for all visual properties.\nBrand theming cascades automatically via CSS custom properties on `:root`.",
           "name": "RrBadge",
-          "cssProperties": [
-            {
-              "name": "--component-badge-{variant}-background"
-            },
-            {
-              "name": "--component-badge-{variant}-foreground"
-            },
-            {
-              "name": "--component-badge-{variant}-border"
-            },
-            {
-              "name": "--component-badge-radius"
-            },
-            {
-              "name": "--component-badge-padding-x"
-            },
-            {
-              "name": "--component-badge-padding-y"
-            }
-          ],
           "slots": [
             {
               "description": "Badge label text",
@@ -2796,7 +2776,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "A form-associated select dropdown with label, helper text, and error state.\n\nPass options via the `options` property (array of `{ value, label, disabled? }`).\nUses `ElementInternals` for native form participation and `delegatesFocus`\nso the host forwards focus to the inner `<select>`.\n\nReuses `--component-input-*` tokens — the input token set covers\ntext input, textarea, and select (see tokens/components/input.tokens.json).",
+          "description": "A form-associated select dropdown with label, helper text, and error state.\n\nPass options via the `options` property (array of `{ value, label, disabled? }`).\nUses `ElementInternals` for native form participation and `delegatesFocus`\nso the host forwards focus to the inner `<select>`.\n\nReuses the input’s semantic token recipe — it covers\ntext input, textarea, and select (see tokens/components/input.tokens.json).",
           "name": "RrSelect",
           "cssParts": [
             {
@@ -3819,28 +3799,8 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "An outlined, uppercase tag / chip component.\n\nThe deliberate inverse of `<rr-badge>`: where the badge is a filled pill for\nstatus, the tag is a square-cornered (radius.sm), transparent-filled, bordered\nlabel for skills, categories, and metadata. Content is rendered UPPERCASE with\nall-caps letter-spacing, so authors pass normal-case text.\n\nUses component-level design tokens for all visual properties. Brand theming\ncascades automatically via CSS custom properties on `:root`.",
+          "description": "An outlined, uppercase tag / chip component.\n\nThe deliberate inverse of `<rr-badge>`: where the badge is a filled pill for\nstatus, the tag is a square-cornered (radius.sm), transparent-filled, bordered\nlabel for skills, categories, and metadata. Content is rendered UPPERCASE with\nall-caps letter-spacing, so authors pass normal-case text.\n\nUses semantic design tokens for all visual properties. Brand theming\ncascades automatically via CSS custom properties on `:root`.",
           "name": "RrTag",
-          "cssProperties": [
-            {
-              "name": "--component-tag-{variant}-background"
-            },
-            {
-              "name": "--component-tag-{variant}-foreground"
-            },
-            {
-              "name": "--component-tag-{variant}-border"
-            },
-            {
-              "name": "--component-tag-radius"
-            },
-            {
-              "name": "--component-tag-padding-x"
-            },
-            {
-              "name": "--component-tag-padding-y"
-            }
-          ],
           "slots": [
             {
               "description": "Tag label text",

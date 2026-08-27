@@ -13,13 +13,13 @@ River Romney's cross-site design system. Single source of truth for color, typog
 tokens/
   primitives/       Raw values — hex colors, px sizes. Never referenced directly in UI.
   semantic/         Base dark-theme semantic tokens (named roles → primitives).
-  components/        Component-scoped tokens (badge, button, input, alert, …).
   brands/           Sub-brand overrides (decision-engine, dot-art, dot-blog).
 build/
   css/              Built output — one CSS file per brand. Generated; consumed by product repos.
 packages/
   components/       Framework-agnostic Lit web components (rr-*). Each ships its own
-                    *.meta.json (props/tokens/a11y/rules) and *.figma.ts (Code Connect).
+                    *.meta.json (props/tokens/a11y/rules) and *.figma.ts (Code Connect —
+                    authored but unpublishable on the current Figma plan; see CLAUDE.md below).
   tokens/           Publishable @digital2analogue2/parsimony — ships the built brand CSS so
                     consumers `npm install` instead of hand-copying. Built by prepack.
   mcp/              MCP server — components, tokens, and design reasoning (rules + decisions). Thin wrapper; logic lives in scripts/{rules,tokens,reasoning}.mjs.
@@ -28,12 +28,49 @@ schemas/
 scripts/
   build-brands.mjs            Runs Style Dictionary for all brands. The token build command.
   generate-docs.mjs           Regenerates docs/index.html from token JSON.
+  generate-design-md.mjs      Regenerates the token tables in ai/DESIGN.md from tokens/ (`npm run docs:design`).
+                              Marker-fenced GEN regions only — authored prose is preserved. `--check` is the CI
+                              staleness gate, and also fails when a semantic token exists that no region emits.
   build-design-system-json.mjs Merges *.meta.json + CEM into design-system.json (deterministic — sorted, no timestamp).
-  rules.mjs                   Single source of truth for the lint rules (no hex / no primitive / no hardcoded size / deprecated). Imported by validate, the MCP, and drift-lint.
-  validate.mjs                Build gate: meta.json schema + lint rules + token-reference resolution.
+  anatomy.mjs                 The `anatomy` part tree: build gates (dangling binding, unknown state prop)
+                              + the fg/bg pairs components declare. Imported by validate and contrast.
+  component-tokens.mjs        Holds each component's contract to the styles it ships (#187): the tokens
+                              `var()`-referenced in the source vs tokensUsed ∪ anatomy, both directions,
+                              plus unknown-token detection. Imported by validate (§4d).
+  rules.mjs                   Single source of truth for the lint rules (no hex / no primitive / no hardcoded size / no hardcoded
+                              motion duration / deprecated). Imported by validate, the MCP, and drift-lint. Also holds
+                              missingReduceGuard — hard-10's other half, a validate gate rather than a portable rule.
+  validate.mjs                Build gate. Twelve checks grouped under the five questions they answer:
+                              is the spec well-formed / does the code follow the rules / do the names point
+                              at things that exist / does the spec match the code / can people read it.
+                              Adding a check means putting it under the question it answers.
   drift-scan.mjs              Reusable consumer-repo scan (scanConsumer): walk + ignore handling + shared rules. Shared by drift-lint and the MCP lint_consumer tool.
   drift-lint.mjs              Thin CLI over drift-scan: scans a consumer repo using the shared rules. `npm run drift -- <dir>`.
+  adoption-scan.mjs           Consumer ADOPTION scan (#106): which rr-* components and which semantic
+                              tokens a consumer actually uses, plus declared/installed/source versions.
+                              `npm run adoption -- <dir>`. Shares drift-scan's walker and file filters.
+                              drift-lint answers "is the consumer breaking the rules"; this answers "is
+                              the consumer using the system" — coverage vs adoption. A measurement, never
+                              a gate: it prints the file behind every component it counts, because markup
+                              inside a string (a case study quoting `<rr-badge>`) is indistinguishable
+                              from real usage to any lexical rule.
+  component-parity.mjs        Code↔Figma parity differ (`npm run parity`): diffs meta.json prop bindings against
+                              figma/components.dump.json, classifies drift ahead/behind/mismatched. See docs/contracts.md.
+  token-diff.mjs              One definition of "what changed" between two sets of built brand CSS (#88):
+                              parseTokens + diffTokenMaps + the changelog renderer. Shared by
+                              check-publish-fresh and token-changelog so the gate and the changelog
+                              cannot disagree.
+  token-changelog.mjs         Semantic diff between two published releases (#88):
+                              `npm run changelog -- <from> [to]`. Prints markdown; never edits
+                              CHANGELOG.md itself, so entries land through a reviewed diff. Omit <to>
+                              to diff the last published version against the current source build.
   check-publish-fresh.mjs     Diffs source-built tokens vs the published npm package; flags a needed republish. `npm run check:publish-fresh`.
+  check-golden.mjs            Golden gate: built brand CSS must match tests/golden/css fixtures byte-for-byte
+                              (`npm run check:golden`; after an intentional token change: `npm run golden:update`).
+                              CI also builds twice and byte-compares — non-determinism fails the run.
+                              Gotcha: `build/css/` is gitignored, so it SURVIVES a branch checkout — build on one
+                              branch, switch, and the gate reports drift from the branch you left. `npm run build`
+                              after switching; the gate is right and you are looking at stale CSS.
   drift_audit.py              Figma-variable-vs-token drift auditor (separate concern from code linting).
 design-system.json   Generated artifact — merged component metadata + Custom Elements Manifest, read by the MCP server.
 .github/workflows/
@@ -52,6 +89,8 @@ design-system.json   Generated artifact — merged component metadata + Custom E
 docs/
   index.html         Base dark theme design system reference. Open file:// directly in browser.
   brand-design-system-prd.md  Product requirements. v1 + the v2 (agentic) scope that reversed several v1 non-goals.
+  contracts.md       Operational guide to the component contract system (#156): prop bindings, slot
+                     accepts, `npm run parity` + how to read ahead/behind/mismatched, dump refresh.
   decisions.md       THE decision log — the only one. Dated entries, newest first.
 AGENTS.md            Vendor-neutral guide for agents *consuming* the system in product repos.
 ```
@@ -78,9 +117,11 @@ Multiple autonomous sessions (local + cloud) work this repo in parallel. Each bo
 
 ## Token Layers
 
+**Two tiers** (the component tier was deleted 2026-07-27 — #114; the `no-component-token`
+lint fences it out):
+
 1. **Primitives** (`tokens/primitives/`) — raw hex values. Never use in UI code.
-2. **Semantic** (`tokens/semantic/`, `tokens/brands/`) — named roles (background, foreground, border). These are what UI code imports.
-3. **Component** (`tokens/components/`) — tokens scoped to a single component (badge, button, input, …), consumed by the matching `rr-*` web component in `packages/components/`. **FROZEN — do not add to this tier.** The target architecture is two-tier (primitives → semantic; see #114 and the 2026-07-16 decision entry): new components write semantic roles directly, and the 9 remaining legacy families migrate out under #114.
+2. **Semantic** (`tokens/semantic/`, `tokens/brands/`) — named roles (background, foreground, border). These are what UI code — including every `rr-*` component — references directly.
 
 ## Workflow: Making a Token Change
 
@@ -89,10 +130,11 @@ Multiple autonomous sessions (local + cloud) work this repo in parallel. Each bo
 1. Edit the appropriate file:
    - New color value → `tokens/primitives/color.tokens.json`
    - Semantic role change → `tokens/semantic/` or `tokens/brands/<brand>.tokens.json`
-   - Component-scoped value → `tokens/components/<component>.tokens.json`
+   - (There is no component tier — #114. Components reference semantic roles directly.)
 2. Build tokens: `npm run build` (or `node scripts/build-brands.mjs`)
-3. Regenerate docs: `npm run docs` (or `node scripts/generate-docs.mjs`)
-   - Or run both at once: `npm run build:all`
+3. Regenerate docs: `npm run docs` (docs/index.html) **and** `npm run docs:design`
+   (the token tables in `ai/DESIGN.md`)
+   - Or run all three at once: `npm run build:all`
 4. Validate: `npm run validate` (rejects hex literals, primitive/deprecated refs, and dangling token references)
 5. If a component's metadata changed, rebuild the artifact: `npm run build:meta` → regenerates the CEM and `design-system.json`. **Commit the regenerated artifact** — CI fails if it's stale.
 6. Check the output in `build/css/<brand>.css`
@@ -127,8 +169,12 @@ mcp package (still scoped `@riverromney`) is not published yet.
 
 ## Components & Agent Tooling
 
-- **`packages/components/`** — framework-agnostic Lit web components (`rr-*`). All are wired to Figma via Code Connect (`*.figma.ts`). Three (`rr-badge`, `rr-button`, `rr-input`) are fully productionized with machine-readable `*.meta.json` (props, slots, events, tokens used, a11y contract, applicable rules) validated against `schemas/meta.schema.json`. See `AGENTS.md` for consumer-facing usage.
-- **`design-system.json`** — generated by `npm run build:meta`. Merges every `*.meta.json` with the Custom Elements Manifest into one artifact the MCP server reads. Never hand-edit. **Prop descriptions are single-sourced from the per-property JSDoc** (`/** … */` above each `@property`): `meta.json` props carry only `{ name, type, default }`, and the merge injects each `description` from the CEM (logic in `scripts/cem-descriptions.mjs`). A prop missing its JSDoc fails the build. To change a prop description, edit the JSDoc and re-run `build:meta` — never `meta.json`.
+- **`packages/components/`** — framework-agnostic Lit web components (`rr-*`). Each ships a Code Connect `*.figma.ts`, but **Code Connect is NOT live** — publishing needs a Dev/Full seat on a Figma Organization/Enterprise plan and the account is `pro` tier, so `figma connect publish` 403s (see the 2026-08-10 decision entry). The files are authored, `validate`-checked (§4/§4b) and ready if the plan changes; they are not an agent surface today. The design↔code bridge that DOES work is `npm run parity`, which reads node IDs from `meta.json` and a dump exported via the Figma MCP — no Code Connect involved. Three (`rr-badge`, `rr-button`, `rr-input`) are fully productionized with machine-readable `*.meta.json` (props, slots, events, tokens used, a11y contract, applicable rules) validated against `schemas/meta.schema.json`. See `AGENTS.md` for consumer-facing usage.
+- **`design-system.json`** — generated by `npm run build:meta`. Merges every `*.meta.json` with the Custom Elements Manifest into one artifact the MCP server reads. Never hand-edit. **`tokensUsed` is DERIVED for any component that declares an anatomy** (#188): the merge
+  computes it from the anatomy tree, and the schema forbids authoring it there. It became
+  derivable only once anatomy v2 (#178) could express every binding — before that, 29 tokens
+  lived only in the flat list. Components without an anatomy still author it.
+  **Prop descriptions are single-sourced from the per-property JSDoc** (`/** … */` above each `@property`): `meta.json` props carry only `{ name, type, default }`, and the merge injects each `description` from the CEM (logic in `scripts/cem-descriptions.mjs`). A prop missing its JSDoc fails the build. To change a prop description, edit the JSDoc and re-run `build:meta` — never `meta.json`.
 - **`packages/mcp/`** — MCP server exposing the system to agents. **Auto-registered via
   `.mcp.json` at the repo root** — every Claude Code session in a clone gets the
   `parsimony` server after `npm ci` (the server needs the workspace-installed MCP SDK;
@@ -138,32 +184,60 @@ mcp package (still scoped `@riverromney`) is not published yet.
   convention: `get_*`/`list_*` look up by exact key (one record), `find_*` search by topic
   (ranked array).
   - Components (from `design-system.json`): `list_components()` — names + summaries;
-    `get_component(name)` — full contract (props, events, tokens, rules, a11y, examples);
+    `get_component(name)` — full contract (props, events, tokens, anatomy part tree, rules,
+    a11y, examples);
     `check_usage(snippet)` — flags rule violations (hex, `--primitive-*` refs, hardcoded
-    font sizes/weights, unapproved font families, deprecated tokens) **before** code is
+    font sizes/weights, hardcoded transition/animation durations, unapproved font families,
+    deprecated tokens) **before** code is
     written. Detectors live once in `scripts/rules.mjs`, so the same set gates `validate`
-    + `drift-lint`; the statically-undetectable hard rules (display/title weight, accent-
+    + `drift-lint`; values written inside comments are never flagged, by any of the three
+    (#174 — a comment ships no styling, and treating one as a violation had a consumer's
+    weekly drift report crying wolf for a week); the duration rule goes quiet on any file
+    that does reduced-motion work at all, because whether a literal is protected is a
+    cascade question a lexical checker cannot answer (same lesson); the statically-undetectable hard rules (display/title weight, accent-
     green-as-resting-text) are out of scope here — they need semantic context.
   - Tokens (from `tokens/**/*.tokens.json`): `get_token(name)`, `find_token(query)`,
     `get_scale(category)` — a full semantic scale (`spacing`, `radius`, `shadow`, `motion`,
     `icon`, `letter-spacing`, `typography`) with resolved values + usage; `get_spacing()`
     is the back-compat alias for `get_scale('spacing')`.
   - Design reasoning (from `ai/rules.md` + `docs/decisions.md`): `find_rule(topic)` /
-    `get_rule(id)` — the hard/soft rules; `find_decision(topic)` / `get_decision(id)` —
+    `get_rule(id)` — the hard/soft rules, each carrying a **`verify` mode** (#189):
+    `lint` (a detector in `scripts/rules.mjs` catches it), `gate` (a `validate` check),
+    `schema` (structurally impossible), or `manual` (**no automated check** — the reader's
+    judgement is the only thing enforcing it; 12 of the 18 rules are `manual`, which is the
+    honest picture, not an oversight). A rule claiming `lint` without a detector fails the
+    test suite, in both directions. Component metas cite these by id in `rules[]`; `find_decision(topic)` / `get_decision(id)` —
     the decision log (dated entries + archived ADR D-NN log).
   - Brand awareness (from `tokens/brands/*.tokens.json`): `get_brand(brand)` — a
     sub-brand's full override set (base vs brand value per token); `compare_brands(a, b)` —
     the tokens whose resolved value diverges between two brands.
-  - Assembly: `check_assembly({components, tokens, context})` — design-intent check
-    over a set used together (3-rule v1: spacing-between-components, WCAG fg/bg pairing,
-    deprecated/unknown token). Returns `{ valid, suggestions }`; logic in `scripts/assembly.mjs`.
+  - Assembly: `check_assembly({components, tokens, placements, context})` — design-intent
+    check over a set used together (4 rules: spacing-between-components, WCAG fg/bg pairing,
+    deprecated/unknown token, and slot composition — `placements: [{component, parent, slot?}]`
+    checked against the parent slot's `accepts` contract from meta.json; slots without
+    `accepts` are unconstrained). Returns `{ valid, suggestions }`; logic in `scripts/assembly.mjs`.
   - Contrast (from `scripts/contrast.mjs`, reusing the WCAG math in `assembly.mjs`):
     `check_contrast({foreground, background, brand?, fontSize?, bold?})` — ratio + AA/AAA
     verdict for a pair (tokens or hex; large-text threshold when `fontSize` qualifies);
+    `check_contrast({component, part, state?})` also resolves the pair from a component's
+    declared anatomy instead of two named colours;
     `validate_brand(brand)` — checks every *intended* fg/bg pairing keeps AA once a
-    sub-brand's overrides apply. Intended pairs are derived by convention and v1 is
-    deliberately scoped to the unambiguous ones (`on-<role>`↔`background.<role>`, base
-    text↔base surfaces); the accent family is out of scope pending an explicit pairing map.
+    sub-brand's overrides apply. Intended pairs come from three sources: naming convention
+    (`on-<role>`↔`background.<role>`, `TEXT_ROLES`↔`SURFACE_ROLES`), the pairs components
+    declare in their `anatomy`, and the explicit map (`tokens/pairings.json`) — whose
+    `excludeBrands` scopes a pair out of brands that never render it, no matter which
+    source named it.
+    **The convention half is BRAND-AWARE (#216):** its token universe is base ∪ the brand's
+    own overrides, and `SURFACE_ROLES` covers `default/alt/elevated/hover` while `TEXT_ROLES`
+    covers `default/alt/muted/action/secondary/tertiary`. Roles absent from a brand are
+    skipped, so base and the dot-* brands are unaffected (13 pairs); decision-engine goes
+    **13 → 31**. Before this both lists were base-shaped, so `validate_brand('decision-engine')`
+    checked **zero** pairs on `background.elevated` — the surface DE renders most content on.
+    A pair the convention generates but a brand genuinely never draws goes in
+    `tokens/pairings.json`'s **`exclusions`** array, not `excludeBrands` (a convention pair
+    has no map entry to flag). The schema requires each exclusion to carry `ratio`,
+    `confirmedBy` and a `reason` describing the UI — so "we never draw this" stays
+    distinguishable from "this was red and we looked away."
   - Consumer linting (from `scripts/drift-scan.mjs`, shared with the `drift-lint` CLI +
     weekly Action): `lint_consumer({ path, ignore? })` — scans a consumer repo (or single
     file) with the same `RULES` as `check_usage`, but at file/repo level. Honours a
@@ -173,7 +247,11 @@ mcp package (still scoped `@riverromney`) is not published yet.
 
 ## AI Reference Files
 
-- `@ai/DESIGN.md` — resolved token tables for the **base dark theme** only.
+- `@ai/DESIGN.md` — resolved token tables for the **base dark theme** only. The tables
+  are **generated** from `tokens/` (`npm run docs:design`) and fenced in `GEN:` markers —
+  never hand-edit a value there; change the token's `$value`/`$description` and regenerate.
+  Everything outside the markers (Visual Identity, Responsive Scaling, Hard Guardrails,
+  Interaction Patterns) is authored prose and is preserved across runs.
 - `@ai/DECISION-ENGINE.md` — token decisions, naming conventions, deleted tokens, and architecture intent for the decision-engine sub-brand. Read this before touching any DE tokens.
 - `@ai/rules.md` — hard and soft rules for token usage across all sites.
 

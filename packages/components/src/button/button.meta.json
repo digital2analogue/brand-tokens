@@ -5,78 +5,313 @@
   "summary": "Button with primary/secondary/danger/ghost variants, three sizes, loading spinner, and full keyboard/form semantics.",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
-    { "name": "variant", "type": "string", "default": "primary" },
-    { "name": "size", "type": "string", "default": "md" },
-    { "name": "disabled", "type": "boolean", "default": false },
-    { "name": "loading", "type": "boolean", "default": false },
-    { "name": "type", "type": "string", "default": "button" },
-    { "name": "aria-label", "type": "string", "default": null }
+    {
+      "name": "variant",
+      "type": "'primary' | 'secondary' | 'danger' | 'ghost'",
+      "default": "primary",
+      "bindings": {
+        "code": {
+          "prop": "variant"
+        },
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Variant",
+          "valueMap": {
+            "primary": "primary",
+            "secondary": "secondary",
+            "ghost": "ghost",
+            "danger": "danger"
+          }
+        }
+      }
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg'",
+      "default": "md",
+      "bindings": {
+        "code": {
+          "prop": "size"
+        },
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Size",
+          "valueMap": {
+            "sm": "sm",
+            "md": "md",
+            "lg": "lg"
+          }
+        }
+      }
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": false,
+      "bindings": {
+        "code": {
+          "prop": "disabled"
+        },
+        "figma": {
+          "kind": "VARIANT",
+          "property": "State",
+          "valueMap": {
+            "disabled": true
+          }
+        }
+      }
+    },
+    {
+      "name": "loading",
+      "type": "boolean",
+      "default": false,
+      "bindings": {
+        "code": {
+          "prop": "loading"
+        },
+        "figma": {
+          "kind": "VARIANT",
+          "property": "State",
+          "valueMap": {
+            "loading": true
+          }
+        }
+      }
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "default": "button"
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "default": null
+    }
   ],
   "slots": [
-    { "name": "(default)", "description": "Button label text." },
-    { "name": "prefix", "description": "Icon or element before the label." },
-    { "name": "suffix", "description": "Icon or element after the label." }
+    {
+      "name": "(default)",
+      "description": "Button label text."
+    },
+    {
+      "name": "prefix",
+      "description": "Icon or element before the label."
+    },
+    {
+      "name": "suffix",
+      "description": "Icon or element after the label."
+    }
   ],
   "events": [
-    { "name": "click", "detail": "Native click event. Suppressed when disabled or loading." }
+    {
+      "name": "click",
+      "detail": "Native click event. Suppressed when disabled or loading."
+    }
   ],
   "cssParts": [
-    { "name": "button", "description": "The inner <button> element." }
+    {
+      "name": "button",
+      "description": "The inner <button> element."
+    }
   ],
-  "tokensUsed": [
-    "--component-button-primary-background-default",
-    "--component-button-primary-background-hover",
-    "--component-button-primary-background-active",
-    "--component-button-primary-foreground-default",
-    "--component-button-primary-border-default",
-    "--component-button-primary-border-hover",
-    "--component-button-primary-border-active",
-    "--component-button-secondary-background-default",
-    "--component-button-secondary-background-hover",
-    "--component-button-secondary-foreground-default",
-    "--component-button-secondary-border-default",
-    "--component-button-secondary-border-hover",
-    "--component-button-ghost-background-default",
-    "--component-button-ghost-background-hover",
-    "--component-button-ghost-foreground-default",
-    "--component-button-ghost-border-default",
-    "--component-button-ghost-border-hover",
-    "--component-button-danger-background-default",
-    "--component-button-danger-background-hover",
-    "--component-button-danger-foreground-default",
-    "--component-button-danger-border-default",
-    "--component-button-danger-border-hover",
-    "--color-background-disabled",
-    "--color-foreground-disabled",
-    "--color-border-disabled",
-    "--color-border-focus",
-    "--font-label-strong-small",
-    "--font-label-strong-medium",
-    "--font-label-strong-large",
-    "--spacing-micro",
-    "--spacing-tight",
-    "--spacing-inline",
-    "--spacing-element",
-    "--radius-default",
-    "--motion-duration-instant",
-    "--motion-easing-default"
-  ],
+  "anatomy": {
+    "description": "The host is a bare wrapper; every token lives on the inner <button> (the exported part) and its two children. The per-variant hover rules are compound states (variant=secondary AND :hover), transcribed as such since anatomy v2 (#178).",
+    "parts": [
+      {
+        "name": "root",
+        "element": ":host",
+        "description": "Host wrapper. Layout only (display: inline-block) — carries no tokens.",
+        "parts": [
+          {
+            "name": "button",
+            "element": "button",
+            "cssPart": "button",
+            "description": "The native <button>: fill, label colour, outline, padding, and the label font.",
+            "tokens": {
+              "background": "--color-background-action",
+              "foreground": "--color-foreground-on-action",
+              "border": "--color-background-action",
+              "spacing": [
+                "--spacing-tight",
+                "--spacing-element"
+              ],
+              "font": "--font-label-strong-medium",
+              "radius": "--radius-default",
+              "motion": [
+                "--motion-duration-instant",
+                "--motion-easing-default"
+              ]
+            },
+            "states": [
+              {
+                "when": ":hover",
+                "tokens": {
+                  "background": "--color-background-action-hover",
+                  "border": "--color-background-action-hover"
+                }
+              },
+              {
+                "when": ":active",
+                "tokens": {
+                  "background": "--color-background-action-active",
+                  "border": "--color-background-action-active"
+                }
+              },
+              {
+                "when": "size=sm",
+                "tokens": {
+                  "spacing": [
+                    "--spacing-micro",
+                    "--spacing-tight"
+                  ],
+                  "font": "--font-label-strong-small"
+                }
+              },
+              {
+                "when": "size=lg",
+                "tokens": {
+                  "spacing": [
+                    "--spacing-inline",
+                    "--spacing-element"
+                  ],
+                  "font": "--font-label-strong-large"
+                }
+              },
+              {
+                "when": "variant=secondary",
+                "description": "Outlined: no fill, action-coloured label and edge.",
+                "tokens": {
+                  "background": "transparent",
+                  "foreground": "--color-foreground-action",
+                  "border": "--color-border-action"
+                }
+              },
+              {
+                "when": "variant=danger",
+                "tokens": {
+                  "background": "--color-background-default",
+                  "foreground": "--color-foreground-danger",
+                  "border": "--color-foreground-danger"
+                }
+              },
+              {
+                "when": "variant=ghost",
+                "description": "Text-only: no fill, no edge.",
+                "tokens": {
+                  "background": "transparent",
+                  "foreground": "--color-foreground-action",
+                  "border": "transparent"
+                }
+              },
+              {
+                "when": "disabled",
+                "tokens": {
+                  "background": "--color-background-disabled",
+                  "foreground": "--color-foreground-disabled",
+                  "border": "--color-border-disabled"
+                }
+              },
+              {
+                "when": ":focus-visible",
+                "description": "Keyboard focus ring, drawn as a 2px box-shadow.",
+                "tokens": {
+                  "focus": "--color-border-focus"
+                }
+              },
+              {
+                "when": [
+                  "variant=secondary",
+                  ":hover"
+                ],
+                "tokens": {
+                  "background": "--color-background-alt"
+                }
+              },
+              {
+                "when": [
+                  "variant=ghost",
+                  ":hover"
+                ],
+                "tokens": {
+                  "background": "--color-background-alt"
+                }
+              },
+              {
+                "when": [
+                  "variant=danger",
+                  ":hover"
+                ],
+                "tokens": {
+                  "background": "--color-background-danger-alt"
+                }
+              }
+            ],
+            "parts": [
+              {
+                "name": "label",
+                "element": ".label",
+                "description": "Inline-flex row holding the prefix, default, and suffix slots.",
+                "tokens": {
+                  "spacing": "--spacing-tight"
+                }
+              },
+              {
+                "name": "spinner",
+                "element": ".spinner",
+                "description": "Loading ring, drawn from the button's own text colour so it tracks every variant.",
+                "tokens": {
+                  "border": "currentColor"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "rules": [
-    "Never use hex values. Always use var(--color-*) or var(--component-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
     "Primary button: one per page maximum",
     "Icon-only buttons must have aria-label"
   ],
   "examples": [
-    { "title": "Primary", "html": "<rr-button>Save changes</rr-button>" },
-    { "title": "Secondary", "html": "<rr-button variant=\"secondary\">Cancel</rr-button>" },
-    { "title": "Danger", "html": "<rr-button variant=\"danger\">Delete</rr-button>" },
-    { "title": "Small", "html": "<rr-button size=\"sm\">Tag</rr-button>" },
-    { "title": "Large", "html": "<rr-button size=\"lg\">Get started</rr-button>" },
-    { "title": "Loading", "html": "<rr-button loading>Saving...</rr-button>" },
-    { "title": "Disabled", "html": "<rr-button disabled>Unavailable</rr-button>" },
-    { "title": "Icon-only", "html": "<rr-button aria-label=\"Close\"><span slot=\"prefix\">X</span></rr-button>" }
+    {
+      "title": "Primary",
+      "html": "<rr-button>Save changes</rr-button>"
+    },
+    {
+      "title": "Secondary",
+      "html": "<rr-button variant=\"secondary\">Cancel</rr-button>"
+    },
+    {
+      "title": "Danger",
+      "html": "<rr-button variant=\"danger\">Delete</rr-button>"
+    },
+    {
+      "title": "Small",
+      "html": "<rr-button size=\"sm\">Tag</rr-button>"
+    },
+    {
+      "title": "Large",
+      "html": "<rr-button size=\"lg\">Get started</rr-button>"
+    },
+    {
+      "title": "Loading",
+      "html": "<rr-button loading>Saving...</rr-button>"
+    },
+    {
+      "title": "Disabled",
+      "html": "<rr-button disabled>Unavailable</rr-button>"
+    },
+    {
+      "title": "Icon-only",
+      "html": "<rr-button aria-label=\"Close\"><span slot=\"prefix\">X</span></rr-button>"
+    }
   ],
   "accessibility": {
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/button/",
@@ -103,6 +338,14 @@
   "figma": {
     "componentKey": "",
     "nodeId": "98:56",
-    "codeConnectFile": "button.figma.ts"
+    "codeConnectFile": "button.figma.ts",
+    "ignoredOptions": {
+      "State": [
+        "default",
+        "hover",
+        "active",
+        "focus"
+      ]
+    }
   }
 }

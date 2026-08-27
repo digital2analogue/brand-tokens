@@ -14,6 +14,7 @@ import {
   mkdirSync,
   copyFileSync,
   readdirSync,
+  readFileSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
@@ -59,11 +60,7 @@ const store = await loadTokens();
 const paths = [...store.base.keys()].sort();
 
 const tier = (path) =>
-  path.startsWith("primitive.")
-    ? "primitive"
-    : path.startsWith("component.")
-      ? "component"
-      : "semantic";
+  path.startsWith("primitive.") ? "primitive" : "semantic";
 
 const entry = (path, brand) => {
   const t = resolveToken(store, path, brand ? { brand } : {});
@@ -138,4 +135,141 @@ copyFileSync(
 );
 console.log(
   "  pairings.json (intended fg/bg pairing map — consumer contrast gates can generate from it)",
+);
+
+// 4. Context packs (#155) — compiled, sharded markdown for agents in
+// environments WITHOUT the MCP (CI bots, headless workers, other vendors'
+// CLIs). One pack per component plus a system entry point, small enough to
+// load individually into a context window. Token values are NOT duplicated
+// here — tokens.json above is already the machine-readable catalog; the
+// packs carry what it lacks: per-component contracts and the entry map.
+const CTX = resolve(HERE, "context");
+rmSync(CTX, { recursive: true, force: true });
+mkdirSync(resolve(CTX, "components"), { recursive: true });
+
+const { components } = JSON.parse(
+  readFileSync(resolve(ROOT, "design-system.json"), "utf8"),
+);
+
+const md = (lines) => lines.filter((l) => l !== null).join("\n") + "\n";
+const section = (title, body) =>
+  body && body.length ? [`## ${title}`, "", ...body, ""] : [];
+
+for (const c of components) {
+  const props = (c.props ?? []).map((p) => {
+    const bind = p.bindings?.figma
+      ? ` _(Figma: ${p.bindings.figma.property})_`
+      : "";
+    const desc = (p.description ?? "").replace(/\s+/g, " ").trim();
+    return `| \`${p.name}\` | \`${p.type.replace(/\|/g, "\\|")}\` | ${p.default !== undefined ? `\`${JSON.stringify(p.default)}\`` : "—"} | ${desc}${bind} |`;
+  });
+  const slots = (c.slots ?? []).map(
+    (s) =>
+      `- \`${s.name}\`${s.accepts ? ` — accepts: ${s.accepts.map((a) => `\`${a}\``).join(", ")}` : ""}${s.description ? ` — ${s.description}` : ""}`,
+  );
+  const events = (c.events ?? []).map(
+    (e) => `- \`${e.name}\`${e.detail ? ` — detail: ${e.detail}` : ""}`,
+  );
+  const a11y = c.accessibility
+    ? [
+        c.accessibility.role ? `- role: \`${c.accessibility.role}\`` : null,
+        `- pattern: ${c.accessibility.ariaPattern}`,
+        ...(c.accessibility.keyboard ?? []).map((k) => `- keyboard: ${k}`),
+        ...(c.accessibility.rules ?? []).map((r) => `- ${r}`),
+      ].filter(Boolean)
+    : [];
+  const examples = (c.examples ?? []).flatMap((e) => [
+    `**${e.title}**`,
+    "",
+    "```html",
+    e.html,
+    "```",
+    "",
+  ]);
+
+  writeFileSync(
+    resolve(CTX, "components", `${c.name}.md`),
+    md([
+      `# ${c.name} — ${c.summary}`,
+      "",
+      `Status: ${c.status}. Generated from ${c.name}'s meta.json — never hand-edit.`,
+      "",
+      ...(props.length
+        ? [
+            "## Props",
+            "",
+            "| Prop | Type | Default | Description |",
+            "|---|---|---|---|",
+            ...props,
+            "",
+          ]
+        : []),
+      ...section("Slots", slots),
+      ...section("Events", events),
+      ...section(
+        "Tokens used",
+        (c.tokensUsed ?? []).map((t) => `- \`${t}\``),
+      ),
+      ...section("Accessibility", a11y),
+      ...section(
+        "Rules",
+        (c.rules ?? []).map((r) => `- ${r}`),
+      ),
+      ...section("Examples", examples),
+    ]),
+  );
+}
+
+const rules = loadRules();
+const ruleLines = (type) =>
+  rules.filter((r) => r.type === type).map((r) => `${r.number}. ${r.rule}`);
+writeFileSync(
+  resolve(CTX, "system.md"),
+  md([
+    "# Parsimony — agent context pack",
+    "",
+    "Generated at pack time from the design-system source — never hand-edit.",
+    "Entry point for agents without MCP access. Load only what you need:",
+    "",
+    "- `../tokens.json` — full token catalog (base + per-brand overrides). Use the `cssVar` names; never primitives.",
+    "- `../rules.json` — these rules plus the lint detector catalog.",
+    "- `../pairings.json` — intended fg/bg pairings (contrast-checked).",
+    "- `components/<tag>.md` — one contract per component (see index.json).",
+    "",
+    "## Hard rules (never break)",
+    "",
+    ...ruleLines("hard"),
+    "",
+    "## Soft rules (prefer)",
+    "",
+    ...ruleLines("soft"),
+    "",
+    "## Brands",
+    "",
+    "- base (dark theme — the full catalog in tokens.json)",
+    ...[...store.brands.keys()]
+      .sort()
+      .map((b) => `- ${b} (overrides in tokens.json under overrides.${b})`),
+  ]),
+);
+
+writeFileSync(
+  resolve(CTX, "index.json"),
+  JSON.stringify(
+    {
+      $generated: "packages/tokens/build.mjs — never hand-edit",
+      entry: "system.md",
+      tokens: "../tokens.json",
+      rules: "../rules.json",
+      pairings: "../pairings.json",
+      components: Object.fromEntries(
+        components.map((c) => [c.name, `components/${c.name}.md`]),
+      ),
+    },
+    null,
+    1,
+  ) + "\n",
+);
+console.log(
+  `  context/ (system.md + ${components.length} component packs + index.json)`,
 );

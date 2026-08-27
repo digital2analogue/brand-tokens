@@ -224,7 +224,7 @@
       "success": {
         "$value": "{primitive.color.green.positive}",
         "$type": "color",
-        "$description": "Success fill — #15803D. White text on this: 5.0:1 AA. Replaces base phosphor green with a proper light-mode success green."
+        "$description": "Success fill — #166534. White text on this: 7.13:1 AAA. Replaces base phosphor green with a proper light-mode success green."
       },
       "success-alt": {
         "$value": "{primitive.color.green.100}",
@@ -289,9 +289,9 @@
         "$description": "Primary text on white — headings, body copy, labels, table cell values. Near-black with a cool cast. Contrast vs white: 16.1:1 (WCAG AAA)."
       },
       "alt": {
-        "$value": "{primitive.color.gray.700}",
+        "$value": "{primitive.color.gray.navy}",
         "$type": "color",
-        "$description": "Secondary text on white — metadata, timestamps, supporting labels, icon chrome. Contrast vs white: 8.9:1 (WCAG AAA)."
+        "$description": "Secondary text on white — metadata, timestamps, supporting labels, icon chrome. Navy-tinted mid-tone; contrast vs white 9.39:1 (WCAG AAA), 8.51:1 on background.elevated. Re-pointed from gray.700 (#4A4A5A) to gray.navy (#3A4663) on 2026-08-18, absorbing the deprecated foreground.secondary — DE carried two tokens for one role and this is the value that was chosen deliberately (see the 2026-04-28 gray.navy entry in ai/DECISION-ENGINE.md)."
       },
       "muted": {
         "$value": "{primitive.color.gray.500}",
@@ -314,9 +314,9 @@
         "$description": "Text/icons on primary blue CTA backgrounds. White on blue. Contrast vs background.action: 5.95:1 (WCAG AA)."
       },
       "accent-green": {
-        "$value": "{primitive.color.green.600}",
+        "$value": "{primitive.color.green.positive}",
         "$type": "color",
-        "$description": "Green for Approve outcome states and success indicators. Vivid green text/icons on white background."
+        "$description": "Green accent text/icons for the DE light theme — same value as foreground.success. Pairs with background.accent-green (green.50 tint): 6.77:1 AAA. Contrast vs white: 7.13:1 AAA. Was green.600 (#8B9683 sage gray), which read as muted gray and failed AA on the tint (2.94:1) — parsimony#176."
       },
       "accent-blue": {
         "$value": "{primitive.color.blue.700}",
@@ -328,10 +328,20 @@
         "$type": "color",
         "$description": "Purple for Review/pending outcome states. Contrast vs white: 5.76:1 (WCAG AA)."
       },
+      "accent-violet": {
+        "$value": "{primitive.color.purple.600}",
+        "$type": "color",
+        "$description": "Violet accent text/icons for the DE light theme — maps the base violet slot onto DE's purple family (same value as foreground.accent-purple). Pairs with background.accent-violet (violet.100 tint): 5.20:1 AA. Without this override the base dark-theme pastel (#C4B5FD) leaked through at 1.68:1 — parsimony#176."
+      },
+      "accent-amber": {
+        "$value": "{primitive.color.amber.700}",
+        "$type": "color",
+        "$description": "Amber accent text/icons for the DE light theme — same value as foreground.warning. Pairs with background.accent-amber (amber.50 tint): 6.84:1 AA. Without this override the base dark-theme amber (#FCD34D) leaked through at 1.39:1 — parsimony#176."
+      },
       "secondary": {
         "$value": "{primitive.color.gray.navy}",
         "$type": "color",
-        "$description": "Secondary text — supporting labels, metadata, helper text. Navy-tinted; sits between foreground.muted and foreground.default in visual hierarchy. Contrast vs white: 9.39:1 (WCAG AAA)."
+        "$description": "DEPRECATED — use foreground.alt, which now carries this exact value. D-09 (2026-04-26) renamed foreground.secondary to foreground.alt across the system; the base followed, this brand did not, and DE ended up with two tokens for one role. Kept as a same-value alias so decisioning-table (16 references) does not lose its text colour at the next package bump; drift-lint flags it via the deprecated-token rule. Remove once no consumer references it."
       },
       "tertiary": {
         "$value": "{primitive.color.gray.600}",
@@ -371,7 +381,7 @@
       "success": {
         "$value": "{primitive.color.green.positive}",
         "$type": "color",
-        "$description": "Success text and icons. Dark green (#15803D) for sufficient contrast on white. Contrast vs white: 5.02:1 (WCAG AA)."
+        "$description": "Success text and icons. Dark green (#166534) — clears AA on every DE surface, not just the canvas: white 7.13:1, background.default 6.69:1, background.alt 6.23:1, background.success-alt 6.49:1. Darkened one step from #15803D on 2026-08-12, which passed white but measured 4.38:1 on background.alt."
       },
       "on-success": {
         "$value": "{primitive.color.neutral.white}",

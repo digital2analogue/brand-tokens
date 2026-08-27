@@ -5,10 +5,26 @@
   "summary": "Horizontal progress bar with determinate and indeterminate modes, using native role=\"progressbar\".",
   "package": "@digital2analogue2/parsimony-components",
   "props": [
-    { "name": "value", "type": "number", "default": "0" },
-    { "name": "max", "type": "number", "default": "100" },
-    { "name": "indeterminate", "type": "boolean", "default": "false" },
-    { "name": "label", "type": "string", "default": "" }
+    {
+      "name": "value",
+      "type": "number",
+      "default": "0"
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "default": "100"
+    },
+    {
+      "name": "indeterminate",
+      "type": "boolean",
+      "default": "false"
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": ""
+    }
   ],
   "slots": [],
   "events": [],
@@ -21,15 +37,26 @@
     "--motion-easing-move"
   ],
   "rules": [
-    "Never use hex values — always var(--color-*) or var(--component-*)",
-    "Never reference --primitive-* tokens in component code",
-    "All text/background pairings must pass WCAG AA (4.5:1)",
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
     "Always provide a label (or an external visible label) so the progressbar has an accessible name"
   ],
   "examples": [
-    { "title": "Determinate progress", "html": "<rr-progress value=\"60\" max=\"100\" label=\"Upload progress\"></rr-progress>" },
-    { "title": "Indeterminate loading", "html": "<rr-progress indeterminate label=\"Loading…\"></rr-progress>" },
-    { "title": "Custom max", "html": "<rr-progress value=\"50\" max=\"200\" label=\"Sync progress\"></rr-progress>" }
+    {
+      "title": "Determinate progress",
+      "html": "<rr-progress value=\"60\" max=\"100\" label=\"Upload progress\"></rr-progress>"
+    },
+    {
+      "title": "Indeterminate loading",
+      "html": "<rr-progress indeterminate label=\"Loading…\"></rr-progress>"
+    },
+    {
+      "title": "Custom max",
+      "html": "<rr-progress value=\"50\" max=\"200\" label=\"Sync progress\"></rr-progress>"
+    }
   ],
   "accessibility": {
     "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/",
@@ -45,5 +72,9 @@
       "aria-valuemin is always 0 and aria-valuemax tracks the max prop"
     ]
   },
-  "figma": { "componentKey": "", "nodeId": "125:6", "codeConnectFile": "progress.figma.ts" }
+  "figma": {
+    "componentKey": "",
+    "nodeId": "125:6",
+    "codeConnectFile": "progress.figma.ts"
+  }
 }
