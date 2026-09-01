@@ -11,6 +11,24 @@ updates:
       npm-dependencies:
         patterns:
           - "*"
+        # Majors stay OUT of the group. With `patterns: ["*"]` alone every
+        # major rides inside the weekly grouped PR, so under a "majors are
+        # taken by hand" policy the first unapproved one freezes every safe
+        # bump behind it — a group is one PR and it merges whole or not at all.
+        #
+        # #222 is the live example this was added for: 14 updates, of which
+        # only three are majors (@figma/code-connect 1->2, jsdom 29->30,
+        # typescript 6->7). Eleven safe bumps sat behind them.
+        #
+        # The same shape cost the consumer repos real time: portfolio-vercel
+        # had to unpick typescript-7 and eslint-10 by hand (its #40/#41), and
+        # river-intro shipped a WCAG token fix two weeks late because the
+        # parsimony bump was grouped with vitest 3->4 (its #26/#27). Both now
+        # carry this key; decisioning-table has had it since its own
+        # typescript-7 incident.
+        update-types:
+          - minor
+          - patch
 
   # Keep the actions used in .github/workflows fresh too.
   - package-ecosystem: github-actions
