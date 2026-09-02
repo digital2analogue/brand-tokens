@@ -11,6 +11,50 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-09-02 — Brad Frost's limits skills are a per-machine install, not a repo artifact (#231)
+
+**What.** `product-inspection` and `ds-adoption-plan` are vendored into
+`.claude/skills/` alongside `ds-inspection`, pinned to upstream `f05e016`. The
+`mental-health` limits family (`limits-setup`, `limits-sessions`,
+`limits-quiet-hours`, `limits-endings`, `limits-energy`) and the
+`setup-brad-frost-skills` router are deliberately **not** vendored, and should not
+be added later.
+
+**Why.** They are not skills in the sense the other three are. `limits-setup`
+copies hook scripts into `~/.config/ai-limits/hooks/`, writes a config and a
+plain-language contract into `~/.config/ai-limits/`, and merges `PreToolUse` /
+`SessionStart` / `Stop` entries into `~/.claude/settings.json`. Every one of those
+paths is outside the repo. A vendored copy would sit in the tree looking installed
+while doing nothing, and the first session to notice would either re-vendor it or
+try to make it work from here. Correct install is per-machine:
+`npx skills add bradfrost/skills -g`, then `/setup-brad-frost-skills`.
+
+**The alternative considered** was vendoring all eight for completeness, on the
+"one command refreshes everything" argument. Rejected: it trades a real capability
+for a tidy directory listing. The limits skills' whole value is enforcement at the
+agent-harness level, and a repo cannot reach that level.
+
+**Second, smaller call: the vendored tree is flattened.** Upstream reorganised into
+families (`skills/design-systems/`, `skills/product-design/`, `skills/mental-health/`)
+and moved the per-skill `LICENSE` to the repo root. Claude Code resolves a skill by
+its **folder name**, so the family directories are dropped here and the MIT licence
+is copied back into each folder. That is the only intended delta from upstream;
+`.claude/skills/README.md` documents it so a refresh diff stays readable, and the
+refresh procedure there excludes `LICENSE` for exactly this reason.
+
+**Local integration guidance lives in `CLAUDE.md`, never in a `SKILL.md`.** Vendored
+files stay byte-identical to upstream so a refresh is a straight copy and any diff is
+genuinely upstream's. The repo-specific wiring — feeding `ds-adoption-plan` the
+output of `npm run adoption` as its phase-1 baseline rather than interviewing for it,
+and bringing `design-system.json` / `*.meta.json` / `packages/mcp` to `ds-inspection`
+stations 9 and 10 as `[verified]` evidence — is in `CLAUDE.md`, which is auto-loaded
+anyway.
+
+**Status:** shipped (#231). Upstream pin and refresh procedure in
+`.claude/skills/README.md`; re-pin it there on every refresh.
+
+---
+
 ## 2026-08-18 — The intended-pairing set was base-shaped; the contrast gate now follows the brand (#216)
 
 **What.** `intendedPairings` takes a `brand` and derives from base ∪ that brand's
