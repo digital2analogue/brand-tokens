@@ -21,7 +21,7 @@ export { RrTable } from './table/table.js';
 export { RrTableRow } from './table/table-row.js';
 export { RrTableCell } from './table/table-cell.js';
 export { RrTabList } from './tabs/tab-list.js';
-export { RrTag } from './tag/tag.js';
+export { RrChip } from './chip/chip.js';
 export { RrTextarea } from './textarea/textarea.js';
 export { RrToast } from './toast/toast.js';
 export { RrToggle } from './toggle/toggle.js';

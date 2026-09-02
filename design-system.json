@@ -1241,6 +1241,92 @@
     {
       "metaVersion": "1.0.0",
       "status": "beta",
+      "name": "rr-chip",
+      "summary": "Outlined uppercase chip naming a discrete thing — a category, skill or filter. The square, transparent counterpart to the filled badge.",
+      "package": "@digital2analogue2/parsimony-components",
+      "props": [
+        {
+          "name": "variant",
+          "type": "'default' | 'subtle'",
+          "default": "default",
+          "description": "Emphasis level. `default` is the standard visible outline (alt text,\nmuted-foreground border) that reads correctly standalone — use it for skill\nchips and most labels. `subtle` is a quieter treatment (muted text,\nelevated-border) for dense or secondary contexts."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Chip label text. Rendered uppercase via CSS — pass normal-case text."
+        }
+      ],
+      "events": [],
+      "cssParts": [],
+      "tokensUsed": [
+        "--color-foreground-alt",
+        "--color-foreground-muted",
+        "--color-border-elevated",
+        "--radius-sm",
+        "--spacing-tight",
+        "--spacing-micro",
+        "--font-label-small",
+        "--letter-spacing-all-caps"
+      ],
+      "rules": [
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
+        "Chip vs badge is a question of provenance, not interactivity. A badge reports state the system decided and you cannot influence — status, count, validity. A chip names a discrete thing — a category, a skill, a filter, a value someone chose. Pick by asking who decided what it says, not by whether it is clickable.",
+        "The visual split follows from that: the chip is outlined (transparent fill, square radius.sm), the badge is a filled pill.",
+        "Do not point a chip border at --color-border-default: it equals background.alt and disappears on the page canvas. The default variant uses foreground.muted and the subtle variant uses border.elevated so both stay visible standalone.",
+        "Content is transformed to uppercase with --letter-spacing-all-caps in CSS; authors pass normal-case text and must not pre-uppercase it.",
+        "This element is the STATIC chip and exposes no role. A chip may legitimately be interactive — a filter that toggles, a removable value, a trigger that opens a listbox — but those modes are not built yet (#229). Until they are, compose an interactive chip from rr-button or rr-link; do not attach handlers to this host.",
+        "When a chip is used as the trigger for a popup, it must not declare aria-haspopup or aria-expanded itself. The popup stamps those onto whatever sits in its trigger slot, exactly as rr-menu already does — so the same chip stays correct when it is used as a plain filter."
+      ],
+      "examples": [
+        {
+          "title": "Default (skill chip)",
+          "html": "<rr-chip>Design Systems</rr-chip>"
+        },
+        {
+          "title": "Subtle",
+          "html": "<rr-chip variant=\"subtle\">Decision Tooling</rr-chip>"
+        },
+        {
+          "title": "Skill chip group",
+          "html": "<rr-chip>Figma</rr-chip>\n<rr-chip>Research</rr-chip>\n<rr-chip>Prototyping</rr-chip>"
+        }
+      ],
+      "accessibility": {
+        "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/",
+        "focusable": false,
+        "keyboard": [],
+        "wcag": [
+          "1.4.3 Contrast (Minimum)",
+          "1.4.11 Non-text Contrast"
+        ],
+        "rules": [
+          "Chip text alone must convey meaning; do not rely on the border or emphasis level to communicate.",
+          "This element is a static label — not focusable, no role. Interactive chips are composed from rr-button or rr-link until the interactive modes land (#229).",
+          "Both variants meet WCAG AA for text contrast on the base canvas (default 8.0:1, subtle 6.3:1)."
+        ]
+      }
+    },
+    {
+      "metaVersion": "1.0.0",
+      "status": "beta",
       "name": "rr-dialog",
       "summary": "Modal dialog built on the native <dialog> element with focus trap and Escape-to-close.",
       "package": "@digital2analogue2/parsimony-components",
@@ -3662,90 +3748,6 @@
     {
       "metaVersion": "1.0.0",
       "status": "beta",
-      "name": "rr-tag",
-      "summary": "Outlined uppercase tag/chip — the square, transparent counterpart to the filled pill badge. Two emphasis variants via component tokens.",
-      "package": "@digital2analogue2/parsimony-components",
-      "props": [
-        {
-          "name": "variant",
-          "type": "'default' | 'subtle'",
-          "default": "default",
-          "description": "Emphasis level. `default` is the standard visible outline (alt text,\nmuted-foreground border) that reads correctly standalone — use it for skill\ntags and most labels. `subtle` is a quieter treatment (muted text,\nelevated-border) for dense or secondary contexts."
-        }
-      ],
-      "slots": [
-        {
-          "name": "default",
-          "description": "Tag label text. Rendered uppercase via CSS — pass normal-case text."
-        }
-      ],
-      "events": [],
-      "cssParts": [],
-      "tokensUsed": [
-        "--color-foreground-alt",
-        "--color-foreground-muted",
-        "--color-border-elevated",
-        "--radius-sm",
-        "--spacing-tight",
-        "--spacing-micro",
-        "--font-label-small",
-        "--letter-spacing-all-caps"
-      ],
-      "rules": [
-        {
-          "id": "hard-1",
-          "verify": "lint",
-          "rule": "No hardcoded colors — use var(--color-*) custom properties"
-        },
-        {
-          "id": "hard-6",
-          "verify": "gate",
-          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
-        },
-        {
-          "id": "hard-9",
-          "verify": "lint",
-          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
-        }
-      ],
-      "guidance": [
-        "The tag is the deliberate inverse of the badge: outlined (transparent fill, square radius.sm) vs the badge's filled pill. Use badge for status, tag for skills/categories/metadata.",
-        "Do not point a tag border at --color-border-default: it equals background.alt and disappears on the page canvas. The default variant uses foreground.muted and the subtle variant uses border.elevated so both stay visible standalone.",
-        "Content is transformed to uppercase with --letter-spacing-all-caps in CSS; authors pass normal-case text and must not pre-uppercase it.",
-        "Tags are non-interactive labels. If a tag must be clickable (e.g. a filter), wrap it in an rr-button or rr-link — do not attach handlers to the tag host."
-      ],
-      "examples": [
-        {
-          "title": "Default (skill tag)",
-          "html": "<rr-tag>Design Systems</rr-tag>"
-        },
-        {
-          "title": "Subtle",
-          "html": "<rr-tag variant=\"subtle\">Decision Tooling</rr-tag>"
-        },
-        {
-          "title": "Skill tag group",
-          "html": "<rr-tag>Figma</rr-tag>\n<rr-tag>Research</rr-tag>\n<rr-tag>Prototyping</rr-tag>"
-        }
-      ],
-      "accessibility": {
-        "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/",
-        "focusable": false,
-        "keyboard": [],
-        "wcag": [
-          "1.4.3 Contrast (Minimum)",
-          "1.4.11 Non-text Contrast"
-        ],
-        "rules": [
-          "Tag text alone must convey meaning; do not rely on the border or emphasis level to communicate.",
-          "Tags are static, non-interactive labels — they are not focusable and expose no role. For interactive chips, compose with rr-button or rr-link.",
-          "Both variants meet WCAG AA for text contrast on the base canvas (default 8.0:1, subtle 6.3:1)."
-        ]
-      }
-    },
-    {
-      "metaVersion": "1.0.0",
-      "status": "beta",
       "name": "rr-textarea",
       "summary": "Form-associated multi-line text area with label, helper text, and error state.",
       "package": "@digital2analogue2/parsimony-components",
@@ -5391,6 +5393,77 @@
       },
       {
         "kind": "javascript-module",
+        "path": "src/chip/chip.figma.ts",
+        "declarations": [],
+        "exports": []
+      },
+      {
+        "kind": "javascript-module",
+        "path": "src/chip/chip.ts",
+        "declarations": [
+          {
+            "kind": "class",
+            "description": "An outlined, uppercase chip — a discrete thing: a category, a skill, a\nfilter, a value someone chose.\n\nThe deliberate counterpart to `<rr-badge>`, and the line between them is\n**provenance, not interactivity**: a badge reports state the *system* decided\nand you cannot influence (status, count, validity); a chip names a thing. So\nthe badge is a filled pill and the chip is a square-cornered (radius.sm),\ntransparent-filled, bordered label. Content is rendered UPPERCASE with\nall-caps letter-spacing, so authors pass normal-case text.\n\nThis element is the **static** chip and exposes no role. A chip may or may\nnot be actionable — most start static and grow a handler later, which is why\nthe noun covers both — but the interactive modes (pressed, removable,\npopup trigger) are not built yet: see #229. Until they are, an interactive\nchip is composed from `rr-button` or `rr-link`; do not attach handlers to\nthis host.\n\nUses semantic design tokens for all visual properties. Brand theming\ncascades automatically via CSS custom properties on `:root`.",
+            "name": "RrChip",
+            "slots": [
+              {
+                "description": "Chip label text",
+                "name": ""
+              }
+            ],
+            "members": [
+              {
+                "kind": "field",
+                "name": "variant",
+                "type": {
+                  "text": "ChipVariant"
+                },
+                "default": "'default'",
+                "description": "Emphasis level. `default` is the standard visible outline (alt text,\nmuted-foreground border) that reads correctly standalone — use it for skill\nchips and most labels. `subtle` is a quieter treatment (muted text,\nelevated-border) for dense or secondary contexts.",
+                "attribute": "variant",
+                "reflects": true
+              }
+            ],
+            "attributes": [
+              {
+                "name": "variant",
+                "type": {
+                  "text": "ChipVariant"
+                },
+                "default": "'default'",
+                "description": "Emphasis level. `default` is the standard visible outline (alt text,\nmuted-foreground border) that reads correctly standalone — use it for skill\nchips and most labels. `subtle` is a quieter treatment (muted text,\nelevated-border) for dense or secondary contexts.",
+                "fieldName": "variant"
+              }
+            ],
+            "superclass": {
+              "name": "LitElement",
+              "package": "lit"
+            },
+            "tagName": "rr-chip",
+            "customElement": true
+          }
+        ],
+        "exports": [
+          {
+            "kind": "js",
+            "name": "RrChip",
+            "declaration": {
+              "name": "RrChip",
+              "module": "src/chip/chip.ts"
+            }
+          },
+          {
+            "kind": "custom-element-definition",
+            "name": "rr-chip",
+            "declaration": {
+              "name": "RrChip",
+              "module": "src/chip/chip.ts"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "javascript-module",
         "path": "src/dialog/dialog.figma.ts",
         "declarations": [],
         "exports": []
@@ -5846,10 +5919,10 @@
           },
           {
             "kind": "js",
-            "name": "RrTag",
+            "name": "RrChip",
             "declaration": {
-              "name": "RrTag",
-              "module": "./tag/tag.js"
+              "name": "RrChip",
+              "module": "./chip/chip.js"
             }
           },
           {
@@ -8244,77 +8317,6 @@
         "path": "src/tabs/tabs.figma.ts",
         "declarations": [],
         "exports": []
-      },
-      {
-        "kind": "javascript-module",
-        "path": "src/tag/tag.figma.ts",
-        "declarations": [],
-        "exports": []
-      },
-      {
-        "kind": "javascript-module",
-        "path": "src/tag/tag.ts",
-        "declarations": [
-          {
-            "kind": "class",
-            "description": "An outlined, uppercase tag / chip component.\n\nThe deliberate inverse of `<rr-badge>`: where the badge is a filled pill for\nstatus, the tag is a square-cornered (radius.sm), transparent-filled, bordered\nlabel for skills, categories, and metadata. Content is rendered UPPERCASE with\nall-caps letter-spacing, so authors pass normal-case text.\n\nUses semantic design tokens for all visual properties. Brand theming\ncascades automatically via CSS custom properties on `:root`.",
-            "name": "RrTag",
-            "slots": [
-              {
-                "description": "Tag label text",
-                "name": ""
-              }
-            ],
-            "members": [
-              {
-                "kind": "field",
-                "name": "variant",
-                "type": {
-                  "text": "TagVariant"
-                },
-                "default": "'default'",
-                "description": "Emphasis level. `default` is the standard visible outline (alt text,\nmuted-foreground border) that reads correctly standalone — use it for skill\ntags and most labels. `subtle` is a quieter treatment (muted text,\nelevated-border) for dense or secondary contexts.",
-                "attribute": "variant",
-                "reflects": true
-              }
-            ],
-            "attributes": [
-              {
-                "name": "variant",
-                "type": {
-                  "text": "TagVariant"
-                },
-                "default": "'default'",
-                "description": "Emphasis level. `default` is the standard visible outline (alt text,\nmuted-foreground border) that reads correctly standalone — use it for skill\ntags and most labels. `subtle` is a quieter treatment (muted text,\nelevated-border) for dense or secondary contexts.",
-                "fieldName": "variant"
-              }
-            ],
-            "superclass": {
-              "name": "LitElement",
-              "package": "lit"
-            },
-            "tagName": "rr-tag",
-            "customElement": true
-          }
-        ],
-        "exports": [
-          {
-            "kind": "js",
-            "name": "RrTag",
-            "declaration": {
-              "name": "RrTag",
-              "module": "src/tag/tag.ts"
-            }
-          },
-          {
-            "kind": "custom-element-definition",
-            "name": "rr-tag",
-            "declaration": {
-              "name": "RrTag",
-              "module": "src/tag/tag.ts"
-            }
-          }
-        ]
       },
       {
         "kind": "javascript-module",

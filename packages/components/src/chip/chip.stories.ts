@@ -6,14 +6,14 @@ import '@digital2analogue2/parsimony-components';
 const VARIANTS = ['default', 'subtle'] as const;
 
 const meta: Meta = {
-  title: 'Components/Tag',
-  component: 'rr-tag',
+  title: 'Components/Chip',
+  component: 'rr-chip',
   argTypes: {
     variant: { control: 'select', options: VARIANTS },
     label: { control: 'text' },
   },
   args: { variant: 'default', label: 'Design Systems' },
-  render: ({ variant, label }) => html`<rr-tag variant=${variant}>${label}</rr-tag>`,
+  render: ({ variant, label }) => html`<rr-chip variant=${variant}>${label}</rr-chip>`,
 };
 export default meta;
 
@@ -26,7 +26,7 @@ export const Subtle: Story = { args: { variant: 'subtle', label: 'Decision Tooli
 export const AllVariants: Story = {
   render: () => html`
     <div style="display: flex; flex-wrap: wrap; gap: var(--spacing-inline);">
-      ${VARIANTS.map((v) => html`<rr-tag variant=${v}>${v}</rr-tag>`)}
+      ${VARIANTS.map((v) => html`<rr-chip variant=${v}>${v}</rr-chip>`)}
     </div>
   `,
 };
@@ -45,7 +45,7 @@ export const SkillTags: Story = {
         'Research',
         'Prototyping',
         'Cross-functional Leadership',
-      ].map((s) => html`<rr-tag>${s}</rr-tag>`)}
+      ].map((s) => html`<rr-chip>${s}</rr-chip>`)}
     </div>
   `,
 };

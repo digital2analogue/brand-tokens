@@ -155,6 +155,24 @@ Form-associated checkbox with checked, indeterminate, and disabled states. Backe
 - All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
 - Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
+### `<rr-chip>`
+
+Outlined uppercase chip naming a discrete thing — a category, skill or filter. The square, transparent counterpart to the filled badge.
+
+| Attribute | Type | Default | Notes |
+|---|---|---|---|
+| `variant` | 'default' \| 'subtle' | `default` | Emphasis level. `default` is the standard visible outline (alt text,
+muted-foreground border) that reads correctly standalone — use it for skill
+chips and most labels. `subtle` is a quieter treatment (muted text,
+elevated-border) for dense or secondary contexts. |
+
+**Slots:** (default) — Chip label text. Rendered uppercase via CSS — pass normal-case text.
+
+**Component rules:**
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
+
 ### `<rr-dialog>`
 
 Modal dialog built on the native <dialog> element with focus trap and Escape-to-close.
@@ -465,24 +483,6 @@ A row inside rr-table; carries role=row, its zebra/hover/selected visuals are pa
 
 **Component rules:**
 - No hardcoded colors — use var(--color-*) custom properties _(lint)_
-- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
-
-### `<rr-tag>`
-
-Outlined uppercase tag/chip — the square, transparent counterpart to the filled pill badge. Two emphasis variants via component tokens.
-
-| Attribute | Type | Default | Notes |
-|---|---|---|---|
-| `variant` | 'default' \| 'subtle' | `default` | Emphasis level. `default` is the standard visible outline (alt text,
-muted-foreground border) that reads correctly standalone — use it for skill
-tags and most labels. `subtle` is a quieter treatment (muted text,
-elevated-border) for dense or secondary contexts. |
-
-**Slots:** (default) — Tag label text. Rendered uppercase via CSS — pass normal-case text.
-
-**Component rules:**
-- No hardcoded colors — use var(--color-*) custom properties _(lint)_
-- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
 - Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
 ### `<rr-textarea>`

@@ -1,0 +1,73 @@
+{
+  "metaVersion": "1.0.0",
+  "status": "beta",
+  "name": "rr-chip",
+  "summary": "Outlined uppercase chip naming a discrete thing — a category, skill or filter. The square, transparent counterpart to the filled badge.",
+  "package": "@digital2analogue2/parsimony-components",
+  "props": [
+    {
+      "name": "variant",
+      "type": "'default' | 'subtle'",
+      "default": "default"
+    }
+  ],
+  "slots": [
+    {
+      "name": "default",
+      "description": "Chip label text. Rendered uppercase via CSS — pass normal-case text."
+    }
+  ],
+  "events": [],
+  "cssParts": [],
+  "tokensUsed": [
+    "--color-foreground-alt",
+    "--color-foreground-muted",
+    "--color-border-elevated",
+    "--radius-sm",
+    "--spacing-tight",
+    "--spacing-micro",
+    "--font-label-small",
+    "--letter-spacing-all-caps"
+  ],
+  "rules": [
+    "hard-1",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
+    "Chip vs badge is a question of provenance, not interactivity. A badge reports state the system decided and you cannot influence — status, count, validity. A chip names a discrete thing — a category, a skill, a filter, a value someone chose. Pick by asking who decided what it says, not by whether it is clickable.",
+    "The visual split follows from that: the chip is outlined (transparent fill, square radius.sm), the badge is a filled pill.",
+    "Do not point a chip border at --color-border-default: it equals background.alt and disappears on the page canvas. The default variant uses foreground.muted and the subtle variant uses border.elevated so both stay visible standalone.",
+    "Content is transformed to uppercase with --letter-spacing-all-caps in CSS; authors pass normal-case text and must not pre-uppercase it.",
+    "This element is the STATIC chip and exposes no role. A chip may legitimately be interactive — a filter that toggles, a removable value, a trigger that opens a listbox — but those modes are not built yet (#229). Until they are, compose an interactive chip from rr-button or rr-link; do not attach handlers to this host.",
+    "When a chip is used as the trigger for a popup, it must not declare aria-haspopup or aria-expanded itself. The popup stamps those onto whatever sits in its trigger slot, exactly as rr-menu already does — so the same chip stays correct when it is used as a plain filter."
+  ],
+  "examples": [
+    {
+      "title": "Default (skill chip)",
+      "html": "<rr-chip>Design Systems</rr-chip>"
+    },
+    {
+      "title": "Subtle",
+      "html": "<rr-chip variant=\"subtle\">Decision Tooling</rr-chip>"
+    },
+    {
+      "title": "Skill chip group",
+      "html": "<rr-chip>Figma</rr-chip>\n<rr-chip>Research</rr-chip>\n<rr-chip>Prototyping</rr-chip>"
+    }
+  ],
+  "accessibility": {
+    "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/",
+    "focusable": false,
+    "keyboard": [],
+    "wcag": [
+      "1.4.3 Contrast (Minimum)",
+      "1.4.11 Non-text Contrast"
+    ],
+    "rules": [
+      "Chip text alone must convey meaning; do not rely on the border or emphasis level to communicate.",
+      "This element is a static label — not focusable, no role. Interactive chips are composed from rr-button or rr-link until the interactive modes land (#229).",
+      "Both variants meet WCAG AA for text contrast on the base canvas (default 8.0:1, subtle 6.3:1)."
+    ]
+  }
+}

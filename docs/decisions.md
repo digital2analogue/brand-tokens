@@ -11,6 +11,54 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-09-02 — badge vs chip splits on provenance, not interactivity; rr-tag renamed to rr-chip (#229)
+
+**What.** `rr-tag` is now `rr-chip`. The taxonomy behind the rename: a **badge**
+reports state the *system* decided and the user cannot influence (status, count,
+validity); a **chip** names a discrete thing (a category, a skill, a filter, a
+value someone chose). A chip may or may not be interactive, and this element is
+still the static one — the pressed/removable/trigger modes are #229's remaining
+half.
+
+**Why.** The first cut of this split drew the line at *interactivity* — inert is a
+badge, clickable is a chip. That does not survive the real use cases: a category
+label and a filter button are the same object, one of which has not been given a
+handler yet, so splitting on interactivity means the same thing gets built twice
+under two names. Provenance is the line that holds, and it is how Material draws
+it too. Hard rule 5 then does the work the name no longer does: a static chip is
+grey, and the moment one becomes operable it earns the accent, a focus ring and
+Enter/Space. The affordance carries interactivity; the noun carries identity.
+
+"Tag" was also too narrow a noun for the object it named — it covers
+categorisation and nothing else, so every filter, removable and trigger use of the
+same component had to be built somewhere else. And the word was already loose in
+the codebase, attached to the wrong things: `badge.ts` described itself as "a
+status badge / **chip** component" and `tag.ts` as "an outlined, uppercase tag /
+**chip**". Two inert components both claimed it; nothing interactive did.
+
+**The alternative considered** was keeping `rr-tag` and adding a separate
+`rr-chip` for the interactive cases. Rejected: it institutionalises the duplicate,
+and leaves a reader with two components and no rule for choosing between them.
+
+**Timing was the forcing function.** A rename of a published component is normally
+a breaking change needing a deprecation window. Right now the three consumer repos
+(`portfolio-vercel`, `river-intro`, `decisioning-table`) each install only
+`@digital2analogue2/parsimony` (tokens); none installs
+`parsimony-components`, so `rr-tag` had no callers outside this repo's own test
+suite and the rename cost nothing. That window closes the moment any repo adopts
+the package — and #180 (anatomy for `tag`) and #34 (Code Connect) were both queued
+to write more work against the old name.
+
+**Consequence worth knowing:** the Figma set is still named "Tag" (node `171:28`).
+Node IDs survive a Figma rename so the Code Connect mapping keeps working, but the
+two sides disagree on the noun until someone renames the set there — tracked in
+#34.
+
+**Status.** Shipped. Static rename only; the interactive modes stay open in #229,
+along with an unsettled question flagged there: whether a chip changes silhouette
+(`radius-sm` → `radius-full`) when it becomes interactive, or whether the accent
+alone carries it.
+
 ## 2026-09-02 — Brad Frost's limits skills are a per-machine install, not a repo artifact (#231)
 
 **What.** `product-inspection` and `ds-adoption-plan` are vendored into
