@@ -86,6 +86,11 @@ design-system.json   Generated artifact — merged component metadata + Custom E
                      registry serves the new version before reporting success.
   publish-freshness.yml  Scheduled (weekly) + manual check that the published package matches the source tokens; opens/closes a tracked issue when a republish is due.
   stale-prs.yml      Scheduled (weekly) + manual check for open PRs idle 7+ days; opens/closes a tracked issue. Enforces the ~7-day land-or-close rule below.
+.claude/skills/       Third-party agent skills, vendored verbatim from bradfrost/skills (MIT).
+  ds-inspection/      10-station inspection of a DESIGN SYSTEM → report + work order.
+  product-inspection/ 10-station inspection of a SHIPPED PRODUCT built on one.
+  ds-adoption-plan/   Bespoke-UI teardown → component mapping → estimate → phased schedule.
+  README.md           Provenance (upstream commit pin), refresh procedure, what is NOT vendored.
 docs/
   index.html         Base dark theme design system reference. Open file:// directly in browser.
   brand-design-system-prd.md  Product requirements. v1 + the v2 (agentic) scope that reversed several v1 non-goals.
@@ -244,6 +249,39 @@ mcp package (still scoped `@riverromney`) is not published yet.
     `.driftignore` at the path root; returns `{ scanned, clean, violations }`. Pass an
     absolute path (relative resolves against the server cwd).
 - **`npm run validate`** — static gate over `tokens/` and components; enforces the hard rules below in CI.
+
+### Vendored inspection skills (`.claude/skills/`)
+
+Three third-party skills from [`bradfrost/skills`](https://github.com/bradfrost/skills)
+are vendored here, so every session in a clone can invoke them by name. They are the
+qualitative counterpart to this repo's own checkers: `validate`, `drift-lint` and
+`adoption-scan` answer *what is measurably true*, the skills answer *what should we do
+about it*. Provenance, the upstream commit pin and the refresh procedure live in
+[`.claude/skills/README.md`](.claude/skills/README.md).
+
+- **`ds-inspection`** grades **this repo** across 10 stations. Stations 9 and 10
+  (machine-readable docs, agent access) are largely what `design-system.json`, the
+  `*.meta.json` contracts and `packages/mcp/` already exist to satisfy — bring those as
+  `[verified]` evidence rather than re-deriving them.
+- **`product-inspection`** grades a **consumer repo** (portfolio-vercel, decisioning-table,
+  portfolio-art, river-intro). Run it from here pointed at the consumer's path, the same
+  shape `npm run drift -- <dir>` uses.
+- **`ds-adoption-plan`** plans a consumer's migration onto Parsimony. **Run
+  `npm run adoption -- <dir>` first and feed it the output** — that scan already reports
+  which `rr-*` components and semantic tokens the consumer uses plus its
+  declared/installed/source versions, which is the skill's phase-1 teardown baseline
+  measured rather than interviewed. Mind the scan's own caveat: it is lexical, so markup
+  quoted inside a string (a case study showing `<rr-badge>`) counts as usage; it prints the
+  file behind every component precisely so you can throw those out.
+
+**Vendored files stay pristine** — no local edits, so a refresh is a straight copy and any
+diff is genuinely upstream's. Local integration guidance goes here in `CLAUDE.md`, never
+into a `SKILL.md`.
+
+The upstream `mental-health` limits family and `setup-brad-frost-skills` are deliberately
+**not** vendored: they wire hooks into `~/.claude/settings.json` and write
+`~/.config/ai-limits/`, so they are per-machine installs
+(`npx skills add bradfrost/skills -g`), not repo artifacts.
 
 ## AI Reference Files
 
