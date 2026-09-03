@@ -105,15 +105,22 @@ docs/
 AGENTS.md            Vendor-neutral guide for agents *consuming* the system in product repos.
 ```
 
-> **Visual regression has two traps, both learned the hard way (#235).** The
-> component screenshots compare with `maxDiffPixels: 200` — an *absolute*
+> **Visual regression has three traps, all learned the hard way (#235).**
+> **(1)** The screenshots compare with `maxDiffPixels: 200` — an *absolute*
 > allowance, deliberately, because the old `maxDiffPixelRatio: 0.02` was 2% of
 > the 800×480 canvas (~7,700 px) while a small component contains fewer pixels
 > than that in total; a visibly broken segmented control passed the suite twice.
-> And `--update-snapshots` only rewrites a baseline whose comparison **failed**,
-> so regenerating locally needs the PNGs deleted first: `npm run baselines:drop
-> -- <substring>`. Baselines are still meant to come from the CI runner
-> (`update-visual-baselines.yml`), not your machine.
+> **(2)** `--update-snapshots` only rewrites a baseline whose comparison
+> **failed**, so regenerating needs the PNGs deleted first: `npm run
+> baselines:drop -- <substring>`.
+> **(3)** A tolerance this tight only holds while every baseline is
+> runner-native, and that is the real reason the "generate on the CI runner,
+> never locally" rule exists — it is not fussiness. Locally-generated baselines
+> measured 228–625 px of drift against the runner, and a genuinely stale one
+> (`button--sizes`, untouched by anyone) measured **4,890 px**. All of that had
+> been passing invisibly under the old ratio. After an intentional visual
+> change, dispatch `update-visual-baselines.yml` on your branch — it
+> regenerates on the runner, commits, and re-triggers CI by itself.
 
 > **One repo, real workspaces.** `packages/*` are npm workspaces — run `npm ci`
 > once at the root. The lint rules live in exactly one place (`scripts/rules.mjs`);

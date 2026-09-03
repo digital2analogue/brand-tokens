@@ -35,11 +35,17 @@ export default defineConfig({
       // so the committed PNG quietly stops describing the code and the next
       // real regression is measured against a stale reference.
       //
-      // 200 is generous for anti-aliasing drift (observed drift between this
-      // repo's runner and a local render is zero across all 86 baselines) and
-      // far below any layout change: moving or resizing one component shifts
-      // thousands of pixels. `threshold` is Playwright's default, stated here
-      // so the per-pixel and per-image allowances are read together.
+      // 200 is chosen against MEASURED run-to-run drift on the runner, with
+      // every baseline regenerated there (see the note below). It is far below
+      // any layout change: moving or resizing one component shifts thousands of
+      // pixels. `threshold` is Playwright's default, stated here so the
+      // per-pixel and per-image allowances are read together.
+      //
+      // A number this tight only holds while the baselines are runner-native.
+      // The first run at 200 failed five stories — button--sizes by 4,890px,
+      // on a baseline nobody had touched — which is what a *stale* baseline
+      // looks like once the gate is honest enough to report it. The old ratio
+      // had been passing that quietly for as long as it had been drifting.
       maxDiffPixels: 200,
       threshold: 0.2,
     },
