@@ -39,7 +39,7 @@ generated from `design-system.json` and `ai/rules.md`.
 > (rules live in `scripts/rules.mjs`). Never emit hex literals, never reference
 > `--primitive-*` tokens, and only use spacing/sizes from the token scale.
 
-## Available components (27)
+## Available components (29)
 
 ### `<rr-alert>`
 
@@ -348,6 +348,50 @@ Form-associated group of radio buttons. Renders a fieldset/legend and manages se
 - No hardcoded colors — use var(--color-*) custom properties _(lint)_
 - All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
 - Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
+
+### `<rr-segment>`
+
+One choice inside rr-segmented. Carries its label colour only — the parent draws the sliding indicator.
+
+| Attribute | Type | Default | Notes |
+|---|---|---|---|
+| `value` | string | `` | The value this segment commits to the group when chosen. Reflected. |
+| `selected` | boolean | `false` | Marks the chosen segment. Set by the parent rr-segmented — do not set directly. Reflected. |
+| `disabled` | boolean | `false` | Prevents selection and skips this segment during arrow navigation. Reflected. |
+| `tone` | 'neutral' \| 'success' \| 'danger' | `neutral` | Semantic colour this choice carries once selected — the label takes the
+matching foreground and the parent tints the indicator to match. Reflected. |
+| `tabStop` | boolean | `false` | Marks this segment as the group's single tab stop (roving tabindex). Set
+by the parent rr-segmented — do not set directly. Maps to attribute tab-stop. |
+
+**Slots:** (default) — Segment label text (and optional leading icon).
+
+**Events:** `rr-segment-select`
+
+**Component rules:**
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
+- Motion must respect `prefers-reduced-motion` (WCAG 2.3.3). The built brand CSS zeroes `--motion-duration-*` under `reduce`, so token-driven transitions stop automatically — never hardcode a transition/animation duration that bypasses the tokens. Any infinite animation (spin, shimmer, pulse) cannot be reached by the token override and MUST carry its own `@media (prefers-reduced-motion: reduce)` guard that stops or damps it _(lint)_
+
+### `<rr-segmented>`
+
+A field whose two or three choices are all visible at rest — a radiogroup with a sliding indicator, not a row of buttons.
+
+| Attribute | Type | Default | Notes |
+|---|---|---|---|
+| `label` | string | `` | Accessible label for the group (required); sets aria-label on the radiogroup. |
+| `value` | string | `` | The chosen segment's value. Empty means nothing is chosen and no indicator is drawn. Reflected. |
+| `disabled` | boolean | `false` | Disables the whole group and every segment in it. Reflected. |
+
+**Slots:** (default) — Place rr-segment elements here.
+
+**Events:** `change`
+
+**Component rules:**
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
+- Motion must respect `prefers-reduced-motion` (WCAG 2.3.3). The built brand CSS zeroes `--motion-duration-*` under `reduce`, so token-driven transitions stop automatically — never hardcode a transition/animation duration that bypasses the tokens. Any infinite animation (spin, shimmer, pulse) cannot be reached by the token override and MUST carry its own `@media (prefers-reduced-motion: reduce)` guard that stops or damps it _(lint)_
 
 ### `<rr-select>`
 

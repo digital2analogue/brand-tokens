@@ -411,7 +411,7 @@
       "inactive": {
         "$value": "{primitive.color.slate.400}",
         "$type": "color",
-        "$description": "Washed-out slate #A8B0BE for WCAG-exempt inactive UI elements — unselected segmented-control labels and similar non-content chrome. Deliberately sub-AA; never use for content text. Backported from the decisioning-table prototype (parsimony#70 §D)."
+        "$description": "Washed-out slate #A8B0BE for WCAG-exempt inactive UI chrome in the decisioning-table prototype. Deliberately sub-AA; never use for content text. Backported from that prototype (parsimony#70 §D). It used to name unselected segmented-control labels as its use case — rr-segmented (#232) deliberately does NOT use it: a sub-AA token was not worth promoting to base, and foreground.muted clears AA in every brand while still reading as recessed."
       },
       "on-action-alt": {
         "$value": "{primitive.color.blue.700}",

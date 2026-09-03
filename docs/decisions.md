@@ -11,6 +11,68 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-09-03 — rr-segmented ships without promoting a sub-AA token, and without a spring curve (#232)
+
+**What.** `rr-segmented` + `rr-segment` land as the third member of the
+badge/chip family — a field whose two or three choices are all visible at rest
+(`radiogroup`/`radio`), lifted from decisioning-table's shipped implementation.
+Two of its dependencies did **not** travel with it, and both were resolved by
+deliberate downgrade rather than by adding to the token system:
+
+1. **The unselected label uses `foreground.muted`, not `foreground.inactive`.**
+2. **The pill slides on `motion-easing-move`, not an overshoot curve.**
+
+**Why (1).** `--color-foreground-inactive` exists only in decision-engine, and
+its own description named "unselected segmented-control labels" — the system
+carried a token for a component it did not have. But `validate` §4d resolves a
+component's `var()` references against **base** tokens only, so a component may
+reference nothing a brand alone defines; the choice was to promote it or to
+derive the state otherwise. Promoting it means adding a **deliberately sub-AA**
+colour to the base theme, which is a liability every future author can reach for
+by accident. `foreground.muted` already exists in every brand, reads as recessed
+against `foreground.default`, and clears AA (6.3:1 on the base track) — strictly
+better than the prototype it was lifted from. The token's description has been
+corrected so it stops naming a use case the system's own component declines.
+
+**Why (2).** The overshoot is not decoration — it is what makes the pill read as
+a physical thing being *moved* rather than a colour being *changed*. The system
+has no spring easing, and inventing one inside a component would be exactly the
+"never define a value in the consumer" failure this repo exists to prevent. So
+the fallback ships, recorded in the component's guidance and its docs rather
+than left as a silent difference from the reference.
+
+**Alternative.** Promote both (`foreground.inactive` to base semantic, a spring
+curve to motion) and ship the control at full fidelity. Rejected for this PR on
+scope: each is a token change with its own contrast, golden-fixture and
+publish-freshness consequences, and neither blocks the component from being
+correct — one trades a hair of visual recession for AA, the other trades feel.
+Promoting the spring curve stays worth doing on its own merits; promoting a
+sub-AA base token does not.
+
+**Also decided.** The tinted pill is a `color-mix` composite (12% of the tone's
+background role into `background.alt`, 30% into the border), which the anatomy
+schema cannot express and the §5 contrast gate cannot declare as a pairing. The
+component therefore authors a flat `tokensUsed` and carries the measured ratios
+in its a11y contract instead (success 6.9:1, danger 5.5:1, neutral 9.9:1 — all
+AA on base dark). That is the honest shape: a gap the gates cannot cover, named
+where a reader will find it, rather than an anatomy that claims a solid fill the
+component never paints.
+
+**And decided on review.** `tone` is `neutral | success | danger` only. The
+first cut also offered `warning` and `info`, and the four-tone story that
+demonstrated them read as arbitrary — which was the tell. A control holding two
+or three choices can colour-code exactly one thing: a binary verdict
+(approve/deny, pass/fail, on/off). `warning` and `info` are *message* roles —
+they name something the system is telling you, not a choice someone made — so
+offering them here invited colour with no meaning behind it. A third outcome
+that genuinely needs its own colour (decision-engine's Review, per
+`ai/rules.md`) gets a tone added deliberately; it does not borrow a feedback
+role.
+
+**Status.** Shipped. `foreground.inactive` stays decision-engine-only.
+
+---
+
 ## 2026-09-02 — badge vs chip splits on provenance, not interactivity; rr-tag renamed to rr-chip (#229)
 
 **What.** `rr-tag` is now `rr-chip`. The taxonomy behind the rename: a **badge**
