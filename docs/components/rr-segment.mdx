@@ -51,7 +51,7 @@ segment.
 | `value` | `string` | `` | The value this segment commits to the group when chosen. Reflected. |
 | `selected` | `boolean` | `false` | Marks the chosen segment. Set by the parent rr-segmented — do not set directly. Reflected. |
 | `disabled` | `boolean` | `false` | Prevents selection and skips this segment during arrow navigation. Reflected. |
-| `tone` | `'neutral' \| 'success' \| 'danger' \| 'warning' \| 'info'` | `neutral` | Semantic colour this choice carries once selected — the label takes the matching foreground and the parent tints the indicator to match. Reflected. |
+| `tone` | `'neutral' \| 'success' \| 'danger'` | `neutral` | Semantic colour this choice carries once selected — the label takes the matching foreground and the parent tints the indicator to match. Reflected. |
 | `tabStop` | `boolean` | `false` | Marks this segment as the group's single tab stop (roving tabindex). Set by the parent rr-segmented — do not set directly. Maps to attribute tab-stop. |
 {/* GEN:properties:end */}
 
@@ -85,8 +85,6 @@ segment.
 | `--color-foreground-default` | #C8CFC4 |
 | `--color-foreground-success` | #4ADE6E |
 | `--color-foreground-danger` | #F87171 |
-| `--color-foreground-warning` | #FCD34D |
-| `--color-foreground-info` | #93C5FD |
 | `--color-foreground-disabled` | #1E241E |
 | `--color-border-focus` | #4ADE6E |
 | `--motion-duration-standard` | 200ms |
@@ -131,7 +129,7 @@ segment.
 
 - Do not set selected or tab-stop directly — control the chosen segment via rr-segmented[value]. Both are written by the parent on every sync.
 - A segment paints no chrome of its own: no fill, no border, no shadow. That restraint is the component — two segments that each drew a box would read as two adjacent buttons instead of one field with one value.
-- tone colours the label when this segment is chosen, and the parent lifts the same tone onto the indicator. Leave it neutral unless the value itself has a semantic reading (an outcome, a status).
+- tone colours the label when this segment is chosen, and the parent lifts the same tone onto the indicator. The set is neutral, success and danger only: a two- or three-choice control can carry a binary verdict (approve/deny, pass/fail, on/off) and nothing more. warning and info are message roles — they describe something the system is telling you, not a choice someone made. A third outcome that genuinely needs its own colour (decision-engine's Review) should get its own tone added deliberately, not borrow a feedback role.
 {/* GEN:guardrails:end */}
 
 {/* AUTHORED:usage — write freely; DocGen preserves this region */}
@@ -142,8 +140,13 @@ segment.
 directly is overwritten.
 
 **Do** use `tone` only where the value has a semantic reading of its own — an
-approve/deny outcome, a pass/fail status. Leave it `neutral` otherwise; a tinted
-pill on an ordinary preference is noise.
+approve/deny outcome, a pass/fail status, an on/off setting. Leave it `neutral`
+otherwise; a tinted pill on an ordinary preference is noise.
+
+There are three tones and there is no fourth. A third outcome that genuinely
+needs its own colour — decision-engine's Review — should get a tone added
+deliberately rather than borrowing `warning` or `info`, which name feedback
+messages, not choices.
 
 **Don't** style a segment with a background, border or shadow. That restraint is
 the component: the moment two segments each draw a box, the control reads as two

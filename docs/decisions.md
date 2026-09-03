@@ -52,11 +52,22 @@ sub-AA base token does not.
 **Also decided.** The tinted pill is a `color-mix` composite (12% of the tone's
 background role into `background.alt`, 30% into the border), which the anatomy
 schema cannot express and the §5 contrast gate cannot declare as a pairing. The
-component therefore authors a flat `tokensUsed` and carries the four measured
-ratios in its a11y contract instead (success 6.9:1, danger 5.5:1, warning 7.9:1,
-info 8.0:1 — all AA on base dark). That is the honest shape: a gap the gates
-cannot cover, named where a reader will find it, rather than an anatomy that
-claims a solid fill the component never paints.
+component therefore authors a flat `tokensUsed` and carries the measured ratios
+in its a11y contract instead (success 6.9:1, danger 5.5:1, neutral 9.9:1 — all
+AA on base dark). That is the honest shape: a gap the gates cannot cover, named
+where a reader will find it, rather than an anatomy that claims a solid fill the
+component never paints.
+
+**And decided on review.** `tone` is `neutral | success | danger` only. The
+first cut also offered `warning` and `info`, and the four-tone story that
+demonstrated them read as arbitrary — which was the tell. A control holding two
+or three choices can colour-code exactly one thing: a binary verdict
+(approve/deny, pass/fail, on/off). `warning` and `info` are *message* roles —
+they name something the system is telling you, not a choice someone made — so
+offering them here invited colour with no meaning behind it. A third outcome
+that genuinely needs its own colour (decision-engine's Review, per
+`ai/rules.md`) gets a tone added deliberately; it does not borrow a feedback
+role.
 
 **Status.** Shipped. `foreground.inactive` stays decision-engine-only.
 

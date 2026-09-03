@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-export type SegmentTone = 'neutral' | 'success' | 'danger' | 'warning' | 'info';
+export type SegmentTone = 'neutral' | 'success' | 'danger';
 
 /**
  * `<rr-segment>` — one choice inside `<rr-segmented>`.
@@ -16,6 +16,12 @@ export type SegmentTone = 'neutral' | 'success' | 'danger' | 'warning' | 'info';
  * `tone` colours the label when this segment is the selected one, and the
  * parent lifts the same tone onto the indicator so the pill is tinted to
  * match. It is how an outcome stays scannable down a column of many rows.
+ *
+ * The set is deliberately only `success` and `danger` beside `neutral`: this
+ * control holds two or three choices, so the only colour-coding it can carry
+ * is a binary verdict — approve/deny, pass/fail, on/off. `warning` and `info`
+ * are message roles; they describe something the system is telling you, not a
+ * choice someone made, and offering them here just invites arbitrary colour.
  *
  * @slot - Segment label text (and optional leading icon)
  * @fires rr-segment-select - Bubbles to rr-segmented when clicked; detail.value
@@ -80,16 +86,6 @@ export class RrSegment extends LitElement {
     :host([selected][tone='danger']) button,
     :host([selected][tone='danger']) button:hover {
       color: var(--color-foreground-danger);
-    }
-
-    :host([selected][tone='warning']) button,
-    :host([selected][tone='warning']) button:hover {
-      color: var(--color-foreground-warning);
-    }
-
-    :host([selected][tone='info']) button,
-    :host([selected][tone='info']) button:hover {
-      color: var(--color-foreground-info);
     }
 
     :host([disabled]) button,

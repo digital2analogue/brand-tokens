@@ -44,17 +44,15 @@ export const Neutral: Story = {
   `,
 };
 
-export const Tones: Story = {
-  render: () => html`
-    <div style="display: flex; flex-direction: column; gap: var(--spacing-inline); align-items: flex-start;">
-      ${(['success', 'danger', 'warning', 'info'] as const).map(
-        (tone) => html`
-          <rr-segmented label=${tone} value="on">
-            <rr-segment value="on" tone=${tone}>${tone}</rr-segment>
-            <rr-segment value="off">Off</rr-segment>
-          </rr-segmented>
-        `
-      )}
-    </div>
+// The only two shapes this control takes: a binary verdict, and a small set of
+// mutually exclusive settings. There is no four-colour tone grid, because a
+// two-choice control has no fourth thing to colour.
+export const OnOff: Story = {
+  args: { label: 'Notifications', value: 'on' },
+  render: ({ label, value }) => html`
+    <rr-segmented label=${label} value=${value}>
+      <rr-segment value="on" tone="success">On</rr-segment>
+      <rr-segment value="off">Off</rr-segment>
+    </rr-segmented>
   `,
 };

@@ -61,9 +61,7 @@
     "--motion-easing-move",
     "--motion-easing-default",
     "--color-background-success",
-    "--color-background-danger",
-    "--color-background-warning",
-    "--color-background-info"
+    "--color-background-danger"
   ],
   "rules": [
     "hard-1",
@@ -77,7 +75,7 @@
     "Leave value empty for an unanswered field — no indicator is drawn at all, so a draft row cannot be mistaken for one that chose the first option.",
     "Segments are equal-width by construction (one 1fr grid column each, so every segment is as wide as the widest label), which is what lets the indicator be placed arithmetically instead of measured. Labels of very different lengths will make the whole control wide; shorten the labels rather than fighting the layout.",
     "The indicator owns all the chrome — fill, border, shadow. Never give a segment its own box: two boxed segments read as two adjacent buttons rather than one field.",
-    "Set tone on a segment to colour-code the chosen value; the indicator picks up a 12% tint of the same role. That is what makes an outcome scannable down a column of many rows.",
+    "Set tone on a segment to colour-code the chosen value; the indicator picks up a 12% tint of the same role. That is what makes an outcome scannable down a column of many rows. Only neutral, success and danger exist, because a two- or three-choice control can only carry a binary verdict.",
     "The pill slides on motion-easing-move. An overshoot curve would read better — the pill should feel moved rather than recoloured — but the system has no spring easing yet (#232)."
   ],
   "examples": [
@@ -117,7 +115,7 @@
       "Selection follows focus, per the WAI-ARIA radio group pattern: arrows both move and check. Roving tabindex keeps the whole group to one tab stop.",
       "The indicator is a non-text state indicator under SC 1.4.11: it carries a border at color-border-default (3:1+ on the track) as well as its fill, so the chosen segment is not signalled by fill alone.",
       "Tone is never the only channel — the chosen segment is also the one the pill sits under and the only one with aria-checked=true.",
-      "Tinted pills are color-mix composites the contrast gate cannot declare as a pairing. Measured on base dark against their tone foreground: success 6.9:1, danger 5.5:1, warning 7.9:1, info 8.0:1, neutral 9.9:1 — all AA."
+      "Tinted pills are color-mix composites the contrast gate cannot declare as a pairing. Measured on base dark against their tone foreground: success 6.9:1, danger 5.5:1, neutral 9.9:1 — all AA."
     ]
   }
 }

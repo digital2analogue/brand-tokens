@@ -103,16 +103,6 @@ export class RrSegmented extends LitElement {
       border-color: color-mix(in srgb, var(--color-background-danger) 30%, var(--color-border-default));
     }
 
-    .indicator[data-tone='warning'] {
-      background: color-mix(in srgb, var(--color-background-warning) 12%, var(--color-background-alt));
-      border-color: color-mix(in srgb, var(--color-background-warning) 30%, var(--color-border-default));
-    }
-
-    .indicator[data-tone='info'] {
-      background: color-mix(in srgb, var(--color-background-info) 12%, var(--color-background-alt));
-      border-color: color-mix(in srgb, var(--color-background-info) 30%, var(--color-border-default));
-    }
-
     :host([disabled]) .track {
       border-color: var(--color-border-disabled);
     }

@@ -358,7 +358,7 @@ One choice inside rr-segmented. Carries its label colour only — the parent dra
 | `value` | string | `` | The value this segment commits to the group when chosen. Reflected. |
 | `selected` | boolean | `false` | Marks the chosen segment. Set by the parent rr-segmented — do not set directly. Reflected. |
 | `disabled` | boolean | `false` | Prevents selection and skips this segment during arrow navigation. Reflected. |
-| `tone` | 'neutral' \| 'success' \| 'danger' \| 'warning' \| 'info' | `neutral` | Semantic colour this choice carries once selected — the label takes the
+| `tone` | 'neutral' \| 'success' \| 'danger' | `neutral` | Semantic colour this choice carries once selected — the label takes the
 matching foreground and the parent tints the indicator to match. Reflected. |
 | `tabStop` | boolean | `false` | Marks this segment as the group's single tab stop (roving tabindex). Set
 by the parent rr-segmented — do not set directly. Maps to attribute tab-stop. |

@@ -22,7 +22,7 @@
     },
     {
       "name": "tone",
-      "type": "'neutral' | 'success' | 'danger' | 'warning' | 'info'",
+      "type": "'neutral' | 'success' | 'danger'",
       "default": "neutral"
     },
     {
@@ -55,8 +55,6 @@
     "--color-foreground-default",
     "--color-foreground-success",
     "--color-foreground-danger",
-    "--color-foreground-warning",
-    "--color-foreground-info",
     "--color-foreground-disabled",
     "--color-border-focus",
     "--motion-duration-standard",
@@ -71,7 +69,7 @@
   "guidance": [
     "Do not set selected or tab-stop directly — control the chosen segment via rr-segmented[value]. Both are written by the parent on every sync.",
     "A segment paints no chrome of its own: no fill, no border, no shadow. That restraint is the component — two segments that each drew a box would read as two adjacent buttons instead of one field with one value.",
-    "tone colours the label when this segment is chosen, and the parent lifts the same tone onto the indicator. Leave it neutral unless the value itself has a semantic reading (an outcome, a status)."
+    "tone colours the label when this segment is chosen, and the parent lifts the same tone onto the indicator. The set is neutral, success and danger only: a two- or three-choice control can carry a binary verdict (approve/deny, pass/fail, on/off) and nothing more. warning and info are message roles — they describe something the system is telling you, not a choice someone made. A third outcome that genuinely needs its own colour (decision-engine's Review) should get its own tone added deliberately, not borrow a feedback role."
   ],
   "examples": [
     {
