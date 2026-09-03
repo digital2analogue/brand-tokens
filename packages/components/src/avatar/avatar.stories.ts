@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/web-components-vite';
 import { html } from 'lit';
 import '@digital2analogue2/parsimony-components';
+import { SAMPLE_AVATAR_SRC } from './avatar-fixture.js';
 
 const meta: Meta = {
   title: 'Components/Avatar',
@@ -59,5 +60,5 @@ export const Colors: Story = {
 };
 
 export const Image: Story = {
-  args: { src: 'https://i.pravatar.cc/96', alt: 'User' },
+  args: { src: SAMPLE_AVATAR_SRC, alt: 'User' },
 };
