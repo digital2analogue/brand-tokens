@@ -1,0 +1,111 @@
+{
+  "metaVersion": "1.0.0",
+  "status": "beta",
+  "name": "rr-segment",
+  "summary": "One choice inside rr-segmented. Carries its label colour only — the parent draws the sliding indicator.",
+  "package": "@digital2analogue2/parsimony-components",
+  "props": [
+    {
+      "name": "value",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "selected",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "tone",
+      "type": "'neutral' | 'success' | 'danger' | 'warning' | 'info'",
+      "default": "neutral"
+    },
+    {
+      "name": "tabStop",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "slots": [
+    {
+      "name": "default",
+      "description": "Segment label text (and optional leading icon)."
+    }
+  ],
+  "events": [
+    {
+      "name": "rr-segment-select",
+      "detail": "Bubbles (composed) to rr-segmented when the segment is clicked; detail.value is this segment's value. Not fired when disabled or already selected."
+    }
+  ],
+  "cssParts": [],
+  "tokensUsed": [
+    "--spacing-micro",
+    "--spacing-inline",
+    "--radius-sm",
+    "--font-label-small",
+    "--letter-spacing-label",
+    "--color-foreground-muted",
+    "--color-foreground-alt",
+    "--color-foreground-default",
+    "--color-foreground-success",
+    "--color-foreground-danger",
+    "--color-foreground-warning",
+    "--color-foreground-info",
+    "--color-foreground-disabled",
+    "--color-border-focus",
+    "--motion-duration-standard",
+    "--motion-easing-default"
+  ],
+  "rules": [
+    "hard-1",
+    "hard-6",
+    "hard-9",
+    "hard-10"
+  ],
+  "guidance": [
+    "Do not set selected or tab-stop directly — control the chosen segment via rr-segmented[value]. Both are written by the parent on every sync.",
+    "A segment paints no chrome of its own: no fill, no border, no shadow. That restraint is the component — two segments that each drew a box would read as two adjacent buttons instead of one field with one value.",
+    "tone colours the label when this segment is chosen, and the parent lifts the same tone onto the indicator. Leave it neutral unless the value itself has a semantic reading (an outcome, a status)."
+  ],
+  "examples": [
+    {
+      "title": "Segment",
+      "html": "<rr-segment value=\"approve\">Approve</rr-segment>"
+    },
+    {
+      "title": "Toned segment",
+      "html": "<rr-segment value=\"deny\" tone=\"danger\">Deny</rr-segment>"
+    },
+    {
+      "title": "Disabled segment",
+      "html": "<rr-segment value=\"review\" disabled>Review</rr-segment>"
+    }
+  ],
+  "accessibility": {
+    "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/radio/",
+    "role": "radio",
+    "focusable": true,
+    "keyboard": [
+      "Enter or Space activates the focused segment via its native button",
+      "Arrow keys are handled by the parent rr-segmented, not here"
+    ],
+    "wcag": [
+      "1.4.3 Contrast (Minimum)",
+      "2.1.1 Keyboard",
+      "2.4.7 Focus Visible",
+      "4.1.2 Name, Role, Value"
+    ],
+    "rules": [
+      "aria-checked and the roving tabindex are managed in concert with rr-segmented.",
+      "Host uses delegatesFocus so focus forwards to the inner button.",
+      "The focus ring is inset rather than outset: the segment sits inside the track's rounded edge, where an outset outline would be clipped.",
+      "Unselected labels use foreground.muted, which clears AA on the track (6.3:1 base dark) — the system's sub-AA foreground.inactive is decision-engine-only chrome and is deliberately not used here (#232)."
+    ]
+  }
+}

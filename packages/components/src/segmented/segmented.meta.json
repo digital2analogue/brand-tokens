@@ -1,0 +1,123 @@
+{
+  "metaVersion": "1.0.0",
+  "status": "beta",
+  "name": "rr-segmented",
+  "summary": "A field whose two or three choices are all visible at rest — a radiogroup with a sliding indicator, not a row of buttons.",
+  "package": "@digital2analogue2/parsimony-components",
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "slots": [
+    {
+      "name": "default",
+      "description": "Place rr-segment elements here.",
+      "accepts": [
+        "rr-segment"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "change",
+      "detail": "Fired (bubbles, composed) when the value changes by click or keyboard; detail.value is the newly chosen segment's value."
+    }
+  ],
+  "cssParts": [
+    {
+      "name": "track",
+      "description": "The outer track the segments sit in."
+    },
+    {
+      "name": "indicator",
+      "description": "The sliding pill drawn behind the chosen segment. Absent when nothing is chosen."
+    }
+  ],
+  "tokensUsed": [
+    "--spacing-align",
+    "--radius-default",
+    "--radius-sm",
+    "--color-background-default",
+    "--color-background-alt",
+    "--color-background-disabled",
+    "--color-border-elevated",
+    "--color-border-default",
+    "--color-border-disabled",
+    "--shadow-raised",
+    "--motion-duration-standard",
+    "--motion-easing-move",
+    "--motion-easing-default",
+    "--color-background-success",
+    "--color-background-danger",
+    "--color-background-warning",
+    "--color-background-info"
+  ],
+  "rules": [
+    "hard-1",
+    "hard-6",
+    "hard-9",
+    "hard-10"
+  ],
+  "guidance": [
+    "Use it at two or three choices. Past that the control stops fitting and the choice belongs behind a click — reach for a listbox instead. This is the same job as a listbox (set a field's value), traded for screen space.",
+    "It is a field, not a row of buttons and not a menu: exactly one choice is checked and the value survives the interaction. A menu latches nothing; a chip group names things rather than setting one value.",
+    "Leave value empty for an unanswered field — no indicator is drawn at all, so a draft row cannot be mistaken for one that chose the first option.",
+    "Segments are equal-width by construction (one 1fr grid column each, so every segment is as wide as the widest label), which is what lets the indicator be placed arithmetically instead of measured. Labels of very different lengths will make the whole control wide; shorten the labels rather than fighting the layout.",
+    "The indicator owns all the chrome — fill, border, shadow. Never give a segment its own box: two boxed segments read as two adjacent buttons rather than one field.",
+    "Set tone on a segment to colour-code the chosen value; the indicator picks up a 12% tint of the same role. That is what makes an outcome scannable down a column of many rows.",
+    "The pill slides on motion-easing-move. An overshoot curve would read better — the pill should feel moved rather than recoloured — but the system has no spring easing yet (#232)."
+  ],
+  "examples": [
+    {
+      "title": "Outcome (tinted)",
+      "html": "<rr-segmented label=\"Outcome\" value=\"approve\">\n  <rr-segment value=\"approve\" tone=\"success\">Approve</rr-segment>\n  <rr-segment value=\"deny\" tone=\"danger\">Deny</rr-segment>\n</rr-segmented>"
+    },
+    {
+      "title": "Unanswered (no indicator)",
+      "html": "<rr-segmented label=\"Outcome\">\n  <rr-segment value=\"approve\" tone=\"success\">Approve</rr-segment>\n  <rr-segment value=\"deny\" tone=\"danger\">Deny</rr-segment>\n</rr-segmented>"
+    },
+    {
+      "title": "Three neutral choices",
+      "html": "<rr-segmented label=\"Density\" value=\"comfortable\">\n  <rr-segment value=\"compact\">Compact</rr-segment>\n  <rr-segment value=\"comfortable\">Comfortable</rr-segment>\n  <rr-segment value=\"spacious\">Spacious</rr-segment>\n</rr-segmented>"
+    }
+  ],
+  "accessibility": {
+    "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/radio/",
+    "role": "radiogroup",
+    "focusable": false,
+    "keyboard": [
+      "Tab enters the group once — the chosen segment is the tab stop, or the first enabled one when nothing is chosen",
+      "ArrowRight / ArrowDown move to the next enabled segment and select it (wraps)",
+      "ArrowLeft / ArrowUp move to the previous enabled segment and select it (wraps)",
+      "Home selects the first enabled segment, End the last",
+      "With nothing chosen, either arrow direction commits the first segment"
+    ],
+    "wcag": [
+      "1.4.3 Contrast (Minimum)",
+      "1.4.11 Non-text Contrast",
+      "2.1.1 Keyboard",
+      "2.4.7 Focus Visible",
+      "4.1.2 Name, Role, Value"
+    ],
+    "rules": [
+      "label is required so the radiogroup has an accessible name via aria-label.",
+      "Selection follows focus, per the WAI-ARIA radio group pattern: arrows both move and check. Roving tabindex keeps the whole group to one tab stop.",
+      "The indicator is a non-text state indicator under SC 1.4.11: it carries a border at color-border-default (3:1+ on the track) as well as its fill, so the chosen segment is not signalled by fill alone.",
+      "Tone is never the only channel — the chosen segment is also the one the pill sits under and the only one with aria-checked=true.",
+      "Tinted pills are color-mix composites the contrast gate cannot declare as a pairing. Measured on base dark against their tone foreground: success 6.9:1, danger 5.5:1, warning 7.9:1, info 8.0:1, neutral 9.9:1 — all AA."
+    ]
+  }
+}

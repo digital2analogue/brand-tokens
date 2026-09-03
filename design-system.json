@@ -2781,6 +2781,280 @@
     {
       "metaVersion": "1.0.0",
       "status": "beta",
+      "name": "rr-segment",
+      "summary": "One choice inside rr-segmented. Carries its label colour only — the parent draws the sliding indicator.",
+      "package": "@digital2analogue2/parsimony-components",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "default": "",
+          "description": "The value this segment commits to the group when chosen. Reflected."
+        },
+        {
+          "name": "selected",
+          "type": "boolean",
+          "default": false,
+          "description": "Marks the chosen segment. Set by the parent rr-segmented — do not set directly. Reflected."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": false,
+          "description": "Prevents selection and skips this segment during arrow navigation. Reflected."
+        },
+        {
+          "name": "tone",
+          "type": "'neutral' | 'success' | 'danger' | 'warning' | 'info'",
+          "default": "neutral",
+          "description": "Semantic colour this choice carries once selected — the label takes the\nmatching foreground and the parent tints the indicator to match. Reflected."
+        },
+        {
+          "name": "tabStop",
+          "type": "boolean",
+          "default": false,
+          "description": "Marks this segment as the group's single tab stop (roving tabindex). Set\nby the parent rr-segmented — do not set directly. Maps to attribute tab-stop."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Segment label text (and optional leading icon)."
+        }
+      ],
+      "events": [
+        {
+          "name": "rr-segment-select",
+          "detail": "Bubbles (composed) to rr-segmented when the segment is clicked; detail.value is this segment's value. Not fired when disabled or already selected."
+        }
+      ],
+      "cssParts": [],
+      "tokensUsed": [
+        "--spacing-micro",
+        "--spacing-inline",
+        "--radius-sm",
+        "--font-label-small",
+        "--letter-spacing-label",
+        "--color-foreground-muted",
+        "--color-foreground-alt",
+        "--color-foreground-default",
+        "--color-foreground-success",
+        "--color-foreground-danger",
+        "--color-foreground-warning",
+        "--color-foreground-info",
+        "--color-foreground-disabled",
+        "--color-border-focus",
+        "--motion-duration-standard",
+        "--motion-easing-default"
+      ],
+      "rules": [
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        },
+        {
+          "id": "hard-10",
+          "verify": "lint",
+          "rule": "Motion must respect `prefers-reduced-motion` (WCAG 2.3.3). The built brand CSS zeroes `--motion-duration-*` under `reduce`, so token-driven transitions stop automatically — never hardcode a transition/animation duration that bypasses the tokens. Any infinite animation (spin, shimmer, pulse) cannot be reached by the token override and MUST carry its own `@media (prefers-reduced-motion: reduce)` guard that stops or damps it"
+        }
+      ],
+      "guidance": [
+        "Do not set selected or tab-stop directly — control the chosen segment via rr-segmented[value]. Both are written by the parent on every sync.",
+        "A segment paints no chrome of its own: no fill, no border, no shadow. That restraint is the component — two segments that each drew a box would read as two adjacent buttons instead of one field with one value.",
+        "tone colours the label when this segment is chosen, and the parent lifts the same tone onto the indicator. Leave it neutral unless the value itself has a semantic reading (an outcome, a status)."
+      ],
+      "examples": [
+        {
+          "title": "Segment",
+          "html": "<rr-segment value=\"approve\">Approve</rr-segment>"
+        },
+        {
+          "title": "Toned segment",
+          "html": "<rr-segment value=\"deny\" tone=\"danger\">Deny</rr-segment>"
+        },
+        {
+          "title": "Disabled segment",
+          "html": "<rr-segment value=\"review\" disabled>Review</rr-segment>"
+        }
+      ],
+      "accessibility": {
+        "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/radio/",
+        "role": "radio",
+        "focusable": true,
+        "keyboard": [
+          "Enter or Space activates the focused segment via its native button",
+          "Arrow keys are handled by the parent rr-segmented, not here"
+        ],
+        "wcag": [
+          "1.4.3 Contrast (Minimum)",
+          "2.1.1 Keyboard",
+          "2.4.7 Focus Visible",
+          "4.1.2 Name, Role, Value"
+        ],
+        "rules": [
+          "aria-checked and the roving tabindex are managed in concert with rr-segmented.",
+          "Host uses delegatesFocus so focus forwards to the inner button.",
+          "The focus ring is inset rather than outset: the segment sits inside the track's rounded edge, where an outset outline would be clipped.",
+          "Unselected labels use foreground.muted, which clears AA on the track (6.3:1 base dark) — the system's sub-AA foreground.inactive is decision-engine-only chrome and is deliberately not used here (#232)."
+        ]
+      }
+    },
+    {
+      "metaVersion": "1.0.0",
+      "status": "beta",
+      "name": "rr-segmented",
+      "summary": "A field whose two or three choices are all visible at rest — a radiogroup with a sliding indicator, not a row of buttons.",
+      "package": "@digital2analogue2/parsimony-components",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "default": "",
+          "description": "Accessible label for the group (required); sets aria-label on the radiogroup."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "",
+          "description": "The chosen segment's value. Empty means nothing is chosen and no indicator is drawn. Reflected."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": false,
+          "description": "Disables the whole group and every segment in it. Reflected."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Place rr-segment elements here.",
+          "accepts": [
+            "rr-segment"
+          ]
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "detail": "Fired (bubbles, composed) when the value changes by click or keyboard; detail.value is the newly chosen segment's value."
+        }
+      ],
+      "cssParts": [
+        {
+          "name": "track",
+          "description": "The outer track the segments sit in."
+        },
+        {
+          "name": "indicator",
+          "description": "The sliding pill drawn behind the chosen segment. Absent when nothing is chosen."
+        }
+      ],
+      "tokensUsed": [
+        "--spacing-align",
+        "--radius-default",
+        "--radius-sm",
+        "--color-background-default",
+        "--color-background-alt",
+        "--color-background-disabled",
+        "--color-border-elevated",
+        "--color-border-default",
+        "--color-border-disabled",
+        "--shadow-raised",
+        "--motion-duration-standard",
+        "--motion-easing-move",
+        "--motion-easing-default",
+        "--color-background-success",
+        "--color-background-danger",
+        "--color-background-warning",
+        "--color-background-info"
+      ],
+      "rules": [
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        },
+        {
+          "id": "hard-10",
+          "verify": "lint",
+          "rule": "Motion must respect `prefers-reduced-motion` (WCAG 2.3.3). The built brand CSS zeroes `--motion-duration-*` under `reduce`, so token-driven transitions stop automatically — never hardcode a transition/animation duration that bypasses the tokens. Any infinite animation (spin, shimmer, pulse) cannot be reached by the token override and MUST carry its own `@media (prefers-reduced-motion: reduce)` guard that stops or damps it"
+        }
+      ],
+      "guidance": [
+        "Use it at two or three choices. Past that the control stops fitting and the choice belongs behind a click — reach for a listbox instead. This is the same job as a listbox (set a field's value), traded for screen space.",
+        "It is a field, not a row of buttons and not a menu: exactly one choice is checked and the value survives the interaction. A menu latches nothing; a chip group names things rather than setting one value.",
+        "Leave value empty for an unanswered field — no indicator is drawn at all, so a draft row cannot be mistaken for one that chose the first option.",
+        "Segments are equal-width by construction (one 1fr grid column each, so every segment is as wide as the widest label), which is what lets the indicator be placed arithmetically instead of measured. Labels of very different lengths will make the whole control wide; shorten the labels rather than fighting the layout.",
+        "The indicator owns all the chrome — fill, border, shadow. Never give a segment its own box: two boxed segments read as two adjacent buttons rather than one field.",
+        "Set tone on a segment to colour-code the chosen value; the indicator picks up a 12% tint of the same role. That is what makes an outcome scannable down a column of many rows.",
+        "The pill slides on motion-easing-move. An overshoot curve would read better — the pill should feel moved rather than recoloured — but the system has no spring easing yet (#232)."
+      ],
+      "examples": [
+        {
+          "title": "Outcome (tinted)",
+          "html": "<rr-segmented label=\"Outcome\" value=\"approve\">\n  <rr-segment value=\"approve\" tone=\"success\">Approve</rr-segment>\n  <rr-segment value=\"deny\" tone=\"danger\">Deny</rr-segment>\n</rr-segmented>"
+        },
+        {
+          "title": "Unanswered (no indicator)",
+          "html": "<rr-segmented label=\"Outcome\">\n  <rr-segment value=\"approve\" tone=\"success\">Approve</rr-segment>\n  <rr-segment value=\"deny\" tone=\"danger\">Deny</rr-segment>\n</rr-segmented>"
+        },
+        {
+          "title": "Three neutral choices",
+          "html": "<rr-segmented label=\"Density\" value=\"comfortable\">\n  <rr-segment value=\"compact\">Compact</rr-segment>\n  <rr-segment value=\"comfortable\">Comfortable</rr-segment>\n  <rr-segment value=\"spacious\">Spacious</rr-segment>\n</rr-segmented>"
+        }
+      ],
+      "accessibility": {
+        "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/radio/",
+        "role": "radiogroup",
+        "focusable": false,
+        "keyboard": [
+          "Tab enters the group once — the chosen segment is the tab stop, or the first enabled one when nothing is chosen",
+          "ArrowRight / ArrowDown move to the next enabled segment and select it (wraps)",
+          "ArrowLeft / ArrowUp move to the previous enabled segment and select it (wraps)",
+          "Home selects the first enabled segment, End the last",
+          "With nothing chosen, either arrow direction commits the first segment"
+        ],
+        "wcag": [
+          "1.4.3 Contrast (Minimum)",
+          "1.4.11 Non-text Contrast",
+          "2.1.1 Keyboard",
+          "2.4.7 Focus Visible",
+          "4.1.2 Name, Role, Value"
+        ],
+        "rules": [
+          "label is required so the radiogroup has an accessible name via aria-label.",
+          "Selection follows focus, per the WAI-ARIA radio group pattern: arrows both move and check. Roving tabindex keeps the whole group to one tab stop.",
+          "The indicator is a non-text state indicator under SC 1.4.11: it carries a border at color-border-default (3:1+ on the track) as well as its fill, so the chosen segment is not signalled by fill alone.",
+          "Tone is never the only channel — the chosen segment is also the one the pill sits under and the only one with aria-checked=true.",
+          "Tinted pills are color-mix composites the contrast gate cannot declare as a pairing. Measured on base dark against their tone foreground: success 6.9:1, danger 5.5:1, warning 7.9:1, info 8.0:1, neutral 9.9:1 — all AA."
+        ]
+      }
+    },
+    {
+      "metaVersion": "1.0.0",
+      "status": "beta",
       "name": "rr-select",
       "summary": "Form-associated select dropdown with label, helper text, and error state. Options supplied via the options property.",
       "package": "@digital2analogue2/parsimony-components",
@@ -5855,6 +6129,22 @@
           },
           {
             "kind": "js",
+            "name": "RrSegment",
+            "declaration": {
+              "name": "RrSegment",
+              "module": "./segmented/segment.js"
+            }
+          },
+          {
+            "kind": "js",
+            "name": "RrSegmented",
+            "declaration": {
+              "name": "RrSegmented",
+              "module": "./segmented/segmented.js"
+            }
+          },
+          {
+            "kind": "js",
             "name": "RrSelect",
             "declaration": {
               "name": "RrSelect",
@@ -7291,6 +7581,345 @@
             "declaration": {
               "name": "RrRadio",
               "module": "src/radio/radio.ts"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "javascript-module",
+        "path": "src/segmented/segment.ts",
+        "declarations": [
+          {
+            "kind": "class",
+            "description": "`<rr-segment>` — one choice inside `<rr-segmented>`.\n\nSelection state is owned by the parent: it sets `selected` and `tab-stop`,\nand it draws the sliding indicator. **A segment paints no chrome of its\nown** — no fill, no border, no shadow — only its label colour. That is the\nwhole reason this is a component rather than a row of chips: two segments\nthat each drew their own box would read as two adjacent buttons, not as one\nfield with one value.\n\n`tone` colours the label when this segment is the selected one, and the\nparent lifts the same tone onto the indicator so the pill is tinted to\nmatch. It is how an outcome stays scannable down a column of many rows.",
+            "name": "RrSegment",
+            "slots": [
+              {
+                "description": "Segment label text (and optional leading icon)",
+                "name": ""
+              }
+            ],
+            "members": [
+              {
+                "kind": "field",
+                "name": "shadowRootOptions",
+                "type": {
+                  "text": "object"
+                },
+                "static": true,
+                "default": "{ ...LitElement.shadowRootOptions, delegatesFocus: true }"
+              },
+              {
+                "kind": "field",
+                "name": "value",
+                "type": {
+                  "text": "string"
+                },
+                "default": "''",
+                "description": "The value this segment commits to the group when chosen. Reflected.",
+                "attribute": "value",
+                "reflects": true
+              },
+              {
+                "kind": "field",
+                "name": "selected",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Marks the chosen segment. Set by the parent rr-segmented — do not set directly. Reflected.",
+                "attribute": "selected",
+                "reflects": true
+              },
+              {
+                "kind": "field",
+                "name": "disabled",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Prevents selection and skips this segment during arrow navigation. Reflected.",
+                "attribute": "disabled",
+                "reflects": true
+              },
+              {
+                "kind": "field",
+                "name": "tone",
+                "type": {
+                  "text": "SegmentTone"
+                },
+                "default": "'neutral'",
+                "description": "Semantic colour this choice carries once selected — the label takes the\nmatching foreground and the parent tints the indicator to match. Reflected.",
+                "attribute": "tone",
+                "reflects": true
+              },
+              {
+                "kind": "field",
+                "name": "tabStop",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Marks this segment as the group's single tab stop (roving tabindex). Set\nby the parent rr-segmented — do not set directly. Maps to attribute tab-stop.",
+                "attribute": "tab-stop",
+                "reflects": true
+              },
+              {
+                "kind": "method",
+                "name": "_handleClick",
+                "privacy": "private"
+              }
+            ],
+            "events": [
+              {
+                "name": "rr-segment-select",
+                "type": {
+                  "text": "CustomEvent"
+                },
+                "description": "Bubbles to rr-segmented when clicked; detail.value"
+              }
+            ],
+            "attributes": [
+              {
+                "name": "value",
+                "type": {
+                  "text": "string"
+                },
+                "default": "''",
+                "description": "The value this segment commits to the group when chosen. Reflected.",
+                "fieldName": "value"
+              },
+              {
+                "name": "selected",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Marks the chosen segment. Set by the parent rr-segmented — do not set directly. Reflected.",
+                "fieldName": "selected"
+              },
+              {
+                "name": "disabled",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Prevents selection and skips this segment during arrow navigation. Reflected.",
+                "fieldName": "disabled"
+              },
+              {
+                "name": "tone",
+                "type": {
+                  "text": "SegmentTone"
+                },
+                "default": "'neutral'",
+                "description": "Semantic colour this choice carries once selected — the label takes the\nmatching foreground and the parent tints the indicator to match. Reflected.",
+                "fieldName": "tone"
+              },
+              {
+                "name": "tab-stop",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Marks this segment as the group's single tab stop (roving tabindex). Set\nby the parent rr-segmented — do not set directly. Maps to attribute tab-stop.",
+                "fieldName": "tabStop"
+              }
+            ],
+            "superclass": {
+              "name": "LitElement",
+              "package": "lit"
+            },
+            "tagName": "rr-segment",
+            "customElement": true
+          }
+        ],
+        "exports": [
+          {
+            "kind": "js",
+            "name": "RrSegment",
+            "declaration": {
+              "name": "RrSegment",
+              "module": "src/segmented/segment.ts"
+            }
+          },
+          {
+            "kind": "custom-element-definition",
+            "name": "rr-segment",
+            "declaration": {
+              "name": "RrSegment",
+              "module": "src/segmented/segment.ts"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "javascript-module",
+        "path": "src/segmented/segmented.ts",
+        "declarations": [
+          {
+            "kind": "class",
+            "description": "`<rr-segmented>` — a segmented control: a field whose two or three choices\nare all visible at rest.\n\nIt does the same job as a listbox — **set a field's value** — but spends\nscreen space instead of a click. That trade only pays at two or three\noptions; past that it stops fitting and the choice belongs behind a click.\n\nThe tell that it is a field and not a row of buttons: `role=\"radiogroup\"` /\n`role=\"radio\"`, exactly one choice checked, and a value that survives the\ninteraction. A menu, by contrast, latches nothing.\n\n**The sliding pill is the whole design.** One absolutely-positioned\nindicator carries the fill, border and shadow and translates between\nsegments; the segments themselves carry only semantic text colour. Segments\nare equal-width — one `1fr` grid column each, so every segment is as wide as\nthe widest label — which is what lets the indicator be placed arithmetically\nrather than measured.\n\nWith no value set, **no indicator is drawn at all** — a draft row that has\nnot been answered must not look like it picked the first option.",
+            "name": "RrSegmented",
+            "cssParts": [
+              {
+                "description": "The outer track element",
+                "name": "track"
+              },
+              {
+                "description": "The sliding pill",
+                "name": "indicator"
+              }
+            ],
+            "slots": [
+              {
+                "description": "Place `<rr-segment>` elements here",
+                "name": ""
+              }
+            ],
+            "members": [
+              {
+                "kind": "field",
+                "name": "label",
+                "type": {
+                  "text": "string"
+                },
+                "default": "''",
+                "description": "Accessible label for the group (required); sets aria-label on the radiogroup.",
+                "attribute": "label"
+              },
+              {
+                "kind": "field",
+                "name": "value",
+                "type": {
+                  "text": "string"
+                },
+                "default": "''",
+                "description": "The chosen segment's value. Empty means nothing is chosen and no indicator is drawn. Reflected.",
+                "attribute": "value",
+                "reflects": true
+              },
+              {
+                "kind": "field",
+                "name": "disabled",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Disables the whole group and every segment in it. Reflected.",
+                "attribute": "disabled",
+                "reflects": true
+              },
+              {
+                "kind": "method",
+                "name": "_segments",
+                "privacy": "private",
+                "return": {
+                  "type": {
+                    "text": "RrSegment[]"
+                  }
+                }
+              },
+              {
+                "kind": "field",
+                "name": "_selectedIndex",
+                "type": {
+                  "text": "number"
+                },
+                "privacy": "private",
+                "description": "Index of the chosen segment among all of them, or -1 when nothing is chosen.",
+                "readonly": true
+              },
+              {
+                "kind": "field",
+                "name": "_syncSegments",
+                "privacy": "private"
+              },
+              {
+                "kind": "method",
+                "name": "_commit",
+                "privacy": "private",
+                "parameters": [
+                  {
+                    "name": "value",
+                    "type": {
+                      "text": "string"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "field",
+                "name": "_onSegmentSelect",
+                "privacy": "private"
+              },
+              {
+                "kind": "field",
+                "name": "_onKeyDown",
+                "privacy": "private"
+              }
+            ],
+            "events": [
+              {
+                "name": "change",
+                "type": {
+                  "text": "CustomEvent"
+                },
+                "description": "When the value changes; detail: { value: string }"
+              }
+            ],
+            "attributes": [
+              {
+                "name": "label",
+                "type": {
+                  "text": "string"
+                },
+                "default": "''",
+                "description": "Accessible label for the group (required); sets aria-label on the radiogroup.",
+                "fieldName": "label"
+              },
+              {
+                "name": "value",
+                "type": {
+                  "text": "string"
+                },
+                "default": "''",
+                "description": "The chosen segment's value. Empty means nothing is chosen and no indicator is drawn. Reflected.",
+                "fieldName": "value"
+              },
+              {
+                "name": "disabled",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Disables the whole group and every segment in it. Reflected.",
+                "fieldName": "disabled"
+              }
+            ],
+            "superclass": {
+              "name": "LitElement",
+              "package": "lit"
+            },
+            "tagName": "rr-segmented",
+            "customElement": true
+          }
+        ],
+        "exports": [
+          {
+            "kind": "js",
+            "name": "RrSegmented",
+            "declaration": {
+              "name": "RrSegmented",
+              "module": "src/segmented/segmented.ts"
+            }
+          },
+          {
+            "kind": "custom-element-definition",
+            "name": "rr-segmented",
+            "declaration": {
+              "name": "RrSegmented",
+              "module": "src/segmented/segmented.ts"
             }
           }
         ]

@@ -13,6 +13,8 @@ export { RrMenuItem } from './menu/menu-item.js';
 export { RrProgress } from './progress/progress.js';
 export { RrRadio } from './radio/radio.js';
 export { RrRadioGroup } from './radio/radio-group.js';
+export { RrSegment } from './segmented/segment.js';
+export { RrSegmented } from './segmented/segmented.js';
 export { RrSelect } from './select/select.js';
 export { RrSkeleton } from './skeleton/skeleton.js';
 export { RrSpinner } from './spinner/spinner.js';
