@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { axe } from 'vitest-axe';
-import './tag.js';
-import type { RrTag } from './tag.js';
+import './chip.js';
+import type { RrChip } from './chip.js';
 
 function createElement(html: string): HTMLElement {
   const tpl = document.createElement('template');
@@ -11,13 +11,13 @@ function createElement(html: string): HTMLElement {
   return el;
 }
 
-describe('rr-tag', () => {
+describe('rr-chip', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   it('renders with default variant', async () => {
-    const el = createElement('<rr-tag>Design Systems</rr-tag>') as RrTag;
+    const el = createElement('<rr-chip>Design Systems</rr-chip>') as RrChip;
     await el.updateComplete;
     expect(el.variant).toBe('default');
     expect(el.getAttribute('variant')).toBe('default');
@@ -25,13 +25,13 @@ describe('rr-tag', () => {
   });
 
   it('reflects variant attribute to property', async () => {
-    const el = createElement('<rr-tag variant="subtle">Skill</rr-tag>') as RrTag;
+    const el = createElement('<rr-chip variant="subtle">Skill</rr-chip>') as RrChip;
     await el.updateComplete;
     expect(el.variant).toBe('subtle');
   });
 
   it('reflects variant property to attribute', async () => {
-    const el = createElement('<rr-tag>Test</rr-tag>') as RrTag;
+    const el = createElement('<rr-chip>Test</rr-chip>') as RrChip;
     await el.updateComplete;
     el.variant = 'subtle';
     await el.updateComplete;
@@ -39,7 +39,7 @@ describe('rr-tag', () => {
   });
 
   it('renders slotted content', async () => {
-    const el = createElement('<rr-tag>Figma</rr-tag>') as RrTag;
+    const el = createElement('<rr-chip>Figma</rr-chip>') as RrChip;
     await el.updateComplete;
     expect(el.textContent).toBe('Figma');
   });
@@ -49,8 +49,8 @@ describe('rr-tag', () => {
   for (const variant of variants) {
     it(`has no a11y violations for variant="${variant}"`, async () => {
       const el = createElement(
-        `<rr-tag variant="${variant}">${variant}</rr-tag>`
-      ) as RrTag;
+        `<rr-chip variant="${variant}">${variant}</rr-chip>`
+      ) as RrChip;
       await el.updateComplete;
       const results = await axe(document.body, {
         rules: {

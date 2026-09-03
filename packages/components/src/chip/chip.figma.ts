@@ -1,10 +1,15 @@
 import figma, { html } from '@figma/code-connect';
 
 /**
- * Code Connect mapping for <rr-tag>.
+ * Code Connect mapping for <rr-chip> (renamed from <rr-tag>, #229).
  *
  * Figma file:  Parsimony Design System (4aOEBHcnAv2Kbn0g1arL78)
  * Component:   Tag ComponentSet — node 171:28 (page "Components / Tag")
+ *
+ * NOTE: the Figma set is still named "Tag". This PR renamed the code side only
+ * (#229); node IDs are stable across a Figma rename, so this mapping keeps
+ * working either way, but the two sides disagree on the noun until someone
+ * renames the set in Figma. Tracked in #34.
  * Variant props:
  *   "Variant" — default | subtle  (1:1 with the element)
  *
@@ -21,6 +26,6 @@ figma.connect(
       }),
     },
     example: ({ variant }) =>
-      html`<rr-tag variant="${variant}">Tag</rr-tag>`,
+      html`<rr-chip variant="${variant}">Chip</rr-chip>`,
   }
 );

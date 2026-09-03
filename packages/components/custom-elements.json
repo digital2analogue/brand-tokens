@@ -933,6 +933,77 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/chip/chip.figma.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/chip/chip.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "An outlined, uppercase chip — a discrete thing: a category, a skill, a\nfilter, a value someone chose.\n\nThe deliberate counterpart to `<rr-badge>`, and the line between them is\n**provenance, not interactivity**: a badge reports state the *system* decided\nand you cannot influence (status, count, validity); a chip names a thing. So\nthe badge is a filled pill and the chip is a square-cornered (radius.sm),\ntransparent-filled, bordered label. Content is rendered UPPERCASE with\nall-caps letter-spacing, so authors pass normal-case text.\n\nThis element is the **static** chip and exposes no role. A chip may or may\nnot be actionable — most start static and grow a handler later, which is why\nthe noun covers both — but the interactive modes (pressed, removable,\npopup trigger) are not built yet: see #229. Until they are, an interactive\nchip is composed from `rr-button` or `rr-link`; do not attach handlers to\nthis host.\n\nUses semantic design tokens for all visual properties. Brand theming\ncascades automatically via CSS custom properties on `:root`.",
+          "name": "RrChip",
+          "slots": [
+            {
+              "description": "Chip label text",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "ChipVariant"
+              },
+              "default": "'default'",
+              "description": "Emphasis level. `default` is the standard visible outline (alt text,\nmuted-foreground border) that reads correctly standalone — use it for skill\nchips and most labels. `subtle` is a quieter treatment (muted text,\nelevated-border) for dense or secondary contexts.",
+              "attribute": "variant",
+              "reflects": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "type": {
+                "text": "ChipVariant"
+              },
+              "default": "'default'",
+              "description": "Emphasis level. `default` is the standard visible outline (alt text,\nmuted-foreground border) that reads correctly standalone — use it for skill\nchips and most labels. `subtle` is a quieter treatment (muted text,\nelevated-border) for dense or secondary contexts.",
+              "fieldName": "variant"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "rr-chip",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RrChip",
+          "declaration": {
+            "name": "RrChip",
+            "module": "src/chip/chip.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "rr-chip",
+          "declaration": {
+            "name": "RrChip",
+            "module": "src/chip/chip.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/dialog/dialog.figma.ts",
       "declarations": [],
       "exports": []
@@ -1388,10 +1459,10 @@
         },
         {
           "kind": "js",
-          "name": "RrTag",
+          "name": "RrChip",
           "declaration": {
-            "name": "RrTag",
-            "module": "./tag/tag.js"
+            "name": "RrChip",
+            "module": "./chip/chip.js"
           }
         },
         {
@@ -3786,77 +3857,6 @@
       "path": "src/tabs/tabs.figma.ts",
       "declarations": [],
       "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/tag/tag.figma.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/tag/tag.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "An outlined, uppercase tag / chip component.\n\nThe deliberate inverse of `<rr-badge>`: where the badge is a filled pill for\nstatus, the tag is a square-cornered (radius.sm), transparent-filled, bordered\nlabel for skills, categories, and metadata. Content is rendered UPPERCASE with\nall-caps letter-spacing, so authors pass normal-case text.\n\nUses semantic design tokens for all visual properties. Brand theming\ncascades automatically via CSS custom properties on `:root`.",
-          "name": "RrTag",
-          "slots": [
-            {
-              "description": "Tag label text",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "TagVariant"
-              },
-              "default": "'default'",
-              "description": "Emphasis level. `default` is the standard visible outline (alt text,\nmuted-foreground border) that reads correctly standalone — use it for skill\ntags and most labels. `subtle` is a quieter treatment (muted text,\nelevated-border) for dense or secondary contexts.",
-              "attribute": "variant",
-              "reflects": true
-            }
-          ],
-          "attributes": [
-            {
-              "name": "variant",
-              "type": {
-                "text": "TagVariant"
-              },
-              "default": "'default'",
-              "description": "Emphasis level. `default` is the standard visible outline (alt text,\nmuted-foreground border) that reads correctly standalone — use it for skill\ntags and most labels. `subtle` is a quieter treatment (muted text,\nelevated-border) for dense or secondary contexts.",
-              "fieldName": "variant"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "rr-tag",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RrTag",
-          "declaration": {
-            "name": "RrTag",
-            "module": "src/tag/tag.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "rr-tag",
-          "declaration": {
-            "name": "RrTag",
-            "module": "src/tag/tag.ts"
-          }
-        }
-      ]
     },
     {
       "kind": "javascript-module",
