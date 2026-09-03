@@ -71,6 +71,11 @@ scripts/
                               Gotcha: `build/css/` is gitignored, so it SURVIVES a branch checkout — build on one
                               branch, switch, and the gate reports drift from the branch you left. `npm run build`
                               after switching; the gate is right and you are looking at stale CSS.
+  drop-baselines.mjs          Deletes visual baselines by substring so `--update-snapshots` will actually
+                              rewrite them (`npm run baselines:drop -- <substring>`; refuses to run without
+                              a filter). Playwright only rewrites a baseline whose comparison FAILED, so a
+                              change small enough to pass on tolerance is one the update flag silently
+                              declines to record — see #235 and the visual-regression note below.
   drift_audit.py              Figma-variable-vs-token drift auditor (separate concern from code linting).
 design-system.json   Generated artifact — merged component metadata + Custom Elements Manifest, read by the MCP server.
 .github/workflows/
@@ -99,6 +104,16 @@ docs/
   decisions.md       THE decision log — the only one. Dated entries, newest first.
 AGENTS.md            Vendor-neutral guide for agents *consuming* the system in product repos.
 ```
+
+> **Visual regression has two traps, both learned the hard way (#235).** The
+> component screenshots compare with `maxDiffPixels: 200` — an *absolute*
+> allowance, deliberately, because the old `maxDiffPixelRatio: 0.02` was 2% of
+> the 800×480 canvas (~7,700 px) while a small component contains fewer pixels
+> than that in total; a visibly broken segmented control passed the suite twice.
+> And `--update-snapshots` only rewrites a baseline whose comparison **failed**,
+> so regenerating locally needs the PNGs deleted first: `npm run baselines:drop
+> -- <substring>`. Baselines are still meant to come from the CI runner
+> (`update-visual-baselines.yml`), not your machine.
 
 > **One repo, real workspaces.** `packages/*` are npm workspaces — run `npm ci`
 > once at the root. The lint rules live in exactly one place (`scripts/rules.mjs`);

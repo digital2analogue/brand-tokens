@@ -6,6 +6,11 @@ import { defineConfig, devices } from '@playwright/test';
 // rasterization differs across machines). After an intentional visual
 // change, run the "Update visual baselines" workflow from the Actions tab.
 //
+// If you do regenerate locally, `--update-snapshots` alone is not enough:
+// it only rewrites a baseline whose comparison FAILED. Delete the PNGs you
+// intend to replace first — `npm run baselines:drop -- <substring>` from the
+// repo root does exactly that, and refuses to run without a filter.
+//
 // Requires storybook-static/ to exist: `npm run build-storybook` first
 // (the root `npm run test:visual` chains it; CI builds it earlier in the
 // verify job).
@@ -19,7 +24,24 @@ export default defineConfig({
   expect: {
     toHaveScreenshot: {
       animations: 'disabled',
-      maxDiffPixelRatio: 0.02,
+      // ABSOLUTE, not a ratio (#235). maxDiffPixelRatio is a fraction of the
+      // whole 800x480 canvas, so 0.02 allowed ~7,700 differing pixels — more
+      // than a small component contains. A segmented control is roughly
+      // 210x26 = 5,500 pixels TOTAL: every one of them could change and the
+      // ratio still passed. It did, twice, on a genuinely broken layout.
+      //
+      // The second-order effect is worse than the missed failure: a change
+      // that passes on tolerance is one `--update-snapshots` will not rewrite,
+      // so the committed PNG quietly stops describing the code and the next
+      // real regression is measured against a stale reference.
+      //
+      // 200 is generous for anti-aliasing drift (observed drift between this
+      // repo's runner and a local render is zero across all 86 baselines) and
+      // far below any layout change: moving or resizing one component shifts
+      // thousands of pixels. `threshold` is Playwright's default, stated here
+      // so the per-pixel and per-image allowances are read together.
+      maxDiffPixels: 200,
+      threshold: 0.2,
     },
   },
   use: {

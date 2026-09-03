@@ -11,6 +11,48 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-09-03 — the visual gate's tolerance is absolute, not a ratio (#235)
+
+**What.** `toHaveScreenshot` now compares with `maxDiffPixels: 200` instead of
+`maxDiffPixelRatio: 0.02`, and `npm run baselines:drop -- <substring>` exists to
+delete baselines before regenerating them.
+
+**Why.** `maxDiffPixelRatio` is a fraction of the whole screenshot, and the
+screenshot is `#storybook-root` spanning an 800×480 viewport — so 0.02 allowed
+about **7,700** differing pixels. Most stories in this suite are one small
+element on a large empty canvas: a segmented control is roughly 210×26, about
+**5,500 pixels in total**. Every pixel in the component could change and the
+ratio still passed. During #234 it did, twice, on a layout that was visibly
+wrong on screen.
+
+The second-order effect is the worse one. `--update-snapshots` only rewrites a
+baseline whose comparison **failed**, so a change that passes on tolerance is a
+change the update flag declines to record. Three consecutive update runs
+reported "86 passed" and wrote nothing while the component was broken; the
+committed PNG had quietly stopped describing the code. It was found only by
+deleting the files and regenerating from scratch — which is now a script with a
+guard rail rather than a thing you have to know.
+
+**Why 200.** Observed drift between a local render and the committed CI
+baselines is **zero** across all 86, measured over five full runs in one
+session. 200 is therefore generous for anti-aliasing jitter and still two orders
+of magnitude below a layout change: moving or resizing one component shifts
+thousands of pixels. `threshold` stays at Playwright's default 0.2 but is now
+written out, so the per-pixel and per-image allowances are read together instead
+of one being invisible.
+
+**Alternative.** Shrink the capture to the story's own element, so the ratio
+would mean what it reads as. Better in principle and still worth doing — it
+would make the allowance scale with the component instead of the frame — but it
+changes every baseline in the repo, which is a much larger and separate change
+than fixing the number that is wrong today.
+
+**Status.** Shipped. The rule that baselines are generated on the CI runner is
+unchanged; `baselines:drop` refuses to run without a filter precisely so it
+cannot become a way to regenerate the whole suite locally.
+
+---
+
 ## 2026-09-03 — rr-segmented ships without promoting a sub-AA token, and without a spring curve (#232)
 
 **What.** `rr-segmented` + `rr-segment` land as the third member of the
