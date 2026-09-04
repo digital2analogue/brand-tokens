@@ -11,6 +11,53 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-09-04 — a chip keeps one silhouette in every mode (#229)
+
+**What.** `rr-chip` gained its interactive half — `interactive`, `pressed`,
+`removable`, `empty`, `disabled`, plus `leading`/`trailing` slots. **The radius
+never changes.** Every chip is `radius.sm`, static or operable, latched or not.
+
+**Why.** The open question in #229 was whether an interactive chip becomes a
+pill (`radius.full`) while a static one stays square. Owner's call, 2026-09-03:
+*"No, it doesn't change radius."* That is the better answer for a reason worth
+writing down — a component that swapped outlines on a boolean would put the same
+object in a design file under two shapes, and a reader of a mock could not tell
+*"this chip is interactive"* from *"someone used the wrong radius."* The
+affordance carries interactivity instead: hard rule 5's accent, a focus ring,
+and Enter/Space.
+
+So the shape grammar for the family is now flat: chip = `radius.sm` in all
+modes; menu trigger and button = `radius.default`; there is no `radius.full`
+anywhere in it.
+
+**Three structural calls that follow.**
+
+*The dismiss control is a sibling of the body, not a child.* A `removable`
+`interactive` chip would otherwise be a button inside a button — invalid HTML
+and an unusable control. Both are native `<button>`s inside a non-interactive
+container, and the dismiss click is stopped so removing a chip never also reads
+as clicking it.
+
+*`pressed` is controlled, not self-toggling* — like `rr-tab[selected]`. A chip
+that flipped its own state would fight every consumer holding filter state, and
+filter state almost always lives above the chip.
+
+*`empty` is awaiting-input, never disabled.* It keeps a legible dashed edge and
+stays fully operable, where `disabled` recedes to near-canvas and leaves the tab
+order. Reaching for `disabled` to mean "nothing chosen yet" announces a control
+as unavailable at the exact moment it is the next thing the user should press.
+
+**Alternative.** Pill-shaped interactive chips, as the first cut of #229
+proposed. Rejected above. Also rejected: a `rr-tab-list variant="pill"` borrowing
+`rr-segmented`'s sliding indicator, raised while reviewing the segmented control
+— the owner declined it (2026-09-04), so the system keeps one tab treatment.
+
+**Status.** Shipped. `rr-badge`'s contract now states its non-interactive
+nature explicitly rather than leaving it as an omission: if the thing can be
+operated it is a chip.
+
+---
+
 ## 2026-09-03 — the visual gate's tolerance is absolute, not a ratio (#235)
 
 **What.** `toHaveScreenshot` now compares with `maxDiffPixels: 200` instead of

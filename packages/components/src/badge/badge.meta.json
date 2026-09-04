@@ -174,6 +174,7 @@
       "1.4.11 Non-text Contrast"
     ],
     "rules": [
+      "rr-badge is a DISPLAY element: not focusable, no interactive role, no click handling. That is the contract, not an omission — if the thing can be operated it is an rr-chip, which is the same family split on provenance rather than interactivity (#229).",
       "Add role=\"status\" on the host element when badge content updates dynamically to create an ARIA live region.",
       "Decorative badges (accent-*) do not need role=\"status\"; they are static labels.",
       "Badge text alone must convey meaning; do not rely solely on color to distinguish variants."
