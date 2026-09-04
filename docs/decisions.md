@@ -11,6 +11,74 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-09-03 — the visual gate's tolerance is absolute, not a ratio (#235)
+
+**What.** `toHaveScreenshot` now compares with `maxDiffPixels: 200` instead of
+`maxDiffPixelRatio: 0.02`, and `npm run baselines:drop -- <substring>` exists to
+delete baselines before regenerating them.
+
+**Why.** `maxDiffPixelRatio` is a fraction of the whole screenshot, and the
+screenshot is `#storybook-root` spanning an 800×480 viewport — so 0.02 allowed
+about **7,700** differing pixels. Most stories in this suite are one small
+element on a large empty canvas: a segmented control is roughly 210×26, about
+**5,500 pixels in total**. Every pixel in the component could change and the
+ratio still passed. During #234 it did, twice, on a layout that was visibly
+wrong on screen.
+
+The second-order effect is the worse one. `--update-snapshots` only rewrites a
+baseline whose comparison **failed**, so a change that passes on tolerance is a
+change the update flag declines to record. Three consecutive update runs
+reported "86 passed" and wrote nothing while the component was broken; the
+committed PNG had quietly stopped describing the code. It was found only by
+deleting the files and regenerating from scratch — which is now a script with a
+guard rail rather than a thing you have to know.
+
+**Why 200 — and the measurement that corrected it.** The first version of this
+entry justified 200 by claiming observed drift was *zero across all 86
+baselines*. That number was wrong, and wrong in an instructive way: it compared
+local renders against baselines generated **on that same machine**, which is
+tautologically zero and says nothing about the runner. The first CI run at 200
+falsified it immediately — 81 passed, 5 failed:
+
+| story | drift | baseline's origin |
+|---|---|---|
+| `button--sizes` | **4,890 px** | the runner, long ago — nobody had touched it |
+| `segmented--neutral` | 625 px | generated locally during #234 |
+| `segmented--denied` | 250–625 px | generated locally during #234 |
+| `segmented--default` | 228–250 px | generated locally during #234 |
+| `avatar--image` | (failed; no pixel count in the log) | the runner |
+
+Two different problems, and separating them is the whole lesson. The three
+`segmented` ones are **local-vs-runner** drift — baselines that should never
+have been generated on a laptop, and were, because the loose ratio made the
+violation invisible. `button--sizes` is worse: nobody generated it locally, so
+its 4,890 px is a baseline that has quietly stopped matching the environment CI
+renders in, and the old gate had been passing it for as long as it had been
+drifting. ~4,890 against an allowance of ~7,700 is not a comfortable margin; it
+is a gate that was about to start failing at random and nobody would have known
+why.
+
+So 200 is only defensible once every baseline is regenerated on the runner, and
+that regeneration is part of this change rather than a follow-up. `threshold`
+stays at Playwright's default 0.2 but is now written out, so the per-pixel and
+per-image allowances are read together instead of one being invisible.
+
+**Alternative.** Shrink the capture to the story's own element, so the ratio
+would mean what it reads as. Better in principle and still worth doing — it
+would make the allowance scale with the component instead of the frame — but it
+changes every baseline in the repo, which is a much larger and separate change
+than fixing the number that is wrong today.
+
+**Status.** Shipped, with all baselines regenerated on the runner as part of it.
+
+The rule that baselines are generated on the CI runner is unchanged, and is now
+load-bearing rather than advisory: at a 7,700-pixel allowance you could ignore
+it for months without a symptom, which is exactly what happened. `baselines:drop`
+refuses to run without a filter precisely so it cannot become a way to
+regenerate the whole suite locally.
+
+---
+
 ## 2026-09-03 — rr-segmented ships without promoting a sub-AA token, and without a spring curve (#232)
 
 **What.** `rr-segmented` + `rr-segment` land as the third member of the
