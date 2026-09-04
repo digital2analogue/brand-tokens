@@ -157,7 +157,7 @@ Form-associated checkbox with checked, indeterminate, and disabled states. Backe
 
 ### `<rr-chip>`
 
-Outlined uppercase chip naming a discrete thing — a category, skill or filter. The square, transparent counterpart to the filled badge.
+Outlined uppercase chip naming a discrete thing — a category, skill, filter or chosen value. Static, interactive, latched or removable.
 
 | Attribute | Type | Default | Notes |
 |---|---|---|---|
@@ -165,13 +165,31 @@ Outlined uppercase chip naming a discrete thing — a category, skill or filter.
 muted-foreground border) that reads correctly standalone — use it for skill
 chips and most labels. `subtle` is a quieter treatment (muted text,
 elevated-border) for dense or secondary contexts. |
+| `interactive` | boolean | `false` | Makes the chip body a real button — focusable, with Enter and Space. The
+accent border and label come with it. Reflected. |
+| `pressed` | boolean | `false` | Latched state for a filter chip; sets aria-pressed and fills the chip.
+Implies interactive. Controlled by the consumer — the chip does not toggle
+itself, so flip it on the click event. Reflected. |
+| `removable` | boolean | `false` | Adds a trailing dismiss control that fires rr-chip-remove. Independent of
+interactive: a static value chip can be removable. Reflected. |
+| `empty` | boolean | `false` | Renders the awaiting-input treatment — dashed edge, muted label — for a
+chip acting as a trigger with nothing chosen yet. Distinct from disabled:
+an empty chip is still operable. Reflected. |
+| `disabled` | boolean | `false` | Disables the chip body and its dismiss control. Reflected. |
+| `removeLabel` | string | `Remove` | Accessible name for the dismiss control. Name the thing being removed
+("Remove Income filter") — a row of chips all saying "Remove" tells a
+screen-reader user nothing. Maps to attribute remove-label. |
 
-**Slots:** (default) — Chip label text. Rendered uppercase via CSS — pass normal-case text.
+**Slots:** (default) — Chip label text. Rendered uppercase via CSS — pass normal-case text.; `leading` — Icon or marker before the label, inside the chip's own padding rhythm.; `trailing` — Icon or marker after the label. Not the remove control — that is the removable prop.
+
+**Events:** `rr-chip-remove`
 
 **Component rules:**
 - No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- Accent green (foreground.action, foreground.accent, background.action, background.accent) is never resting text or decoration — it signals interactivity or intentional emphasis only _(manual)_
 - All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
 - Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
+- Motion must respect `prefers-reduced-motion` (WCAG 2.3.3). The built brand CSS zeroes `--motion-duration-*` under `reduce`, so token-driven transitions stop automatically — never hardcode a transition/animation duration that bypasses the tokens. Any infinite animation (spin, shimmer, pulse) cannot be reached by the token override and MUST carry its own `@media (prefers-reduced-motion: reduce)` guard that stops or damps it _(lint)_
 
 ### `<rr-dialog>`
 

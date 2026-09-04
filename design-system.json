@@ -461,6 +461,7 @@
           "1.4.11 Non-text Contrast"
         ],
         "rules": [
+          "rr-badge is a DISPLAY element: not focusable, no interactive role, no click handling. That is the contract, not an omission — if the thing can be operated it is an rr-chip, which is the same family split on provenance rather than interactivity (#229).",
           "Add role=\"status\" on the host element when badge content updates dynamically to create an ARIA live region.",
           "Decorative badges (accent-*) do not need role=\"status\"; they are static labels.",
           "Badge text alone must convey meaning; do not rely solely on color to distinguish variants."
@@ -1242,7 +1243,7 @@
       "metaVersion": "1.0.0",
       "status": "beta",
       "name": "rr-chip",
-      "summary": "Outlined uppercase chip naming a discrete thing — a category, skill or filter. The square, transparent counterpart to the filled badge.",
+      "summary": "Outlined uppercase chip naming a discrete thing — a category, skill, filter or chosen value. Static, interactive, latched or removable.",
       "package": "@digital2analogue2/parsimony-components",
       "props": [
         {
@@ -1250,31 +1251,112 @@
           "type": "'default' | 'subtle'",
           "default": "default",
           "description": "Emphasis level. `default` is the standard visible outline (alt text,\nmuted-foreground border) that reads correctly standalone — use it for skill\nchips and most labels. `subtle` is a quieter treatment (muted text,\nelevated-border) for dense or secondary contexts."
+        },
+        {
+          "name": "interactive",
+          "type": "boolean",
+          "default": false,
+          "description": "Makes the chip body a real button — focusable, with Enter and Space. The\naccent border and label come with it. Reflected."
+        },
+        {
+          "name": "pressed",
+          "type": "boolean",
+          "default": false,
+          "description": "Latched state for a filter chip; sets aria-pressed and fills the chip.\nImplies interactive. Controlled by the consumer — the chip does not toggle\nitself, so flip it on the click event. Reflected."
+        },
+        {
+          "name": "removable",
+          "type": "boolean",
+          "default": false,
+          "description": "Adds a trailing dismiss control that fires rr-chip-remove. Independent of\ninteractive: a static value chip can be removable. Reflected."
+        },
+        {
+          "name": "empty",
+          "type": "boolean",
+          "default": false,
+          "description": "Renders the awaiting-input treatment — dashed edge, muted label — for a\nchip acting as a trigger with nothing chosen yet. Distinct from disabled:\nan empty chip is still operable. Reflected."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": false,
+          "description": "Disables the chip body and its dismiss control. Reflected."
+        },
+        {
+          "name": "removeLabel",
+          "type": "string",
+          "default": "Remove",
+          "description": "Accessible name for the dismiss control. Name the thing being removed\n(\"Remove Income filter\") — a row of chips all saying \"Remove\" tells a\nscreen-reader user nothing. Maps to attribute remove-label."
         }
       ],
       "slots": [
         {
           "name": "default",
           "description": "Chip label text. Rendered uppercase via CSS — pass normal-case text."
+        },
+        {
+          "name": "leading",
+          "description": "Icon or marker before the label, inside the chip's own padding rhythm."
+        },
+        {
+          "name": "trailing",
+          "description": "Icon or marker after the label. Not the remove control — that is the removable prop."
         }
       ],
-      "events": [],
-      "cssParts": [],
+      "events": [
+        {
+          "name": "rr-chip-remove",
+          "detail": "Bubbles (composed) when the dismiss control is activated. Not fired while disabled. The chip does not remove itself — the consumer decides what happens."
+        }
+      ],
+      "cssParts": [
+        {
+          "name": "chip",
+          "description": "The outer chip container that carries the border, fill and radius."
+        },
+        {
+          "name": "body",
+          "description": "The label body — a button when interactive or pressed, a span otherwise."
+        },
+        {
+          "name": "remove",
+          "description": "The dismiss control, a sibling of the body rather than a child."
+        }
+      ],
       "tokensUsed": [
+        "--spacing-micro",
+        "--spacing-tight",
+        "--radius-sm",
+        "--font-label-small",
+        "--letter-spacing-all-caps",
+        "--icon-size-compact",
         "--color-foreground-alt",
         "--color-foreground-muted",
+        "--color-foreground-default",
+        "--color-foreground-action",
+        "--color-foreground-accent-green",
+        "--color-foreground-disabled",
+        "--color-background-alt",
+        "--color-background-accent-green",
+        "--color-background-disabled",
         "--color-border-elevated",
-        "--radius-sm",
-        "--spacing-tight",
-        "--spacing-micro",
-        "--font-label-small",
-        "--letter-spacing-all-caps"
+        "--color-border-default",
+        "--color-border-action",
+        "--color-border-focus",
+        "--color-border-disabled",
+        "--motion-duration-instant",
+        "--motion-easing-default"
       ],
       "rules": [
         {
           "id": "hard-1",
           "verify": "lint",
           "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-5",
+          "verify": "manual",
+          "rule": "Accent green (foreground.action, foreground.accent, background.action, background.accent) is never resting text or decoration — it signals interactivity or intentional emphasis only"
         },
         {
           "id": "hard-6",
@@ -1285,15 +1367,23 @@
           "id": "hard-9",
           "verify": "lint",
           "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        },
+        {
+          "id": "hard-10",
+          "verify": "lint",
+          "rule": "Motion must respect `prefers-reduced-motion` (WCAG 2.3.3). The built brand CSS zeroes `--motion-duration-*` under `reduce`, so token-driven transitions stop automatically — never hardcode a transition/animation duration that bypasses the tokens. Any infinite animation (spin, shimmer, pulse) cannot be reached by the token override and MUST carry its own `@media (prefers-reduced-motion: reduce)` guard that stops or damps it"
         }
       ],
       "guidance": [
         "Chip vs badge is a question of provenance, not interactivity. A badge reports state the system decided and you cannot influence — status, count, validity. A chip names a discrete thing — a category, a skill, a filter, a value someone chose. Pick by asking who decided what it says, not by whether it is clickable.",
-        "The visual split follows from that: the chip is outlined (transparent fill, square radius.sm), the badge is a filled pill.",
-        "Do not point a chip border at --color-border-default: it equals background.alt and disappears on the page canvas. The default variant uses foreground.muted and the subtle variant uses border.elevated so both stay visible standalone.",
-        "Content is transformed to uppercase with --letter-spacing-all-caps in CSS; authors pass normal-case text and must not pre-uppercase it.",
-        "This element is the STATIC chip and exposes no role. A chip may legitimately be interactive — a filter that toggles, a removable value, a trigger that opens a listbox — but those modes are not built yet (#229). Until they are, compose an interactive chip from rr-button or rr-link; do not attach handlers to this host.",
-        "When a chip is used as the trigger for a popup, it must not declare aria-haspopup or aria-expanded itself. The popup stamps those onto whatever sits in its trigger slot, exactly as rr-menu already does — so the same chip stays correct when it is used as a plain filter."
+        "A chip keeps ONE silhouette in every mode: radius.sm, interactive or not (owner's call, 2026-09-03). What changes is the affordance — an operable chip earns the accent, a focus ring and Enter/Space. Never change the radius to signal interactivity; a reader of a mock could not then tell an interactive chip from a wrong one.",
+        "pressed implies interactive, and is CONTROLLED — the chip does not toggle itself, exactly like rr-tab[selected]. Listen for click and flip the prop. A chip that toggled itself would fight every consumer holding filter state of its own.",
+        "removable is independent of interactive: a static value chip can carry a dismiss control. The control is a SIBLING of the body, never a child — a button inside a button is neither valid HTML nor operable — and its click is stopped so it cannot also read as a click on the chip.",
+        "Name what the dismiss control removes via remove-label (\"Remove Income filter\"). A row of chips all announcing \"Remove\" tells a screen-reader user nothing about which one they are on.",
+        "empty is awaiting-input, NOT disabled. It keeps a legible dashed border and stays fully operable; disabled recedes to near-canvas and stops accepting input. Reaching for disabled to mean \"nothing chosen yet\" tells the user the control is unavailable when it is in fact the next thing they should press.",
+        "When a chip is used as the trigger for a popup, it must not declare aria-haspopup or aria-expanded itself. The popup stamps those onto whatever sits in its trigger slot, exactly as rr-menu already does — so the same chip stays correct when it is used as a plain filter.",
+        "Do not point a chip border at --color-border-default for the resting state: it equals background.alt and disappears on the page canvas. The default variant uses foreground.muted and the subtle variant uses border.elevated so both stay visible standalone. (empty is the deliberate exception — a dashed border.default edge reads as an unfilled field.)",
+        "Content is transformed to uppercase with --letter-spacing-all-caps in CSS; authors pass normal-case text and must not pre-uppercase it."
       ],
       "examples": [
         {
@@ -1305,22 +1395,48 @@
           "html": "<rr-chip variant=\"subtle\">Decision Tooling</rr-chip>"
         },
         {
+          "title": "Interactive filter",
+          "html": "<rr-chip interactive>Compliance UX</rr-chip>"
+        },
+        {
+          "title": "Latched filter (controlled)",
+          "html": "<rr-chip interactive pressed>Compliance UX</rr-chip>"
+        },
+        {
+          "title": "Removable value",
+          "html": "<rr-chip removable remove-label=\"Remove Income filter\">Income &gt; 75k</rr-chip>"
+        },
+        {
+          "title": "Empty trigger (awaiting input)",
+          "html": "<rr-chip interactive empty>Select attribute</rr-chip>"
+        },
+        {
           "title": "Skill chip group",
           "html": "<rr-chip>Figma</rr-chip>\n<rr-chip>Research</rr-chip>\n<rr-chip>Prototyping</rr-chip>"
         }
       ],
       "accessibility": {
-        "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/",
-        "focusable": false,
-        "keyboard": [],
+        "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/button/",
+        "focusable": true,
+        "keyboard": [
+          "Tab reaches the chip body when interactive or pressed, and the dismiss control when removable",
+          "Enter and Space activate the body and the dismiss control, via native buttons"
+        ],
         "wcag": [
           "1.4.3 Contrast (Minimum)",
-          "1.4.11 Non-text Contrast"
+          "1.4.11 Non-text Contrast",
+          "2.1.1 Keyboard",
+          "2.4.7 Focus Visible",
+          "4.1.2 Name, Role, Value"
         ],
         "rules": [
           "Chip text alone must convey meaning; do not rely on the border or emphasis level to communicate.",
-          "This element is a static label — not focusable, no role. Interactive chips are composed from rr-button or rr-link until the interactive modes land (#229).",
-          "Both variants meet WCAG AA for text contrast on the base canvas (default 8.0:1, subtle 6.3:1)."
+          "A static chip exposes NO role and is not focusable — it renders a span. Only interactive, pressed and removable introduce controls, and each is a native button so Enter and Space come for free.",
+          "aria-pressed is present only when pressed, and absent entirely otherwise — an unpressed toggle and a plain button are different things to a screen reader.",
+          "The dismiss control carries its own accessible name via remove-label; name the value being removed, not the action alone.",
+          "empty stays operable and keeps a legible edge. Never use disabled to mean \"nothing chosen yet\": disabled removes the control from the tab order and announces it as unavailable.",
+          "Both variants meet WCAG AA for text contrast on the base canvas (default 8.0:1, subtle 6.3:1). Interactive uses foreground.action (11.1:1 on canvas, 9.0:1 on background.alt hover); pressed pairs foreground.accent-green on background.accent-green at 9.7:1.",
+          "A chip used as a popup trigger must not declare aria-haspopup or aria-expanded — the popup owns those."
         ]
       }
     },
@@ -5673,15 +5789,46 @@
         "declarations": [
           {
             "kind": "class",
-            "description": "An outlined, uppercase chip — a discrete thing: a category, a skill, a\nfilter, a value someone chose.\n\nThe deliberate counterpart to `<rr-badge>`, and the line between them is\n**provenance, not interactivity**: a badge reports state the *system* decided\nand you cannot influence (status, count, validity); a chip names a thing. So\nthe badge is a filled pill and the chip is a square-cornered (radius.sm),\ntransparent-filled, bordered label. Content is rendered UPPERCASE with\nall-caps letter-spacing, so authors pass normal-case text.\n\nThis element is the **static** chip and exposes no role. A chip may or may\nnot be actionable — most start static and grow a handler later, which is why\nthe noun covers both — but the interactive modes (pressed, removable,\npopup trigger) are not built yet: see #229. Until they are, an interactive\nchip is composed from `rr-button` or `rr-link`; do not attach handlers to\nthis host.\n\nUses semantic design tokens for all visual properties. Brand theming\ncascades automatically via CSS custom properties on `:root`.",
+            "description": "An outlined, uppercase chip — a discrete thing: a category, a skill, a\nfilter, a value someone chose.\n\nThe deliberate counterpart to `<rr-badge>`, and the line between them is\n**provenance, not interactivity**: a badge reports state the *system* decided\nand you cannot influence (status, count, validity); a chip names a thing. So\nthe badge is a filled pill and the chip is a square-cornered (radius.sm),\nbordered label. Content is rendered UPPERCASE with all-caps letter-spacing,\nso authors pass normal-case text.\n\n**A chip keeps one silhouette in every mode.** Interactive or not, it is\n`radius.sm` (owner's call, 2026-09-03). What changes is the *affordance*:\nan operable chip earns the accent, a focus ring and Enter/Space, exactly as\nhard rule 5 describes. A component that changed shape on a boolean would put\nthe same object in a design file under two outlines, and nobody reading a\nmock could tell \"this chip is interactive\" from \"someone used the wrong\nradius\".\n\nFour modes compose freely:\n\n- **static** (default) — no role, not focusable. A label.\n- **`interactive`** — the body becomes a real `<button>`; click, Enter and\n  Space all work, and `click` bubbles from the host.\n- **`pressed`** — a latched filter chip (`aria-pressed`). Implies\n  `interactive`. **Controlled, not self-toggling**: like `rr-tab[selected]`,\n  the consumer owns the state and flips it on `click`.\n- **`removable`** — a trailing dismiss button, a *sibling* of the body\n  rather than a child, because a button inside a button is neither valid\n  HTML nor a usable control. Fires `rr-chip-remove`.\n\n`empty` is the \"nothing chosen yet\" treatment for a chip used as a trigger:\na dashed edge and muted text. It must read as **awaiting input**, never as\ndisabled — so it stays fully operable and keeps a legible border, where\n`disabled` recedes to near-canvas and stops accepting input.\n\nUsed as a popup trigger, a chip **never declares `aria-haspopup` or\n`aria-expanded` itself** — the popup stamps those onto whatever sits in its\ntrigger slot, as `rr-menu` already does (`menu.ts:148-149`). That is what\nkeeps one chip correct both as a trigger and as a plain filter.\n\nUses semantic design tokens for all visual properties. Brand theming\ncascades automatically via CSS custom properties on `:root`.",
             "name": "RrChip",
+            "cssParts": [
+              {
+                "description": "The outer chip container",
+                "name": "chip"
+              },
+              {
+                "description": "The label body (a button when interactive)",
+                "name": "body"
+              },
+              {
+                "description": "The dismiss control",
+                "name": "remove"
+              }
+            ],
             "slots": [
               {
                 "description": "Chip label text",
                 "name": ""
+              },
+              {
+                "description": "Icon or marker before the label",
+                "name": "leading"
+              },
+              {
+                "description": "Icon or marker after the label (not the remove control)",
+                "name": "trailing"
               }
             ],
             "members": [
+              {
+                "kind": "field",
+                "name": "shadowRootOptions",
+                "type": {
+                  "text": "object"
+                },
+                "static": true,
+                "default": "{ ...LitElement.shadowRootOptions, delegatesFocus: true }"
+              },
               {
                 "kind": "field",
                 "name": "variant",
@@ -5692,6 +5839,97 @@
                 "description": "Emphasis level. `default` is the standard visible outline (alt text,\nmuted-foreground border) that reads correctly standalone — use it for skill\nchips and most labels. `subtle` is a quieter treatment (muted text,\nelevated-border) for dense or secondary contexts.",
                 "attribute": "variant",
                 "reflects": true
+              },
+              {
+                "kind": "field",
+                "name": "interactive",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Makes the chip body a real button — focusable, with Enter and Space. The\naccent border and label come with it. Reflected.",
+                "attribute": "interactive",
+                "reflects": true
+              },
+              {
+                "kind": "field",
+                "name": "pressed",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Latched state for a filter chip; sets aria-pressed and fills the chip.\nImplies interactive. Controlled by the consumer — the chip does not toggle\nitself, so flip it on the click event. Reflected.",
+                "attribute": "pressed",
+                "reflects": true
+              },
+              {
+                "kind": "field",
+                "name": "removable",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Adds a trailing dismiss control that fires rr-chip-remove. Independent of\ninteractive: a static value chip can be removable. Reflected.",
+                "attribute": "removable",
+                "reflects": true
+              },
+              {
+                "kind": "field",
+                "name": "empty",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Renders the awaiting-input treatment — dashed edge, muted label — for a\nchip acting as a trigger with nothing chosen yet. Distinct from disabled:\nan empty chip is still operable. Reflected.",
+                "attribute": "empty",
+                "reflects": true
+              },
+              {
+                "kind": "field",
+                "name": "disabled",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Disables the chip body and its dismiss control. Reflected.",
+                "attribute": "disabled",
+                "reflects": true
+              },
+              {
+                "kind": "field",
+                "name": "removeLabel",
+                "type": {
+                  "text": "string"
+                },
+                "default": "'Remove'",
+                "description": "Accessible name for the dismiss control. Name the thing being removed\n(\"Remove Income filter\") — a row of chips all saying \"Remove\" tells a\nscreen-reader user nothing. Maps to attribute remove-label.",
+                "attribute": "remove-label"
+              },
+              {
+                "kind": "field",
+                "name": "_operable",
+                "type": {
+                  "text": "boolean"
+                },
+                "privacy": "private",
+                "description": "True when the body should render as a button. `pressed` implies it.",
+                "readonly": true
+              },
+              {
+                "kind": "field",
+                "name": "_onRemove",
+                "privacy": "private"
+              },
+              {
+                "kind": "method",
+                "name": "_label",
+                "privacy": "private"
+              }
+            ],
+            "events": [
+              {
+                "description": "The dismiss control was activated",
+                "name": "rr-chip-remove"
               }
             ],
             "attributes": [
@@ -5703,6 +5941,60 @@
                 "default": "'default'",
                 "description": "Emphasis level. `default` is the standard visible outline (alt text,\nmuted-foreground border) that reads correctly standalone — use it for skill\nchips and most labels. `subtle` is a quieter treatment (muted text,\nelevated-border) for dense or secondary contexts.",
                 "fieldName": "variant"
+              },
+              {
+                "name": "interactive",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Makes the chip body a real button — focusable, with Enter and Space. The\naccent border and label come with it. Reflected.",
+                "fieldName": "interactive"
+              },
+              {
+                "name": "pressed",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Latched state for a filter chip; sets aria-pressed and fills the chip.\nImplies interactive. Controlled by the consumer — the chip does not toggle\nitself, so flip it on the click event. Reflected.",
+                "fieldName": "pressed"
+              },
+              {
+                "name": "removable",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Adds a trailing dismiss control that fires rr-chip-remove. Independent of\ninteractive: a static value chip can be removable. Reflected.",
+                "fieldName": "removable"
+              },
+              {
+                "name": "empty",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Renders the awaiting-input treatment — dashed edge, muted label — for a\nchip acting as a trigger with nothing chosen yet. Distinct from disabled:\nan empty chip is still operable. Reflected.",
+                "fieldName": "empty"
+              },
+              {
+                "name": "disabled",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Disables the chip body and its dismiss control. Reflected.",
+                "fieldName": "disabled"
+              },
+              {
+                "name": "remove-label",
+                "type": {
+                  "text": "string"
+                },
+                "default": "'Remove'",
+                "description": "Accessible name for the dismiss control. Name the thing being removed\n(\"Remove Income filter\") — a row of chips all saying \"Remove\" tells a\nscreen-reader user nothing. Maps to attribute remove-label.",
+                "fieldName": "removeLabel"
               }
             ],
             "superclass": {
