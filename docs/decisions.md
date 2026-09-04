@@ -11,6 +11,49 @@ reverse or would surprise someone reading the code later.
 
 ---
 
+## 2026-09-04 — rr-listbox owns its value; the chip that opens it does not (#230)
+
+**What.** `rr-listbox` + `rr-option` ship as the selection half of the popup
+family. Two calls are worth keeping: the listbox **owns `value`** and updates it
+itself, and the trigger is an **`rr-chip`**, not a pill.
+
+**Why the listbox owns its value, when a chip does not.** `rr-chip[pressed]` and
+`rr-tab[selected]` are controlled — they never flip themselves. `rr-listbox.value`
+does. That reads as an inconsistency and is not one: the line is whether the
+component can see the whole state. A listbox holds exactly one value and *is* the
+container for it, so it can be right on its own. A chip is one control in a
+filter row whose state is the set — no single chip can know whether the others
+are on, so a self-toggling chip would fight the consumer holding that set. Both
+stay settable, so a consumer who wants full control has it either way.
+
+The consequence that matters for the pattern: because the listbox knows its own
+value, opening can focus the **current** option rather than the first. A
+selection popover that always opens at the top makes the user re-find their own
+choice every time they look at it.
+
+**Why the trigger is a chip.** #230 was filed on 2026-09-02 saying a listbox
+trigger is a pill (`radius.full`) against the menu's button — the two silhouettes
+being the only cue that separates them at rest, since both are "click a thing, a
+panel appears". The owner's radius answer the next day removed `radius.full` from
+the family entirely, so the shape survived but the value did not: the trigger is
+a chip at `radius.sm`, the menu trigger stays a button at `radius.default`. Two
+silhouettes still, one rung apart instead of at opposite ends. The chip's `empty`
+mode (#229) is what it wears while nothing is chosen. Correction posted on the
+issue so the stale instruction does not get built from.
+
+**Alternative.** Adding a slotted mode to `rr-select` instead. Struck on #230
+before this was built, and correctly: `rr-select` emits native `<option>`, which
+renders text and nothing else at any level of CSS effort. That is the platform's
+constraint, not the wrapper's — and it is exactly what makes `rr-select`
+form-associated, which is worth keeping. So the two coexist: plain text and form
+participation go to `rr-select`; icons, swatches and second lines go here.
+
+**Status.** Shipped. No anatomy declared — #181 promotes anatomy for the
+menu/listbox family as one scope, and bolting it onto one member first is how the
+two halves drift.
+
+---
+
 ## 2026-09-04 — a chip keeps one silhouette in every mode (#229)
 
 **What.** `rr-chip` gained its interactive half — `interactive`, `pressed`,

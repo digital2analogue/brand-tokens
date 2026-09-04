@@ -39,7 +39,7 @@ generated from `design-system.json` and `ai/rules.md`.
 > (rules live in `scripts/rules.mjs`). Never emit hex literals, never reference
 > `--primitive-*` tokens, and only use spacing/sizes from the token scale.
 
-## Available components (29)
+## Available components (31)
 
 ### `<rr-alert>`
 
@@ -271,6 +271,27 @@ Anchor enforcing the design system link style — underlined by default, underli
 - All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
 - Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
 
+### `<rr-listbox>`
+
+Selection popover (WAI-ARIA listbox pattern) for choosing one value from rich options — icons, descriptions and a selected check.
+
+| Attribute | Type | Default | Notes |
+|---|---|---|---|
+| `open` | boolean | `false` | Whether the listbox is open. Usually driven by the component itself; settable for controlled usage. |
+| `placement` | string | `bottom-start` | Which edge of the trigger the listbox aligns to: bottom-start (default) or bottom-end. |
+| `label` | string | `` | Accessible label for the listbox popup (required); sets aria-label on the role=listbox element. |
+| `value` | string | `` | The chosen option's value. Owned by the component; set it to control the selection. |
+
+**Slots:** `trigger` — The control that opens the listbox — an rr-chip, because the trigger displays the current value.; `(default)` — Place <rr-option> elements here.
+
+**Events:** `rr-listbox-select`, `rr-listbox-toggle`
+
+**Component rules:**
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- Accent green (foreground.action, foreground.accent, background.action, background.accent) is never resting text or decoration — it signals interactivity or intentional emphasis only _(manual)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
+
 ### `<rr-menu>`
 
 Dropdown action menu (WAI-ARIA menu-button pattern) with full keyboard navigation, Escape/outside-click dismissal, and trigger ARIA wiring.
@@ -308,6 +329,27 @@ A single action inside rr-menu; the host carries role=menuitem and focus is mana
 - No hardcoded colors — use var(--color-*) custom properties _(lint)_
 - All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
 - Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
+
+### `<rr-option>`
+
+A selectable value inside rr-listbox — leading icon or swatch, label, optional description line, and a selected check mark.
+
+| Attribute | Type | Default | Notes |
+|---|---|---|---|
+| `value` | string | `` | Value reported in rr-listbox's rr-listbox-select event when this option is chosen. |
+| `selected` | boolean | `false` | Whether this option is the listbox's current value. Set by the parent rr-listbox. |
+| `disabled` | boolean | `false` | Disables the option — skipped by keyboard navigation, click is inert. |
+
+**Slots:** (default) — The option label.; `leading` — Icon, swatch or marker shown before the label.; `description` — Secondary line beneath the label.
+
+**Events:** `rr-option-select`
+
+**Component rules:**
+- No hardcoded colors — use var(--color-*) custom properties _(lint)_
+- Accent green (foreground.action, foreground.accent, background.action, background.accent) is never resting text or decoration — it signals interactivity or intentional emphasis only _(manual)_
+- All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking _(gate)_
+- Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer _(lint)_
+- Motion must respect `prefers-reduced-motion` (WCAG 2.3.3). The built brand CSS zeroes `--motion-duration-*` under `reduce`, so token-driven transitions stop automatically — never hardcode a transition/animation duration that bypasses the tokens. Any infinite animation (spin, shimmer, pulse) cannot be reached by the token override and MUST carry its own `@media (prefers-reduced-motion: reduce)` guard that stops or damps it _(lint)_
 
 ### `<rr-progress>`
 

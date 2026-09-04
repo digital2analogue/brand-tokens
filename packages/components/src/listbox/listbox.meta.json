@@ -1,0 +1,124 @@
+{
+  "metaVersion": "1.0.0",
+  "status": "beta",
+  "name": "rr-listbox",
+  "summary": "Selection popover (WAI-ARIA listbox pattern) for choosing one value from rich options — icons, descriptions and a selected check.",
+  "package": "@digital2analogue2/parsimony-components",
+  "props": [
+    {
+      "name": "open",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "placement",
+      "type": "string",
+      "default": "bottom-start"
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": ""
+    }
+  ],
+  "slots": [
+    {
+      "name": "trigger",
+      "description": "The control that opens the listbox — an rr-chip, because the trigger displays the current value."
+    },
+    {
+      "name": "(default)",
+      "description": "Place <rr-option> elements here.",
+      "accepts": [
+        "rr-option"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "rr-listbox-select",
+      "detail": "Fired when an option is chosen; detail.value is the option's value."
+    },
+    {
+      "name": "rr-listbox-toggle",
+      "detail": "Fired when the listbox opens or closes; detail.open is the new state."
+    }
+  ],
+  "cssParts": [
+    {
+      "name": "listbox",
+      "description": "The floating listbox surface."
+    }
+  ],
+  "tokensUsed": [
+    "--color-background-alt",
+    "--color-border-elevated",
+    "--radius-default",
+    "--shadow-overlay",
+    "--spacing-micro"
+  ],
+  "rules": [
+    "hard-1",
+    "hard-5",
+    "hard-6",
+    "hard-9"
+  ],
+  "guidance": [
+    "Listbox vs menu is a question of what the control DOES, not how it looks. A menu fires commands and nothing latches; a listbox sets a value and the chosen option stays marked. Using rr-menu for selection is the wrong ARIA role, not merely a missing prop — role=menuitem has no selected state at all.",
+    "Listbox vs rr-select is a question of option content. rr-select wraps a native <select> and emits native <option>, which renders text and nothing else at any level of CSS effort — that constraint is the platform's, and it is what makes rr-select form-associated. Reach for rr-listbox only when an option needs an icon, a swatch or a second line; reach for rr-select whenever plain text will do, because it participates in forms for free.",
+    "The trigger is an rr-chip and the menu trigger is an rr-button. Those two silhouettes — radius.sm against radius.default — are the only cue distinguishing them at rest, since both are 'click a thing, a panel appears'. A chip is right here because what the trigger displays IS the current value. Use the chip's empty mode while nothing is chosen.",
+    "Never let the trigger declare aria-haspopup or aria-expanded itself: the listbox stamps both onto whatever sits in the trigger slot, exactly as rr-menu does. That is what keeps one chip correct as a filter and as a trigger.",
+    "value is OWNED by the listbox and settable to control it — unlike rr-chip[pressed] and rr-tab[selected], which are controlled only. The line is whether the component can see the whole state: a listbox holds exactly one value and is the container for it, while a chip is one control in a filter row whose state is the set, which no single chip can know.",
+    "Opening focuses the CURRENT value, not the first option — reopening a listbox should put you where you already are. A list that always opens at the top makes the user re-find their own choice every time.",
+    "Always set label; it names the popup for assistive tech. The popup positions with CSS below the trigger (no portal), so keep the listbox outside overflow:hidden ancestors."
+  ],
+  "examples": [
+    {
+      "title": "Attribute picker",
+      "html": "<rr-listbox label=\"Attribute\" value=\"income\">\n  <rr-chip slot=\"trigger\" interactive>Income</rr-chip>\n  <rr-option value=\"income\">Income</rr-option>\n  <rr-option value=\"tenure\">Tenure</rr-option>\n  <rr-option value=\"score\">Credit score</rr-option>\n</rr-listbox>"
+    },
+    {
+      "title": "Nothing chosen yet",
+      "html": "<rr-listbox label=\"Attribute\">\n  <rr-chip slot=\"trigger\" interactive empty>Select attribute</rr-chip>\n  <rr-option value=\"income\">Income</rr-option>\n  <rr-option value=\"tenure\">Tenure</rr-option>\n</rr-listbox>"
+    },
+    {
+      "title": "Rich options with descriptions",
+      "html": "<rr-listbox label=\"Outcome\" value=\"approve\">\n  <rr-chip slot=\"trigger\" interactive>Approve</rr-chip>\n  <rr-option value=\"approve\">Approve<span slot=\"description\">Send straight to funding</span></rr-option>\n  <rr-option value=\"review\">Review<span slot=\"description\">Queue for an analyst</span></rr-option>\n  <rr-option value=\"deny\">Deny<span slot=\"description\">Close with a reason code</span></rr-option>\n</rr-listbox>"
+    },
+    {
+      "title": "Right-aligned",
+      "html": "<rr-listbox label=\"Sort\" value=\"recent\" placement=\"bottom-end\">\n  <rr-chip slot=\"trigger\" interactive>Most recent</rr-chip>\n  <rr-option value=\"recent\">Most recent</rr-option>\n  <rr-option value=\"oldest\">Oldest first</rr-option>\n</rr-listbox>"
+    }
+  ],
+  "accessibility": {
+    "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/listbox/",
+    "role": "listbox",
+    "focusable": false,
+    "keyboard": [
+      "Enter, Space, or click on the trigger toggles the listbox",
+      "ArrowDown or ArrowUp on the trigger opens it focused on the current value",
+      "ArrowDown/ArrowUp move through enabled options and wrap; Home/End jump to the ends",
+      "Enter or Space chooses the focused option, closes, and returns focus to the trigger",
+      "Escape closes and returns focus to the trigger; Tab closes and moves on"
+    ],
+    "wcag": [
+      "1.4.3 Contrast (Minimum)",
+      "1.4.11 Non-text Contrast",
+      "2.1.1 Keyboard",
+      "2.4.3 Focus Order",
+      "4.1.2 Name, Role, Value"
+    ],
+    "rules": [
+      "The slotted trigger receives aria-haspopup=listbox and live aria-expanded automatically",
+      "Every option carries aria-selected, true or false — a listbox whose unchosen options are silent reads as a list of buttons",
+      "Disabled options are skipped by keyboard navigation and are inert to clicks",
+      "Focus returns to the trigger on Escape and on selection",
+      "The selected option is marked by a check glyph as well as accent colour, so selection never depends on colour alone"
+    ]
+  }
+}

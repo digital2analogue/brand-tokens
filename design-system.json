@@ -2126,6 +2126,150 @@
     {
       "metaVersion": "1.0.0",
       "status": "beta",
+      "name": "rr-listbox",
+      "summary": "Selection popover (WAI-ARIA listbox pattern) for choosing one value from rich options — icons, descriptions and a selected check.",
+      "package": "@digital2analogue2/parsimony-components",
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the listbox is open. Usually driven by the component itself; settable for controlled usage."
+        },
+        {
+          "name": "placement",
+          "type": "string",
+          "default": "bottom-start",
+          "description": "Which edge of the trigger the listbox aligns to: bottom-start (default) or bottom-end."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "",
+          "description": "Accessible label for the listbox popup (required); sets aria-label on the role=listbox element."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "",
+          "description": "The chosen option's value. Owned by the component; set it to control the selection."
+        }
+      ],
+      "slots": [
+        {
+          "name": "trigger",
+          "description": "The control that opens the listbox — an rr-chip, because the trigger displays the current value."
+        },
+        {
+          "name": "(default)",
+          "description": "Place <rr-option> elements here.",
+          "accepts": [
+            "rr-option"
+          ]
+        }
+      ],
+      "events": [
+        {
+          "name": "rr-listbox-select",
+          "detail": "Fired when an option is chosen; detail.value is the option's value."
+        },
+        {
+          "name": "rr-listbox-toggle",
+          "detail": "Fired when the listbox opens or closes; detail.open is the new state."
+        }
+      ],
+      "cssParts": [
+        {
+          "name": "listbox",
+          "description": "The floating listbox surface."
+        }
+      ],
+      "tokensUsed": [
+        "--color-background-alt",
+        "--color-border-elevated",
+        "--radius-default",
+        "--shadow-overlay",
+        "--spacing-micro"
+      ],
+      "rules": [
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-5",
+          "verify": "manual",
+          "rule": "Accent green (foreground.action, foreground.accent, background.action, background.accent) is never resting text or decoration — it signals interactivity or intentional emphasis only"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        }
+      ],
+      "guidance": [
+        "Listbox vs menu is a question of what the control DOES, not how it looks. A menu fires commands and nothing latches; a listbox sets a value and the chosen option stays marked. Using rr-menu for selection is the wrong ARIA role, not merely a missing prop — role=menuitem has no selected state at all.",
+        "Listbox vs rr-select is a question of option content. rr-select wraps a native <select> and emits native <option>, which renders text and nothing else at any level of CSS effort — that constraint is the platform's, and it is what makes rr-select form-associated. Reach for rr-listbox only when an option needs an icon, a swatch or a second line; reach for rr-select whenever plain text will do, because it participates in forms for free.",
+        "The trigger is an rr-chip and the menu trigger is an rr-button. Those two silhouettes — radius.sm against radius.default — are the only cue distinguishing them at rest, since both are 'click a thing, a panel appears'. A chip is right here because what the trigger displays IS the current value. Use the chip's empty mode while nothing is chosen.",
+        "Never let the trigger declare aria-haspopup or aria-expanded itself: the listbox stamps both onto whatever sits in the trigger slot, exactly as rr-menu does. That is what keeps one chip correct as a filter and as a trigger.",
+        "value is OWNED by the listbox and settable to control it — unlike rr-chip[pressed] and rr-tab[selected], which are controlled only. The line is whether the component can see the whole state: a listbox holds exactly one value and is the container for it, while a chip is one control in a filter row whose state is the set, which no single chip can know.",
+        "Opening focuses the CURRENT value, not the first option — reopening a listbox should put you where you already are. A list that always opens at the top makes the user re-find their own choice every time.",
+        "Always set label; it names the popup for assistive tech. The popup positions with CSS below the trigger (no portal), so keep the listbox outside overflow:hidden ancestors."
+      ],
+      "examples": [
+        {
+          "title": "Attribute picker",
+          "html": "<rr-listbox label=\"Attribute\" value=\"income\">\n  <rr-chip slot=\"trigger\" interactive>Income</rr-chip>\n  <rr-option value=\"income\">Income</rr-option>\n  <rr-option value=\"tenure\">Tenure</rr-option>\n  <rr-option value=\"score\">Credit score</rr-option>\n</rr-listbox>"
+        },
+        {
+          "title": "Nothing chosen yet",
+          "html": "<rr-listbox label=\"Attribute\">\n  <rr-chip slot=\"trigger\" interactive empty>Select attribute</rr-chip>\n  <rr-option value=\"income\">Income</rr-option>\n  <rr-option value=\"tenure\">Tenure</rr-option>\n</rr-listbox>"
+        },
+        {
+          "title": "Rich options with descriptions",
+          "html": "<rr-listbox label=\"Outcome\" value=\"approve\">\n  <rr-chip slot=\"trigger\" interactive>Approve</rr-chip>\n  <rr-option value=\"approve\">Approve<span slot=\"description\">Send straight to funding</span></rr-option>\n  <rr-option value=\"review\">Review<span slot=\"description\">Queue for an analyst</span></rr-option>\n  <rr-option value=\"deny\">Deny<span slot=\"description\">Close with a reason code</span></rr-option>\n</rr-listbox>"
+        },
+        {
+          "title": "Right-aligned",
+          "html": "<rr-listbox label=\"Sort\" value=\"recent\" placement=\"bottom-end\">\n  <rr-chip slot=\"trigger\" interactive>Most recent</rr-chip>\n  <rr-option value=\"recent\">Most recent</rr-option>\n  <rr-option value=\"oldest\">Oldest first</rr-option>\n</rr-listbox>"
+        }
+      ],
+      "accessibility": {
+        "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/listbox/",
+        "role": "listbox",
+        "focusable": false,
+        "keyboard": [
+          "Enter, Space, or click on the trigger toggles the listbox",
+          "ArrowDown or ArrowUp on the trigger opens it focused on the current value",
+          "ArrowDown/ArrowUp move through enabled options and wrap; Home/End jump to the ends",
+          "Enter or Space chooses the focused option, closes, and returns focus to the trigger",
+          "Escape closes and returns focus to the trigger; Tab closes and moves on"
+        ],
+        "wcag": [
+          "1.4.3 Contrast (Minimum)",
+          "1.4.11 Non-text Contrast",
+          "2.1.1 Keyboard",
+          "2.4.3 Focus Order",
+          "4.1.2 Name, Role, Value"
+        ],
+        "rules": [
+          "The slotted trigger receives aria-haspopup=listbox and live aria-expanded automatically",
+          "Every option carries aria-selected, true or false — a listbox whose unchosen options are silent reads as a list of buttons",
+          "Disabled options are skipped by keyboard navigation and are inert to clicks",
+          "Focus returns to the trigger on Escape and on selection",
+          "The selected option is marked by a check glyph as well as accent colour, so selection never depends on colour alone"
+        ]
+      }
+    },
+    {
+      "metaVersion": "1.0.0",
+      "status": "beta",
       "name": "rr-menu",
       "summary": "Dropdown action menu (WAI-ARIA menu-button pattern) with full keyboard navigation, Escape/outside-click dismissal, and trigger ARIA wiring.",
       "package": "@digital2analogue2/parsimony-components",
@@ -2360,6 +2504,162 @@
         "componentKey": "9f299a57d0007a7b0414efe72d32eb352c1efd57",
         "nodeId": "186:2",
         "codeConnectFile": "menu.figma.ts"
+      }
+    },
+    {
+      "metaVersion": "1.0.0",
+      "status": "beta",
+      "name": "rr-option",
+      "summary": "A selectable value inside rr-listbox — leading icon or swatch, label, optional description line, and a selected check mark.",
+      "package": "@digital2analogue2/parsimony-components",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "default": "",
+          "description": "Value reported in rr-listbox's rr-listbox-select event when this option is chosen."
+        },
+        {
+          "name": "selected",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this option is the listbox's current value. Set by the parent rr-listbox."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": false,
+          "description": "Disables the option — skipped by keyboard navigation, click is inert."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "The option label."
+        },
+        {
+          "name": "leading",
+          "description": "Icon, swatch or marker shown before the label."
+        },
+        {
+          "name": "description",
+          "description": "Secondary line beneath the label."
+        }
+      ],
+      "events": [
+        {
+          "name": "rr-option-select",
+          "detail": "Bubbles (composed) to rr-listbox when the option is activated; detail.value is this option's value. Not fired when disabled."
+        }
+      ],
+      "cssParts": [
+        {
+          "name": "option",
+          "description": "The option row."
+        },
+        {
+          "name": "leading",
+          "description": "The leading icon/swatch wrapper."
+        },
+        {
+          "name": "label",
+          "description": "The label line."
+        },
+        {
+          "name": "description",
+          "description": "The secondary description line."
+        },
+        {
+          "name": "check",
+          "description": "The selected-state check mark."
+        }
+      ],
+      "tokensUsed": [
+        "--spacing-align",
+        "--spacing-tight",
+        "--spacing-inline",
+        "--radius-sm",
+        "--font-label-medium",
+        "--font-label-small",
+        "--icon-size-compact",
+        "--color-foreground-default",
+        "--color-foreground-muted",
+        "--color-foreground-accent-green",
+        "--color-foreground-disabled",
+        "--color-background-accent-green",
+        "--color-border-focus",
+        "--motion-duration-instant",
+        "--motion-easing-default"
+      ],
+      "rules": [
+        {
+          "id": "hard-1",
+          "verify": "lint",
+          "rule": "No hardcoded colors — use var(--color-*) custom properties"
+        },
+        {
+          "id": "hard-5",
+          "verify": "manual",
+          "rule": "Accent green (foreground.action, foreground.accent, background.action, background.accent) is never resting text or decoration — it signals interactivity or intentional emphasis only"
+        },
+        {
+          "id": "hard-6",
+          "verify": "gate",
+          "rule": "All text must meet WCAG AA contrast (4.5:1) against its background — all pairings in the system already do; do not introduce new ones without checking"
+        },
+        {
+          "id": "hard-9",
+          "verify": "lint",
+          "rule": "Never use primitive tokens (color.green.*, space.*, font.size.*) in UI code — always go through the semantic layer"
+        },
+        {
+          "id": "hard-10",
+          "verify": "lint",
+          "rule": "Motion must respect `prefers-reduced-motion` (WCAG 2.3.3). The built brand CSS zeroes `--motion-duration-*` under `reduce`, so token-driven transitions stop automatically — never hardcode a transition/animation duration that bypasses the tokens. Any infinite animation (spin, shimmer, pulse) cannot be reached by the token override and MUST carry its own `@media (prefers-reduced-motion: reduce)` guard that stops or damps it"
+        }
+      ],
+      "guidance": [
+        "selected is set BY the parent rr-listbox from its value — do not drive it by hand. Setting it directly on an option desynchronises the two and produces a listbox with two checks or none.",
+        "The check mark keeps its box when the option is unselected (visibility, not display), so rows do not shift as the selection moves down the list.",
+        "A description is a second line of meaning, not a place for overflow. If the label needs the description to make sense, the label is wrong.",
+        "Use leading for a swatch or category glyph — the channel a native <option> cannot provide, and the reason this family exists next to rr-select."
+      ],
+      "examples": [
+        {
+          "title": "Plain option",
+          "html": "<rr-option value=\"income\">Income</rr-option>"
+        },
+        {
+          "title": "With a description",
+          "html": "<rr-option value=\"tenure\">Tenure<span slot=\"description\">Months at current address</span></rr-option>"
+        },
+        {
+          "title": "Disabled",
+          "html": "<rr-option value=\"legacy\" disabled>Legacy score</rr-option>"
+        }
+      ],
+      "accessibility": {
+        "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/listbox/",
+        "role": "option",
+        "focusable": true,
+        "keyboard": [
+          "Options are focused programmatically by rr-listbox during keyboard navigation (tabindex -1)",
+          "Enter or Space on the focused option chooses it"
+        ],
+        "wcag": [
+          "1.4.3 Contrast (Minimum)",
+          "1.4.11 Non-text Contrast",
+          "2.1.1 Keyboard",
+          "2.4.7 Focus Visible",
+          "4.1.2 Name, Role, Value"
+        ],
+        "rules": [
+          "aria-selected is present on every option, true or false, not only on the chosen one",
+          "Disabled options carry aria-disabled and are inert to both click and keyboard",
+          "Selection is carried by a check glyph as well as accent colour — never by colour alone",
+          "The focused row shows an inset focus ring, because options are focused programmatically inside an overlay",
+          "Label text (foreground.default on background.alt, 9.9:1) and description text (foreground.muted, 5.1:1) both clear WCAG AA; the selected accent pairs foreground.accent-green on background.accent-green at 9.7:1"
+        ]
       }
     },
     {
@@ -6377,6 +6677,22 @@
           },
           {
             "kind": "js",
+            "name": "RrListbox",
+            "declaration": {
+              "name": "RrListbox",
+              "module": "./listbox/listbox.js"
+            }
+          },
+          {
+            "kind": "js",
+            "name": "RrOption",
+            "declaration": {
+              "name": "RrOption",
+              "module": "./listbox/option.js"
+            }
+          },
+          {
+            "kind": "js",
             "name": "RrMenu",
             "declaration": {
               "name": "RrMenu",
@@ -7041,6 +7357,417 @@
             "declaration": {
               "name": "RrLink",
               "module": "src/link/link.ts"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "javascript-module",
+        "path": "src/listbox/listbox.ts",
+        "declarations": [
+          {
+            "kind": "class",
+            "description": "`<rr-listbox>` — a selection popover (WAI-ARIA listbox pattern).\n\nSlot any control into the `trigger` slot and `<rr-option>` elements into the\ndefault slot. The component owns the open state, trigger ARIA wiring\n(aria-haspopup / aria-expanded), outside-click and Escape dismissal, and full\nkeyboard navigation: ArrowDown/ArrowUp move through enabled options\n(wrapping), Home/End jump, Enter/Space choose, Escape closes and returns\nfocus to the trigger.\n\nIt is the selection counterpart to `rr-menu`. A menu fires commands and\nnothing latches; a listbox sets a value and the chosen option stays marked.\nOpening focuses the CURRENT value rather than the first option, so reopening\na listbox puts you where you already are.\n\n`value` is owned by the component and settable for controlled usage — the\nwidget is the state container for its own single value.",
+            "name": "RrListbox",
+            "cssParts": [
+              {
+                "description": "The floating listbox surface",
+                "name": "listbox"
+              }
+            ],
+            "slots": [
+              {
+                "description": "The control that opens the listbox (an rr-chip)",
+                "name": "trigger"
+              },
+              {
+                "description": "Place `<rr-option>` elements here",
+                "name": ""
+              }
+            ],
+            "members": [
+              {
+                "kind": "field",
+                "name": "open",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Whether the listbox is open. Usually driven by the component itself; settable for controlled usage.",
+                "attribute": "open",
+                "reflects": true
+              },
+              {
+                "kind": "field",
+                "name": "placement",
+                "type": {
+                  "text": "ListboxPlacement"
+                },
+                "default": "'bottom-start'",
+                "description": "Which edge of the trigger the listbox aligns to: bottom-start (default) or bottom-end.",
+                "attribute": "placement",
+                "reflects": true
+              },
+              {
+                "kind": "field",
+                "name": "label",
+                "type": {
+                  "text": "string"
+                },
+                "default": "''",
+                "description": "Accessible label for the listbox popup (required); sets aria-label on the role=listbox element.",
+                "attribute": "label"
+              },
+              {
+                "kind": "field",
+                "name": "value",
+                "type": {
+                  "text": "string"
+                },
+                "default": "''",
+                "description": "The chosen option's value. Owned by the component; set it to control the selection.",
+                "attribute": "value",
+                "reflects": true
+              },
+              {
+                "kind": "field",
+                "name": "_trigger",
+                "type": {
+                  "text": "HTMLElement | null"
+                },
+                "privacy": "private",
+                "default": "null"
+              },
+              {
+                "kind": "method",
+                "name": "show",
+                "parameters": [
+                  {
+                    "name": "focusOption",
+                    "default": "true"
+                  }
+                ],
+                "description": "Open the listbox, moving focus to the selected option (or the first when nothing is chosen)."
+              },
+              {
+                "kind": "method",
+                "name": "hide",
+                "parameters": [
+                  {
+                    "name": "refocusTrigger",
+                    "default": "true"
+                  }
+                ],
+                "description": "Close the listbox and return focus to the trigger."
+              },
+              {
+                "kind": "method",
+                "name": "_allOptions",
+                "privacy": "private",
+                "return": {
+                  "type": {
+                    "text": "RrOption[]"
+                  }
+                }
+              },
+              {
+                "kind": "method",
+                "name": "_options",
+                "privacy": "private",
+                "return": {
+                  "type": {
+                    "text": "RrOption[]"
+                  }
+                }
+              },
+              {
+                "kind": "method",
+                "name": "_syncSelected",
+                "privacy": "private"
+              },
+              {
+                "kind": "field",
+                "name": "_onSlotChange",
+                "privacy": "private"
+              },
+              {
+                "kind": "field",
+                "name": "_onTriggerSlotChange",
+                "privacy": "private"
+              },
+              {
+                "kind": "field",
+                "name": "_onTriggerClick",
+                "privacy": "private"
+              },
+              {
+                "kind": "field",
+                "name": "_onOutsidePointerDown",
+                "privacy": "private"
+              },
+              {
+                "kind": "field",
+                "name": "_onOptionSelect",
+                "privacy": "private"
+              },
+              {
+                "kind": "field",
+                "name": "_onKeyDown",
+                "privacy": "private"
+              }
+            ],
+            "events": [
+              {
+                "name": "rr-listbox-toggle",
+                "type": {
+                  "text": "CustomEvent"
+                },
+                "description": "When the listbox opens or closes; detail: { open: boolean }"
+              },
+              {
+                "description": "When an option is chosen; detail: { value: string }",
+                "name": "rr-listbox-select"
+              }
+            ],
+            "attributes": [
+              {
+                "name": "open",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Whether the listbox is open. Usually driven by the component itself; settable for controlled usage.",
+                "fieldName": "open"
+              },
+              {
+                "name": "placement",
+                "type": {
+                  "text": "ListboxPlacement"
+                },
+                "default": "'bottom-start'",
+                "description": "Which edge of the trigger the listbox aligns to: bottom-start (default) or bottom-end.",
+                "fieldName": "placement"
+              },
+              {
+                "name": "label",
+                "type": {
+                  "text": "string"
+                },
+                "default": "''",
+                "description": "Accessible label for the listbox popup (required); sets aria-label on the role=listbox element.",
+                "fieldName": "label"
+              },
+              {
+                "name": "value",
+                "type": {
+                  "text": "string"
+                },
+                "default": "''",
+                "description": "The chosen option's value. Owned by the component; set it to control the selection.",
+                "fieldName": "value"
+              }
+            ],
+            "superclass": {
+              "name": "LitElement",
+              "package": "lit"
+            },
+            "tagName": "rr-listbox",
+            "customElement": true
+          }
+        ],
+        "exports": [
+          {
+            "kind": "js",
+            "name": "RrListbox",
+            "declaration": {
+              "name": "RrListbox",
+              "module": "src/listbox/listbox.ts"
+            }
+          },
+          {
+            "kind": "custom-element-definition",
+            "name": "rr-listbox",
+            "declaration": {
+              "name": "RrListbox",
+              "module": "src/listbox/listbox.ts"
+            }
+          }
+        ]
+      },
+      {
+        "kind": "javascript-module",
+        "path": "src/listbox/option.ts",
+        "declarations": [
+          {
+            "kind": "class",
+            "description": "`<rr-option>` — a single selectable value inside `<rr-listbox>`.\n\nThe host carries `role=\"option\"`, `aria-selected` and `tabindex=\"-1\"`, so the\nflattened tree reads as listbox → option; focus and roving order are managed\nby the parent `rr-listbox`.\n\nUnlike a native `<option>`, this renders arbitrary content: a leading icon or\nswatch, a label, and an optional description line. That richness is the whole\nreason the listbox family exists alongside the form-associated `rr-select`.",
+            "name": "RrOption",
+            "cssParts": [
+              {
+                "description": "The option row",
+                "name": "option"
+              },
+              {
+                "description": "The leading icon/swatch wrapper",
+                "name": "leading"
+              },
+              {
+                "description": "The label line",
+                "name": "label"
+              },
+              {
+                "description": "The secondary description line",
+                "name": "description"
+              },
+              {
+                "description": "The selected-state check mark",
+                "name": "check"
+              }
+            ],
+            "slots": [
+              {
+                "description": "The option label",
+                "name": ""
+              },
+              {
+                "description": "Icon, swatch or marker shown before the label",
+                "name": "leading"
+              },
+              {
+                "description": "Secondary line beneath the label",
+                "name": "description"
+              }
+            ],
+            "members": [
+              {
+                "kind": "field",
+                "name": "value",
+                "type": {
+                  "text": "string"
+                },
+                "default": "''",
+                "description": "Value reported in rr-listbox's rr-listbox-select event when this option is chosen.",
+                "attribute": "value"
+              },
+              {
+                "kind": "field",
+                "name": "selected",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Whether this option is the listbox's current value. Set by the parent rr-listbox.",
+                "attribute": "selected",
+                "reflects": true
+              },
+              {
+                "kind": "field",
+                "name": "disabled",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Disables the option — skipped by keyboard navigation, click is inert.",
+                "attribute": "disabled",
+                "reflects": true
+              },
+              {
+                "kind": "field",
+                "name": "_hasLeading",
+                "type": {
+                  "text": "boolean"
+                },
+                "privacy": "private",
+                "default": "false"
+              },
+              {
+                "kind": "field",
+                "name": "_hasDescription",
+                "type": {
+                  "text": "boolean"
+                },
+                "privacy": "private",
+                "default": "false"
+              },
+              {
+                "kind": "field",
+                "name": "_onActivate",
+                "privacy": "private"
+              },
+              {
+                "kind": "field",
+                "name": "_onKeyDown",
+                "privacy": "private"
+              },
+              {
+                "kind": "field",
+                "name": "_onLeadingSlotChange",
+                "privacy": "private"
+              },
+              {
+                "kind": "field",
+                "name": "_onDescriptionSlotChange",
+                "privacy": "private"
+              }
+            ],
+            "events": [
+              {
+                "description": "Bubbles (composed) to rr-listbox when the option is activated; detail.value is this option's value. Not fired when disabled.",
+                "name": "rr-option-select"
+              }
+            ],
+            "attributes": [
+              {
+                "name": "value",
+                "type": {
+                  "text": "string"
+                },
+                "default": "''",
+                "description": "Value reported in rr-listbox's rr-listbox-select event when this option is chosen.",
+                "fieldName": "value"
+              },
+              {
+                "name": "selected",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Whether this option is the listbox's current value. Set by the parent rr-listbox.",
+                "fieldName": "selected"
+              },
+              {
+                "name": "disabled",
+                "type": {
+                  "text": "boolean"
+                },
+                "default": "false",
+                "description": "Disables the option — skipped by keyboard navigation, click is inert.",
+                "fieldName": "disabled"
+              }
+            ],
+            "superclass": {
+              "name": "LitElement",
+              "package": "lit"
+            },
+            "tagName": "rr-option",
+            "customElement": true
+          }
+        ],
+        "exports": [
+          {
+            "kind": "js",
+            "name": "RrOption",
+            "declaration": {
+              "name": "RrOption",
+              "module": "src/listbox/option.ts"
+            }
+          },
+          {
+            "kind": "custom-element-definition",
+            "name": "rr-option",
+            "declaration": {
+              "name": "RrOption",
+              "module": "src/listbox/option.ts"
             }
           }
         ]
