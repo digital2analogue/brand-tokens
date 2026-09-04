@@ -1,0 +1,133 @@
+{
+  "metaVersion": "1.0.0",
+  "status": "beta",
+  "name": "rr-option",
+  "summary": "A selectable value inside rr-listbox — leading icon or swatch, label, optional description line, and a selected check mark.",
+  "package": "@digital2analogue2/parsimony-components",
+  "props": [
+    {
+      "name": "value",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "selected",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "slots": [
+    {
+      "name": "default",
+      "description": "The option label."
+    },
+    {
+      "name": "leading",
+      "description": "Icon, swatch or marker shown before the label."
+    },
+    {
+      "name": "description",
+      "description": "Secondary line beneath the label."
+    }
+  ],
+  "events": [
+    {
+      "name": "rr-option-select",
+      "detail": "Bubbles (composed) to rr-listbox when the option is activated; detail.value is this option's value. Not fired when disabled."
+    }
+  ],
+  "cssParts": [
+    {
+      "name": "option",
+      "description": "The option row."
+    },
+    {
+      "name": "leading",
+      "description": "The leading icon/swatch wrapper."
+    },
+    {
+      "name": "label",
+      "description": "The label line."
+    },
+    {
+      "name": "description",
+      "description": "The secondary description line."
+    },
+    {
+      "name": "check",
+      "description": "The selected-state check mark."
+    }
+  ],
+  "tokensUsed": [
+    "--spacing-align",
+    "--spacing-tight",
+    "--spacing-inline",
+    "--radius-sm",
+    "--font-label-medium",
+    "--font-label-small",
+    "--icon-size-compact",
+    "--color-foreground-default",
+    "--color-foreground-muted",
+    "--color-foreground-accent-green",
+    "--color-foreground-disabled",
+    "--color-background-accent-green",
+    "--color-border-focus",
+    "--motion-duration-instant",
+    "--motion-easing-default"
+  ],
+  "rules": [
+    "hard-1",
+    "hard-5",
+    "hard-6",
+    "hard-9",
+    "hard-10"
+  ],
+  "guidance": [
+    "selected is set BY the parent rr-listbox from its value — do not drive it by hand. Setting it directly on an option desynchronises the two and produces a listbox with two checks or none.",
+    "The check mark keeps its box when the option is unselected (visibility, not display), so rows do not shift as the selection moves down the list.",
+    "A description is a second line of meaning, not a place for overflow. If the label needs the description to make sense, the label is wrong.",
+    "Use leading for a swatch or category glyph — the channel a native <option> cannot provide, and the reason this family exists next to rr-select."
+  ],
+  "examples": [
+    {
+      "title": "Plain option",
+      "html": "<rr-option value=\"income\">Income</rr-option>"
+    },
+    {
+      "title": "With a description",
+      "html": "<rr-option value=\"tenure\">Tenure<span slot=\"description\">Months at current address</span></rr-option>"
+    },
+    {
+      "title": "Disabled",
+      "html": "<rr-option value=\"legacy\" disabled>Legacy score</rr-option>"
+    }
+  ],
+  "accessibility": {
+    "ariaPattern": "https://www.w3.org/WAI/ARIA/apg/patterns/listbox/",
+    "role": "option",
+    "focusable": true,
+    "keyboard": [
+      "Options are focused programmatically by rr-listbox during keyboard navigation (tabindex -1)",
+      "Enter or Space on the focused option chooses it"
+    ],
+    "wcag": [
+      "1.4.3 Contrast (Minimum)",
+      "1.4.11 Non-text Contrast",
+      "2.1.1 Keyboard",
+      "2.4.7 Focus Visible",
+      "4.1.2 Name, Role, Value"
+    ],
+    "rules": [
+      "aria-selected is present on every option, true or false, not only on the chosen one",
+      "Disabled options carry aria-disabled and are inert to both click and keyboard",
+      "Selection is carried by a check glyph as well as accent colour — never by colour alone",
+      "The focused row shows an inset focus ring, because options are focused programmatically inside an overlay",
+      "Label text (foreground.default on background.alt, 9.9:1) and description text (foreground.muted, 5.1:1) both clear WCAG AA; the selected accent pairs foreground.accent-green on background.accent-green at 9.7:1"
+    ]
+  }
+}
