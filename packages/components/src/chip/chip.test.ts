@@ -199,9 +199,65 @@ describe('rr-chip', () => {
   it('never declares aria-haspopup or aria-expanded itself', async () => {
     const el = createElement('<rr-chip interactive>Attribute</rr-chip>') as RrChip;
     await el.updateComplete;
-    const html = el.shadowRoot!.innerHTML;
-    expect(html).not.toContain('aria-haspopup');
-    expect(html).not.toContain('aria-expanded');
+    // Query ELEMENTS, not the HTML string: the caret's CSS selector mentions
+    // aria-haspopup, and Lit inlines its styles into the shadow root here, so a
+    // substring check would pass the stylesheet off as a declaration.
+    expect(
+      el.shadowRoot!.querySelectorAll('[aria-haspopup], [aria-expanded]').length
+    ).toBe(0);
+  });
+
+  // ── Popup-trigger caret (owner review, 2026-09-04) ────────────────────────
+  //
+  // A chip that opens a panel must look like it does. The affordance is driven
+  // entirely by the ARIA the popup stamps (rr-menu sets aria-haspopup=menu,
+  // rr-listbox aria-haspopup=listbox, both keep aria-expanded live), so there
+  // is no prop to forget and no second source of truth to drift from.
+  //
+  // Whether it is VISIBLE is a pure CSS question, and jsdom does not apply
+  // shadow-root stylesheet rules — getComputedStyle here reports the unstyled
+  // default, not the cascade. The visual baselines are what prove the rendering
+  // (components-listbox--default shows it at rest, --open shows it rotated).
+  // These tests pin the structure those rules hang off.
+
+  it('ships a caret element on every chip, for the CSS to reveal', async () => {
+    const el = createElement('<rr-chip interactive>Filter</rr-chip>') as RrChip;
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('.caret')).toBeTruthy();
+  });
+
+  it('hides the caret from assistive tech — the ARIA already says it opens', async () => {
+    const el = createElement('<rr-chip interactive>Filter</rr-chip>') as RrChip;
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('.caret')!.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  // The caret belongs to the trigger, so activating it must open the popup — it
+  // rides INSIDE the body button, unlike the dismiss control which is a sibling.
+  it('keeps the caret inside the body button, unlike the dismiss control', async () => {
+    const el = createElement('<rr-chip interactive removable>Income</rr-chip>') as RrChip;
+    await el.updateComplete;
+    const body = el.shadowRoot!.querySelector('button.body')!;
+    expect(body.querySelector('.caret')).toBeTruthy();
+    expect(body.querySelector('.remove')).toBeNull();
+  });
+
+  it('exposes the caret as a part so a consumer can restyle it', async () => {
+    const el = createElement('<rr-chip interactive>Filter</rr-chip>') as RrChip;
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('.caret')!.getAttribute('part')).toBe('caret');
+  });
+
+  // Still true with the caret shipped: the chip READS this ARIA, never sets it.
+  it('still declares no ARIA of its own once a popup stamps the host', async () => {
+    const el = createElement('<rr-chip interactive>Attribute</rr-chip>') as RrChip;
+    await el.updateComplete;
+    el.setAttribute('aria-haspopup', 'listbox');
+    el.setAttribute('aria-expanded', 'false');
+    await el.updateComplete;
+    expect(
+      el.shadowRoot!.querySelectorAll('[aria-haspopup], [aria-expanded]').length
+    ).toBe(0);
   });
 
   it('has no axe violations when interactive and removable', async () => {

@@ -969,7 +969,7 @@
               "name": "leading"
             },
             {
-              "description": "Icon or marker after the label (not the remove control)",
+              "description": "Icon or marker after the label (not the remove control) A chip used as a popup trigger grows a down caret automatically: rr-menu and rr-listbox stamp `aria-haspopup` (and keep `aria-expanded` live) on whatever they are given, and the chip styles off those. There is no prop for it, so a trigger cannot be shipped without the affordance and a plain filter chip never gains one.",
               "name": "trailing"
             }
           ],

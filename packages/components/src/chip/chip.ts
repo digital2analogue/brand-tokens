@@ -50,6 +50,12 @@ export type ChipVariant = 'default' | 'subtle';
  * @slot - Chip label text
  * @slot leading - Icon or marker before the label
  * @slot trailing - Icon or marker after the label (not the remove control)
+ *
+ * A chip used as a popup trigger grows a down caret automatically: rr-menu and
+ * rr-listbox stamp `aria-haspopup` (and keep `aria-expanded` live) on whatever
+ * they are given, and the chip styles off those. There is no prop for it, so a
+ * trigger cannot be shipped without the affordance and a plain filter chip
+ * never gains one.
  * @fires rr-chip-remove - The dismiss control was activated
  * @csspart chip - The outer chip container
  * @csspart body - The label body (a button when interactive)
@@ -79,6 +85,32 @@ export class RrChip extends LitElement {
         background-color var(--motion-duration-instant) var(--motion-easing-default),
         border-color var(--motion-duration-instant) var(--motion-easing-default),
         color var(--motion-duration-instant) var(--motion-easing-default);
+    }
+
+    /* The popup-trigger affordance. A chip that opens a panel must say so —
+       without a caret it is indistinguishable from a plain filter chip, which
+       is what a review of the rr-listbox baselines found (owner, 2026-09-04).
+
+       It is driven entirely by the ARIA the popup already stamps on its
+       trigger: rr-menu sets aria-haspopup=menu, rr-listbox sets
+       aria-haspopup=listbox, and both keep aria-expanded live. So the chip
+       needs no prop of its own, a consumer cannot forget it, and the glyph
+       cannot disagree with the semantics — there is no second source of truth
+       to drift from. A chip with nothing behind it never draws one. */
+    .caret {
+      display: none;
+      flex: 0 0 auto;
+      width: var(--icon-size-compact);
+      height: var(--icon-size-compact);
+      transition: transform var(--motion-duration-instant) var(--motion-easing-default);
+    }
+
+    :host([aria-haspopup]) .caret {
+      display: inline-block;
+    }
+
+    :host([aria-expanded='true']) .caret {
+      transform: rotate(180deg);
     }
 
     .body {
@@ -245,7 +277,16 @@ export class RrChip extends LitElement {
   };
 
   private _label() {
-    return html`<slot name="leading"></slot><slot></slot><slot name="trailing"></slot>`;
+    return html`<slot name="leading"></slot><slot></slot><slot name="trailing"></slot
+      ><svg class="caret" part="caret" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path
+          d="M4 6.5l4 4 4-4"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>`;
   }
 
   render() {
